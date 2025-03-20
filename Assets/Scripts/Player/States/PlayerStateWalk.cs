@@ -3,11 +3,13 @@ using UnityEngine;
 public class PlayerStateWalk<T> : State<T>
 {
     private T inputToIdle;
+    private T inputToJump;
 
 
-    public PlayerStateWalk(T inputToIdle)
+    public PlayerStateWalk(T inputToIdle, T inputToJump)
     {
         this.inputToIdle = inputToIdle;
+        this.inputToJump = inputToJump;
     }
 
     public override void Enter()
@@ -25,6 +27,11 @@ public class PlayerStateWalk<T> : State<T>
         if (direction == Vector3.zero)
         {
             Fsm.TransitionTo(inputToIdle);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Fsm.TransitionTo(inputToJump);
         }
     }
 }
