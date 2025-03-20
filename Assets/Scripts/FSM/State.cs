@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public class State<T> : IState<T>
 {
@@ -11,14 +10,11 @@ public class State<T> : IState<T>
 
     public virtual void Initialize(params object[] p) { }
 
-    public virtual void Enter()
-    {
-        Debug.Log("ADAS");
-    }
+    public virtual void Enter() { }
 
     public virtual void Execute() { }
 
-    public virtual void Exit(){ }
+    public virtual void Exit() { }
 
     public IState<T> GetTransition(T input)
     {

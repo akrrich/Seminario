@@ -2,41 +2,39 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerCamera playerCamaera;
+    private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
+
     private Rigidbody rb;
 
-    private float speed = 75f;
+
+    public Rigidbody Rb { get => rb; }
 
 
     void Awake()
     {
-        GetComponents();
-    }
+        InitializeFSM();
 
-    void FixedUpdate()
-    {
-        Movement();
-    }
-
-
-    private void GetComponents()
-    {
         rb = GetComponent<Rigidbody>();
-        playerCamaera = GetComponentInChildren<PlayerCamera>();
     }
 
-    private void Movement()
+
+    private void InitializeFSM()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump);
+        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle);
+        PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, this);
 
-        Vector3 cameraForward = playerCamaera.transform.forward;
-        cameraForward.y = 0;
-        cameraForward.Normalize();
+        psIdle.AddTransition(PlayerStates.Walk, psWalk);
+        psWalk.AddTransition(PlayerStates.Idle, psIdle);
 
-        Vector3 right = playerCamaera.transform.right;
-        Vector3 movement = (cameraForward * verticalInput + right * horizontalInput).normalized * speed * Time.deltaTime;
+        psJump.AddTransition(PlayerStates.Idle, psIdle);
+        psIdle.AddTransition(PlayerStates.Jump, psJump);
 
-        rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+        fsm.SetInit(psIdle);
+    }
+
+    void Update()
+    {
+        fsm.OnExecute();
     }
 }

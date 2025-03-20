@@ -2,12 +2,6 @@ public class FSM<T>
 {
     private IState<T> currentState;
 
-    public FSM() { }
-
-    public FSM(IState<T> current)
-    {
-        SetInit(current);
-    }
 
     public void SetInit(IState<T> current)
     {
@@ -24,7 +18,7 @@ public class FSM<T>
         }
     }
 
-    public void Transition(T input)
+    public void TransitionTo(T input)
     {
         IState<T> newState = currentState.GetTransition(input);
 

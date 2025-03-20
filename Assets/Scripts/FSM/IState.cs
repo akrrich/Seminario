@@ -1,6 +1,6 @@
 public interface IState<T>
 {
-    public FSM<T> Fsm { get; set; }
+    FSM<T> Fsm { get; set; }
     void Initialize(params object[] p);
     void Enter();
     void Execute();
