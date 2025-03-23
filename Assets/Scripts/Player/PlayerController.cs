@@ -2,21 +2,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private PlayerModel playerModel;
+
     private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
-    private Rigidbody rb;
-
-    private bool isGrounded = true;
-
-    public Rigidbody Rb { get => rb; }
-
-    public bool IsGrounded { get => isGrounded; }
 
 
     void Awake()
     {
         InitializeFSM();
-
-        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -28,7 +21,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
-            isGrounded = true;
+            playerModel.IsGrounded = true;
         }
     }
 
@@ -36,16 +29,16 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
-            isGrounded = false;
+            playerModel.IsGrounded = false;
         }
     }
 
 
     private void InitializeFSM()
     {
-        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, this);
-        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Jump, this);
-        PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, this);
+        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, playerModel);
+        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Jump, playerModel);
+        PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, playerModel);
 
         psIdle.AddTransition(PlayerStates.Walk, psWalk);
         psIdle.AddTransition(PlayerStates.Jump, psJump);

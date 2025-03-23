@@ -13,6 +13,11 @@ public class PlayerModel : MonoBehaviour
     private Rigidbody rb;
 
     [SerializeField] private float speed = 250f;
+    private bool isGrounded = true;
+
+    public Rigidbody Rb { get => rb; set => rb = value; }
+
+    public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
 
 
     void Awake()

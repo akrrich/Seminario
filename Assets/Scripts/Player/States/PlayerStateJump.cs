@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class PlayerStateJump<T> : State<T>
 {
-    private PlayerController playerController;
+    private PlayerModel playerModel;
 
     private T inputToIdle;
 
     private float jumpForce = 5;
 
 
-    public PlayerStateJump(T inputToIdle, PlayerController playerController)
+    public PlayerStateJump(T inputToIdle, PlayerModel playerModel)
     {
         this.inputToIdle = inputToIdle;
-        this.playerController = playerController;
+        this.playerModel = playerModel;
     }
 
     public override void Enter()
@@ -20,14 +20,14 @@ public class PlayerStateJump<T> : State<T>
         base.Enter();
         Debug.Log("Jump");
 
-        playerController.Rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        playerModel.Rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     public override void Execute()
     {
         base.Execute();
 
-        if (playerController.IsGrounded)
+        if (playerModel.IsGrounded)
         {
             Fsm.TransitionTo(inputToIdle);
         }
