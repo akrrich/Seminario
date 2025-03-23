@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    void Update()
+    {
+        fsm.OnExecute();
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
@@ -38,8 +43,8 @@ public class PlayerController : MonoBehaviour
 
     private void InitializeFSM()
     {
-        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump);
-        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Jump);
+        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, this);
+        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Jump, this);
         PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, this);
 
         psIdle.AddTransition(PlayerStates.Walk, psWalk);
@@ -52,10 +57,5 @@ public class PlayerController : MonoBehaviour
         psJump.AddTransition(PlayerStates.Walk, psWalk);
 
         fsm.SetInit(psIdle);
-    }
-
-    void Update()
-    {
-        fsm.OnExecute();
     }
 }

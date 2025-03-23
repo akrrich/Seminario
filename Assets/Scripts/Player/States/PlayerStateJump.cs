@@ -20,10 +20,7 @@ public class PlayerStateJump<T> : State<T>
         base.Enter();
         Debug.Log("Jump");
 
-        if (playerController.IsGrounded)
-        {
-            playerController.Rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
+        playerController.Rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     public override void Execute()

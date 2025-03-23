@@ -12,7 +12,7 @@ public class PlayerModel : MonoBehaviour
     private PlayerCamera playerCamaera;
     private Rigidbody rb;
 
-    private float speed = 100f;
+    [SerializeField] private float speed = 250f;
 
 
     void Awake()

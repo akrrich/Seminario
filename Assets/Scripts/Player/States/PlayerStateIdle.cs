@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class PlayerStateIdle<T> : State<T>
 {
+    private PlayerController playerController;
+
     private T inputToWalk;
     private T inputToJump;
 
 
-    public PlayerStateIdle(T inputToWalk, T inputToJump)
+    public PlayerStateIdle(T inputToWalk, T inputToJump, PlayerController playerController)
     {
         this.inputToWalk = inputToWalk;
         this.inputToJump = inputToJump;
+        this.playerController = playerController;
     }
 
     public override void Enter()
@@ -27,7 +30,7 @@ public class PlayerStateIdle<T> : State<T>
             Fsm.TransitionTo(inputToWalk);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && playerController.IsGrounded)
         {
             Fsm.TransitionTo(inputToJump);
         }
