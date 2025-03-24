@@ -4,20 +4,31 @@ public enum PlayerStates
 {
     Idle,
     Walk,
-    Jump
+    Jump,
+    Cook
 }
 
 public class PlayerModel : MonoBehaviour
 {
-    private PlayerCamera playerCamaera;
+    [SerializeField] public Transform cookPosition;
+
+    private PlayerCamera playerCamera;
     private Rigidbody rb;
 
     [SerializeField] private float speed = 250f;
-    private bool isGrounded = true;
+    [SerializeField] private float jumpForce = 5f;
 
+    private bool isGrounded = true;
+    private bool isCollidingOven = false;
+    private bool isCoking = false;
+
+    public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
     public Rigidbody Rb { get => rb; set => rb = value; }
 
+    public float JumpForce { get => jumpForce; }
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
+    public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
+    public bool IsCooking { get => isCoking; set => isCoking = value; }
 
 
     void Awake()
@@ -31,7 +42,7 @@ public class PlayerModel : MonoBehaviour
     }
 
 
-    public static Vector2 GetMove()
+    public static Vector2 GetMoveAxis()
     {
         return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
@@ -40,18 +51,21 @@ public class PlayerModel : MonoBehaviour
     private void GetComponents()
     {
         rb = GetComponent<Rigidbody>();
-        playerCamaera = GetComponentInChildren<PlayerCamera>();
+        playerCamera = GetComponentInChildren<PlayerCamera>();
     }
 
     private void Movement()
     {
-        Vector3 cameraForward = playerCamaera.transform.forward;
-        cameraForward.y = 0;
-        cameraForward.Normalize();
+        if (!isCoking)
+        {
+            Vector3 cameraForward = playerCamera.transform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
 
-        Vector3 right = playerCamaera.transform.right;
-        Vector3 movement = (cameraForward * GetMove().y + right * GetMove().x).normalized * speed * Time.deltaTime;
+            Vector3 right = playerCamera.transform.right;
+            Vector3 movement = (cameraForward * GetMoveAxis().y + right * GetMoveAxis().x).normalized * speed * Time.deltaTime;
 
-        rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+            rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+        }
     }
 }

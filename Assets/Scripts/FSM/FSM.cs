@@ -2,7 +2,6 @@ public class FSM<T>
 {
     private IState<T> currentState;
 
-
     public void SetInit(IState<T> current)
     {
         current.Fsm = this;

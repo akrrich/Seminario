@@ -6,8 +6,6 @@ public class PlayerStateJump<T> : State<T>
 
     private T inputToIdle;
 
-    private float jumpForce = 5;
-
 
     public PlayerStateJump(T inputToIdle, PlayerModel playerModel)
     {
@@ -20,7 +18,7 @@ public class PlayerStateJump<T> : State<T>
         base.Enter();
         Debug.Log("Jump");
 
-        playerModel.Rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        playerModel.Rb.AddForce(Vector3.up * playerModel.JumpForce, ForceMode.Impulse);
     }
 
     public override void Execute()

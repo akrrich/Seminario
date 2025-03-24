@@ -6,12 +6,14 @@ public class PlayerStateWalk<T> : State<T>
 
     private T inputToIdle;
     private T inputToJump;
+    private T inputToCook;
 
 
-    public PlayerStateWalk(T inputToIdle, T inputToJump, PlayerModel playerModel)
+    public PlayerStateWalk(T inputToIdle, T inputToJump, T inputToCook, PlayerModel playerModel)
     {
         this.inputToIdle = inputToIdle;
         this.inputToJump = inputToJump;
+        this.inputToCook = inputToCook;
         this.playerModel = playerModel;
     }
 
@@ -25,7 +27,7 @@ public class PlayerStateWalk<T> : State<T>
     {
         base.Execute();
 
-        Vector3 direction = new Vector3(PlayerModel.GetMove().x, 0, PlayerModel.GetMove().y);
+        Vector3 direction = new Vector3(PlayerModel.GetMoveAxis().x, 0, PlayerModel.GetMoveAxis().y);
 
         if (direction == Vector3.zero)
         {
@@ -35,6 +37,11 @@ public class PlayerStateWalk<T> : State<T>
         if (Input.GetKeyDown(KeyCode.Space) && playerModel.IsGrounded)
         {
             Fsm.TransitionTo(inputToJump);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven)
+        {
+            Fsm.TransitionTo(inputToCook);
         }
     }
 }

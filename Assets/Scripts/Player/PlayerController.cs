@@ -15,9 +15,56 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         fsm.OnExecute();
+
+        // Provisorio
+        if (!IsLookingAtOven())
+        {
+            PlayerView.OnExitInCookModeMessage?.Invoke();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
+    {
+        ColisionEnterWithFloor(collision);
+        OnCollisionEnterWithOven(collision);
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        OnCollisionStayWithOvenAndLOS(collision);
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        ColisionExitWithFloor(collision);
+        OnColisionExitWithOven(collision);
+    }
+
+
+    private void InitializeFSM()
+    {
+        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, playerModel);
+        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Jump, PlayerStates.Cook, playerModel);
+        PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, playerModel);
+        PlayerStateCook<PlayerStates> psCook = new PlayerStateCook<PlayerStates>(PlayerStates.Idle, playerModel);
+
+        psIdle.AddTransition(PlayerStates.Walk, psWalk);
+        psIdle.AddTransition(PlayerStates.Jump, psJump);
+        psIdle.AddTransition(PlayerStates.Cook, psCook);
+
+        psWalk.AddTransition(PlayerStates.Idle, psIdle);
+        psWalk.AddTransition(PlayerStates.Jump, psJump);
+        psWalk.AddTransition(PlayerStates.Cook, psCook);
+
+        psJump.AddTransition(PlayerStates.Idle, psIdle);
+        psJump.AddTransition(PlayerStates.Walk, psWalk);
+
+        psCook.AddTransition(PlayerStates.Idle, psIdle);
+
+        fsm.SetInit(psIdle);
+    }
+
+    private void ColisionEnterWithFloor(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
@@ -25,7 +72,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void OnCollisionExit(Collision collision)
+    private void OnCollisionEnterWithOven(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Oven") && IsLookingAtOven())
+        {
+            playerModel.IsCollidingOven = true;
+            PlayerView.OnEnterInCookModeMessage?.Invoke();
+        }
+    }
+
+    private void OnCollisionStayWithOvenAndLOS(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Oven") && IsLookingAtOven())
+        {
+            playerModel.IsCollidingOven = true;
+            PlayerView.OnEnterInCookModeMessage?.Invoke();
+        }
+    }
+
+    private void ColisionExitWithFloor(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
@@ -33,22 +98,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    private void InitializeFSM()
+    private void OnColisionExitWithOven(Collision colision)
     {
-        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, playerModel);
-        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Jump, playerModel);
-        PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, playerModel);
+        if (colision.gameObject.CompareTag("Oven"))
+        {
+            playerModel.IsCollidingOven = false;
+            PlayerView.OnExitInCookModeMessage?.Invoke();
+        }
+    }
 
-        psIdle.AddTransition(PlayerStates.Walk, psWalk);
-        psIdle.AddTransition(PlayerStates.Jump, psJump);
+    // Provisorio
+    private bool IsLookingAtOven()
+    {
+        GameObject oven = GameObject.FindGameObjectWithTag("Oven");
 
-        psWalk.AddTransition(PlayerStates.Idle, psIdle);
-        psWalk.AddTransition(PlayerStates.Jump, psJump);
+        if (oven == null) return false;
 
-        psJump.AddTransition(PlayerStates.Idle, psIdle);
-        psJump.AddTransition(PlayerStates.Walk, psWalk);
+        Vector3 directionToOven = oven.transform.position - playerModel.transform.position;
+        float angle = Vector3.Angle(playerModel.PlayerCamera.transform.forward, directionToOven);
 
-        fsm.SetInit(psIdle);
+        if (angle <= 90f) 
+        {
+            return true;
+        }
+
+        return false;
     }
 }

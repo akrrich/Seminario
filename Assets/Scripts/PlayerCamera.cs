@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private PlayerController playerController;
+    private PlayerModel playerModel;
 
     private Vector3 cameraOffset;
 
@@ -26,27 +26,30 @@ public class PlayerCamera : MonoBehaviour
 
     private void GetComponents()
     {
-        playerController = GetComponentInParent<PlayerController>();
+        playerModel = GetComponentInParent<PlayerModel>();
     }
 
     private void InitializeCameraPosition()
     {
         cameraOffset = new Vector3(0f, offSetY, 0.3f);
-        transform.position = playerController.transform.position + cameraOffset;
+        transform.position = playerModel.transform.position + cameraOffset;
     }
 
     private void UpdateCameraFollow()
     {
-        cameraOffset = new Vector3(0f, offSetY, 0.3f);
+        if (!playerModel.IsCooking)
+        {
+            cameraOffset = new Vector3(0f, offSetY, 0.3f);
 
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+            float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
-        rotationX -= mouseY;
-        rotationX = Mathf.Clamp(rotationX, -80f, 80f);
+            rotationX -= mouseY;
+            rotationX = Mathf.Clamp(rotationX, -80f, 80f);
 
-        transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+            transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
 
-        playerController.transform.Rotate(Vector3.up * mouseX);
+            playerModel.transform.Rotate(Vector3.up * mouseX);
+        }
     }
 }
