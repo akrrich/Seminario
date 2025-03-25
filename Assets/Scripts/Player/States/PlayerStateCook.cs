@@ -16,12 +16,11 @@ public class PlayerStateCook<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-
         Debug.Log("Cook");
 
         PlayerView.OnEnterInCookMode?.Invoke();
         playerModel.IsCooking = true;
-        playerModel.transform.position = playerModel.cookPosition.transform.position;
+        playerModel.transform.position = playerModel.CookingPosition.transform.position;
         playerModel.transform.rotation = Quaternion.Euler(0, -90, 0);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }

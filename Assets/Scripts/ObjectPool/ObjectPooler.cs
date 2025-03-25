@@ -8,21 +8,12 @@ public class ObjectPooler : MonoBehaviour
 
     private Queue<MonoBehaviour> pool = new Queue<MonoBehaviour>();
 
+    public GameObject Prefab { get => prefab; }
+
 
     void Awake()
     {
         InitializePool();
-    }
-
-
-    private void InitializePool()
-    {
-        for (int i = 0; i < poolSize; i++)
-        {
-            GameObject obj = Instantiate(prefab, transform);
-            obj.SetActive(false);
-            pool.Enqueue(obj.GetComponent<MonoBehaviour>());
-        }
     }
 
 
@@ -46,5 +37,16 @@ public class ObjectPooler : MonoBehaviour
     {
         obj.gameObject.SetActive(false);
         pool.Enqueue(obj);
+    }
+
+
+    private void InitializePool()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject obj = Instantiate(prefab, transform);
+            obj.SetActive(false);
+            pool.Enqueue(obj.GetComponent<MonoBehaviour>());
+        }
     }
 }

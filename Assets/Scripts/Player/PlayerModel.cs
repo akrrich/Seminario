@@ -2,32 +2,39 @@ using UnityEngine;
 
 public enum PlayerStates
 {
-    Idle,
-    Walk,
-    Jump,
-    Cook
+    Idle, Walk, Jump, Cook, Grab
 }
 
 public class PlayerModel : MonoBehaviour
 {
-    [SerializeField] public Transform cookPosition;
-
     private PlayerCamera playerCamera;
-    private Rigidbody rb;
+    private InventoryManager inventoryManager; // Manager del Inventario
 
-    [SerializeField] private float speed = 250f;
-    [SerializeField] private float jumpForce = 5f;
+    private Rigidbody rb;
+    private Transform inventory; // GameObject hijo del player que representa el inventario
+    private Transform cookingPosition;
+    private GameObject currentItem = null;
+
+    [SerializeField] private float speed;
+    [SerializeField] private float jumpForce;
 
     private bool isGrounded = true;
     private bool isCollidingOven = false;
+    private bool isCollidingItem = false;
     private bool isCoking = false;
 
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
+    public InventoryManager InventoryManager { get => inventoryManager; }
+
     public Rigidbody Rb { get => rb; set => rb = value; }
+    public Transform Inventory { get => inventory; }
+    public Transform CookingPosition { get => cookingPosition; }
+    public GameObject CurrentItem { get => currentItem; set => currentItem = value; }
 
     public float JumpForce { get => jumpForce; }
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
+    public bool IsCollidingItem { get => isCollidingItem; set => isCollidingItem = value; }
     public bool IsCooking { get => isCoking; set => isCoking = value; }
 
 
@@ -47,11 +54,39 @@ public class PlayerModel : MonoBehaviour
         return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
+    // Provisorio
+    public bool IsLookingAtOven()
+    {
+        // Solucionar la parte comentada
+
+        /*GameObject oven = GameObject.FindGameObjectWithTag("Oven");
+
+        Vector3 directionToOven = oven.transform.position - transform.position;
+        float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
+
+        return LineOfSight.LOS(playerCamera.transform, oven.transform, 50, angle, LayerMask.NameToLayer("Oven"));*/
+
+        GameObject oven = GameObject.FindGameObjectWithTag("Oven");
+
+        Vector3 directionToOven = oven.transform.position - transform.position;
+        float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
+
+        if (angle <= 90f)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 
     private void GetComponents()
     {
-        rb = GetComponent<Rigidbody>();
         playerCamera = GetComponentInChildren<PlayerCamera>();
+        inventoryManager = FindFirstObjectByType<InventoryManager>();
+        rb = GetComponent<Rigidbody>();
+        inventory = transform.Find("Inventory").transform;
+        cookingPosition = GameObject.Find("CookingPosition").transform;
     }
 
     private void Movement()

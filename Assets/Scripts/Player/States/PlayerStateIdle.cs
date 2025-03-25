@@ -7,13 +7,15 @@ public class PlayerStateIdle<T> : State<T>
     private T inputToWalk;
     private T inputToJump;
     private T inputToCook;
+    private T inputToGrab;
 
 
-    public PlayerStateIdle(T inputToWalk, T inputToJump, T inputToCook, PlayerModel playerModel)
+    public PlayerStateIdle(T inputToWalk, T inputToJump, T inputToCook, T inputToGrab, PlayerModel playerModel)
     {
         this.inputToWalk = inputToWalk;
         this.inputToJump = inputToJump;
         this.inputToCook = inputToCook;
+        this.inputToGrab = inputToGrab;
         this.playerModel = playerModel;
     }
 
@@ -37,19 +39,14 @@ public class PlayerStateIdle<T> : State<T>
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven && IsLookingAtOven())
+        if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
         {
             Fsm.TransitionTo(inputToCook);
         }
-    }
 
-    public bool IsLookingAtOven()
-    {
-        GameObject oven = GameObject.FindGameObjectWithTag("Oven");
-
-        Vector3 directionToOven = oven.transform.position - playerModel.transform.position;
-        float angle = Vector3.Angle(playerModel.PlayerCamera.transform.forward, directionToOven);
-
-        return LineOfSight.CheckRange(playerModel.PlayerCamera.transform, oven.transform, angle);
+        if (Input.GetKeyDown(KeyCode.R) && playerModel.IsCollidingItem)
+        {
+            Fsm.TransitionTo(inputToGrab);
+        }
     }
 }

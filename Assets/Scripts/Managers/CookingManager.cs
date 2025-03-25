@@ -7,7 +7,7 @@ public class CookingManager : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones hijos
 
-    [SerializeField] private AbstractFactory abstractFactory;
+    [SerializeField] private AbstractFactory foodAbstractFactory;
     [SerializeField] private List<ObjectPooler> objectsPools;
     [SerializeField] private List<Button> buttonsFoods;
 
@@ -40,13 +40,13 @@ public class CookingManager : MonoBehaviour
 
 
     // Funcion asignada a los botones de la UI
-    public void ButtonGetFood(int poolerIndex)
+    public void ButtonGetFood(string prefabFoodName)
     {
         currentStove = GetNextAvailableStove();
 
         if (currentStove != null)
         {
-            abstractFactory.CreateObject(currentStove, new Vector3(0, 0.2f, 0), objectsPools[poolerIndex]);
+            foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
         }
     }
 
