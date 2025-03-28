@@ -35,6 +35,7 @@ public class ObjectPooler : MonoBehaviour
 
     public void ReturnObjectToPool(MonoBehaviour obj)
     {
+        obj.gameObject.transform.SetParent(transform);
         obj.gameObject.SetActive(false);
         pool.Enqueue(obj);
     }

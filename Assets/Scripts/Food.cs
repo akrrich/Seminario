@@ -12,10 +12,17 @@ public class Food : MonoBehaviour
     private CookingManager cookingManager;
 
     private Transform stovePosition;
-    private Transform positionWhenItsCooked;
+    private Transform cookedPosition;
+    private Transform dishPosition;
+
+    private Rigidbody rb;
+    private BoxCollider boxCollider;
 
     [SerializeField] private float timeToBeenCooked;
     [SerializeField] private FoodType foodType;
+
+    private bool isCooked = false;
+    private bool isInPlayerDishPosition = false;
 
 
     void Awake()
@@ -28,13 +35,28 @@ public class Food : MonoBehaviour
         StartCoroutine(CookGameObject());
     }
 
+    void OnDisable()
+    {
+        RestartValues();
+    }
+
     void Update()
     {
-        // Provisorio para devolver el objeto al pool
-        if (Input.GetKeyDown(KeyCode.Q))
+        // Provisorio para agarrar las comidas
+        if (Input.GetKeyDown(KeyCode.Q) && isCooked && !isInPlayerDishPosition)
         {
-            cookingManager.ReleaseCookedPosition(positionWhenItsCooked);
+            cookingManager.ReleaseCookedPosition(cookedPosition);
+            dishPosition = cookingManager.MoveFoodToDish(this);
 
+            StartCoroutine(DisablePhysics());
+
+            isInPlayerDishPosition = true;
+        }
+
+        // Provisorio para "entregar" las comidas
+        if (Input.GetKeyDown(KeyCode.Z) && isInPlayerDishPosition)
+        {
+            cookingManager.ReleaseDishPosition(dishPosition);
             cookingManager.ReturnObjectToPool(foodType, this);
         }
     }
@@ -43,6 +65,8 @@ public class Food : MonoBehaviour
     private void GetComponents()
     {
         cookingManager = FindFirstObjectByType<CookingManager>();
+        rb = GetComponent<Rigidbody>();
+        boxCollider = GetComponent<BoxCollider>();
     }
      
     private IEnumerator CookGameObject()
@@ -52,7 +76,28 @@ public class Food : MonoBehaviour
         yield return new WaitForSeconds(timeToBeenCooked);
 
         cookingManager.ReleaseStovePosition(stovePosition);
+        cookedPosition = cookingManager.MoveFoodWhenIsCooked(this);
 
-        positionWhenItsCooked = cookingManager.MoveFoodWhenIsCooked(this);
+        isCooked = true;
+    }
+
+    private IEnumerator DisablePhysics()
+    {
+        yield return new WaitForSeconds(0.1f);
+        rb.isKinematic = true;
+        boxCollider.enabled = false;
+    }
+
+    private void RestartValues()
+    {
+        stovePosition = null;
+        cookedPosition = null;
+        dishPosition = null;
+
+        rb.isKinematic = false;
+        boxCollider.enabled = true;
+
+        isCooked = false;
+        isInPlayerDishPosition = false;
     }
 }

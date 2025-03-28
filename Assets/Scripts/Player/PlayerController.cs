@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Teclas ocupadas: WASD, Q, E, R, X
+    // Teclas ocupadas provisoriamente: WASD, Q, E, R, X, Z
 
     [SerializeField] private PlayerModel playerModel;
 

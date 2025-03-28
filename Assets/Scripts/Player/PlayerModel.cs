@@ -26,7 +26,7 @@ public class PlayerModel : MonoBehaviour
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
     public InventoryManager InventoryManager { get => inventoryManager; }
 
-    public Rigidbody Rb { get => rb; set => rb = value; }
+    public Rigidbody Rb { get => rb; }
     public Transform Inventory { get => inventory; }
     public Transform CookingPosition { get => cookingPosition; }
     public GameObject CurrentItem { get => currentItem; set => currentItem = value; }

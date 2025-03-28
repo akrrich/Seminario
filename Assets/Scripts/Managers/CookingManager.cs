@@ -11,14 +11,21 @@ public class CookingManager : MonoBehaviour
     [SerializeField] private List<ObjectPooler> objectsPools;
     [SerializeField] private List<Button> buttonsFoods;
 
+    // Para las posiciones de las sarten
     [SerializeField] private List<Transform> stovesPositions;
     private Transform currentStove;
     private Queue<Transform> availableStovesPositions = new Queue<Transform>();
     private HashSet<Transform> occupiedStovesPositions = new HashSet<Transform>();
 
+    // Para las posiciones cuando se terminan de cocinar
     [SerializeField] private List<Transform> cookedPositions;
     private Queue<Transform> availableCookedPositions = new Queue<Transform>(); 
     private HashSet<Transform> occupiedCookedPositions = new HashSet<Transform>();
+
+    // Para las posiciones en la bandeja del player
+    [SerializeField] private List<Transform> dishPositions;
+    private Queue<Transform> availableDishPositions = new Queue<Transform>();
+    private HashSet<Transform> occupiedDishPositions = new HashSet<Transform>();
 
     private Dictionary<FoodType, ObjectPooler> foodPoolDictionary = new Dictionary<FoodType, ObjectPooler>();
 
@@ -30,6 +37,7 @@ public class CookingManager : MonoBehaviour
         SuscribeToPlayerViewEvents();
         EnqueueStovesPositions();
         EnqueueCookedPosition();
+        EnqueueDishPositions();
         InitializeFoodPoolDictionary();
     }
 
@@ -60,6 +68,7 @@ public class CookingManager : MonoBehaviour
 
     public void ReleaseStovePosition(Transform stovePosition)
     {
+        // Solamanete liberar posiciones de sarten si hay lugar en los espacios donde va la comida cocinada
         if (availableCookedPositions.Count > 0)
         {
             if (occupiedStovesPositions.Contains(stovePosition))
@@ -105,6 +114,42 @@ public class CookingManager : MonoBehaviour
         }
     }
 
+    public Transform MoveFoodToDish(Food currentFood)
+    {
+        Transform targetPosition = null;
+
+        while (availableDishPositions.Count > 0)
+        {
+            targetPosition = availableDishPositions.Dequeue();
+
+            if (occupiedDishPositions.Contains(targetPosition))
+            {
+                availableDishPositions.Enqueue(targetPosition);
+                continue;
+            }
+
+            occupiedDishPositions.Add(targetPosition);
+            break;
+        }
+
+        if (targetPosition != null)
+        {
+            currentFood.transform.position = targetPosition.position;
+            currentFood.transform.SetParent(targetPosition);
+        }
+
+        return targetPosition;
+    }
+
+    public void ReleaseDishPosition(Transform dishPosition)
+    {
+        if (occupiedDishPositions.Contains(dishPosition))
+        {
+            occupiedDishPositions.Remove(dishPosition);
+            availableDishPositions.Enqueue(dishPosition);
+        }
+    }
+
     private Transform GetNextAvailableStove()
     {
         Transform targetPosition = null;
@@ -130,7 +175,6 @@ public class CookingManager : MonoBehaviour
 
         return targetPosition;
     }
-
 
     private void SuscribeToPlayerViewEvents()
     {
@@ -162,6 +206,14 @@ public class CookingManager : MonoBehaviour
         foreach (var position in cookedPositions)
         {
             availableCookedPositions.Enqueue(position);
+        }
+    }
+
+    private void EnqueueDishPositions()
+    {
+        foreach (var position in dishPositions)
+        {
+            availableDishPositions.Enqueue(position);
         }
     }
 
