@@ -35,6 +35,7 @@ public class Food : MonoBehaviour
         StartCoroutine(CookGameObject());
     }
 
+    // Solucionar error de comida desaparece cuando desactivo el plato por ejecucion de metodo
     void OnDisable()
     {
         RestartValues();

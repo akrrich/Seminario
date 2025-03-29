@@ -1,32 +1,30 @@
 using UnityEngine;
 
-public class PlayerStateWalk<T> : State<T>
+public class PlayerStateRun<T> : State<T>
 {
     private PlayerModel playerModel;
 
     private T inputToIdle;
-    private T inputToRun;
+    private T inputToWalk;
     private T inputToJump;
     private T inputToCook;
-    private T inputToGrab;
 
 
-    public PlayerStateWalk(T inputToIdle, T inputToRun, T inputToJump, T inputToCook, T inputToGrab, PlayerModel playerModel)
+    public PlayerStateRun(T inputToIdle, T inputToWalk, T inputToJump, T inputToCook, PlayerModel playerModel)
     {
         this.inputToIdle = inputToIdle;
-        this.inputToRun = inputToRun;
+        this.inputToWalk = inputToWalk;
         this.inputToJump = inputToJump;
         this.inputToCook = inputToCook;
-        this.inputToGrab = inputToGrab;
         this.playerModel = playerModel;
     }
 
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Walk");
+        Debug.Log("Run");
 
-        playerModel.Speed = playerModel.WalkSpeed;
+        playerModel.Speed = playerModel.RunSpeed;
     }
 
     public override void Execute()
@@ -40,12 +38,12 @@ public class PlayerStateWalk<T> : State<T>
             Fsm.TransitionTo(inputToIdle);
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            Fsm.TransitionTo(inputToRun);
+            Fsm.TransitionTo(inputToWalk);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && playerModel.IsGrounded)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Fsm.TransitionTo(inputToJump);
         }
@@ -53,11 +51,6 @@ public class PlayerStateWalk<T> : State<T>
         if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
         {
             Fsm.TransitionTo(inputToCook);
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && playerModel.IsCollidingItem)
-        {
-            Fsm.TransitionTo(inputToGrab);
         }
     }
 }

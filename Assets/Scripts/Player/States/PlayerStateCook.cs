@@ -19,6 +19,7 @@ public class PlayerStateCook<T> : State<T>
         Debug.Log("Cook");
 
         PlayerView.OnEnterInCookMode?.Invoke();
+        playerModel.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = playerModel.CookingPosition.transform.position;
         playerModel.transform.rotation = Quaternion.Euler(0, -90, 0);
@@ -43,6 +44,7 @@ public class PlayerStateCook<T> : State<T>
     public override void Exit()
     {
         PlayerView.OnExitInCookMode?.Invoke();
+        playerModel.ShowOrHideDish(true);
         playerModel.IsCooking = false;
     }
 }

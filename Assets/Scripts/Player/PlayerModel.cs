@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum PlayerStates
 {
-    Idle, Walk, Jump, Cook, Grab
+    Idle, Walk, Run, Jump, Cook, Grab
 }
 
 public class PlayerModel : MonoBehaviour
@@ -13,10 +13,14 @@ public class PlayerModel : MonoBehaviour
     private Rigidbody rb;
     private Transform inventory; // GameObject hijo del player que representa el inventario
     private Transform cookingPosition;
+    private GameObject dish;
     private GameObject currentItem = null;
 
-    [SerializeField] private float speed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
+
+    private float speed;
 
     private bool isGrounded = true;
     private bool isCollidingOven = false;
@@ -31,6 +35,9 @@ public class PlayerModel : MonoBehaviour
     public Transform CookingPosition { get => cookingPosition; }
     public GameObject CurrentItem { get => currentItem; set => currentItem = value; }
 
+    public float WalkSpeed { get => walkSpeed; }
+    public float RunSpeed { get => runSpeed; } 
+    public float Speed { get => speed; set => speed = value; }
     public float JumpForce { get => jumpForce; }
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
@@ -79,6 +86,11 @@ public class PlayerModel : MonoBehaviour
         return false;
     }
 
+    public void ShowOrHideDish(bool current)
+    {
+        dish.SetActive(current);
+    }
+
 
     private void GetComponents()
     {
@@ -87,6 +99,7 @@ public class PlayerModel : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         inventory = transform.Find("Inventory").transform;
         cookingPosition = GameObject.Find("CookingPosition").transform;
+        dish = GameObject.Find("Dish");
     }
 
     private void Movement()

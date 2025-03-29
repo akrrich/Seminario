@@ -47,7 +47,8 @@ public class ShowCookMessage : MonoBehaviour
 
     private void ShowEnterMessageText()
     {
-        cookMessageDesplayText.text = "Presione la tecla 'E' para cocinar";
+        string inputKey = "<color=yellow>'E'</color>";
+        cookMessageDesplayText.text = "Presione la tecla " + inputKey + " para cocinar";
     }
 
     private void DisapearMessageText()
