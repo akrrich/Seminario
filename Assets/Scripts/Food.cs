@@ -35,12 +35,6 @@ public class Food : MonoBehaviour
         StartCoroutine(CookGameObject());
     }
 
-    // Solucionar error de comida desaparece cuando desactivo el plato por ejecucion de metodo
-    void OnDisable()
-    {
-        RestartValues();
-    }
-
     void Update()
     {
         // Provisorio para agarrar las comidas
@@ -59,6 +53,8 @@ public class Food : MonoBehaviour
         {
             cookingManager.ReleaseDishPosition(dishPosition);
             cookingManager.ReturnObjectToPool(foodType, this);
+
+            RestartValues();
         }
     }
 
@@ -69,17 +65,21 @@ public class Food : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
     }
-     
+
+    // Ejecutar unicamente la corrutina cuando se activa el objeto, si se activo porque entrego la comida
     private IEnumerator CookGameObject()
     {
-        stovePosition = cookingManager.CurrentStove;
+        if (!isInPlayerDishPosition)
+        {
+            stovePosition = cookingManager.CurrentStove;
 
-        yield return new WaitForSeconds(timeToBeenCooked);
+            yield return new WaitForSeconds(timeToBeenCooked);
 
-        cookingManager.ReleaseStovePosition(stovePosition);
-        cookedPosition = cookingManager.MoveFoodWhenIsCooked(this);
+            cookingManager.ReleaseStovePosition(stovePosition);
+            cookedPosition = cookingManager.MoveFoodWhenIsCooked(this);
 
-        isCooked = true;
+            isCooked = true;
+        }
     }
 
     private IEnumerator DisablePhysics()

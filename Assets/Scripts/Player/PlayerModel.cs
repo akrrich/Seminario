@@ -13,7 +13,7 @@ public class PlayerModel : MonoBehaviour
     private Rigidbody rb;
     private Transform inventory; // GameObject hijo del player que representa el inventario
     private Transform cookingPosition;
-    private GameObject dish;
+    private GameObject dish; // GameObject hijo del player que representa la bandeja
     private GameObject currentItem = null;
 
     [SerializeField] private float walkSpeed;
@@ -56,7 +56,7 @@ public class PlayerModel : MonoBehaviour
     }
 
 
-    public static Vector2 GetMoveAxis()
+    public Vector2 GetMoveAxis()
     {
         return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
@@ -99,7 +99,7 @@ public class PlayerModel : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         inventory = transform.Find("Inventory").transform;
         cookingPosition = GameObject.Find("CookingPosition").transform;
-        dish = GameObject.Find("Dish");
+        dish = transform.Find("Dish").gameObject;
     }
 
     private void Movement()

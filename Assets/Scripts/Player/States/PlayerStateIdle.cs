@@ -29,7 +29,7 @@ public class PlayerStateIdle<T> : State<T>
     {
         base.Execute();
 
-        if (PlayerModel.GetMoveAxis() != Vector2.zero)
+        if (playerModel.GetMoveAxis() != Vector2.zero)
         {
             Fsm.TransitionTo(inputToWalk);
         }

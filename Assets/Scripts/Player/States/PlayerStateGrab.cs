@@ -28,14 +28,14 @@ public class PlayerStateGrab<T> : State<T>
     {
         base.Execute();
 
-        Vector3 direction = new Vector3(PlayerModel.GetMoveAxis().x, 0, PlayerModel.GetMoveAxis().y);
+        Vector3 direction = new Vector3(playerModel.GetMoveAxis().x, 0, playerModel.GetMoveAxis().y);
 
         if (direction == Vector3.zero)
         {
             Fsm.TransitionTo(inputToIdle);
         }
 
-        if (PlayerModel.GetMoveAxis() != Vector2.zero)
+        if (playerModel.GetMoveAxis() != Vector2.zero)
         {
             Fsm.TransitionTo(inputToWalk);
         }
