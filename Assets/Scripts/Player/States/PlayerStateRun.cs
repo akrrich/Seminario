@@ -31,9 +31,7 @@ public class PlayerStateRun<T> : State<T>
     {
         base.Execute();
 
-        Vector3 direction = new Vector3(playerModel.GetMoveAxis().x, 0, playerModel.GetMoveAxis().y);
-
-        if (direction == Vector3.zero)
+        if (playerModel.GetMoveAxis() == Vector2.zero)
         {
             Fsm.TransitionTo(inputToIdle);
         }

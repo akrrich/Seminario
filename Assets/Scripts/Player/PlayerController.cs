@@ -4,7 +4,7 @@ public class PlayerController : MonoBehaviour
 {
     // Teclas ocupadas provisoriamente: WASD, Q, E, R, X, Z
 
-    [SerializeField] private PlayerModel playerModel;
+    private PlayerModel playerModel;
 
     private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
     private PlayerCollisions playerCollisions;
@@ -15,8 +15,8 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        GetComponentsAndInitializeReferences();
         InitializeFSM();
-        playerCollisions = new PlayerCollisions(this);
     }
 
     void Update()
@@ -56,6 +56,11 @@ public class PlayerController : MonoBehaviour
         playerCollisions.OnCollisionExitWithItem(collision);
     }
 
+    private void GetComponentsAndInitializeReferences()
+    {
+        playerModel = GetComponent<PlayerModel>();
+        playerCollisions = new PlayerCollisions(this);
+    }
 
     private void InitializeFSM()
     {
