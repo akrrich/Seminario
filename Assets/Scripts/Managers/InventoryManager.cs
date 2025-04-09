@@ -5,6 +5,8 @@ public class InventoryManager : MonoBehaviour
 {
     private List<GameObject> inventory = new List<GameObject>();
 
+    public List<GameObject> Inventory { get => inventory; }
+
 
     public void SaveElementInInventory(GameObject element, Transform playerInvontory)
     {

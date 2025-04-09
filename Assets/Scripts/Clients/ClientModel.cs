@@ -2,40 +2,70 @@ using UnityEngine;
 
 public enum ClientStates
 {
-    idle, GoChair, Leave
+    idle, GoChair, WaitingFood, Leave
 }
 
 public class ClientModel : MonoBehaviour
 {
+    private ClientManager clientManager;
+
     private Rigidbody rb;
+    private Transform currentTablePosition;
 
-    [SerializeField] public Transform newTransform;
-    [SerializeField] public Transform startTransform;
+    private Vector3 currentDirection;
 
-    [SerializeField] private float speed;
+    [SerializeField] public float speed;
+
+    public ClientManager ClientManager { get => clientManager; }
+
+    public Transform CurrentTablePosition { get => currentTablePosition; }
 
 
     void Awake()
     {
         GetComponents();
+        InitializeTablePosition();
+    }
+
+    void FixedUpdate()
+    {
+        Movement();
+    }
+
+
+    public void MoveToTarget(Transform target)
+    {
+        Vector3 newDirection = (target.position - transform.position).normalized;
+        currentDirection = newDirection;
+        Vector3 lookDirection = new Vector3(newDirection.x, 0, newDirection.z);
+
+        if (lookDirection != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = rotation;
+        }
+    }
+
+    public void StopVelocity()
+    {
+        currentDirection = Vector3.zero;
     }
 
 
     private void GetComponents()
     {
+        clientManager = FindFirstObjectByType<ClientManager>();
+
         rb = GetComponent<Rigidbody>();
     }
 
-    public void MoveToTarget(Transform target)
+    private void InitializeTablePosition()
     {
-        //transform.LookAt(target);
-
-        Vector3 direction = (target.position - transform.position).normalized;
-        rb.velocity = direction * speed * Time.fixedDeltaTime;
+        currentTablePosition = clientManager.GetRandomAvailableTable();
     }
 
-    public void StopVelocity()
+    private void Movement()
     {
-        rb.velocity = Vector3.zero;
+        rb.velocity = currentDirection * speed * Time.fixedDeltaTime;
     }
 }

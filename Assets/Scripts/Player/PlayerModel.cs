@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum PlayerStates
 {
-    Idle, Walk, Run, Jump, Cook, Grab
+    Idle, Walk, Run, Jump, Cook
 }
 
 public class PlayerModel : MonoBehaviour

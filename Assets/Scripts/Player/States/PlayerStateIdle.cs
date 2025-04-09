@@ -7,15 +7,13 @@ public class PlayerStateIdle<T> : State<T>
     private T inputToWalk;
     private T inputToJump;
     private T inputToCook;
-    private T inputToGrab;
 
 
-    public PlayerStateIdle(T inputToWalk, T inputToJump, T inputToCook, T inputToGrab, PlayerModel playerModel)
+    public PlayerStateIdle(T inputToWalk, T inputToJump, T inputToCook, PlayerModel playerModel)
     {
         this.inputToWalk = inputToWalk;
         this.inputToJump = inputToJump;
         this.inputToCook = inputToCook;
-        this.inputToGrab = inputToGrab;
         this.playerModel = playerModel;
     }
 
@@ -34,19 +32,14 @@ public class PlayerStateIdle<T> : State<T>
             Fsm.TransitionTo(inputToWalk);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && playerModel.IsGrounded)
+        if (PlayerInputs.Instance.Jump() && playerModel.IsGrounded)
         {
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
+        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
         {
             Fsm.TransitionTo(inputToCook);
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && playerModel.IsCollidingItem)
-        {
-            Fsm.TransitionTo(inputToGrab);
         }
     }
 }

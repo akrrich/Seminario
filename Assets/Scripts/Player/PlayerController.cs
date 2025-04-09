@@ -1,16 +1,22 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Teclas ocupadas provisoriamente: WASD, Q, E, R, X, Z
+    // Teclas ocupadas: WASD, Q, E, R, X, Z, indicacion en la clase PlayerInputs
 
     private PlayerModel playerModel;
 
     private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
     private PlayerCollisions playerCollisions;
 
+    private static event Action onGrabFood;
+    private static event Action onHandOverFood;
 
     public PlayerModel PlayerModel { get => playerModel; }
+
+    public static Action OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
+    public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
 
 
     void Awake()
@@ -23,16 +29,13 @@ public class PlayerController : MonoBehaviour
     {
         fsm.OnExecute();
 
-        // Provisorio
+        GrabOrDropItems();
+        GrabOrHandOverFood();
+
+        // Provisorio hay que solucionar el lineofsight
         if (!playerModel.IsLookingAtOven())
         {
             PlayerView.OnExitInCookModeMessage?.Invoke();
-        }
-
-        // Provisorio
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            playerModel.InventoryManager.RemoveElmentFromInventory(playerModel.Inventory);
         }
     }
 
@@ -56,30 +59,28 @@ public class PlayerController : MonoBehaviour
         playerCollisions.OnCollisionExitWithItem(collision);
     }
 
+
     private void GetComponentsAndInitializeReferences()
     {
         playerModel = GetComponent<PlayerModel>();
         playerCollisions = new PlayerCollisions(this);
     }
 
-    private void InitializeFSM()
+    private void InitializeFSM() 
     {
-        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Grab, playerModel);
-        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Run, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Grab, playerModel);
+        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, playerModel);
+        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Run, PlayerStates.Jump, PlayerStates.Cook, playerModel);
         PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, playerModel);
         PlayerStateCook<PlayerStates> psCook = new PlayerStateCook<PlayerStates>(PlayerStates.Idle, playerModel);
-        PlayerStateGrab<PlayerStates> psGrab = new PlayerStateGrab<PlayerStates>(PlayerStates.Idle, PlayerStates.Walk, playerModel);
         PlayerStateRun<PlayerStates> psRun = new PlayerStateRun<PlayerStates>(PlayerStates.Idle, PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, playerModel);
-
+         
         psIdle.AddTransition(PlayerStates.Walk, psWalk);
         psIdle.AddTransition(PlayerStates.Jump, psJump);
         psIdle.AddTransition(PlayerStates.Cook, psCook);
-        psIdle.AddTransition(PlayerStates.Grab, psGrab);
 
         psWalk.AddTransition(PlayerStates.Idle, psIdle);
         psWalk.AddTransition(PlayerStates.Jump, psJump);
         psWalk.AddTransition(PlayerStates.Cook, psCook);
-        psWalk.AddTransition(PlayerStates.Grab, psGrab);
         psWalk.AddTransition(PlayerStates.Run, psRun);
 
         psJump.AddTransition(PlayerStates.Idle, psIdle);
@@ -87,14 +88,39 @@ public class PlayerController : MonoBehaviour
 
         psCook.AddTransition(PlayerStates.Idle, psIdle);
 
-        psGrab.AddTransition(PlayerStates.Idle, psIdle);
-        psGrab.AddTransition(PlayerStates.Walk, psWalk);
-
         psRun.AddTransition(PlayerStates.Idle, psIdle);
         psRun.AddTransition(PlayerStates.Walk, psWalk);
         psRun.AddTransition(PlayerStates.Jump, psJump);
         psRun.AddTransition(PlayerStates.Cook, psCook);
 
         fsm.SetInit(psIdle);
+    }
+
+    private void GrabOrDropItems()
+    {
+        if (PlayerInputs.Instance.GrabItem() && playerModel.IsCollidingItem)
+        {
+            playerModel.InventoryManager.SaveElementInInventory(playerModel.CurrentItem, playerModel.Inventory);
+            playerModel.CurrentItem = null;
+            playerModel.IsCollidingItem = false;
+        }
+
+        if (PlayerInputs.Instance.DropItem() && playerModel.Inventory.childCount > 0) 
+        {
+            playerModel.InventoryManager.RemoveElmentFromInventory(playerModel.Inventory);
+        }
+    }
+
+    private void GrabOrHandOverFood()
+    {
+        if (PlayerInputs.Instance.GrabFood())
+        {
+            onGrabFood?.Invoke();
+        }
+
+        if (PlayerInputs.Instance.HandOverFood())
+        {
+            onHandOverFood?.Invoke();
+        }
     }
 }

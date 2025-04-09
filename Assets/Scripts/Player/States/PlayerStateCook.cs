@@ -30,7 +30,7 @@ public class PlayerStateCook<T> : State<T>
     {
         base.Execute();
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (PlayerInputs.Instance.Cook())
         {
             if (playerModel.GetMoveAxis() == Vector2.zero)
             {

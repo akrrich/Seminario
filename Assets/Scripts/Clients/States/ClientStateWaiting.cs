@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class ClientStateIdle<T> : State<T>
+public class ClientStateWaiting<T> : State<T>
 {
     private ClientModel clientModel;
 
 
-    public ClientStateIdle(ClientModel clientModel)
+    public ClientStateWaiting(ClientModel clientModel)
     {
         this.clientModel = clientModel;
     }
@@ -14,7 +14,7 @@ public class ClientStateIdle<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("IdleClient");
+        Debug.Log("Waiting");
     }
 
     public override void Execute()

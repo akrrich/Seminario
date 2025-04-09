@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class ClientController : MonoBehaviour
@@ -7,6 +6,8 @@ public class ClientController : MonoBehaviour
 
     private FSM<ClientStates> fsm = new FSM<ClientStates>();
     private ITreeNode root;
+
+    private float arrivalTime = 0f; // Provisorio
 
 
     void Awake()
@@ -20,8 +21,6 @@ public class ClientController : MonoBehaviour
     {
         fsm.OnExecute();
         root.Execute();
-
-        print(root);
     }
 
 
@@ -33,14 +32,15 @@ public class ClientController : MonoBehaviour
     private void InitializeFSM()
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel);
-        ClientStateChase<ClientStates> csChair = new ClientStateChase<ClientStates>(clientModel, clientModel.newTransform);
-        ClientStateChase<ClientStates> csLeave = new ClientStateChase<ClientStates>(clientModel, clientModel.startTransform);
+        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientModel.CurrentTablePosition);
+        ClientStateWaiting<ClientStates> csWaitingFood = new ClientStateWaiting<ClientStates>(clientModel);
+        ClientStateLeave<ClientStates> csLeave = new ClientStateLeave<ClientStates>(clientModel, clientModel.ClientManager.OutsidePosition);
 
         csIdle.AddTransition(ClientStates.GoChair, csChair);
-        csIdle.AddTransition(ClientStates.Leave, csLeave);
 
-        csChair.AddTransition(ClientStates.idle, csIdle);
-        csChair.AddTransition(ClientStates.Leave, csLeave);
+        csChair.AddTransition(ClientStates.WaitingFood, csWaitingFood);
+
+        csWaitingFood.AddTransition(ClientStates.Leave, csLeave);
 
         csLeave.AddTransition(ClientStates.idle, csIdle);
 
@@ -51,49 +51,47 @@ public class ClientController : MonoBehaviour
     {
         ActionNode idle = new ActionNode(() => fsm.TransitionTo(ClientStates.idle));
         ActionNode goChair = new ActionNode(() => fsm.TransitionTo(ClientStates.GoChair));
+        ActionNode waitingFood = new ActionNode(() => fsm.TransitionTo(ClientStates.WaitingFood));
         ActionNode leave = new ActionNode(() => fsm.TransitionTo(ClientStates.Leave));
 
-        QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, idle);
+        QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, leave, waitingFood);
+        QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, qIsWaitingForFood);
         QuestionNode qCanLeave = new QuestionNode(QuestionLeave, leave, qCanGoToChair);
 
         root = qCanLeave;
     }
 
-    private bool QuestionCanGoToChair()
+    private bool QuestionIsWaitingForFood()
     {
-        if (clientModel.newTransform != null)
+        arrivalTime += Time.deltaTime;
+
+        if (arrivalTime >= 5f)
         {
+            arrivalTime = 0f;
+            clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
             return true;
         }
 
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
-    private bool Question()
-    {
-        if (QuestionLeave())
+    private bool QuestionCanGoToChair()
+    {                                                                                         // si esta fuera del rango de la silla
+        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) >= 15f)
         {
-            return false;
-        }
-
-        else
-        {
-            StartCoroutine(waitSeconds());
+            return true;
         }
 
         return false;
     }
 
     private bool QuestionLeave()
-    {
-        return Vector3.Distance(clientModel.newTransform.position, transform.position) <= 1f;
-    }
+    {                                                                                     // si esta dentro del rango de la silla
+        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) <= 2f)
+        {
+            return true;
+        }
 
-    private IEnumerator waitSeconds()
-    {
-        yield return new WaitForSeconds(3);
+        return false;
     }
 }

@@ -36,17 +36,17 @@ public class PlayerStateRun<T> : State<T>
             Fsm.TransitionTo(inputToIdle);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (PlayerInputs.Instance.StopRun())
         {
             Fsm.TransitionTo(inputToWalk);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (PlayerInputs.Instance.Jump())
         {
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
+        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
         {
             Fsm.TransitionTo(inputToCook);
         }

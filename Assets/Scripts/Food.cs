@@ -3,8 +3,7 @@ using UnityEngine;
 
 public enum FoodType
 {
-    Mouse,
-    Fish,
+    Mouse, Fish,
 }
 
 public class Food : MonoBehaviour
@@ -27,6 +26,7 @@ public class Food : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToPlayerControllerEvents();
         GetComponents();
     }
 
@@ -35,29 +35,23 @@ public class Food : MonoBehaviour
         StartCoroutine(CookGameObject());
     }
 
-    void Update()
+    void OnDestroy()
     {
-        // Provisorio para agarrar las comidas
-        if (Input.GetKeyDown(KeyCode.Q) && isCooked && !isInPlayerDishPosition)
-        {
-            cookingManager.ReleaseCookedPosition(cookedPosition);
-            dishPosition = cookingManager.MoveFoodToDish(this);
-
-            StartCoroutine(DisablePhysics());
-
-            isInPlayerDishPosition = true;
-        }
-
-        // Provisorio para "entregar" las comidas
-        if (Input.GetKeyDown(KeyCode.Z) && isInPlayerDishPosition)
-        {
-            cookingManager.ReleaseDishPosition(dishPosition);
-            cookingManager.ReturnObjectToPool(foodType, this);
-
-            RestartValues();
-        }
+        UnsuscribeToPlayerControllerEvents();
     }
 
+
+    private void SuscribeToPlayerControllerEvents()
+    {
+        PlayerController.OnGrabFood += Grab;
+        PlayerController.OnHandOverFood += HandOver;
+    }
+
+    private void UnsuscribeToPlayerControllerEvents()
+    {
+        PlayerController.OnGrabFood -= Grab;
+        PlayerController.OnHandOverFood -= HandOver;
+    }
 
     private void GetComponents()
     {
@@ -100,5 +94,29 @@ public class Food : MonoBehaviour
 
         isCooked = false;
         isInPlayerDishPosition = false;
+    }
+
+    private void Grab()
+    {
+        if (isCooked && !isInPlayerDishPosition)
+        {
+            cookingManager.ReleaseCookedPosition(cookedPosition);
+            dishPosition = cookingManager.MoveFoodToDish(this);
+
+            StartCoroutine(DisablePhysics());
+
+            isInPlayerDishPosition = true;
+        }
+    }
+
+    private void HandOver()
+    {
+        if (isInPlayerDishPosition)
+        {
+            cookingManager.ReleaseDishPosition(dishPosition);
+            cookingManager.ReturnObjectToPool(foodType, this);
+
+            RestartValues();
+        }
     }
 }
