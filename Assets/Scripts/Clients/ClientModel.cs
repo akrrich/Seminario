@@ -14,7 +14,7 @@ public class ClientModel : MonoBehaviour
 
     private Vector3 currentDirection;
 
-    [SerializeField] public float speed;
+    [SerializeField] private float speed;
 
     public ClientManager ClientManager { get => clientManager; }
 

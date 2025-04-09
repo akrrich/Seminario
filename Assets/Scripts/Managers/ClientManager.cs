@@ -18,7 +18,7 @@ public class ClientManager : MonoBehaviour
     void Awake()
     {
         InitializeTables();
-        GameObject client = Instantiate(clientPrefab, transform, spawnPosition);
+        GameObject client = Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);  
     }
 
     void Update()

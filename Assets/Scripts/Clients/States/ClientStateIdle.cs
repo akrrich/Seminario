@@ -15,12 +15,12 @@ public class ClientStateIdle<T> : State<T>
     {
         base.Enter();
         Debug.Log("IdleClient");
+
+        clientModel.StopVelocity();
     }
 
     public override void Execute()
     {
         base.Execute();
-
-        clientModel.StopVelocity();
     }
 }

@@ -44,7 +44,7 @@ public class ClientController : MonoBehaviour
 
         csLeave.AddTransition(ClientStates.idle, csIdle);
 
-        fsm.SetInit(csIdle);
+        fsm.SetInit(csChair); // Intercambiar estados entre idle y chair segun se necesite
     }
 
     private void InitializeTree()
@@ -57,8 +57,9 @@ public class ClientController : MonoBehaviour
         QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, leave, waitingFood);
         QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, qIsWaitingForFood);
         QuestionNode qCanLeave = new QuestionNode(QuestionLeave, leave, qCanGoToChair);
+        QuestionNode qIsOutside = new QuestionNode(QuestionIsOutside, idle, qCanLeave);
 
-        root = qCanLeave;
+        root = qIsOutside;
     }
 
     private bool QuestionIsWaitingForFood()
@@ -76,8 +77,8 @@ public class ClientController : MonoBehaviour
     }
 
     private bool QuestionCanGoToChair()
-    {                                                                                         // si esta fuera del rango de la silla
-        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) >= 15f)
+    {                                                    // si esta fuera del rango de la silla
+        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) > 2f)
         {
             return true;
         }
@@ -86,8 +87,18 @@ public class ClientController : MonoBehaviour
     }
 
     private bool QuestionLeave()
-    {                                                                                     // si esta dentro del rango de la silla
-        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) <= 2f)
+    {                                                    // si esta dentro del rango de la silla
+        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) <= 1f)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool QuestionIsOutside()
+    {                                                    // si esta afuera de la taberna
+        if (Vector3.Distance(clientModel.ClientManager.OutsidePosition.position, transform.position) <= 2f)
         {
             return true;
         }

@@ -15,12 +15,12 @@ public class ClientStateWaiting<T> : State<T>
     {
         base.Enter();
         Debug.Log("Waiting");
+
+        clientModel.StopVelocity();
     }
 
     public override void Execute()
     {
         base.Execute();
-
-        clientModel.StopVelocity();
     }
 }
