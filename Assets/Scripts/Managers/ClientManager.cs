@@ -6,34 +6,32 @@ public class ClientManager : MonoBehaviour
     [SerializeField] private GameObject clientPrefab;
     [SerializeField] private Transform spawnPosition, outsidePosition;
 
-    [SerializeField] private List<Transform> tablesPositions;
-    private List<bool> tablesOccupied = new List<bool>();
+    [SerializeField] private List<Table> tablesPositions;
 
     private float instantiateTime = 0f;
-    private float timeToWaitForInstantiateNewClient = 5f;
+    private float timeToWaitForInstantiateNewClient = 20f;
 
     public Transform OutsidePosition { get => outsidePosition; }
 
 
     void Awake()
     {
-        InitializeTables();
         GameObject client = Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);  
     }
 
     void Update()
     {
-        //InstantiateClient();
+        InstantiateClient();
     }
 
 
-    public Transform GetRandomAvailableTable()
+    public Table GetRandomAvailableTable()
     {
         List<int> availableIndexes = new List<int>();
 
-        for (int i = 0; i < tablesOccupied.Count; i++)
+        for (int i = 0; i < tablesPositions.Count; i++)
         {
-            if (!tablesOccupied[i])
+            if (!tablesPositions[i].IsOccupied)
             {
                 availableIndexes.Add(i);
             }
@@ -41,27 +39,15 @@ public class ClientManager : MonoBehaviour
 
         int randomAvailableIndex = availableIndexes[Random.Range(0, availableIndexes.Count)];
 
-        tablesOccupied[randomAvailableIndex] = true;
+        tablesPositions[randomAvailableIndex].IsOccupied = true;
         return tablesPositions[randomAvailableIndex];
     }
 
-    public void FreeTable(Transform tableToFree)
+    public void FreeTable(Table tableToFree)
     {
-        int index = tablesPositions.IndexOf(tableToFree);
-        if (index >= 0)
-        {
-            tablesOccupied[index] = false;
-        }
+        tableToFree.IsOccupied = false;
     }
 
-
-    private void InitializeTables()
-    {
-        for (int i = 0; i < tablesPositions.Count; i++)
-        {
-            tablesOccupied.Add(false);
-        }
-    }
 
     private void InstantiateClient()
     {
@@ -69,7 +55,7 @@ public class ClientManager : MonoBehaviour
 
         if (instantiateTime >= timeToWaitForInstantiateNewClient)
         {
-            GameObject client = Instantiate(clientPrefab, transform, spawnPosition);
+            GameObject client = Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);
             instantiateTime = 0f;
         }
     }

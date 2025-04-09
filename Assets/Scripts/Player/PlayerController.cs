@@ -13,10 +13,16 @@ public class PlayerController : MonoBehaviour
     private static event Action onGrabFood;
     private static event Action onHandOverFood;
 
+    private static event Action<Table> onTableCollisionEnter;
+    private static event Action onTableCollisionExit;
+
     public PlayerModel PlayerModel { get => playerModel; }
 
     public static Action OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
+
+    public static Action<Table> OnTableCollisionEnter { get => onTableCollisionEnter; set => onTableCollisionEnter = value; }
+    public static Action OnTableCollisionExit { get => onTableCollisionExit; set => onTableCollisionExit = value; }
 
 
     void Awake()
@@ -44,6 +50,7 @@ public class PlayerController : MonoBehaviour
         playerCollisions.OnCollisionEnterWithFloor(collision);
         playerCollisions.OnCollisionEnterWithOvenAndLOS(collision);
         playerCollisions.OnCollisionEnterWithItem(collision);
+        playerCollisions.OnCollisionEnterWithTable(collision);
     }
 
     void OnCollisionStay(Collision collision)
@@ -57,6 +64,7 @@ public class PlayerController : MonoBehaviour
         playerCollisions.OnCollisionExitWithFloor(collision);
         playerCollisions.OnCollisionExitWithOven(collision);
         playerCollisions.OnCollisionExitWithItem(collision);
+        playerCollisions.OnCollisionExitWithTable(collision);
     }
 
 

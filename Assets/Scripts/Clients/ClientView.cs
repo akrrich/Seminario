@@ -8,8 +8,10 @@ public class ClientView : MonoBehaviour
     private Transform order; // GameObject padre de la UI
     private SpriteRenderer foodSprite;
 
-    private string food;
-    private string[] foods = { "fish", "mouse" };
+    private string foodName;
+    private string[] foods = { "Fish", "Mouse" };
+
+    public string FoodName { get => foodName; }
 
 
     void Awake()
@@ -35,15 +37,15 @@ public class ClientView : MonoBehaviour
     private void InitializeRandomFoodUI()
     {
         int randomIndex = Random.Range(0, foods.Length);
-        food = foods[randomIndex];
+        foodName = foods[randomIndex];
 
-        switch (food)
+        switch (foodName)
         {
-            case "fish":
+            case "Fish":
                 foodSprite.color = Color.yellow;
                 break;
 
-            case "mouse":
+            case "Mouse":
                 foodSprite.color = Color.blue;
                 break;
         }

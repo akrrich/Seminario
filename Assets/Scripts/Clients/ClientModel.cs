@@ -10,7 +10,7 @@ public class ClientModel : MonoBehaviour
     private ClientManager clientManager;
 
     private Rigidbody rb;
-    private Transform currentTablePosition;
+    private Table currentTablePosition;
 
     private Vector3 currentDirection;
 
@@ -18,7 +18,7 @@ public class ClientModel : MonoBehaviour
 
     public ClientManager ClientManager { get => clientManager; }
 
-    public Transform CurrentTablePosition { get => currentTablePosition; }
+    public Table CurrentTablePosition { get => currentTablePosition; }
 
 
     void Awake()

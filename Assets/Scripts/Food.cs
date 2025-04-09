@@ -9,6 +9,7 @@ public enum FoodType
 public class Food : MonoBehaviour
 {
     private CookingManager cookingManager;
+    private Table currentTable;
 
     private Transform stovePosition;
     private Transform cookedPosition;
@@ -41,16 +42,30 @@ public class Food : MonoBehaviour
     }
 
 
+    public void ReturnObjetToPool()
+    {
+        cookingManager.ReturnObjectToPool(foodType, this);
+
+        RestartValues();
+    }
+
+
     private void SuscribeToPlayerControllerEvents()
     {
         PlayerController.OnGrabFood += Grab;
         PlayerController.OnHandOverFood += HandOver;
+
+        PlayerController.OnTableCollisionEnter += SaveTable;
+        PlayerController.OnTableCollisionExit += ClearTable;
     }
 
     private void UnsuscribeToPlayerControllerEvents()
     {
         PlayerController.OnGrabFood -= Grab;
         PlayerController.OnHandOverFood -= HandOver;
+
+        PlayerController.OnTableCollisionEnter -= SaveTable;
+        PlayerController.OnTableCollisionExit -= ClearTable;
     }
 
     private void GetComponents()
@@ -94,6 +109,25 @@ public class Food : MonoBehaviour
 
         isCooked = false;
         isInPlayerDishPosition = false;
+
+        // Averiguar porque esto funciona
+        if (currentTable != null)
+        {
+            currentTable.CurrentFood = null;
+        }
+    }
+
+    private void SaveTable(Table table)
+    {
+        if (isInPlayerDishPosition)
+        {
+            currentTable = table;
+        }
+    }
+
+    private void ClearTable()
+    {
+        currentTable = null;
     }
 
     private void Grab()
@@ -111,12 +145,21 @@ public class Food : MonoBehaviour
 
     private void HandOver()
     {
-        if (isInPlayerDishPosition)
+        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
         {
             cookingManager.ReleaseDishPosition(dishPosition);
-            cookingManager.ReturnObjectToPool(foodType, this);
 
-            RestartValues();
+            transform.SetParent(currentTable.DishPosition);
+            transform.position = currentTable.DishPosition.position + new Vector3(0, 0.1f, 0);
+
+            rb.isKinematic = false;
+            boxCollider.enabled = true;
+            isInPlayerDishPosition = false;
+            isCooked = false;
+
+            currentTable.CurrentFood = this;
+
+            ClearTable();
         }
     }
 }

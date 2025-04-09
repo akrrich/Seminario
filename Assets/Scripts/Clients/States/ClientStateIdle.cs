@@ -3,6 +3,7 @@ using UnityEngine;
 public class ClientStateIdle<T> : State<T>
 {
     private ClientModel clientModel;
+    private MonoBehaviour mono;
 
 
     public ClientStateIdle(ClientModel clientModel)

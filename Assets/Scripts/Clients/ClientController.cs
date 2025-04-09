@@ -3,6 +3,7 @@ using UnityEngine;
 public class ClientController : MonoBehaviour
 {
     private ClientModel clientModel;
+    private ClientView clientView;
 
     private FSM<ClientStates> fsm = new FSM<ClientStates>();
     private ITreeNode root;
@@ -23,16 +24,23 @@ public class ClientController : MonoBehaviour
         root.Execute();
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(clientModel.CurrentTablePosition.ChairPosition.position, 2);
+    }
+
 
     private void GetComponents()
     {
         clientModel = GetComponent<ClientModel>();
+        clientView = GetComponent<ClientView>();
     }
 
     private void InitializeFSM()
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel);
-        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientModel.CurrentTablePosition);
+        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientModel.CurrentTablePosition.ChairPosition);
         ClientStateWaiting<ClientStates> csWaitingFood = new ClientStateWaiting<ClientStates>(clientModel);
         ClientStateLeave<ClientStates> csLeave = new ClientStateLeave<ClientStates>(clientModel, clientModel.ClientManager.OutsidePosition);
 
@@ -64,13 +72,23 @@ public class ClientController : MonoBehaviour
 
     private bool QuestionIsWaitingForFood()
     {
-        arrivalTime += Time.deltaTime;
-
-        if (arrivalTime >= 5f)
+        if (clientModel.CurrentTablePosition.DishPosition.transform.childCount > 0)
         {
-            arrivalTime = 0f;
-            clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
-            return true;
+            if (clientModel.CurrentTablePosition.DishPosition.transform.GetChild(0).name == clientView.FoodName + "(Clone)")
+            {
+                arrivalTime += Time.deltaTime;
+
+                if (arrivalTime >= 5f)
+                {
+                    arrivalTime = 0f;
+
+                    clientModel.CurrentTablePosition.CurrentFood.ReturnObjetToPool();
+                    //clientModel.CurrentTablePosition.CurrentFood = null;
+
+                    clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -78,7 +96,7 @@ public class ClientController : MonoBehaviour
 
     private bool QuestionCanGoToChair()
     {                                                    // si esta fuera del rango de la silla
-        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) > 2f)
+        if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) > 2f)
         {
             return true;
         }
@@ -88,7 +106,7 @@ public class ClientController : MonoBehaviour
 
     private bool QuestionLeave()
     {                                                    // si esta dentro del rango de la silla
-        if (Vector3.Distance(clientModel.CurrentTablePosition.position, transform.position) <= 1f)
+        if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) <= 1f)
         {
             return true;
         }
