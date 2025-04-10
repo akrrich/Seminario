@@ -14,6 +14,11 @@ public class ClientController : MonoBehaviour
     void Awake()
     {
         GetComponents();
+    }
+
+    void Start()
+    {
+        // Obligatorio inicializar la maquina de estados despues del awake, ya que depende del awake del Model
         InitializeFSM();
         InitializeTree();
     }
@@ -22,12 +27,6 @@ public class ClientController : MonoBehaviour
     {
         fsm.OnExecute();
         root.Execute();
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(clientModel.CurrentTablePosition.ChairPosition.position, 2);
     }
 
 
@@ -83,11 +82,19 @@ public class ClientController : MonoBehaviour
                     arrivalTime = 0f;
 
                     clientModel.CurrentTablePosition.CurrentFood.ReturnObjetToPool();
-                    //clientModel.CurrentTablePosition.CurrentFood = null;
+                    clientModel.CurrentTablePosition.CurrentFood = null;
 
                     clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
+
                     return true;
                 }
+            }
+
+            else
+            {
+                // Aplicar logica par si el plato es incorrecto
+
+                return true;
             }
         }
 

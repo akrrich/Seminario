@@ -21,6 +21,7 @@ public class Food : MonoBehaviour
     [SerializeField] private float timeToBeenCooked;
     [SerializeField] private FoodType foodType;
 
+    private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
 
@@ -36,6 +37,11 @@ public class Food : MonoBehaviour
         StartCoroutine(CookGameObject());
     }
 
+    void OnDisable()
+    {
+        RestartValues();
+    }
+
     void OnDestroy()
     {
         UnsuscribeToPlayerControllerEvents();
@@ -45,8 +51,6 @@ public class Food : MonoBehaviour
     public void ReturnObjetToPool()
     {
         cookingManager.ReturnObjectToPool(foodType, this);
-
-        RestartValues();
     }
 
 
@@ -78,7 +82,7 @@ public class Food : MonoBehaviour
     // Ejecutar unicamente la corrutina cuando se activa el objeto, si se activo porque entrego la comida
     private IEnumerator CookGameObject()
     {
-        if (!isInPlayerDishPosition)
+        if (!isInPlayerDishPosition && !isInstantiateFirstTime)
         {
             stovePosition = cookingManager.CurrentStove;
 
@@ -89,6 +93,8 @@ public class Food : MonoBehaviour
 
             isCooked = true;
         }
+
+        isInstantiateFirstTime = false;
     }
 
     private IEnumerator DisablePhysics()
@@ -109,12 +115,6 @@ public class Food : MonoBehaviour
 
         isCooked = false;
         isInPlayerDishPosition = false;
-
-        // Averiguar porque esto funciona
-        if (currentTable != null)
-        {
-            currentTable.CurrentFood = null;
-        }
     }
 
     private void SaveTable(Table table)

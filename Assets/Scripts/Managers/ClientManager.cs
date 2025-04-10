@@ -9,19 +9,19 @@ public class ClientManager : MonoBehaviour
     [SerializeField] private List<Table> tablesPositions;
 
     private float instantiateTime = 0f;
-    private float timeToWaitForInstantiateNewClient = 20f;
+    private float timeToWaitForInstantiateNewClient = 10f;
 
     public Transform OutsidePosition { get => outsidePosition; }
 
 
     void Awake()
     {
-        GameObject client = Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);  
+        Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);  
     }
 
     void Update()
     {
-        InstantiateClient();
+        //InstantiateClient();
     }
 
 
@@ -55,7 +55,7 @@ public class ClientManager : MonoBehaviour
 
         if (instantiateTime >= timeToWaitForInstantiateNewClient)
         {
-            GameObject client = Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);
+            Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);
             instantiateTime = 0f;
         }
     }
