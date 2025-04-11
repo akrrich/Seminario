@@ -1,15 +1,16 @@
+using System;
 using UnityEngine;
 
 public class ClientStateGoChair<T> : State<T>
 {
     private ClientModel clientModel;
-    private Transform newTransform;
+    private Func<Transform> getTargetTransform; 
 
 
-    public ClientStateGoChair(ClientModel clientModel, Transform newTransform)
+    public ClientStateGoChair(ClientModel clientModel, Func<Transform> getTargetTransform)
     {
         this.clientModel = clientModel;
-        this.newTransform = newTransform;
+        this.getTargetTransform = getTargetTransform;
     }
 
 
@@ -18,7 +19,7 @@ public class ClientStateGoChair<T> : State<T>
         base.Enter();
         Debug.Log("GoChair");
 
-        clientModel.MoveToTarget(newTransform);
+        clientModel.MoveToTarget(getTargetTransform());
     }
 
     public override void Execute()

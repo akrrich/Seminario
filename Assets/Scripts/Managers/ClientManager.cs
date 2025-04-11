@@ -3,20 +3,21 @@ using UnityEngine;
 
 public class ClientManager : MonoBehaviour
 {
-    [SerializeField] private GameObject clientPrefab;
     [SerializeField] private Transform spawnPosition, outsidePosition;
 
+    [SerializeField] private ObjectPooler clientPool;
     [SerializeField] private List<Table> tablesPositions;
 
     private float instantiateTime = 0f;
-    private float timeToWaitForInstantiateNewClient = 10f;
+    private float timeToWaitForInstantiateNewClient = 5f;
 
+    public Transform SpawnPosition { get => spawnPosition; }
     public Transform OutsidePosition { get => outsidePosition; }
 
 
     void Awake()
     {
-        Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);  
+        ClientController client = clientPool.GetObjectFromPool<ClientController>();
     }
 
     void Update()
@@ -24,6 +25,11 @@ public class ClientManager : MonoBehaviour
         //InstantiateClient();
     }
 
+
+    public void ReturnObjectToPool(ClientModel clientModel)
+    {
+        clientPool.ReturnObjectToPool(clientModel);
+    }
 
     public Table GetRandomAvailableTable()
     {
@@ -55,7 +61,7 @@ public class ClientManager : MonoBehaviour
 
         if (instantiateTime >= timeToWaitForInstantiateNewClient)
         {
-            Instantiate(clientPrefab, spawnPosition.position, Quaternion.identity, transform);
+            ClientController client = clientPool.GetObjectFromPool<ClientController>();
             instantiateTime = 0f;
         }
     }

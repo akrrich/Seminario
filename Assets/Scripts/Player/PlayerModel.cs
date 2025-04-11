@@ -15,6 +15,7 @@ public class PlayerModel : MonoBehaviour
     private Transform cookingPosition;
     private GameObject dish; // GameObject hijo del player que representa la bandeja
     private GameObject currentItem = null;
+    private GameObject oven;
 
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
@@ -33,6 +34,7 @@ public class PlayerModel : MonoBehaviour
     public Rigidbody Rb { get => rb; }
     public Transform Inventory { get => inventory; }
     public Transform CookingPosition { get => cookingPosition; }
+    public GameObject Dish { get => dish; }
     public GameObject CurrentItem { get => currentItem; set => currentItem = value; }
 
     public float WalkSpeed { get => walkSpeed; }
@@ -66,14 +68,10 @@ public class PlayerModel : MonoBehaviour
     {
         // Solucionar la parte comentada
 
-        /*GameObject oven = GameObject.FindGameObjectWithTag("Oven");
-
-        Vector3 directionToOven = oven.transform.position - transform.position;
+        /*Vector3 directionToOven = oven.transform.position - transform.position;
         float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
 
         return LineOfSight.LOS(playerCamera.transform, oven.transform, 50, angle, LayerMask.NameToLayer("Oven"));*/
-
-        GameObject oven = GameObject.FindGameObjectWithTag("Oven");
 
         Vector3 directionToOven = oven.transform.position - transform.position;
         float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
@@ -100,6 +98,7 @@ public class PlayerModel : MonoBehaviour
         inventory = transform.Find("Inventory").transform;
         cookingPosition = GameObject.Find("CookingPosition").transform;
         dish = transform.Find("Dish").gameObject;
+        oven = GameObject.FindGameObjectWithTag("Oven");
     }
 
     private void Movement()

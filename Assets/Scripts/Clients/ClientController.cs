@@ -39,7 +39,7 @@ public class ClientController : MonoBehaviour
     private void InitializeFSM()
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel);
-        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientModel.CurrentTablePosition.ChairPosition);
+        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, () => clientModel.CurrentTablePosition.ChairPosition);
         ClientStateWaiting<ClientStates> csWaitingFood = new ClientStateWaiting<ClientStates>(clientModel);
         ClientStateLeave<ClientStates> csLeave = new ClientStateLeave<ClientStates>(clientModel, clientModel.ClientManager.OutsidePosition);
 
@@ -92,7 +92,7 @@ public class ClientController : MonoBehaviour
 
             else
             {
-                // Aplicar logica par si el plato es incorrecto
+                // Aplicar logica par si el plato es incorrecto si es necesario
 
                 return true;
             }
@@ -122,7 +122,7 @@ public class ClientController : MonoBehaviour
     }
 
     private bool QuestionIsOutside()
-    {                                                    // si esta afuera de la taberna
+    {                                                    // si esta afuera del rango de OutsidePosition
         if (Vector3.Distance(clientModel.ClientManager.OutsidePosition.position, transform.position) <= 2f)
         {
             return true;

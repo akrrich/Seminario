@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class ClientView : MonoBehaviour
 {
@@ -8,8 +9,12 @@ public class ClientView : MonoBehaviour
     private Transform order; // GameObject padre de la UI
     private SpriteRenderer foodSprite;
 
+    private static event Action onFoodChange;
+
     private string foodName;
     private string[] foods = { "Fish", "Mouse" };
+
+    public static Action OnFoodChange { get => onFoodChange; set => onFoodChange = value; }
 
     public string FoodName { get => foodName; }
 
@@ -17,6 +22,7 @@ public class ClientView : MonoBehaviour
     void Awake()
     {
         GetComponents();
+        SuscribeToOwnEvent();
         InitializeRandomFoodUI();
     }
 
@@ -34,9 +40,14 @@ public class ClientView : MonoBehaviour
         foodSprite = transform.Find("Order").transform.Find("FoodsPositions").transform.Find("Position1").GetComponent<SpriteRenderer>();
     }
 
+    private void SuscribeToOwnEvent()
+    {
+        onFoodChange += InitializeRandomFoodUI;
+    }
+
     private void InitializeRandomFoodUI()
     {
-        int randomIndex = Random.Range(0, foods.Length);
+        int randomIndex = UnityEngine.Random.Range(0, foods.Length);
         foodName = foods[randomIndex];
 
         switch (foodName)

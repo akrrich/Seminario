@@ -4026,7 +4026,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8174932956925981841, guid: 2ff490485441024498ae24e3d0fdb2b7, type: 3}
-  poolSize: 10
+  poolSize: 1
 --- !u!1 &451803043
 GameObject:
   m_ObjectHideFlags: 0
@@ -7165,9 +7165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2ee7024166dfd4b9a92fc2cae2f510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clientPrefab: {fileID: 8174932956925981841, guid: 2ff490485441024498ae24e3d0fdb2b7, type: 3}
   spawnPosition: {fileID: 1723860516}
   outsidePosition: {fileID: 723869295}
+  clientPool: {fileID: 442943460}
   tablesPositions:
   - {fileID: 796359616}
   - {fileID: 155692888}

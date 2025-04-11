@@ -44,9 +44,23 @@ public class PlayerCollisions
     {
         if (collision.gameObject.CompareTag("Table"))
         {
-            Table table = collision.gameObject.GetComponentInParent<Table>();
+            bool hasGrandchildren = false;
 
-            PlayerController.OnTableCollisionEnter?.Invoke(table);
+            foreach (Transform child in playerController.PlayerModel.Dish.transform)
+            {
+                if (child.childCount > 0)
+                {
+                    hasGrandchildren = true;
+                    break;
+                }
+            }
+
+            if (hasGrandchildren)
+            {
+                Table table = collision.gameObject.GetComponentInParent<Table>();
+
+                PlayerController.OnTableCollisionEnter?.Invoke(table);
+            }
         }
     }
 

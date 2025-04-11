@@ -16,6 +16,8 @@ public class ClientModel : MonoBehaviour
 
     [SerializeField] private float speed;
 
+    private bool isInstantiateFirstTime = true;
+
     public ClientManager ClientManager { get => clientManager; }
 
     public Table CurrentTablePosition { get => currentTablePosition; }
@@ -24,7 +26,11 @@ public class ClientModel : MonoBehaviour
     void Awake()
     {
         GetComponents();
-        InitializeTablePosition();
+    }
+
+    void OnEnable()
+    {
+        InitializeClientForPool();
     }
 
     void FixedUpdate()
@@ -62,6 +68,18 @@ public class ClientModel : MonoBehaviour
     private void InitializeTablePosition()
     {
         currentTablePosition = clientManager.GetRandomAvailableTable();
+    }
+
+    private void InitializeClientForPool()
+    {
+        if (!isInstantiateFirstTime)
+        {
+            transform.position = clientManager.SpawnPosition.position;
+            InitializeTablePosition();
+            ClientView.OnFoodChange?.Invoke();
+        }
+
+        isInstantiateFirstTime = false;
     }
 
     private void Movement()

@@ -3,7 +3,6 @@ using UnityEngine;
 public class ClientStateIdle<T> : State<T>
 {
     private ClientModel clientModel;
-    private MonoBehaviour mono;
 
 
     public ClientStateIdle(ClientModel clientModel)
@@ -18,6 +17,8 @@ public class ClientStateIdle<T> : State<T>
         Debug.Log("IdleClient");
 
         clientModel.StopVelocity();
+
+        clientModel.ClientManager.ReturnObjectToPool(clientModel);
     }
 
     public override void Execute()
