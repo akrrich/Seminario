@@ -5,7 +5,7 @@ public class ClientView : MonoBehaviour
 {
     private PlayerController playerController;
 
-    private Animator anim;
+    [SerializeField] private Animator anim;
     private Transform order; // GameObject padre de la UI
     private SpriteRenderer foodSprite;
 
@@ -41,9 +41,14 @@ public class ClientView : MonoBehaviour
         anim.transform.position = transform.position;
     }
 
+    void OnEnable()
+    {
+        anim.SetBool("Walk", true);
+    }
+
     void OnDestroy()
     {
-        UnsuscribeToOwnEvents();
+        //UnsuscribeToOwnEvents();
     }
 
 
@@ -57,20 +62,20 @@ public class ClientView : MonoBehaviour
 
     private void SuscribeToOwnEvent()
     {
-        onWalkEnter += () => ExecuteCurrentAnimation("Walk");
-        onSitEnter += () => ExecuteCurrentAnimation("Sit");
-        onStanUpEnter += () => ExecuteCurrentAnimation("StandUp");
+        onWalkEnter += Walk;
+        onSitEnter += Sit;
+        onStanUpEnter += StandUp;
 
         onFoodChange += InitializeRandomFoodUI;
     }
 
     private void UnsuscribeToOwnEvents()
     {
-        onWalkEnter -= () => ExecuteCurrentAnimation("Walk");
-        onSitEnter -= () => ExecuteCurrentAnimation("Sit");
-        onStanUpEnter -= () => ExecuteCurrentAnimation("StandUp");
+        /*onWalkEnter -= () => ExecuteCurrentAnimation(0);
+        onSitEnter -= () => ExecuteCurrentAnimation(1);
+        onStanUpEnter -= () => ExecuteCurrentAnimation(2);
 
-        onFoodChange -= InitializeRandomFoodUI;
+        onFoodChange -= InitializeRandomFoodUI;*/
     }
 
     private void InitializeRandomFoodUI()
@@ -102,18 +107,33 @@ public class ClientView : MonoBehaviour
         }
     }
 
-    private void ExecuteCurrentAnimation(string indexName) 
+    /*private void ExecuteCurrentAnimation(int parameterIndex) 
     {
-        string[] statesNames = { "Walk", "Sit", "StandUp" };
+        string[] parametersNames = { "Walk", "Sit", "StandUp" };
 
-        for (int i = 0; i < statesNames.Length; i++)
+        for (int i = 0; i < parametersNames.Length; i++)
         {
-            if (statesNames[i] == indexName)
-            {
-                anim.SetBool(indexName, true);
+            anim.SetBool(parametersNames[i], i == parameterIndex);
 
-                print("EjecuteAnimacion");
+            if (i == parameterIndex)
+            {
+                break;
             }
         }
+    }*/
+
+    private void Walk()
+    {
+        anim.SetBool("Walk", true);
+    }
+
+    private void Sit()
+    {
+        anim.SetBool("Sit", true);
+    }
+
+    private void StandUp()
+    {
+        anim.SetBool("StandUp", true);
     }
 }
