@@ -20,6 +20,8 @@ public class ClientStateGoChair<T> : State<T>
         Debug.Log("GoChair");
 
         clientModel.MoveToTarget(getTargetTransform());
+
+        ClientView.OnWalkEnter?.Invoke();
     }
 
     public override void Execute()

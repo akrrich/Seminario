@@ -9,10 +9,18 @@ public class ClientView : MonoBehaviour
     private Transform order; // GameObject padre de la UI
     private SpriteRenderer foodSprite;
 
+    private static event Action onWalkEnter;
+    private static event Action onSitEnter;
+    private static event Action onStanUpEnter;
+
     private static event Action onFoodChange;
 
     private string foodName;
     private string[] foods = { "Fish", "Mouse" };
+
+    public static Action OnWalkEnter { get => onWalkEnter; set => onWalkEnter = value; }
+    public static Action OnSitEnter { get => onSitEnter; set => onSitEnter = value; }
+    public static Action OnStandUpEnter { get => onStanUpEnter; set => onStanUpEnter = value; }
 
     public static Action OnFoodChange { get => onFoodChange; set => onFoodChange = value; }
 
@@ -29,20 +37,40 @@ public class ClientView : MonoBehaviour
     void Update()
     {
         RotateOrderUIToLookAtPlayer();
+
+        anim.transform.position = transform.position;
+    }
+
+    void OnDestroy()
+    {
+        UnsuscribeToOwnEvents();
     }
 
 
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
-        //anim = GetComponentInChildren<Animator>();
+        anim = GetComponentInChildren<Animator>();
         order = transform.Find("Order");
         foodSprite = transform.Find("Order").transform.Find("FoodsPositions").transform.Find("Position1").GetComponent<SpriteRenderer>();
     }
 
     private void SuscribeToOwnEvent()
     {
+        onWalkEnter += () => ExecuteCurrentAnimation("Walk");
+        onSitEnter += () => ExecuteCurrentAnimation("Sit");
+        onStanUpEnter += () => ExecuteCurrentAnimation("StandUp");
+
         onFoodChange += InitializeRandomFoodUI;
+    }
+
+    private void UnsuscribeToOwnEvents()
+    {
+        onWalkEnter -= () => ExecuteCurrentAnimation("Walk");
+        onSitEnter -= () => ExecuteCurrentAnimation("Sit");
+        onStanUpEnter -= () => ExecuteCurrentAnimation("StandUp");
+
+        onFoodChange -= InitializeRandomFoodUI;
     }
 
     private void InitializeRandomFoodUI()
@@ -71,6 +99,21 @@ public class ClientView : MonoBehaviour
         {
             Quaternion rotation = Quaternion.LookRotation(lookDirection);
             order.rotation = rotation;
+        }
+    }
+
+    private void ExecuteCurrentAnimation(string indexName) 
+    {
+        string[] statesNames = { "Walk", "Sit", "StandUp" };
+
+        for (int i = 0; i < statesNames.Length; i++)
+        {
+            if (statesNames[i] == indexName)
+            {
+                anim.SetBool(indexName, true);
+
+                print("EjecuteAnimacion");
+            }
         }
     }
 }
