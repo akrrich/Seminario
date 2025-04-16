@@ -17,12 +17,13 @@ public class ClientManager : MonoBehaviour
 
     void Awake()
     {
+        // Prueba
         ClientController client = clientPool.GetObjectFromPool<ClientController>();
     }
 
     void Update()
     {
-        //InstantiateClient();
+        GetClientFromPool();
     }
 
 
@@ -55,7 +56,7 @@ public class ClientManager : MonoBehaviour
     }
 
 
-    private void InstantiateClient()
+    private void GetClientFromPool()
     {
         instantiateTime += Time.deltaTime;
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum ClientStates
@@ -12,6 +13,8 @@ public class ClientModel : MonoBehaviour
     private Rigidbody rb;
     private Table currentTablePosition;
 
+    private static Action onWaitingFood;
+
     private Vector3 currentDirection;
 
     [SerializeField] private float speed;
@@ -21,6 +24,8 @@ public class ClientModel : MonoBehaviour
     public ClientManager ClientManager { get => clientManager; }
 
     public Table CurrentTablePosition { get => currentTablePosition; }
+
+    public static Action OnWaitingFood { get => onWaitingFood; set => onWaitingFood = value; }
 
 
     void Awake()
@@ -55,6 +60,28 @@ public class ClientModel : MonoBehaviour
     public void StopVelocity()
     {
         currentDirection = Vector3.zero;
+    }
+
+    public bool ReturnFoodFromTableToPool(ref float arrivalTime)
+    {
+        arrivalTime += Time.deltaTime;
+
+        if (arrivalTime >= 5f)
+        {
+            arrivalTime = 0f;
+
+            foreach (Food food in currentTablePosition.CurrentFoods)
+            {
+                food.ReturnObjetToPool();
+            }
+
+            currentTablePosition.CurrentFoods.Clear();
+            clientManager.FreeTable(currentTablePosition);
+
+            return true;
+        }
+
+        return false;
     }
 
 

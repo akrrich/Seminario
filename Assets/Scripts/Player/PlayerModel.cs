@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum PlayerStates
 {
-    Idle, Walk, Run, Jump, Cook
+    Idle, Walk, Run, Jump, Cook, Admin
 }
 
 public class PlayerModel : MonoBehaviour
@@ -13,9 +13,11 @@ public class PlayerModel : MonoBehaviour
     private Rigidbody rb;
     private Transform inventory; // GameObject hijo del player que representa el inventario
     private Transform cookingPosition;
+    private Transform administratingPosition;
     private GameObject dish; // GameObject hijo del player que representa la bandeja
     private GameObject currentItem = null;
     private GameObject oven;
+    private GameObject administration;
 
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
@@ -26,7 +28,9 @@ public class PlayerModel : MonoBehaviour
     private bool isGrounded = true;
     private bool isCollidingOven = false;
     private bool isCollidingItem = false;
+    private bool isCollidingAdministration = false;
     private bool isCoking = false;
+    private bool isAdministrating = false;
 
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
     public InventoryManager InventoryManager { get => inventoryManager; }
@@ -34,6 +38,7 @@ public class PlayerModel : MonoBehaviour
     public Rigidbody Rb { get => rb; }
     public Transform Inventory { get => inventory; }
     public Transform CookingPosition { get => cookingPosition; }
+    public Transform AdministratingPosition { get => administratingPosition; }
     public GameObject Dish { get => dish; }
     public GameObject CurrentItem { get => currentItem; set => currentItem = value; }
 
@@ -44,7 +49,9 @@ public class PlayerModel : MonoBehaviour
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
     public bool IsCollidingItem { get => isCollidingItem; set => isCollidingItem = value; }
+    public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCooking { get => isCoking; set => isCoking = value; }
+    public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
 
 
     void Awake()
@@ -63,25 +70,15 @@ public class PlayerModel : MonoBehaviour
         return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
-    // Provisorio
+    // Solucionar los LineOfSight
     public bool IsLookingAtOven()
     {
-        // Solucionar la parte comentada
+        return LineOfSight.LOS(playerCamera.transform, oven.transform, 5, 125, LayerMask.NameToLayer("LOS"));
+    }
 
-        /*Vector3 directionToOven = oven.transform.position - transform.position;
-        float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
-
-        return LineOfSight.LOS(playerCamera.transform, oven.transform, 50, angle, LayerMask.NameToLayer("Oven"));*/
-
-        Vector3 directionToOven = oven.transform.position - transform.position;
-        float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
-
-        if (angle <= 90f)
-        {
-            return true;
-        }
-
-        return false;
+    public bool IsLookingAtAdministration()
+    {
+        return LineOfSight.LOS(playerCamera.transform, administration.transform, 5, 125, LayerMask.NameToLayer("LOS"));
     }
 
     public void ShowOrHideDish(bool current)
@@ -97,13 +94,15 @@ public class PlayerModel : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         inventory = transform.Find("Inventory").transform;
         cookingPosition = GameObject.Find("CookingPosition").transform;
+        administratingPosition = GameObject.Find("AdministratingPosition").transform;
         dish = transform.Find("Dish").gameObject;
         oven = GameObject.FindGameObjectWithTag("Oven");
+        administration = GameObject.FindGameObjectWithTag("Administration");
     }
 
     private void Movement()
     {
-        if (!isCoking)
+        if (!isCoking && !isAdministrating)
         {
             Vector3 cameraForward = playerCamera.transform.forward;
             cameraForward.y = 0;

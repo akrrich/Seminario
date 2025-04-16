@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ClientController : MonoBehaviour
@@ -51,7 +52,7 @@ public class ClientController : MonoBehaviour
 
         csLeave.AddTransition(ClientStates.idle, csIdle);
 
-        fsm.SetInit(csChair); // Intercambiar estados entre idle y chair segun se necesite
+        fsm.SetInit(csChair);
     }
 
     private void InitializeTree()
@@ -71,34 +72,51 @@ public class ClientController : MonoBehaviour
 
     private bool QuestionIsWaitingForFood()
     {
-        if (clientModel.CurrentTablePosition.DishPosition.transform.childCount > 0)
+        List<string> expectedDishNames = new List<string>();
+        List<string> servedDishNames = new List<string>();
+
+        foreach (string food in clientView.OrderFoodNames)
         {
-            if (clientModel.CurrentTablePosition.DishPosition.transform.GetChild(0).name == clientView.FoodName + "(Clone)")
+            expectedDishNames.Add(food + "(Clone)");
+        }
+
+        foreach (Transform dishSpot in clientModel.CurrentTablePosition.DishPositions)
+        {
+            if (dishSpot.childCount > 0)
             {
-                arrivalTime += Time.deltaTime;
-
-                if (arrivalTime >= 5f)
-                {
-                    arrivalTime = 0f;
-
-                    clientModel.CurrentTablePosition.CurrentFood.ReturnObjetToPool();
-                    clientModel.CurrentTablePosition.CurrentFood = null;
-
-                    clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
-
-                    return true;
-                }
-            }
-
-            else
-            {
-                // Aplicar logica par si el plato es incorrecto si es necesario
-
-                return true;
+                servedDishNames.Add(dishSpot.GetChild(0).name);
             }
         }
 
-        return false;
+        if (servedDishNames.Count == 0)
+        {
+            arrivalTime = 0f;
+            return false;
+        }
+
+        expectedDishNames.Sort();
+        servedDishNames.Sort();
+
+        bool dishesMatch = expectedDishNames.Count == servedDishNames.Count;
+
+        if (dishesMatch)
+        {
+            for (int i = 0; i < expectedDishNames.Count; i++)
+            {
+                if (expectedDishNames[i] != servedDishNames[i])
+                {
+                    dishesMatch = false;
+                    break;
+                }
+            }
+        }
+
+        if (!dishesMatch)
+        {
+            return clientModel.ReturnFoodFromTableToPool(ref arrivalTime);
+        }
+
+        return clientModel.ReturnFoodFromTableToPool(ref arrivalTime);
     }
 
     private bool QuestionCanGoToChair()

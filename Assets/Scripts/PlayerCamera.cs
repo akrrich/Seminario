@@ -37,7 +37,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void UpdateCameraFollow()
     {
-        if (!playerModel.IsCooking)
+        if (!playerModel.IsCooking && !playerModel.IsAdministrating)
         {
             cameraOffset = new Vector3(0f, offSetY, 0.3f);
 
