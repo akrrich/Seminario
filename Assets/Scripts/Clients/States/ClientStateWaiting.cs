@@ -17,7 +17,6 @@ public class ClientStateWaiting<T> : State<T>
         Debug.Log("Waiting");
 
         clientModel.StopVelocity();
-        ClientModel.OnWaitingFood?.Invoke();
     }
 
     public override void Execute()

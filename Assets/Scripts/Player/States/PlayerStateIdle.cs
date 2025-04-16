@@ -7,15 +7,13 @@ public class PlayerStateIdle<T> : State<T>
     private T inputToWalk;
     private T inputToJump;
     private T inputToCook;
-    private T inputToAdmin;
 
 
-    public PlayerStateIdle(T inputToWalk, T inputToJump, T inputToCook, T inputToAdmin, PlayerModel playerModel)
+    public PlayerStateIdle(T inputToWalk, T inputToJump, T inputToCook, PlayerModel playerModel)
     {
         this.inputToWalk = inputToWalk;
         this.inputToJump = inputToJump;
         this.inputToCook = inputToCook;
-        this.inputToAdmin = inputToAdmin;
         this.playerModel = playerModel;
     }
 
@@ -42,11 +40,6 @@ public class PlayerStateIdle<T> : State<T>
         if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
         {
             Fsm.TransitionTo(inputToCook);
-        }
-
-        if (PlayerInputs.Instance.Administration() && playerModel.IsCollidingAdministration && playerModel.IsLookingAtAdministration())
-        {
-            Fsm.TransitionTo(inputToAdmin);
         }
     }
 }

@@ -8,8 +8,6 @@ public enum FoodType
 
 public class Food : MonoBehaviour
 {
-    // No usar el metodo OnDisabled de Unity
-
     private CookingManager cookingManager;
     private Table currentTable;
 
@@ -26,13 +24,11 @@ public class Food : MonoBehaviour
     private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
-    private bool isClientInChair = false;
 
 
     void Awake()
     {
         SuscribeToPlayerControllerEvents();
-        SuscribeToClientModelEvent();
         GetComponents();
     }
 
@@ -41,17 +37,20 @@ public class Food : MonoBehaviour
         StartCoroutine(CookGameObject());
     }
 
+    void OnDisable()
+    {
+        RestartValues();
+    }
+
     void OnDestroy()
     {
         UnsuscribeToPlayerControllerEvents();
-        UnsuscribeToClientModelEvent();
     }
 
 
     public void ReturnObjetToPool()
     {
         cookingManager.ReturnObjectToPool(foodType, this);
-        RestartValues();
     }
 
 
@@ -62,16 +61,6 @@ public class Food : MonoBehaviour
 
         PlayerController.OnTableCollisionEnter += SaveTable;
         PlayerController.OnTableCollisionExit += ClearTable;
-    }
-
-    private void SuscribeToClientModelEvent()
-    {
-        ClientModel.OnWaitingFood += SaveClientInChair;
-    }
-
-    private void UnsuscribeToClientModelEvent()
-    {
-        ClientModel.OnWaitingFood -= SaveClientInChair;
     }
 
     private void UnsuscribeToPlayerControllerEvents()
@@ -126,7 +115,6 @@ public class Food : MonoBehaviour
 
         isCooked = false;
         isInPlayerDishPosition = false;
-        isClientInChair = false;
     }
 
     private void SaveTable(Table table)
@@ -140,11 +128,6 @@ public class Food : MonoBehaviour
     private void ClearTable()
     {
         currentTable = null;
-    }
-
-    private void SaveClientInChair()
-    {
-        isClientInChair = true;
     }
 
     private void Grab()
@@ -162,37 +145,21 @@ public class Food : MonoBehaviour
 
     private void HandOver()
     {
-        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied && isClientInChair)
+        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
         {
-            PlayerView.OnHandOverCompletedForHandOverMessage?.Invoke();
-
             cookingManager.ReleaseDishPosition(dishPosition);
 
-            Transform freeSpot = null;
+            transform.SetParent(currentTable.DishPosition);
+            transform.position = currentTable.DishPosition.position + new Vector3(0, 0.1f, 0);
 
-            foreach (Transform spot in currentTable.DishPositions)
-            {
-                if (spot.childCount == 0)
-                {
-                    freeSpot = spot;
-                    break;
-                }
-            }
+            rb.isKinematic = false;
+            boxCollider.enabled = true;
+            isInPlayerDishPosition = false;
+            isCooked = false;
 
-            if (freeSpot != null)
-            {
-                transform.SetParent(freeSpot);
-                transform.position = freeSpot.position + new Vector3(0, 0.1f, 0);
+            currentTable.CurrentFood = this;
 
-                rb.isKinematic = false;
-                boxCollider.enabled = true;
-                isInPlayerDishPosition = false;
-                isCooked = false;
-
-                currentTable.CurrentFoods.Add(this); 
-
-                ClearTable();
-            }
+            ClearTable();
         }
     }
 }

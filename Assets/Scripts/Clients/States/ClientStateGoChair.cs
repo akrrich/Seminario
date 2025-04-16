@@ -21,7 +21,7 @@ public class ClientStateGoChair<T> : State<T>
 
         clientModel.MoveToTarget(getTargetTransform());
 
-        //ClientView.OnWalkEnter?.Invoke();
+        ClientView.OnWalkEnter?.Invoke();
     }
 
     public override void Execute()

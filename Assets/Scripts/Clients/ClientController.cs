@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ClientController : MonoBehaviour
@@ -52,7 +51,7 @@ public class ClientController : MonoBehaviour
 
         csLeave.AddTransition(ClientStates.idle, csIdle);
 
-        fsm.SetInit(csChair);
+        fsm.SetInit(csChair); // Intercambiar estados entre idle y chair segun se necesite
     }
 
     private void InitializeTree()
@@ -72,51 +71,34 @@ public class ClientController : MonoBehaviour
 
     private bool QuestionIsWaitingForFood()
     {
-        List<string> expectedDishNames = new List<string>();
-        List<string> servedDishNames = new List<string>();
-
-        foreach (string food in clientView.OrderFoodNames)
+        if (clientModel.CurrentTablePosition.DishPosition.transform.childCount > 0)
         {
-            expectedDishNames.Add(food + "(Clone)");
-        }
-
-        foreach (Transform dishSpot in clientModel.CurrentTablePosition.DishPositions)
-        {
-            if (dishSpot.childCount > 0)
+            if (clientModel.CurrentTablePosition.DishPosition.transform.GetChild(0).name == clientView.FoodName + "(Clone)")
             {
-                servedDishNames.Add(dishSpot.GetChild(0).name);
-            }
-        }
+                arrivalTime += Time.deltaTime;
 
-        if (servedDishNames.Count == 0)
-        {
-            arrivalTime = 0f;
-            return false;
-        }
-
-        expectedDishNames.Sort();
-        servedDishNames.Sort();
-
-        bool dishesMatch = expectedDishNames.Count == servedDishNames.Count;
-
-        if (dishesMatch)
-        {
-            for (int i = 0; i < expectedDishNames.Count; i++)
-            {
-                if (expectedDishNames[i] != servedDishNames[i])
+                if (arrivalTime >= 5f)
                 {
-                    dishesMatch = false;
-                    break;
+                    arrivalTime = 0f;
+
+                    clientModel.CurrentTablePosition.CurrentFood.ReturnObjetToPool();
+                    clientModel.CurrentTablePosition.CurrentFood = null;
+
+                    clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
+
+                    return true;
                 }
             }
+
+            else
+            {
+                // Aplicar logica par si el plato es incorrecto si es necesario
+
+                return true;
+            }
         }
 
-        if (!dishesMatch)
-        {
-            return clientModel.ReturnFoodFromTableToPool(ref arrivalTime);
-        }
-
-        return clientModel.ReturnFoodFromTableToPool(ref arrivalTime);
+        return false;
     }
 
     private bool QuestionCanGoToChair()

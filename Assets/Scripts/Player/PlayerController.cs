@@ -37,6 +37,12 @@ public class PlayerController : MonoBehaviour
 
         GrabOrDropItems();
         GrabOrHandOverFood();
+
+        // Provisorio hay que solucionar el lineofsight
+        if (!playerModel.IsLookingAtOven())
+        {
+            PlayerView.OnExitInCookModeMessage?.Invoke();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -45,14 +51,12 @@ public class PlayerController : MonoBehaviour
         playerCollisions.OnCollisionEnterWithOvenAndLOS(collision);
         playerCollisions.OnCollisionEnterWithItem(collision);
         playerCollisions.OnCollisionEnterWithTable(collision);
-        playerCollisions.OnCollisionEnterWithAdministration(collision);
     }
 
     void OnCollisionStay(Collision collision)
     {
         playerCollisions.OnCollisionStayWithOvenAndLOS(collision);
         playerCollisions.OnCollisionStayWithItem(collision);
-        playerCollisions.OnCollisionStayWithAdministrationAndLOS(collision);
     }
 
     void OnCollisionExit(Collision collision)
@@ -61,7 +65,6 @@ public class PlayerController : MonoBehaviour
         playerCollisions.OnCollisionExitWithOven(collision);
         playerCollisions.OnCollisionExitWithItem(collision);
         playerCollisions.OnCollisionExitWithTable(collision);
-        playerCollisions.OnCollisionExitWithAdministration(collision);
     }
 
 
@@ -73,23 +76,20 @@ public class PlayerController : MonoBehaviour
 
     private void InitializeFSM() 
     {
-        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
-        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Run, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
+        PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, playerModel);
+        PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Run, PlayerStates.Jump, PlayerStates.Cook, playerModel);
         PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, playerModel);
         PlayerStateCook<PlayerStates> psCook = new PlayerStateCook<PlayerStates>(PlayerStates.Idle, playerModel);
-        PlayerStateRun<PlayerStates> psRun = new PlayerStateRun<PlayerStates>(PlayerStates.Idle, PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
-        PlayerStateAdministration<PlayerStates> psAdmin = new PlayerStateAdministration<PlayerStates>(PlayerStates.Idle, playerModel);
-
+        PlayerStateRun<PlayerStates> psRun = new PlayerStateRun<PlayerStates>(PlayerStates.Idle, PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, playerModel);
+         
         psIdle.AddTransition(PlayerStates.Walk, psWalk);
         psIdle.AddTransition(PlayerStates.Jump, psJump);
         psIdle.AddTransition(PlayerStates.Cook, psCook);
-        psIdle.AddTransition(PlayerStates.Admin, psAdmin);
 
         psWalk.AddTransition(PlayerStates.Idle, psIdle);
         psWalk.AddTransition(PlayerStates.Jump, psJump);
         psWalk.AddTransition(PlayerStates.Cook, psCook);
         psWalk.AddTransition(PlayerStates.Run, psRun);
-        psWalk.AddTransition(PlayerStates.Admin, psAdmin);
 
         psJump.AddTransition(PlayerStates.Idle, psIdle);
         psJump.AddTransition(PlayerStates.Walk, psWalk);
@@ -100,9 +100,6 @@ public class PlayerController : MonoBehaviour
         psRun.AddTransition(PlayerStates.Walk, psWalk);
         psRun.AddTransition(PlayerStates.Jump, psJump);
         psRun.AddTransition(PlayerStates.Cook, psCook);
-        psRun.AddTransition(PlayerStates.Admin, psAdmin);
-
-        psAdmin.AddTransition(PlayerStates.Idle, psIdle);
 
         fsm.SetInit(psIdle);
     }

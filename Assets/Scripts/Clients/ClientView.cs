@@ -1,16 +1,13 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
 public class ClientView : MonoBehaviour
 {
     private PlayerController playerController;
 
-    private Animator anim;
+    [SerializeField] private Animator anim;
     private Transform order; // GameObject padre de la UI
-    private List<SpriteRenderer> foodSprites = new List<SpriteRenderer>();
-
-    private List<string> orderFoodNames = new List<string>();
+    private SpriteRenderer foodSprite;
 
     private static event Action onWalkEnter;
     private static event Action onSitEnter;
@@ -18,9 +15,8 @@ public class ClientView : MonoBehaviour
 
     private static event Action onFoodChange;
 
-    private string[] foodsTypes = { "Fish", "Mouse" };
-
-    public List<string> OrderFoodNames { get => orderFoodNames; }
+    private string foodName;
+    private string[] foods = { "Fish", "Mouse" };
 
     public static Action OnWalkEnter { get => onWalkEnter; set => onWalkEnter = value; }
     public static Action OnSitEnter { get => onSitEnter; set => onSitEnter = value; }
@@ -28,87 +24,74 @@ public class ClientView : MonoBehaviour
 
     public static Action OnFoodChange { get => onFoodChange; set => onFoodChange = value; }
 
+    public string FoodName { get => foodName; }
+
 
     void Awake()
     {
         GetComponents();
         SuscribeToOwnEvent();
+        InitializeRandomFoodUI();
     }
 
     void Update()
     {
         RotateOrderUIToLookAtPlayer();
-        //MoveAnimationTowardsRootNode();
+
+        anim.transform.position = transform.position;
+    }
+
+    void OnEnable()
+    {
+        anim.SetBool("Walk", true);
     }
 
     void OnDestroy()
     {
-        UnsuscribeToOwnEvents();
+        //UnsuscribeToOwnEvents();
     }
 
 
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
-        //anim = GetComponentInChildren<Animator>();
+        anim = GetComponentInChildren<Animator>();
         order = transform.Find("Order");
-
-        Transform foodsPositions = order.Find("FoodsPositions");
-
-        foreach (Transform position in foodsPositions)
-        {
-            foodSprites.Add(position.GetComponent<SpriteRenderer>());
-        }
+        foodSprite = transform.Find("Order").transform.Find("FoodsPositions").transform.Find("Position1").GetComponent<SpriteRenderer>();
     }
 
     private void SuscribeToOwnEvent()
     {
-        onWalkEnter += WalkAnim;
-        onSitEnter += SitAnim;
-        onStanUpEnter += StandUpAnim;
+        onWalkEnter += Walk;
+        onSitEnter += Sit;
+        onStanUpEnter += StandUp;
 
         onFoodChange += InitializeRandomFoodUI;
     }
 
     private void UnsuscribeToOwnEvents()
     {
-        onWalkEnter -= WalkAnim;
-        onSitEnter -= SitAnim;
-        onStanUpEnter -= StandUpAnim;
+        /*onWalkEnter -= () => ExecuteCurrentAnimation(0);
+        onSitEnter -= () => ExecuteCurrentAnimation(1);
+        onStanUpEnter -= () => ExecuteCurrentAnimation(2);
 
-        onFoodChange -= InitializeRandomFoodUI;
+        onFoodChange -= InitializeRandomFoodUI;*/
     }
 
     private void InitializeRandomFoodUI()
     {
-        orderFoodNames.Clear();
+        int randomIndex = UnityEngine.Random.Range(0, foods.Length);
+        foodName = foods[randomIndex];
 
-        int foodCount = UnityEngine.Random.Range(1, foodSprites.Count + 1);
-
-        for (int i = 0; i < foodSprites.Count; i++)
+        switch (foodName)
         {
-            SpriteRenderer sprite = foodSprites[i];
+            case "Fish":
+                foodSprite.color = Color.yellow;
+                break;
 
-            if (i < foodCount)
-            {
-                int randomIndex = UnityEngine.Random.Range(0, foodsTypes.Length);
-                string selectedFood = foodsTypes[randomIndex];
-
-                switch (selectedFood)
-                {
-                    case "Fish": sprite.color = Color.yellow; break;
-                    case "Mouse": sprite.color = Color.blue; break;
-                }
-
-                orderFoodNames.Add(selectedFood);
-                sprite.enabled = true;
-            }
-
-            else
-            {
-                sprite.color = Color.clear;
-                sprite.enabled = false;
-            }
+            case "Mouse":
+                foodSprite.color = Color.blue;
+                break;
         }
     }
 
@@ -122,11 +105,6 @@ public class ClientView : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(lookDirection);
             order.rotation = rotation;
         }
-    }
-
-    private void MoveAnimationTowardsRootNode()
-    {
-        anim.transform.position = transform.position;
     }
 
     /*private void ExecuteCurrentAnimation(int parameterIndex) 
@@ -144,17 +122,17 @@ public class ClientView : MonoBehaviour
         }
     }*/
 
-    private void WalkAnim()
+    private void Walk()
     {
         anim.SetBool("Walk", true);
     }
 
-    private void SitAnim()
+    private void Sit()
     {
         anim.SetBool("Sit", true);
     }
 
-    private void StandUpAnim()
+    private void StandUp()
     {
         anim.SetBool("StandUp", true);
     }

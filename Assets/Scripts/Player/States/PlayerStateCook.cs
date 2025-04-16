@@ -32,7 +32,10 @@ public class PlayerStateCook<T> : State<T>
 
         if (PlayerInputs.Instance.Cook())
         {
-            Fsm.TransitionTo(inputToIdle);
+            if (playerModel.GetMoveAxis() == Vector2.zero)
+            {
+                Fsm.TransitionTo(inputToIdle);
+            }
         }
     }
 

@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class CookingManager : MonoBehaviour
 {
-    // Recordartorio: Desactivar los botones si no hay mas comida disponible en ese item
-
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones hijos
 
     [SerializeField] private AbstractFactory foodAbstractFactory;
