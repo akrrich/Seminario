@@ -1,28 +1,29 @@
 using UnityEngine;
 
-public class PlayerStateCook<T> : State<T>
+public class PlayerStateAdministration<T> : State<T>
 {
     private PlayerModel playerModel;
 
     private T inputToIdle;
 
 
-    public PlayerStateCook(T inputToIdle, PlayerModel playerModel)
+    public PlayerStateAdministration(T inputToIdle, PlayerModel playerModel)
     {
         this.inputToIdle = inputToIdle;
         this.playerModel = playerModel;
     }
+
 
     public override void Enter()
     {
         base.Enter();
         Debug.Log("Cook");
 
-        PlayerView.OnEnterInCookMode?.Invoke();
+        PlayerView.OnEnterInAdministrationMode?.Invoke();
         playerModel.ShowOrHideDish(false);
-        playerModel.IsCooking = true;
-        playerModel.transform.position = playerModel.CookingPosition.transform.position;
-        playerModel.transform.rotation = Quaternion.Euler(0, -90, 0);
+        playerModel.IsAdministrating = true;
+        playerModel.transform.position = playerModel.AdministratingPosition.transform.position;
+        playerModel.transform.rotation = Quaternion.Euler(0, 90, 0);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 
@@ -30,7 +31,7 @@ public class PlayerStateCook<T> : State<T>
     {
         base.Execute();
 
-        if (PlayerInputs.Instance.Cook())
+        if (PlayerInputs.Instance.Administration())
         {
             Fsm.TransitionTo(inputToIdle);
         }
@@ -38,8 +39,10 @@ public class PlayerStateCook<T> : State<T>
 
     public override void Exit()
     {
-        PlayerView.OnExitInCookMode?.Invoke();
+        base.Exit();
+
+        PlayerView.OnExitInAdministrationMode?.Invoke();
         playerModel.ShowOrHideDish(true);
-        playerModel.IsCooking = false;
+        playerModel.IsAdministrating = false;
     }
 }

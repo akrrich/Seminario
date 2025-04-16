@@ -26,7 +26,7 @@ public class PlayerCollisions
         if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
         {
             playerController.PlayerModel.IsCollidingOven = true;
-            PlayerView.OnEnterInCookModeMessage?.Invoke();
+            PlayerView.OnCollisionEnterWithOvenForCookModeMessage?.Invoke();
         }
     }
 
@@ -44,23 +44,36 @@ public class PlayerCollisions
     {
         if (collision.gameObject.CompareTag("Table"))
         {
-            bool hasGrandchildren = false;
+            bool hasChildren = false;
 
             foreach (Transform child in playerController.PlayerModel.Dish.transform)
             {
                 if (child.childCount > 0)
                 {
-                    hasGrandchildren = true;
+                    hasChildren = true;
                     break;
                 }
             }
 
-            if (hasGrandchildren)
+            if (hasChildren)
             {
                 Table table = collision.gameObject.GetComponentInParent<Table>();
 
-                PlayerController.OnTableCollisionEnter?.Invoke(table);
+                if (table.IsOccupied)
+                {
+                    PlayerController.OnTableCollisionEnter?.Invoke(table);
+                    PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
+                }
             }
+        }
+    }
+
+    public void OnCollisionEnterWithAdministration(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
+        {
+            playerController.PlayerModel.IsCollidingAdministration = true;
+            PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage?.Invoke();
         }
     }
 
@@ -72,7 +85,12 @@ public class PlayerCollisions
         if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
         {
             playerController.PlayerModel.IsCollidingOven = true;
-            PlayerView.OnEnterInCookModeMessage?.Invoke();
+            PlayerView.OnCollisionEnterWithOvenForCookModeMessage?.Invoke();
+        }
+
+        if (collision.gameObject.CompareTag("Oven") && !playerController.PlayerModel.IsLookingAtOven())
+        {
+            PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
         }
     }
 
@@ -83,6 +101,20 @@ public class PlayerCollisions
             playerController.PlayerModel.IsCollidingItem = true;
 
             playerController.PlayerModel.CurrentItem = collision.gameObject;
+        }
+    }
+
+    public void OnCollisionStayWithAdministrationAndLOS(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
+        {
+            playerController.PlayerModel.IsCollidingAdministration = true;
+            PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage?.Invoke();
+        }
+
+        if (collision.gameObject.CompareTag("Administration") && !playerController.PlayerModel.IsLookingAtAdministration())
+        {
+            PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage?.Invoke();
         }
     }
 
@@ -102,7 +134,7 @@ public class PlayerCollisions
         if (collision.gameObject.CompareTag("Oven"))
         {
             playerController.PlayerModel.IsCollidingOven = false;
-            PlayerView.OnExitInCookModeMessage?.Invoke();
+            PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
         }
     }
 
@@ -119,6 +151,16 @@ public class PlayerCollisions
         if (collision.gameObject.CompareTag("Table"))
         {
             PlayerController.OnTableCollisionExit?.Invoke();
+            PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
+        }
+    }
+
+    public void OnCollisionExitWithAdministration(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Administration"))
+        {
+            playerController.PlayerModel.IsCollidingAdministration = false;
+            PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage?.Invoke();
         }
     }
 }

@@ -11,6 +11,7 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private KeyCode grabFood;
     [SerializeField] private KeyCode handOverFood;
     [SerializeField] private KeyCode cook;
+    [SerializeField] private KeyCode administration;
     [SerializeField] private KeyCode jump;
 
     public static PlayerInputs Instance { get => instance; }
@@ -60,6 +61,11 @@ public class PlayerInputs : MonoBehaviour
     public bool Cook()
     {
         return Input.GetKeyDown(cook);
+    }
+
+    public bool Administration()
+    {
+        return Input.GetKeyDown(administration);
     }
 
 

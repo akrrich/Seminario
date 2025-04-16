@@ -1,19 +1,22 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Table : MonoBehaviour
 {
     private GameObject chair;
-    private GameObject table;
     private GameObject dish;
 
-    private Food currentFood;
+    private List<Transform> dishPositions = new List<Transform>(); // Representa las posiciones hijas del plato
+
+    private List<Food> currentFoods = new List<Food>();
 
     private bool isOccupied = false;
 
     public Transform ChairPosition { get => chair.transform; }
-    public Transform DishPosition { get => dish.transform; }
 
-    public Food CurrentFood { get => currentFood; set => currentFood = value; }
+    public List<Transform> DishPositions { get => dishPositions; }
+
+    public List<Food> CurrentFoods { get => currentFoods; set => currentFoods = value; }
 
     public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
 
@@ -27,7 +30,11 @@ public class Table : MonoBehaviour
     private void FindObjects()
     {
         chair = transform.Find("Chair").gameObject;
-        table = transform.Find("Table").gameObject;
         dish = transform.Find("Dish").gameObject;
+
+        foreach (Transform childs in dish.transform)
+        {
+            dishPositions.Add(childs.GetComponent<Transform>());
+        }
     }
 }
