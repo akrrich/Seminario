@@ -31,11 +31,15 @@ public class CookingManager : MonoBehaviour
 
     private Dictionary<FoodType, ObjectPooler> foodPoolDictionary = new Dictionary<FoodType, ObjectPooler>();
 
+    private Action onEnterCook, onExitCook;
+
     public Transform CurrentStove { get => currentStove; }
+    public Queue<Transform> AvailableDishPositions { get => availableDishPositions; }
 
 
     void Awake()
     {
+        InitializeLambdaEvents();
         SuscribeToPlayerViewEvents();
         EnqueueStovesPositions();
         EnqueueCookedPosition();
@@ -52,11 +56,18 @@ public class CookingManager : MonoBehaviour
     // Funcion asignada a los botones de la UI
     public void ButtonGetFood(string prefabFoodName)
     {
-        currentStove = GetNextAvailableStove();
+        FoodType foodType = (FoodType)Enum.Parse(typeof(FoodType), prefabFoodName);
 
-        if (currentStove != null)
+        if (InventoryFoodManager.Instance.GetFoodStock(foodType) > 0)
         {
-            foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
+            InventoryFoodManager.Instance.ConsumeFood(foodType);
+
+            currentStove = GetNextAvailableStove();
+
+            if (currentStove != null)
+            {
+                foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
+            }
         }
     }
 
@@ -178,16 +189,22 @@ public class CookingManager : MonoBehaviour
         return targetPosition;
     }
 
+    private void InitializeLambdaEvents()
+    {
+        onEnterCook += () => ActiveOrDeactivateRootGameObject(true);
+        onExitCook += () => ActiveOrDeactivateRootGameObject(false);
+    }
+
     private void SuscribeToPlayerViewEvents()
     {
-        PlayerView.OnEnterInCookMode += () => ActiveOrDeactivateRootGameObject(true);
-        PlayerView.OnExitInCookMode += () => ActiveOrDeactivateRootGameObject(false);
+        PlayerView.OnEnterInCookMode += onEnterCook;
+        PlayerView.OnExitInCookMode += onExitCook;
     }
 
     private void UnSuscribeToPlayerViewEvents()
     {
-        PlayerView.OnEnterInCookMode -= () => ActiveOrDeactivateRootGameObject(true);
-        PlayerView.OnExitInCookMode -= () => ActiveOrDeactivateRootGameObject(false);
+        PlayerView.OnEnterInCookMode -= onEnterCook;
+        PlayerView.OnExitInCookMode -= onExitCook;
     }
 
     private void ActiveOrDeactivateRootGameObject(bool state)

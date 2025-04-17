@@ -6,8 +6,6 @@ public class PlayerInputs : MonoBehaviour
 
     [Header("Keyboard Inputs:")]
     [SerializeField] private KeyCode run;
-    [SerializeField] private KeyCode grabItem;
-    [SerializeField] private KeyCode dropItem;
     [SerializeField] private KeyCode grabFood;
     [SerializeField] private KeyCode handOverFood;
     [SerializeField] private KeyCode cook;
@@ -31,16 +29,6 @@ public class PlayerInputs : MonoBehaviour
     public bool StopRun()
     {
         return Input.GetKeyUp(run);
-    }
-
-    public bool GrabItem()
-    {
-        return Input.GetKeyDown(grabItem);    
-    }
-
-    public bool DropItem()
-    {
-        return Input.GetKeyDown(dropItem);
     }
 
     public bool GrabFood()

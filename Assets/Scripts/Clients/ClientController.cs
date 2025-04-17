@@ -113,10 +113,10 @@ public class ClientController : MonoBehaviour
 
         if (!dishesMatch)
         {
-            return clientModel.ReturnFoodFromTableToPool(ref arrivalTime);
+            return clientModel.ReturnFoodFromTableToPool(ref arrivalTime, false);
         }
 
-        return clientModel.ReturnFoodFromTableToPool(ref arrivalTime);
+        return clientModel.ReturnFoodFromTableToPool(ref arrivalTime, true);
     }
 
     private bool QuestionCanGoToChair()

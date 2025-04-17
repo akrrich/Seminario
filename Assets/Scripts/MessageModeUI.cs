@@ -12,7 +12,7 @@ public class MessageModeUI : MonoBehaviour
     void Awake()
     {
         GetComponents();
-        InitializeMessages();
+        InitializeLamdaEventMessages();
         SuscribeToPlayerViewEvents();
     }
 
@@ -27,7 +27,7 @@ public class MessageModeUI : MonoBehaviour
     }
 
 
-    private void InitializeMessages()
+    private void InitializeLamdaEventMessages()
     {
         onCook += () => ShowEnterMessageText(" para entrar a cocinar");
         onAdministration += () => ShowEnterMessageText(" para entrar en administracion");

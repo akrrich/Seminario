@@ -17,6 +17,8 @@ public class PlayerView : MonoBehaviour
     private static Action onCollisionExitWithTableForHandOverMessage; // Esconder el texto de la UI
     private static Action onHandOverCompletedForHandOverMessage; // Esconder el texto de la UI
 
+    private static Action onDeactivateInventoryFoodUI; // Esconder la UI del inventario
+
 
     public static Action OnCollisionEnterWithOvenForCookModeMessage { get => onCollisionEnterWithOvenForCookModeMessage; set => onCollisionEnterWithOvenForCookModeMessage = value; }
     public static Action OnCollisionExitWithOvenForCookModeMessage { get => onCollisionExitWithOvenForCookModeMessage; set => onCollisionExitWithOvenForCookModeMessage = value; }    
@@ -31,5 +33,7 @@ public class PlayerView : MonoBehaviour
     public static Action OnCollisionEnterWithTableForHandOverMessage { get => onCollisionEnterWithTableForHandOverMessage; set => onCollisionEnterWithTableForHandOverMessage = value; }
     public static Action OnCollisionExitWithTableForHandOverMessage { get => onCollisionExitWithTableForHandOverMessage; set => onCollisionExitWithTableForHandOverMessage = value; }
     public static Action OnHandOverCompletedForHandOverMessage { get => onHandOverCompletedForHandOverMessage; set => onHandOverCompletedForHandOverMessage = value; }
+
+    public static Action OnDeactivateInventoryFoodUi { get => onDeactivateInventoryFoodUI; set => onDeactivateInventoryFoodUI = value; }
 
 }

@@ -35,7 +35,6 @@ public class PlayerController : MonoBehaviour
     {
         fsm.OnExecute();
 
-        GrabOrDropItems();
         GrabOrHandOverFood();
     }
 
@@ -43,7 +42,6 @@ public class PlayerController : MonoBehaviour
     {
         playerCollisions.OnCollisionEnterWithFloor(collision);
         playerCollisions.OnCollisionEnterWithOvenAndLOS(collision);
-        playerCollisions.OnCollisionEnterWithItem(collision);
         playerCollisions.OnCollisionEnterWithTable(collision);
         playerCollisions.OnCollisionEnterWithAdministration(collision);
     }
@@ -51,7 +49,6 @@ public class PlayerController : MonoBehaviour
     void OnCollisionStay(Collision collision)
     {
         playerCollisions.OnCollisionStayWithOvenAndLOS(collision);
-        playerCollisions.OnCollisionStayWithItem(collision);
         playerCollisions.OnCollisionStayWithAdministrationAndLOS(collision);
     }
 
@@ -59,7 +56,6 @@ public class PlayerController : MonoBehaviour
     {
         playerCollisions.OnCollisionExitWithFloor(collision);
         playerCollisions.OnCollisionExitWithOven(collision);
-        playerCollisions.OnCollisionExitWithItem(collision);
         playerCollisions.OnCollisionExitWithTable(collision);
         playerCollisions.OnCollisionExitWithAdministration(collision);
     }
@@ -105,21 +101,6 @@ public class PlayerController : MonoBehaviour
         psAdmin.AddTransition(PlayerStates.Idle, psIdle);
 
         fsm.SetInit(psIdle);
-    }
-
-    private void GrabOrDropItems()
-    {
-        if (PlayerInputs.Instance.GrabItem() && playerModel.IsCollidingItem)
-        {
-            playerModel.InventoryManager.SaveElementInInventory(playerModel.CurrentItem, playerModel.Inventory);
-            playerModel.CurrentItem = null;
-            playerModel.IsCollidingItem = false;
-        }
-
-        if (PlayerInputs.Instance.DropItem() && playerModel.Inventory.childCount > 0) 
-        {
-            playerModel.InventoryManager.RemoveElmentFromInventory(playerModel.Inventory);
-        }
     }
 
     private void GrabOrHandOverFood()

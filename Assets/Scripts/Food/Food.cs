@@ -20,13 +20,18 @@ public class Food : MonoBehaviour
     private Rigidbody rb;
     private BoxCollider boxCollider;
 
-    [SerializeField] private float timeToBeenCooked;
     [SerializeField] private FoodType foodType;
+    [SerializeField] private float timeToBeenCooked;
+    [SerializeField] private int price;
 
     private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
     private bool isClientInChair = false;
+
+    public FoodType FoodType { get => foodType; }
+
+    public int Price { get => price; set => price = value; }
 
 
     void Awake()
@@ -148,8 +153,8 @@ public class Food : MonoBehaviour
     }
 
     private void Grab()
-    {
-        if (isCooked && !isInPlayerDishPosition)
+    {                                               // Si hay posiciones disponibles en la bandeja
+        if (isCooked && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
         {
             cookingManager.ReleaseCookedPosition(cookedPosition);
             dishPosition = cookingManager.MoveFoodToDish(this);

@@ -62,7 +62,7 @@ public class ClientModel : MonoBehaviour
         currentDirection = Vector3.zero;
     }
 
-    public bool ReturnFoodFromTableToPool(ref float arrivalTime)
+    public bool ReturnFoodFromTableToPool(ref float arrivalTime, bool dishesMatch)
     {
         arrivalTime += Time.deltaTime;
 
@@ -77,6 +77,17 @@ public class ClientModel : MonoBehaviour
 
             currentTablePosition.CurrentFoods.Clear();
             clientManager.FreeTable(currentTablePosition);
+
+            if (dishesMatch)
+            {
+                MoneyManager.Instance.AddMoney(500);
+            }
+
+            else
+            {
+                MoneyManager.Instance.SubMoney(250);
+            }
+
 
             return true;
         }

@@ -30,16 +30,6 @@ public class PlayerCollisions
         }
     }
 
-    public void OnCollisionEnterWithItem(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Item"))
-        {
-            playerController.PlayerModel.IsCollidingItem = true;
-
-            playerController.PlayerModel.CurrentItem = collision.gameObject;
-        }
-    }
-
     public void OnCollisionEnterWithTable(Collision collision)
     {
         if (collision.gameObject.CompareTag("Table"))
@@ -77,7 +67,6 @@ public class PlayerCollisions
         }
     }
 
-
     /* ------------------------------------------STAY----------------------------------------------- */
 
     public void OnCollisionStayWithOvenAndLOS(Collision collision)
@@ -91,16 +80,6 @@ public class PlayerCollisions
         if (collision.gameObject.CompareTag("Oven") && !playerController.PlayerModel.IsLookingAtOven())
         {
             PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
-        }
-    }
-
-    public void OnCollisionStayWithItem(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Item"))
-        {
-            playerController.PlayerModel.IsCollidingItem = true;
-
-            playerController.PlayerModel.CurrentItem = collision.gameObject;
         }
     }
 
@@ -118,7 +97,6 @@ public class PlayerCollisions
         }
     }
 
-
     /* -------------------------------------------EXIT--------------------------------------------- */
 
     public void OnCollisionExitWithFloor(Collision collision)
@@ -135,14 +113,6 @@ public class PlayerCollisions
         {
             playerController.PlayerModel.IsCollidingOven = false;
             PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
-        }
-    }
-
-    public void OnCollisionExitWithItem(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Item"))
-        {
-            playerController.PlayerModel.IsCollidingItem = false;
         }
     }
 

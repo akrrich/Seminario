@@ -8,14 +8,11 @@ public enum PlayerStates
 public class PlayerModel : MonoBehaviour
 {
     private PlayerCamera playerCamera;
-    private InventoryManager inventoryManager; // Manager del Inventario
 
     private Rigidbody rb;
-    private Transform inventory; // GameObject hijo del player que representa el inventario
     private Transform cookingPosition;
     private Transform administratingPosition;
     private GameObject dish; // GameObject hijo del player que representa la bandeja
-    private GameObject currentItem = null;
     private GameObject oven;
     private GameObject administration;
 
@@ -27,20 +24,16 @@ public class PlayerModel : MonoBehaviour
 
     private bool isGrounded = true;
     private bool isCollidingOven = false;
-    private bool isCollidingItem = false;
     private bool isCollidingAdministration = false;
     private bool isCoking = false;
     private bool isAdministrating = false;
 
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
-    public InventoryManager InventoryManager { get => inventoryManager; }
 
     public Rigidbody Rb { get => rb; }
-    public Transform Inventory { get => inventory; }
     public Transform CookingPosition { get => cookingPosition; }
     public Transform AdministratingPosition { get => administratingPosition; }
     public GameObject Dish { get => dish; }
-    public GameObject CurrentItem { get => currentItem; set => currentItem = value; }
 
     public float WalkSpeed { get => walkSpeed; }
     public float RunSpeed { get => runSpeed; } 
@@ -48,7 +41,6 @@ public class PlayerModel : MonoBehaviour
     public float JumpForce { get => jumpForce; }
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
-    public bool IsCollidingItem { get => isCollidingItem; set => isCollidingItem = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCooking { get => isCoking; set => isCoking = value; }
     public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
@@ -90,9 +82,7 @@ public class PlayerModel : MonoBehaviour
     private void GetComponents()
     {
         playerCamera = GetComponentInChildren<PlayerCamera>();
-        inventoryManager = FindFirstObjectByType<InventoryManager>();
         rb = GetComponent<Rigidbody>();
-        inventory = transform.Find("Inventory").transform;
         cookingPosition = GameObject.Find("CookingPosition").transform;
         administratingPosition = GameObject.Find("AdministratingPosition").transform;
         dish = transform.Find("Dish").gameObject;
