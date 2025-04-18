@@ -34,6 +34,6 @@ public class PlayerView : MonoBehaviour
     public static Action OnCollisionExitWithTableForHandOverMessage { get => onCollisionExitWithTableForHandOverMessage; set => onCollisionExitWithTableForHandOverMessage = value; }
     public static Action OnHandOverCompletedForHandOverMessage { get => onHandOverCompletedForHandOverMessage; set => onHandOverCompletedForHandOverMessage = value; }
 
-    public static Action OnDeactivateInventoryFoodUi { get => onDeactivateInventoryFoodUI; set => onDeactivateInventoryFoodUI = value; }
+    public static Action OnDeactivateInventoryFoodUI { get => onDeactivateInventoryFoodUI; set => onDeactivateInventoryFoodUI = value; }
 
 }

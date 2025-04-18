@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,15 +11,19 @@ public class InventoryFoodManager : MonoBehaviour
 
     private PlayerModel playerModel;
 
-    [SerializeField] private List<Food> foodPrefabs = new List<Food>();
+    [SerializeField] private List<Food> foodPrefabs; // Prefabs de las comidas
+    [SerializeField] private List<GameObject> slotPrefabs; // Prefabs de los slots
+    [SerializeField] private List<Transform> slotPositions; // Posiciones donde se instancian los slots
+    [SerializeField] private Transform slotParent; // Transform que representa donde se instancian los slots
 
     private Dictionary<FoodType, int> foodInventory = new Dictionary<FoodType, int>();
+    private Dictionary<FoodType, (GameObject slot, TextMeshProUGUI text)> foodSlots = new();
 
-    private Image inventoryPanel;
+    private RawImage inventoryPanel;
 
     [SerializeField] private int initializeStockForFoods;
 
-    private bool isInventoryOpenUI = false;
+    private bool isInventoryOpenUI = false;                             
 
     public static InventoryFoodManager Instance { get => instance; }
 
@@ -26,9 +31,9 @@ public class InventoryFoodManager : MonoBehaviour
     void Awake()
     {
         InitializeSingleton();
+        GetComponents();
         SuscribeToPlayerViewEvent();
         InitializeInventory();
-        GetComponents();
     }
 
     void Update()
@@ -82,51 +87,74 @@ public class InventoryFoodManager : MonoBehaviour
         }
     }
 
+    private void GetComponents()
+    {
+        playerModel = FindFirstObjectByType<PlayerModel>();
+        inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<RawImage>();
+    }
+
     private void SuscribeToPlayerViewEvent()
     {
-        PlayerView.OnDeactivateInventoryFoodUi += DeactivateInventoryUIForced;
+        PlayerView.OnDeactivateInventoryFoodUI += HideInventory;
     }
 
     private void UnsuscribeToPlayerViewEvent()
     {
-        PlayerView.OnDeactivateInventoryFoodUi -= DeactivateInventoryUIForced;
+        PlayerView.OnDeactivateInventoryFoodUI -= HideInventory;
     }
 
     private void InitializeInventory()
     {
+        // Inicializar stock
         foreach (FoodType food in Enum.GetValues(typeof(FoodType)))
         {
             foodInventory[food] = initializeStockForFoods;
         }
+
+        // Inicializar en la UI
+        for (int i = 0; i < slotPrefabs.Count && i < slotPositions.Count && i < foodPrefabs.Count; i++)
+        {
+            GameObject slotInstance = Instantiate(slotPrefabs[i], slotPositions[i].position, Quaternion.identity, slotParent);
+            slotInstance.SetActive(false);
+
+            FoodType type = foodPrefabs[i].FoodType;
+            TextMeshProUGUI stockText = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
+
+            foodSlots[type] = (slotInstance, stockText);
+        }
     }
 
-    private void GetComponents()
+    private void ShowInventory()
     {
-        playerModel = FindFirstObjectByType<PlayerModel>();
-        inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<Image>();
+        isInventoryOpenUI = true;
+        inventoryPanel.enabled = true;
+
+        foreach (var kvp in foodSlots)
+        {
+            kvp.Value.slot.SetActive(true);
+            kvp.Value.text.text = foodInventory[kvp.Key].ToString();
+        }
+    }
+
+    private void HideInventory()
+    {
+        isInventoryOpenUI = false;
+        inventoryPanel.enabled = false;
+
+        foreach (var kvp in foodSlots)
+        {
+            kvp.Value.slot.SetActive(false);
+        }
     }
 
     private void EnabledOrDisabledInventoryPanel()
     {
         if (!playerModel.IsCooking && !playerModel.IsAdministrating)
         {
-            if (Input.GetKeyDown(KeyCode.Tab) && !isInventoryOpenUI)
+            if (PlayerInputs.Instance.Inventory())
             {
-                isInventoryOpenUI = true;
-                inventoryPanel.enabled = true;
-            }
-
-            else if (Input.GetKeyDown(KeyCode.Tab) && isInventoryOpenUI)
-            {
-                isInventoryOpenUI = false;
-                inventoryPanel.enabled = false;
+                (isInventoryOpenUI ? (Action)HideInventory : ShowInventory)();
             }
         }
-    }
-
-    private void DeactivateInventoryUIForced()
-    {
-        isInventoryOpenUI = false;
-        inventoryPanel.enabled = false;
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum FoodType
 {
-    Mouse, Fish,
+    Mouse, Fish
 }
 
 public class Food : MonoBehaviour

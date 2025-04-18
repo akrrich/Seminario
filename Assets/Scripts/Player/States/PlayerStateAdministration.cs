@@ -20,7 +20,7 @@ public class PlayerStateAdministration<T> : State<T>
         Debug.Log("Cook");
 
         PlayerView.OnEnterInAdministrationMode?.Invoke();
-        PlayerView.OnDeactivateInventoryFoodUi?.Invoke();
+        PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
         playerModel.ShowOrHideDish(false);
         playerModel.IsAdministrating = true;
         playerModel.transform.position = playerModel.AdministratingPosition.transform.position;

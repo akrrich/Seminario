@@ -19,7 +19,7 @@ public class PlayerStateCook<T> : State<T>
         Debug.Log("Cook");
 
         PlayerView.OnEnterInCookMode?.Invoke();
-        PlayerView.OnDeactivateInventoryFoodUi?.Invoke();
+        PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
         playerModel.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = playerModel.CookingPosition.transform.position;
