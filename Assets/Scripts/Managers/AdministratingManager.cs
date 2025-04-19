@@ -1,11 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class AdministratingManager : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones hijos
 
     private Action onEnterAdmin, onExitAdmin;
+
+    private List<Button> buttons;
 
 
     void Awake()
@@ -20,18 +24,17 @@ public class AdministratingManager : MonoBehaviour
     }
 
 
-    // Funcion asignada a un boton
-    public void ButtonBuyFood(string foodTypeName)
+    // Funcion asignada a boton UI
+    public void ButtonBuyIngredient(string ingredientName)
     {
-        if (Enum.TryParse(foodTypeName, out FoodType foodType))
+        if (Enum.TryParse(ingredientName, out IngredientType ingredient))
         {
-            int priceFood = InventoryFoodManager.Instance.GetPriceOfFood(foodType);
+            int price = IngredientInventoryManager.Instance.GetPriceOfIngredient(ingredient);
 
-            if (MoneyManager.Instance.CurrentMoney >= priceFood)
+            if (MoneyManager.Instance.CurrentMoney >= price && IngredientInventoryManager.Instance.HasUnlockIngredient(ingredient))
             {
-                InventoryFoodManager.Instance.BuyFood(foodType);
-
-                MoneyManager.Instance.SubMoney(priceFood);
+                IngredientInventoryManager.Instance.IncreaseIngredientStock(ingredient);
+                MoneyManager.Instance.SubMoney(price);
             }
         }
     }

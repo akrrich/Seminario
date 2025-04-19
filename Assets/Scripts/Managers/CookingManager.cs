@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CookingManager : MonoBehaviour
 {
@@ -11,8 +10,8 @@ public class CookingManager : MonoBehaviour
 
     [SerializeField] private AbstractFactory foodAbstractFactory;
     [SerializeField] private List<ObjectPooler> objectsPools;
-    [SerializeField] private List<Button> buttonsFoods;
 
+    [Header("Positions")]
     // Para las posiciones de las sarten
     [SerializeField] private List<Transform> stovesPositions;
     private Transform currentStove;
@@ -56,17 +55,16 @@ public class CookingManager : MonoBehaviour
     // Funcion asignada a los botones de la UI
     public void ButtonGetFood(string prefabFoodName)
     {
-        FoodType foodType = (FoodType)Enum.Parse(typeof(FoodType), prefabFoodName);
-
-        if (InventoryFoodManager.Instance.GetFoodStock(foodType) > 0)
+        if (Enum.TryParse(prefabFoodName, out FoodType foodType))
         {
-            InventoryFoodManager.Instance.ConsumeFood(foodType);
-
-            currentStove = GetNextAvailableStove();
-
-            if (currentStove != null)
+            if (IngredientInventoryManager.Instance.TryCraftFood(foodType))
             {
-                foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
+                currentStove = GetNextAvailableStove();
+
+                if (currentStove != null)
+                {
+                    foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
+                }
             }
         }
     }

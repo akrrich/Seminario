@@ -12,6 +12,7 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private KeyCode administration;
     [SerializeField] private KeyCode jump;
     [SerializeField] private KeyCode inventory;
+    [SerializeField] private KeyCode pause;
 
     public static PlayerInputs Instance { get => instance; }
 
@@ -60,6 +61,10 @@ public class PlayerInputs : MonoBehaviour
     public bool Inventory()
     {
         return Input.GetKeyDown(inventory);
+    }
+    public bool Pause()
+    {
+        return Input.GetKeyDown(pause);
     }
 
 

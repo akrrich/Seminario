@@ -22,16 +22,11 @@ public class Food : MonoBehaviour
 
     [SerializeField] private FoodType foodType;
     [SerializeField] private float timeToBeenCooked;
-    [SerializeField] private int price;
 
     private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
     private bool isClientInChair = false;
-
-    public FoodType FoodType { get => foodType; }
-
-    public int Price { get => price; set => price = value; }
 
 
     void Awake()
