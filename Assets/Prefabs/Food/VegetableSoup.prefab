@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8422264678453447937}
   - component: {fileID: -4751430896841583275}
   m_Layer: 0
-  m_Name: Fish
+  m_Name: VegetableSoup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,6 +148,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86082d48524a9a243bbfc995a809360f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foodType: 0
   timeToBeenCooked: 3
-  foodType: 1
-  price: 50

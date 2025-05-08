@@ -114,7 +114,7 @@ public class ClientModel : MonoBehaviour
         {
             transform.position = clientManager.SpawnPosition.position;
             InitializeTablePosition();
-            ClientView.OnFoodChange?.Invoke();
+            ClientView.OnFoodChangeUI?.Invoke();
         }
 
         isInstantiateFirstTime = false;

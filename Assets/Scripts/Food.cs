@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum FoodType
 {
-    Mouse, Fish
+    VegetableSoup, BeefStew, TomatoAndLettuceSalad, BeastMeatPie, HumanFleshStew
 }
 
 public class Food : MonoBehaviour
@@ -11,7 +11,7 @@ public class Food : MonoBehaviour
     // No usar el metodo OnDisabled de Unity
 
     private CookingManager cookingManager;
-    private Table currentTable;
+    private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
     private Transform stovePosition;
     private Transform cookedPosition;

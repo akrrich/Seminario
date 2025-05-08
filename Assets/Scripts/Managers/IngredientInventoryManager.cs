@@ -7,14 +7,12 @@ using UnityEngine.UI;
 
 public class IngredientInventoryManager : MonoBehaviour
 {
-    // Lo que hay que hacer es sincronizar los botones de compra de ingredientes cuando se desbloquean 
-
     private static IngredientInventoryManager instance;
 
     private PlayerModel playerModel;
 
     [Header("Ingredientes")]
-    [SerializeField] private List<IngredientType> availableIngredients;
+    private List<IngredientType> availableIngredients;
     [SerializeField] private List<Ingredients.FoodRecipe> foodRecipes;
     [SerializeField] private List<Ingredients.IngredientData> ingredientData;
 
@@ -50,12 +48,6 @@ public class IngredientInventoryManager : MonoBehaviour
     void Update()
     {
         EnabledOrDisabledInventoryPanel();
-
-        // Test
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            UnlockNewIngredient(IngredientType.Water, "WaterSlot", 1);
-        }
     }
 
     void OnDestroy()
@@ -104,7 +96,7 @@ public class IngredientInventoryManager : MonoBehaviour
         return ingredientDataDict.TryGetValue(ingredient, out var data) ? data.Price : 0;
     }
 
-    public void UnlockNewIngredient(IngredientType newIngredient, string prefabName, int stockForIngredient)
+    /*public void UnlockNewIngredient(IngredientType newIngredient, string prefabName, int stockForIngredient)
     {
         if (!ingredientInventory.ContainsKey(newIngredient))
         {
@@ -127,7 +119,7 @@ public class IngredientInventoryManager : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
 
     private void InitializeSingleton()
@@ -169,6 +161,8 @@ public class IngredientInventoryManager : MonoBehaviour
 
     private void InitializeInventory()
     {
+        availableIngredients = Enum.GetValues(typeof(IngredientType)).Cast<IngredientType>().ToList();
+
         foreach (IngredientType ingredient in availableIngredients)
         {
             ingredientInventory[ingredient] = initializeStockIngredients;
