@@ -40,9 +40,9 @@ public class ClientController : MonoBehaviour
     private void InitializeFSM()
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel);
-        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, () => clientModel.CurrentTablePosition.ChairPosition);
-        ClientStateWaiting<ClientStates> csWaitingFood = new ClientStateWaiting<ClientStates>(clientModel);
-        ClientStateLeave<ClientStates> csLeave = new ClientStateLeave<ClientStates>(clientModel, clientModel.ClientManager.OutsidePosition);
+        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTablePosition.ChairPosition);
+        ClientStateWaiting<ClientStates> csWaitingFood = new ClientStateWaiting<ClientStates>(clientModel, clientView);
+        ClientStateLeave<ClientStates> csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
 
         csIdle.AddTransition(ClientStates.GoChair, csChair);
 

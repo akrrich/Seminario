@@ -14,6 +14,8 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] private KeyCode inventory;
     [SerializeField] private KeyCode pause;
 
+    [Header("Joystick Inputs:")]
+
     public static PlayerInputs Instance { get => instance; }
 
 
@@ -62,6 +64,7 @@ public class PlayerInputs : MonoBehaviour
     {
         return Input.GetKeyDown(inventory);
     }
+
     public bool Pause()
     {
         return Input.GetKeyDown(pause);

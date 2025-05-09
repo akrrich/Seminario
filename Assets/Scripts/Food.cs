@@ -12,6 +12,7 @@ public class Food : MonoBehaviour
 
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
+    private Table pendingTableFromClient;
 
     private Transform stovePosition;
     private Transform cookedPosition;
@@ -64,16 +65,6 @@ public class Food : MonoBehaviour
         PlayerController.OnTableCollisionExit += ClearTable;
     }
 
-    private void SuscribeToClientModelEvent()
-    {
-        ClientModel.OnWaitingFood += SaveClientInChair;
-    }
-
-    private void UnsuscribeToClientModelEvent()
-    {
-        ClientModel.OnWaitingFood -= SaveClientInChair;
-    }
-
     private void UnsuscribeToPlayerControllerEvents()
     {
         PlayerController.OnGrabFood -= Grab;
@@ -81,6 +72,16 @@ public class Food : MonoBehaviour
 
         PlayerController.OnTableCollisionEnter -= SaveTable;
         PlayerController.OnTableCollisionExit -= ClearTable;
+    }
+
+    private void SuscribeToClientModelEvent()
+    {
+        ClientModel.OnWaitingFood += SaveClientInTable;
+    }
+
+    private void UnsuscribeToClientModelEvent()
+    {
+        ClientModel.OnWaitingFood -= SaveClientInTable;
     }
 
     private void GetComponents()
@@ -142,9 +143,9 @@ public class Food : MonoBehaviour
         currentTable = null;
     }
 
-    private void SaveClientInChair()
+    private void SaveClientInTable()
     {
-        isClientInChair = true;
+        isClientInChair = true;   // RESOLVER PROBLEMA ACA CUANDO SE INVOCA EL EVENTO (porque lo esta ejecutando en todas las comidas de la escena)
     }
 
     private void Grab()

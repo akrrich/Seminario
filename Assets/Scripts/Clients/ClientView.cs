@@ -17,17 +17,9 @@ public class ClientView : MonoBehaviour
 
     private Dictionary<FoodType, Sprite> foodSpriteDict = new();
 
-    private event Action onWalkEnter;
-    private event Action onSitEnter;
-    private event Action onStanUpEnter;
-
     private static event Action onFoodChangeUI; // Modificar para que no sea statico
 
     public List<string> OrderFoodNames { get => orderFoodNames; }
-
-    public Action OnWalkEnter { get => onWalkEnter; set => onWalkEnter = value; }
-    public Action OnSitEnter { get => onSitEnter; set => onSitEnter = value; }
-    public Action OnStandUpEnter { get => onStanUpEnter; set => onStanUpEnter = value; }
 
     public static Action OnFoodChangeUI { get => onFoodChangeUI; set => onFoodChangeUI = value; }
 
@@ -51,6 +43,25 @@ public class ClientView : MonoBehaviour
     }
 
 
+    public void WalkAnim()
+    {
+        RestartAnimationsValues();
+        anim.SetBool("Walk", true);
+    }
+
+    public void SitAnim()
+    {
+        RestartAnimationsValues();
+        anim.SetBool("Sit", true);
+    }
+
+    public void StandUpAnim()
+    {
+        RestartAnimationsValues();
+        anim.SetBool("StandUp", true);
+    }
+
+
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
@@ -61,19 +72,11 @@ public class ClientView : MonoBehaviour
 
     private void SuscribeToOwnEvent()
     {
-        onWalkEnter += WalkAnim;
-        onSitEnter += SitAnim;
-        onStanUpEnter += StandUpAnim;
-
         onFoodChangeUI += InitializeRandomFoodUI;
     }
 
     private void UnsuscribeToOwnEvents()
     {
-        onWalkEnter -= WalkAnim;
-        onSitEnter -= SitAnim;
-        onStanUpEnter -= StandUpAnim;
-
         onFoodChangeUI -= InitializeRandomFoodUI;
     }
 
@@ -132,7 +135,7 @@ public class ClientView : MonoBehaviour
         anim.transform.position = transform.position;
     }
 
-    private void DisableAnimationsValues() 
+    private void RestartAnimationsValues()
     {
         string[] parametersNames = { "Walk", "Sit", "StandUp" };
 
@@ -140,24 +143,6 @@ public class ClientView : MonoBehaviour
         {
             anim.SetBool(parametersNames[i], false);
         }
-    }
-
-    private void WalkAnim()
-    {
-        DisableAnimationsValues();
-        anim.SetBool("Walk", true);
-    }
-
-    private void SitAnim()
-    {
-        DisableAnimationsValues();
-        anim.SetBool("Sit", true);
-    }
-
-    private void StandUpAnim()
-    {
-        DisableAnimationsValues();
-        anim.SetBool("StandUp", true);
     }
 }
 

@@ -3,11 +3,13 @@ using UnityEngine;
 public class ClientStateWaiting<T> : State<T>
 {
     private ClientModel clientModel;
+    private ClientView clientView;
 
 
-    public ClientStateWaiting(ClientModel clientModel)
+    public ClientStateWaiting(ClientModel clientModel, ClientView clientView)
     {
         this.clientModel = clientModel;
+        this.clientView = clientView;
     }
 
 
@@ -17,6 +19,7 @@ public class ClientStateWaiting<T> : State<T>
         Debug.Log("Waiting");
 
         clientModel.StopVelocity();
+        //clientView.SitAnim();
         ClientModel.OnWaitingFood?.Invoke();
     }
 
