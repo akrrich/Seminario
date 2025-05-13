@@ -112,7 +112,7 @@ public class IngredientInventoryManager : MonoBehaviour
 
     private void GetComponents()
     {
-        //playerModel = FindFirstObjectByType<PlayerModel>();
+        playerModel = FindFirstObjectByType<PlayerModel>();
 
         slotParentObject = GameObject.Find("SlotObjects").transform;
         inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<RawImage>();    

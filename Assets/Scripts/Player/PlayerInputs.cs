@@ -75,7 +75,6 @@ public class PlayerInputs : MonoBehaviour
         return Input.GetKeyDown(pause);
     }
 
-
     private void CreateSingleton()
     {
         if (instance == null)

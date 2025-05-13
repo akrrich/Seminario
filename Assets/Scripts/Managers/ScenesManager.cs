@@ -52,17 +52,21 @@ public class ScenesManager : MonoBehaviour
 
         switch (initializedCurrentScene.name)
         {
-            case "Game":
-                 LoadScene("TabernUI", LoadSceneMode.Additive);
-                break;
-
             case "MainMenu":
                 LoadScene("MainMenuUI", LoadSceneMode.Additive);
                 break;
 
+            case "Tabern":
+                 LoadScene("TabernUI", LoadSceneMode.Additive);
+                 LoadScene("CompartidoUI", LoadSceneMode.Additive);
+                break;
+
             case "Dungeon":
                 LoadScene("DungeonUI", LoadSceneMode.Additive);
+                LoadScene("CompartidoUI", LoadSceneMode.Additive);
                 break;
+
+
         }
     }
 }
