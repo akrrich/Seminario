@@ -7,14 +7,12 @@ using UnityEngine.UI;
 
 public class IngredientInventoryManager : MonoBehaviour
 {
-    // Lo que hay que hacer es sincronizar los botones de compra de ingredientes cuando se desbloquean 
-
     private static IngredientInventoryManager instance;
 
     private PlayerModel playerModel;
 
     [Header("Ingredientes")]
-    [SerializeField] private List<IngredientType> availableIngredients;
+    private List<IngredientType> availableIngredients;
     [SerializeField] private List<Ingredients.FoodRecipe> foodRecipes;
     [SerializeField] private List<Ingredients.IngredientData> ingredientData;
 
@@ -50,12 +48,6 @@ public class IngredientInventoryManager : MonoBehaviour
     void Update()
     {
         EnabledOrDisabledInventoryPanel();
-
-        // Test
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            UnlockNewIngredient(IngredientType.Water, "WaterSlot", 1);
-        }
     }
 
     void OnDestroy()
@@ -104,31 +96,6 @@ public class IngredientInventoryManager : MonoBehaviour
         return ingredientDataDict.TryGetValue(ingredient, out var data) ? data.Price : 0;
     }
 
-    public void UnlockNewIngredient(IngredientType newIngredient, string prefabName, int stockForIngredient)
-    {
-        if (!ingredientInventory.ContainsKey(newIngredient))
-        {
-            availableIngredients.Add(newIngredient);
-            ingredientInventory[newIngredient] = stockForIngredient;
-
-            GameObject slotPrefab = Resources.Load<GameObject>("Prefabs/InventorySlot/" + prefabName); 
-
-            if (slotPrefab != null)
-            {
-                int nextSlotIndex = availableIngredients.Count - 1;
-
-                if (nextSlotIndex < slotPositions.Count)
-                {
-                    GameObject slotInstance = Instantiate(slotPrefab, slotPositions[nextSlotIndex].position, Quaternion.identity, slotParentObject);
-                    slotInstance.SetActive(false);
-
-                    TextMeshProUGUI stockText = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
-                    ingredientSlots[newIngredient] = (slotInstance, stockText);
-                }
-            }
-        }
-    }
-
 
     private void InitializeSingleton()
     {
@@ -145,7 +112,7 @@ public class IngredientInventoryManager : MonoBehaviour
 
     private void GetComponents()
     {
-        playerModel = FindFirstObjectByType<PlayerModel>();
+        //playerModel = FindFirstObjectByType<PlayerModel>();
 
         slotParentObject = GameObject.Find("SlotObjects").transform;
         inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<RawImage>();    
@@ -167,8 +134,20 @@ public class IngredientInventoryManager : MonoBehaviour
         PlayerView.OnDeactivateInventoryFoodUI -= HideInventory;
     }
 
+    private void SuscribeToPlayerModelEvent()
+    {
+        PlayerModel.onPlayerInitialized += GetPloyerModelReferenceFromEvent;
+    }
+
+    private void UnsuscribeToPlayerModelEvent()
+    {
+        PlayerModel.onPlayerInitialized -= GetPloyerModelReferenceFromEvent;
+    }
+
     private void InitializeInventory()
     {
+        availableIngredients = Enum.GetValues(typeof(IngredientType)).Cast<IngredientType>().ToList();
+
         foreach (IngredientType ingredient in availableIngredients)
         {
             ingredientInventory[ingredient] = initializeStockIngredients;
@@ -225,9 +204,17 @@ public class IngredientInventoryManager : MonoBehaviour
         }
     }
 
+    private void GetPloyerModelReferenceFromEvent(PlayerModel playerModel)
+    {
+        if (playerModel == null)
+        {
+            this.playerModel = playerModel;
+        }
+    }
+
     private void EnabledOrDisabledInventoryPanel()
     {
-        if (!playerModel.IsCooking && !playerModel.IsAdministrating)
+        if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating)
         {
             if (PlayerInputs.Instance.Inventory())
             {

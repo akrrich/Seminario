@@ -7,32 +7,28 @@ public class ClientView : MonoBehaviour
     private PlayerController playerController;
 
     private Animator anim;
+    private SpriteRenderer foodSpriteRenderer;
     private Transform order; // GameObject padre de la UI
-    private List<SpriteRenderer> foodSprites = new List<SpriteRenderer>();
 
     private List<string> orderFoodNames = new List<string>();
 
-    private static event Action onWalkEnter;
-    private static event Action onSitEnter;
-    private static event Action onStanUpEnter;
+    [SerializeField] private List<FoodType> favoritesFoodTypes; // Las comidas que puede pedir
+    [SerializeField] private List<FoodTypeSpritePair> foodSpritePairs; 
 
-    private static event Action onFoodChange;
+    private Dictionary<FoodType, Sprite> foodSpriteDict = new();
 
-    private string[] foodsTypes = { "Fish", "Mouse" };
+    private static event Action onFoodChangeUI; // Modificar para que no sea statico
 
     public List<string> OrderFoodNames { get => orderFoodNames; }
 
-    public static Action OnWalkEnter { get => onWalkEnter; set => onWalkEnter = value; }
-    public static Action OnSitEnter { get => onSitEnter; set => onSitEnter = value; }
-    public static Action OnStandUpEnter { get => onStanUpEnter; set => onStanUpEnter = value; }
-
-    public static Action OnFoodChange { get => onFoodChange; set => onFoodChange = value; }
+    public static Action OnFoodChangeUI { get => onFoodChangeUI; set => onFoodChangeUI = value; }
 
 
     void Awake()
     {
         GetComponents();
         SuscribeToOwnEvent();
+        InitializeFoodSpriteDictionary();
     }
 
     void Update()
@@ -47,69 +43,79 @@ public class ClientView : MonoBehaviour
     }
 
 
+    public void WalkAnim()
+    {
+        RestartAnimationsValues();
+        anim.SetBool("Walk", true);
+    }
+
+    public void SitAnim()
+    {
+        RestartAnimationsValues();
+        anim.SetBool("Sit", true);
+    }
+
+    public void StandUpAnim()
+    {
+        RestartAnimationsValues();
+        anim.SetBool("StandUp", true);
+    }
+
+
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
         //anim = GetComponentInChildren<Animator>();
+        foodSpriteRenderer = transform.Find("Order").Find("SpriteFood").GetComponent<SpriteRenderer>();
         order = transform.Find("Order");
-
-        Transform foodsPositions = order.Find("FoodsPositions");
-
-        foreach (Transform position in foodsPositions)
-        {
-            foodSprites.Add(position.GetComponent<SpriteRenderer>());
-        }
     }
 
     private void SuscribeToOwnEvent()
     {
-        onWalkEnter += WalkAnim;
-        onSitEnter += SitAnim;
-        onStanUpEnter += StandUpAnim;
-
-        onFoodChange += InitializeRandomFoodUI;
+        onFoodChangeUI += InitializeRandomFoodUI;
     }
 
     private void UnsuscribeToOwnEvents()
     {
-        onWalkEnter -= WalkAnim;
-        onSitEnter -= SitAnim;
-        onStanUpEnter -= StandUpAnim;
+        onFoodChangeUI -= InitializeRandomFoodUI;
+    }
 
-        onFoodChange -= InitializeRandomFoodUI;
+    private void InitializeFoodSpriteDictionary()
+    {
+        foodSpriteDict.Clear();
+
+        foreach (var pair in foodSpritePairs)
+        {
+            if (!foodSpriteDict.ContainsKey(pair.FoodType))
+            {
+                foodSpriteDict.Add(pair.FoodType, pair.Sprite);
+            }
+        }
     }
 
     private void InitializeRandomFoodUI()
     {
         orderFoodNames.Clear();
 
-        int foodCount = UnityEngine.Random.Range(1, foodSprites.Count + 1);
+        int randomIndex = UnityEngine.Random.Range(0, favoritesFoodTypes.Count);
+        FoodType selectedFood = favoritesFoodTypes[randomIndex];
 
-        for (int i = 0; i < foodSprites.Count; i++)
+        if (foodSpriteDict.TryGetValue(selectedFood, out Sprite sprite))
         {
-            SpriteRenderer sprite = foodSprites[i];
-
-            if (i < foodCount)
-            {
-                int randomIndex = UnityEngine.Random.Range(0, foodsTypes.Length);
-                string selectedFood = foodsTypes[randomIndex];
-
-                switch (selectedFood)
-                {
-                    case "Fish": sprite.color = Color.yellow; break;
-                    case "Mouse": sprite.color = Color.blue; break;
-                }
-
-                orderFoodNames.Add(selectedFood);
-                sprite.enabled = true;
-            }
-
-            else
-            {
-                sprite.color = Color.clear;
-                sprite.enabled = false;
-            }
+            foodSpriteRenderer.sprite = sprite;
+            foodSpriteRenderer.enabled = true;
+            orderFoodNames.Add(selectedFood.ToString());
+            AutoAdjustSpriteScale(sprite);
         }
+    }
+
+    private void AutoAdjustSpriteScale(Sprite sprite)
+    {
+        float maxDimension = 0.5f; 
+        Vector2 spriteSize = sprite.bounds.size;
+
+        float scaleFactor = maxDimension / Mathf.Max(spriteSize.x, spriteSize.y);
+        foodSpriteRenderer.transform.localScale = Vector3.one * scaleFactor;
     }
 
     private void RotateOrderUIToLookAtPlayer()
@@ -129,33 +135,23 @@ public class ClientView : MonoBehaviour
         anim.transform.position = transform.position;
     }
 
-    /*private void ExecuteCurrentAnimation(int parameterIndex) 
+    private void RestartAnimationsValues()
     {
         string[] parametersNames = { "Walk", "Sit", "StandUp" };
 
         for (int i = 0; i < parametersNames.Length; i++)
         {
-            anim.SetBool(parametersNames[i], i == parameterIndex);
-
-            if (i == parameterIndex)
-            {
-                break;
-            }
+            anim.SetBool(parametersNames[i], false);
         }
-    }*/
-
-    private void WalkAnim()
-    {
-        anim.SetBool("Walk", true);
     }
+}
 
-    private void SitAnim()
-    {
-        anim.SetBool("Sit", true);
-    }
+[Serializable]
+public class FoodTypeSpritePair
+{
+    [SerializeField] private FoodType foodType;
+    [SerializeField] private Sprite sprite;
 
-    private void StandUpAnim()
-    {
-        anim.SetBool("StandUp", true);
-    }
+    public FoodType FoodType { get => foodType; } 
+    public Sprite Sprite { get => sprite; }
 }

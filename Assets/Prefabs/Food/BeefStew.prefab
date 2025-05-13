@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -8154771779855483243}
   - component: {fileID: 6942893187234943749}
   m_Layer: 0
-  m_Name: Mouse
+  m_Name: BeefStew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

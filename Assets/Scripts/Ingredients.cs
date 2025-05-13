@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum IngredientType
+public enum IngredientType // Flour = Harina
 {
-    Rat,
-    Salmon,
-    Water,
+    Onion, Carrot, Potato, BeastMeat, Tomato, Lettuce, Oil, Flour, Pepper, HumanFlesh
 }
 
 public class Ingredients
