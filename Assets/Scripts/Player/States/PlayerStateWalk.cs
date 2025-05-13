@@ -33,7 +33,7 @@ public class PlayerStateWalk<T> : State<T>
     {
         base.Execute();
 
-        if (playerModel.GetMoveAxis() == Vector2.zero)
+        if (PlayerInputs.Instance.GetMoveAxis() == Vector2.zero)
         {
             Fsm.TransitionTo(inputToIdle);
         }

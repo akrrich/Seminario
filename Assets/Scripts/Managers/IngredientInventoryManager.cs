@@ -96,31 +96,6 @@ public class IngredientInventoryManager : MonoBehaviour
         return ingredientDataDict.TryGetValue(ingredient, out var data) ? data.Price : 0;
     }
 
-    /*public void UnlockNewIngredient(IngredientType newIngredient, string prefabName, int stockForIngredient)
-    {
-        if (!ingredientInventory.ContainsKey(newIngredient))
-        {
-            availableIngredients.Add(newIngredient);
-            ingredientInventory[newIngredient] = stockForIngredient;
-
-            GameObject slotPrefab = Resources.Load<GameObject>("Prefabs/InventorySlot/" + prefabName); 
-
-            if (slotPrefab != null)
-            {
-                int nextSlotIndex = availableIngredients.Count - 1;
-
-                if (nextSlotIndex < slotPositions.Count)
-                {
-                    GameObject slotInstance = Instantiate(slotPrefab, slotPositions[nextSlotIndex].position, Quaternion.identity, slotParentObject);
-                    slotInstance.SetActive(false);
-
-                    TextMeshProUGUI stockText = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
-                    ingredientSlots[newIngredient] = (slotInstance, stockText);
-                }
-            }
-        }
-    }*/
-
 
     private void InitializeSingleton()
     {
@@ -137,7 +112,7 @@ public class IngredientInventoryManager : MonoBehaviour
 
     private void GetComponents()
     {
-        playerModel = FindFirstObjectByType<PlayerModel>();
+        //playerModel = FindFirstObjectByType<PlayerModel>();
 
         slotParentObject = GameObject.Find("SlotObjects").transform;
         inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<RawImage>();    
@@ -157,6 +132,16 @@ public class IngredientInventoryManager : MonoBehaviour
     private void UnsubscribeToPlayerViewEvent()
     {
         PlayerView.OnDeactivateInventoryFoodUI -= HideInventory;
+    }
+
+    private void SuscribeToPlayerModelEvent()
+    {
+        PlayerModel.onPlayerInitialized += GetPloyerModelReferenceFromEvent;
+    }
+
+    private void UnsuscribeToPlayerModelEvent()
+    {
+        PlayerModel.onPlayerInitialized -= GetPloyerModelReferenceFromEvent;
     }
 
     private void InitializeInventory()
@@ -219,9 +204,17 @@ public class IngredientInventoryManager : MonoBehaviour
         }
     }
 
+    private void GetPloyerModelReferenceFromEvent(PlayerModel playerModel)
+    {
+        if (playerModel == null)
+        {
+            this.playerModel = playerModel;
+        }
+    }
+
     private void EnabledOrDisabledInventoryPanel()
     {
-        if (!playerModel.IsCooking && !playerModel.IsAdministrating)
+        if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating)
         {
             if (PlayerInputs.Instance.Inventory())
             {

@@ -25,6 +25,11 @@ public class PlayerInputs : MonoBehaviour
     }
 
 
+    public Vector2 GetMoveAxis()
+    {
+        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+    }
+
     public bool Run()
     {
         return Input.GetKey(run);

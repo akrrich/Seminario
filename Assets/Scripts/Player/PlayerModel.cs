@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public enum PlayerStates
 {
@@ -16,6 +17,13 @@ public class PlayerModel : MonoBehaviour
     private GameObject oven;
     private GameObject administration;
 
+    public static event Action<PlayerModel> onPlayerInitialized; // evento que se utilizara cuando para buscar referncias de la escena Data
+
+    [Header("LineOfSight")]
+    [SerializeField] private float rangeVision;
+    [SerializeField] private float angleVision;
+
+    [Header("Variables")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
@@ -49,6 +57,9 @@ public class PlayerModel : MonoBehaviour
     void Awake()
     {
         GetComponents();
+
+        // Provisorio
+        onPlayerInitialized?.Invoke(this);
     }
 
     void FixedUpdate()
@@ -56,21 +67,21 @@ public class PlayerModel : MonoBehaviour
         Movement();
     }
 
-
-    public Vector2 GetMoveAxis()
+    void OnDrawGizmosSelected()
     {
-        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        LineOfSight.DrawLOSOnGizmos(transform, angleVision, rangeVision);
     }
+
 
     // Solucionar los LineOfSight
     public bool IsLookingAtOven()
     {
-        return LineOfSight.LOS(playerCamera.transform, oven.transform, 5, 125, LayerMask.NameToLayer("LOS"));
+        return LineOfSight.LOS(playerCamera.transform, oven.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
     }
 
     public bool IsLookingAtAdministration()
     {
-        return LineOfSight.LOS(playerCamera.transform, administration.transform, 5, 125, LayerMask.NameToLayer("LOS"));
+        return LineOfSight.LOS(playerCamera.transform, administration.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
     }
 
     public void ShowOrHideDish(bool current)
@@ -99,7 +110,7 @@ public class PlayerModel : MonoBehaviour
             cameraForward.Normalize();
 
             Vector3 right = playerCamera.transform.right;
-            Vector3 movement = (cameraForward * GetMoveAxis().y + right * GetMoveAxis().x).normalized * speed * Time.deltaTime;
+            Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
 
             rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
         }

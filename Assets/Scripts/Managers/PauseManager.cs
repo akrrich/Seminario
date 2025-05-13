@@ -7,6 +7,8 @@ public class PauseManager : MonoBehaviour
 {
     private static PauseManager instance;
 
+    private AudioSource buttonClick;
+
     [Header("UI")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingsPanel;
@@ -33,26 +35,32 @@ public class PauseManager : MonoBehaviour
     // Funciones asignadas a botones de la UI
     public void ButtonResume()
     {
+        buttonClick.Play();
         HidePause();
     }
 
     public void ButtonSettings()
     {
+        buttonClick.Play();
         ShowSettings();
     }
 
     public void ButtonMainMenu()
     {
-        loadSceneAfterSeconds("MainMenu");
+        buttonClick.Play();
+        Time.timeScale = 1f;
+        StartCoroutine(loadSceneAfterSeconds("MainMenu", "MainMenuUI"));
     }
 
     public void ButtonExit()
     {
-        ExitGameAfterSeconds();
+        buttonClick.Play();
+        StartCoroutine(ExitGameAfterSeconds());
     }
 
     public void ButtonBack()
     {
+        buttonClick.Play();
         HideSettings();
     }
 
@@ -72,7 +80,7 @@ public class PauseManager : MonoBehaviour
 
     private void GetComponents()
     {
-
+        buttonClick = GetComponent<AudioSource>();
     }
 
 
@@ -105,20 +113,22 @@ public class PauseManager : MonoBehaviour
     {
         if (PlayerInputs.Instance.Pause())
         {
+            buttonClick.Play();
             (isGamePaused ? (Action)HidePause : ShowPause)();
         }
     }
 
-    private IEnumerator loadSceneAfterSeconds(string sceneName)
+    private IEnumerator loadSceneAfterSeconds(string sceneName, string sceneNameAdditive)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(buttonClick.clip.length);
 
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadSceneAsync(sceneName);
+        ScenesManager.Instance.LoadScene(sceneNameAdditive, LoadSceneMode.Additive);
     }
 
     private IEnumerator ExitGameAfterSeconds()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(buttonClick.clip.length);
 
         Application.Quit();
     }
