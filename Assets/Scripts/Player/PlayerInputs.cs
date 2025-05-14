@@ -27,7 +27,7 @@ public class PlayerInputs : MonoBehaviour
 
     public Vector2 GetMoveAxis()
     {
-        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
 
     public bool Run()
