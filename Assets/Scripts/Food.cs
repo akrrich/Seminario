@@ -10,9 +10,11 @@ public class Food : MonoBehaviour
 {
     // No usar el metodo OnDisabled de Unity
 
+    // Resolver problema que cuando al npc se le asigna una mesa, que no se pueda entregar el pedido
+    // hasta que realmente llegue a la silla
+
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
-    private Table pendingTableFromClient;
 
     private Transform stovePosition;
     private Transform cookedPosition;
@@ -27,13 +29,11 @@ public class Food : MonoBehaviour
     private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
-    private bool isClientInChair = false;
 
 
     void Awake()
     {
         SuscribeToPlayerControllerEvents();
-        SuscribeToClientModelEvent();
         GetComponents();
     }
 
@@ -45,7 +45,6 @@ public class Food : MonoBehaviour
     void OnDestroy()
     {
         UnsuscribeToPlayerControllerEvents();
-        UnsuscribeToClientModelEvent();
     }
 
 
@@ -72,16 +71,6 @@ public class Food : MonoBehaviour
 
         PlayerController.OnTableCollisionEnter -= SaveTable;
         PlayerController.OnTableCollisionExit -= ClearTable;
-    }
-
-    private void SuscribeToClientModelEvent()
-    {
-        ClientModel.OnWaitingFood += SaveClientInTable;
-    }
-
-    private void UnsuscribeToClientModelEvent()
-    {
-        ClientModel.OnWaitingFood -= SaveClientInTable;
     }
 
     private void GetComponents()
@@ -127,7 +116,6 @@ public class Food : MonoBehaviour
 
         isCooked = false;
         isInPlayerDishPosition = false;
-        isClientInChair = false;
     }
 
     private void SaveTable(Table table)
@@ -141,11 +129,6 @@ public class Food : MonoBehaviour
     private void ClearTable()
     {
         currentTable = null;
-    }
-
-    private void SaveClientInTable()
-    {
-        isClientInChair = true;   // RESOLVER PROBLEMA ACA CUANDO SE INVOCA EL EVENTO (porque lo esta ejecutando en todas las comidas de la escena)
     }
 
     private void Grab()
@@ -163,7 +146,7 @@ public class Food : MonoBehaviour
 
     private void HandOver()
     {
-        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied && isClientInChair)
+        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
         {
             PlayerView.OnHandOverCompletedForHandOverMessage?.Invoke();
 

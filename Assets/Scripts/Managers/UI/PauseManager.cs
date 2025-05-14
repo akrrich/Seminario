@@ -122,7 +122,7 @@ public class PauseManager : MonoBehaviour
     {
         yield return new WaitForSeconds(buttonClick.clip.length);
 
-        SceneManager.LoadSceneAsync(sceneName);
+        ScenesManager.Instance.LoadScene(sceneName);
         ScenesManager.Instance.LoadScene(sceneNameAdditive, LoadSceneMode.Additive);
     }
 

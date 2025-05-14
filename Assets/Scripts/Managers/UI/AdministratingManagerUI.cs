@@ -1,15 +1,11 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections.Generic;
 
-public class AdministratingManager : MonoBehaviour
+public class AdministratingManagerUI : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones hijos
 
     private Action onEnterAdmin, onExitAdmin;
-
-    private List<Button> buttons;
 
 
     void Awake()
@@ -31,7 +27,7 @@ public class AdministratingManager : MonoBehaviour
         {
             int price = IngredientInventoryManager.Instance.GetPriceOfIngredient(ingredient);
 
-            if (MoneyManager.Instance.CurrentMoney >= price && IngredientInventoryManager.Instance.HasUnlockIngredient(ingredient))
+            if (MoneyManager.Instance.CurrentMoney >= price)
             {
                 IngredientInventoryManager.Instance.IncreaseIngredientStock(ingredient);
                 MoneyManager.Instance.SubMoney(price);

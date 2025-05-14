@@ -43,6 +43,7 @@ public class MainMenu : MonoBehaviour
 
         ScenesManager.Instance.LoadScene("Tabern");
         ScenesManager.Instance.LoadScene("TabernUI", LoadSceneMode.Additive);
+        ScenesManager.Instance.LoadScene("CompartidoUI", LoadSceneMode.Additive);
     }
 
     private IEnumerator CloseGameAfterClickButton()

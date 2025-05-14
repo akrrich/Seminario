@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
 public enum PlayerStates
 {
@@ -17,7 +18,7 @@ public class PlayerModel : MonoBehaviour
     private GameObject oven;
     private GameObject administration;
 
-    public static event Action<PlayerModel> onPlayerInitialized; // evento que se utilizara cuando para buscar referncias de la escena Data
+    private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
 
     [Header("LineOfSight")]
     [SerializeField] private float rangeVision;
@@ -43,6 +44,8 @@ public class PlayerModel : MonoBehaviour
     public Transform AdministratingPosition { get => administratingPosition; }
     public GameObject Dish { get => dish; }
 
+    public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
+
     public float WalkSpeed { get => walkSpeed; }
     public float RunSpeed { get => runSpeed; } 
     public float Speed { get => speed; set => speed = value; }
@@ -59,8 +62,9 @@ public class PlayerModel : MonoBehaviour
         GetComponents();
 
         // Provisorio
-        onPlayerInitialized?.Invoke(this);
+        StartCoroutine(InvokeEventInitializationPlayer());
     }
+
 
     void FixedUpdate()
     {
@@ -114,5 +118,12 @@ public class PlayerModel : MonoBehaviour
 
             rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
         }
+    }
+
+    private IEnumerator InvokeEventInitializationPlayer()
+    {
+        yield return new WaitForSeconds(1);
+
+        onPlayerInitialized?.Invoke(this);
     }
 }

@@ -1,65 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class IngredientInventoryManager : MonoBehaviour
 {
     private static IngredientInventoryManager instance;
 
-    private PlayerModel playerModel;
-
-    [Header("Ingredientes")]
     private List<IngredientType> availableIngredients;
     [SerializeField] private List<Ingredients.FoodRecipe> foodRecipes;
     [SerializeField] private List<Ingredients.IngredientData> ingredientData;
-
-    [Header("UI")]
-    [SerializeField] private List<GameObject> startSlotPrefabs;
-    private RawImage inventoryPanel;
-    private Transform slotParentObject;
-    private List<Transform> slotPositions = new List<Transform>();
-
-    private Dictionary<IngredientType, int> ingredientInventory = new();
-    private Dictionary<IngredientType, (GameObject slot, TextMeshProUGUI text)> ingredientSlots = new();
-    private Dictionary<FoodType, Ingredients.FoodRecipe> recipeDict = new();
-    private Dictionary<IngredientType, Ingredients.IngredientData> ingredientDataDict = new();
-
-    [Header("")]
     [SerializeField] private int initializeStockIngredients;
 
-    private bool isInventoryOpenUI = false;
-
-    public static IngredientInventoryManager Instance => instance;
+    private Dictionary<IngredientType, int> ingredientInventory = new();
+    private Dictionary<FoodType, Ingredients.FoodRecipe> recipeDict = new();
+    private Dictionary<IngredientType, Ingredients.IngredientData> ingredientDataDict = new();
+    
+    public static IngredientInventoryManager Instance { get => instance; }
 
 
     void Awake()
     {
-        InitializeSingleton();
-        GetComponents();
-        SubscribeToPlayerViewEvent();
+        CreateSingleton();
         InitializeInventory();
         InitializeIngredientData();
         InitializeRecipes();
     }
 
-    void Update()
-    {
-        EnabledOrDisabledInventoryPanel();
-    }
-
-    void OnDestroy()
-    {
-        UnsubscribeToPlayerViewEvent();
-    }
-
-
-    public bool HasUnlockIngredient(IngredientType ingredient)
-    {
-        return ingredientInventory.ContainsKey(ingredient);
-    }
 
     public void IncreaseIngredientStock(IngredientType ingredient)
     {
@@ -68,10 +35,7 @@ public class IngredientInventoryManager : MonoBehaviour
 
     public bool TryCraftFood(FoodType foodType)
     {
-        if (!recipeDict.ContainsKey(foodType))
-        {
-            return false;
-        }
+        if (!recipeDict.ContainsKey(foodType)) return false;
 
         var recipe = recipeDict[foodType];
 
@@ -96,8 +60,15 @@ public class IngredientInventoryManager : MonoBehaviour
         return ingredientDataDict.TryGetValue(ingredient, out var data) ? data.Price : 0;
     }
 
+    public int GetStock(IngredientType ingredient)
+    {
+        return ingredientInventory.TryGetValue(ingredient, out var stock) ? stock : 0;
+    }
 
-    private void InitializeSingleton()
+    public List<IngredientType> GetAllIngredients() => new List<IngredientType>(ingredientInventory.Keys);
+
+
+    private void CreateSingleton()
     {
         if (instance == null)
         {
@@ -107,41 +78,10 @@ public class IngredientInventoryManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(gameObject);
+            return;
         }
-    }
 
-    private void GetComponents()
-    {
-        playerModel = FindFirstObjectByType<PlayerModel>();
-
-        slotParentObject = GameObject.Find("SlotObjects").transform;
-        inventoryPanel = GameObject.Find("InventoryPanel").GetComponent<RawImage>();    
-
-        Transform slotParentPositions = GameObject.Find("SlotTransforms").transform;
-        foreach (Transform slotChilds in slotParentPositions)
-        {
-            slotPositions.Add(slotChilds.GetComponent<Transform>());
-        }
-    }
-
-    private void SubscribeToPlayerViewEvent()
-    {
-        PlayerView.OnDeactivateInventoryFoodUI += HideInventory;
-    }
-
-    private void UnsubscribeToPlayerViewEvent()
-    {
-        PlayerView.OnDeactivateInventoryFoodUI -= HideInventory;
-    }
-
-    private void SuscribeToPlayerModelEvent()
-    {
-        PlayerModel.onPlayerInitialized += GetPloyerModelReferenceFromEvent;
-    }
-
-    private void UnsuscribeToPlayerModelEvent()
-    {
-        PlayerModel.onPlayerInitialized -= GetPloyerModelReferenceFromEvent;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void InitializeInventory()
@@ -152,22 +92,6 @@ public class IngredientInventoryManager : MonoBehaviour
         {
             ingredientInventory[ingredient] = initializeStockIngredients;
         }
-
-        for (int i = 0; i < startSlotPrefabs.Count; i++)
-        {
-            GameObject slotInstance = Instantiate(startSlotPrefabs[i], slotPositions[i].position, Quaternion.identity, slotParentObject);
-            slotInstance.SetActive(false);
-
-            IngredientType type = availableIngredients[i];
-            TextMeshProUGUI stockText = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
-
-            ingredientSlots[type] = (slotInstance, stockText);
-        }
-    }
-
-    private void InitializeRecipes()
-    {
-        recipeDict = foodRecipes.ToDictionary(r => r.FoodType, r => r);
     }
 
     private void InitializeIngredientData()
@@ -181,45 +105,8 @@ public class IngredientInventoryManager : MonoBehaviour
         }
     }
 
-    private void ShowInventory()
+    private void InitializeRecipes()
     {
-        isInventoryOpenUI = true;
-        inventoryPanel.enabled = true;
-
-        foreach (var kvp in ingredientSlots)
-        {
-            kvp.Value.slot.SetActive(true);
-            kvp.Value.text.text = ingredientInventory[kvp.Key].ToString();
-        }
-    }
-
-    private void HideInventory()
-    {
-        isInventoryOpenUI = false;
-        inventoryPanel.enabled = false;
-
-        foreach (var kvp in ingredientSlots)
-        {
-            kvp.Value.slot.SetActive(false);
-        }
-    }
-
-    private void GetPloyerModelReferenceFromEvent(PlayerModel playerModel)
-    {
-        if (playerModel == null)
-        {
-            this.playerModel = playerModel;
-        }
-    }
-
-    private void EnabledOrDisabledInventoryPanel()
-    {
-        if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating)
-        {
-            if (PlayerInputs.Instance.Inventory())
-            {
-                (isInventoryOpenUI ? (Action)HideInventory : ShowInventory)();
-            }
-        }
+        recipeDict = foodRecipes.ToDictionary(r => r.FoodType, r => r);
     }
 }

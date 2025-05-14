@@ -5,8 +5,6 @@ public class ScenesManager : MonoBehaviour
 {
     private static ScenesManager instance;
 
-    private Scene initializedCurrentScene;
-
     public static ScenesManager Instance { get => instance; }
 
 
@@ -46,9 +44,10 @@ public class ScenesManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    // Este metodo solamente funciona para cuando se inicia el programa, es decir solamente una vez en toda la ejecucion
     private void SetInitializedScene()
     {
-        initializedCurrentScene = SceneManager.GetActiveScene();
+        Scene initializedCurrentScene = SceneManager.GetActiveScene();
 
         switch (initializedCurrentScene.name)
         {
@@ -65,8 +64,6 @@ public class ScenesManager : MonoBehaviour
                 LoadScene("DungeonUI", LoadSceneMode.Additive);
                 LoadScene("CompartidoUI", LoadSceneMode.Additive);
                 break;
-
-
         }
     }
 }

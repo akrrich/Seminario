@@ -4,14 +4,13 @@ using System;
 
 public class MessageModeUI : MonoBehaviour
 {
-    private TextMeshProUGUI messageDesplayText;
+    [SerializeField] private TextMeshProUGUI messageDesplayText;
 
     private Action onCook, onAdministration, onHandOver;
 
 
     void Awake()
     {
-        GetComponents();
         InitializeLamdaEventMessages();
         SuscribeToPlayerViewEvents();
     }
@@ -58,11 +57,6 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionEnterWithTableForHandOverMessage -= onHandOver;
         PlayerView.OnCollisionExitWithTableForHandOverMessage -= DisapearMessageText;
         PlayerView.OnHandOverCompletedForHandOverMessage -= DisapearMessageText;
-    }
-
-    private void GetComponents()
-    {
-        messageDesplayText = GetComponent<TextMeshProUGUI>();
     }
 
     private void InitializeReferencs()

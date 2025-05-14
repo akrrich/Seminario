@@ -18,8 +18,8 @@ public class MoneyManager : MonoBehaviour
     void Awake()
     {
         CreateSingleton();
-        GetComponents();
         InitializeCurrentMoney();
+        SuscribeToMoneyTextEvent();
     }
 
 
@@ -46,18 +46,28 @@ public class MoneyManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    private void GetComponents()
+    // No es necesario desuscribirse porque es singleton
+    private void SuscribeToMoneyTextEvent()
     {
-        moneyText = GameObject.Find("MoneyText").GetComponent<TextMeshProUGUI>();
+        MoneyManagerUI.OnTextGetComponent += GetComponentFromEvent;
+    }
+
+    private void GetComponentFromEvent(TextMeshProUGUI moneyText)
+    {
+        this.moneyText = moneyText;
+
+        UpdateMoneyText();
     }
 
     private void InitializeCurrentMoney()
     {
         currentMoney = initializeCurrentMoneyValue;
-        moneyText.text = currentMoney.ToString();
     }
 
     private void UpdateMoneyText()

@@ -163,8 +163,162 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7f869020a7d80d4cb1d3ba87a08e534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1264300540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1264300542}
+  - component: {fileID: 1264300541}
+  m_Layer: 0
+  m_Name: MoneyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1264300541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264300540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85b36471e7af5484f9971986043128e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initializeCurrentMoneyValue: 500
+--- !u!4 &1264300542
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264300540}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 986.3974, y: 397.66522, z: -1.5244477}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1302569138
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1302569140}
+  - component: {fileID: 1302569139}
+  m_Layer: 0
+  m_Name: IngredientInventoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1302569139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302569138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a1a5d700ef71241a1dc7ca6459ade4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodRecipes:
+  - foodType: 0
+    ingridients:
+    - ingredientType: 0
+      amount: 2
+    - ingredientType: 1
+      amount: 1
+    - ingredientType: 2
+      amount: 1
+  - foodType: 1
+    ingridients:
+    - ingredientType: 3
+      amount: 2
+    - ingredientType: 1
+      amount: 1
+    - ingredientType: 2
+      amount: 2
+  - foodType: 2
+    ingridients:
+    - ingredientType: 4
+      amount: 2
+    - ingredientType: 5
+      amount: 2
+    - ingredientType: 2
+      amount: 2
+  - foodType: 3
+    ingridients:
+    - ingredientType: 3
+      amount: 2
+    - ingredientType: 7
+      amount: 1
+    - ingredientType: 6
+      amount: 1
+  - foodType: 4
+    ingridients:
+    - ingredientType: 9
+      amount: 2
+    - ingredientType: 8
+      amount: 1
+    - ingredientType: 6
+      amount: 1
+  ingredientData:
+  - ingridientType: 0
+    price: 15
+  - ingridientType: 1
+    price: 15
+  - ingridientType: 2
+    price: 15
+  - ingridientType: 3
+    price: 15
+  - ingridientType: 4
+    price: 15
+  - ingridientType: 5
+    price: 15
+  - ingridientType: 6
+    price: 15
+  - ingridientType: 7
+    price: 15
+  - ingridientType: 8
+    price: 15
+  - ingridientType: 9
+    price: 15
+  initializeStockIngredients: 10
+--- !u!4 &1302569140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302569138}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1263.082, y: -10.708893, z: -78.02305}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 673489817}
+  - {fileID: 1264300542}
+  - {fileID: 1302569140}
