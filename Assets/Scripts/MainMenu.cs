@@ -1,12 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private Button[] buttonsClickOnce; // Para los botones que se pueden presionar una vez
-
     private AudioSource buttonClick;
 
 
@@ -37,21 +33,20 @@ public class MainMenu : MonoBehaviour
     private IEnumerator LoadSceneAfterButtonClick()
     {
         buttonClick.Play();
-        buttonsClickOnce[0].interactable = false;
 
-        yield return new WaitForSeconds(buttonClick.clip.length);
-
-        ScenesManager.Instance.LoadScene("Tabern");
-        ScenesManager.Instance.LoadScene("TabernUI", LoadSceneMode.Additive);
+        string[] additiveScenes = { "TabernUI", "CompartidoUI" };
+        yield return StartCoroutine(ScenesManager.Instance.LoadScene("Tabern", additiveScenes));
     }
 
     private IEnumerator CloseGameAfterClickButton()
     {
         buttonClick.Play();
-        buttonsClickOnce[1].interactable = false;
 
         yield return new WaitForSeconds(buttonClick.clip.length);
 
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
         Application.Quit();
     }
 }

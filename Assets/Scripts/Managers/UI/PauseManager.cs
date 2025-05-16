@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PauseManager : MonoBehaviour
@@ -49,7 +48,9 @@ public class PauseManager : MonoBehaviour
     {
         buttonClick.Play();
         Time.timeScale = 1f;
-        StartCoroutine(loadSceneAfterSeconds("MainMenu", "MainMenuUI"));
+
+        string[] additiveScenes = { "MainMenuUI" };
+        StartCoroutine(loadSceneAfterSeconds("MainMenu", additiveScenes));
     }
 
     public void ButtonExit()
@@ -118,17 +119,18 @@ public class PauseManager : MonoBehaviour
         }
     }
 
-    private IEnumerator loadSceneAfterSeconds(string sceneName, string sceneNameAdditive)
+    private IEnumerator loadSceneAfterSeconds(string sceneName, string[] sceneNameAdditive)
     {
-        yield return new WaitForSeconds(buttonClick.clip.length);
-
-        SceneManager.LoadSceneAsync(sceneName);
-        ScenesManager.Instance.LoadScene(sceneNameAdditive, LoadSceneMode.Additive);
+        yield return StartCoroutine(ScenesManager.Instance.LoadScene(sceneName, sceneNameAdditive));
     }
 
     private IEnumerator ExitGameAfterSeconds()
     {
         yield return new WaitForSeconds(buttonClick.clip.length);
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
 
         Application.Quit();
     }

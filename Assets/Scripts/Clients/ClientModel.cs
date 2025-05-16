@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public enum ClientStates
@@ -13,8 +12,6 @@ public class ClientModel : MonoBehaviour
     private Rigidbody rb;
     private Table currentTablePosition;
 
-    private static Action onWaitingFood;
-
     private Vector3 currentDirection;
 
     [SerializeField] private float speed;
@@ -24,8 +21,6 @@ public class ClientModel : MonoBehaviour
     public ClientManager ClientManager { get => clientManager; }
 
     public Table CurrentTablePosition { get => currentTablePosition; }
-
-    public static Action OnWaitingFood { get => onWaitingFood; set => onWaitingFood = value; }
 
 
     void Awake()

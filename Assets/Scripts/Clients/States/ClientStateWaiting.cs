@@ -20,7 +20,6 @@ public class ClientStateWaiting<T> : State<T>
 
         clientModel.StopVelocity();
         //clientView.SitAnim();
-        ClientModel.OnWaitingFood?.Invoke();
     }
 
     public override void Execute()
