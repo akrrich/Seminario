@@ -1,9 +1,22 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ScenesManager : MonoBehaviour
 {
+    // Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga
+
+    // Agregar metodo futuro para cerrar el juego con pantalla de carga y guardar los datos en ese tiempo
+
     private static ScenesManager instance;
+
+    [SerializeField] private GameObject loadingPanel;
+
+    [SerializeField] private float duringTimeLoadingPanel;
+
+#pragma warning disable 0414
+    private bool isInLoadingScreen = false; // Esto sirve para el UpdateManager
+#pragma warning restore 0414 
 
     public static ScenesManager Instance { get => instance; }
 
@@ -11,20 +24,56 @@ public class ScenesManager : MonoBehaviour
     void Awake()
     {
         CreateSingleton();
+        DontDestroyOnLoadLoadingPanelInCanvas();
         SetInitializedScene();
     }
 
 
-    // Para pasar de una escena a otra
-    public void LoadScene(string sceneName)
+    // Para pasar de una escena a otra con pantalla de carga
+    public IEnumerator LoadScene(string sceneName, string[] additiveScenes)
     {
-        SceneManager.LoadSceneAsync(sceneName);
+        loadingPanel.SetActive(true);
+        isInLoadingScreen = true;
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        asyncLoad.allowSceneActivation = false;
+
+        float elapsedTime = 0f;
+
+        while (!asyncLoad.isDone)
+        {
+            elapsedTime += Time.deltaTime;
+
+            if (asyncLoad.progress >= 0.9f && elapsedTime >= duringTimeLoadingPanel)
+            {
+                if (additiveScenes != null)
+                {
+                    for (int i = 0; i < additiveScenes.Length; i++)
+                    {
+                        AsyncOperation additiveLoad = LoadSceneAdditive(additiveScenes[i]);
+                    }
+                }
+
+                // Esperar 3 segundos aparte del tiempo de carga de escena, para que se carguen las aditivas
+                yield return new WaitForSeconds(3);
+
+                StartCoroutine(DisableLoadingPanelAfterSeconds());
+
+                isInLoadingScreen = false;
+                asyncLoad.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
     }
 
-    // Para agregar escenas aditivas a la escena actual
-    public void LoadScene(string sceneName, LoadSceneMode mode)
+
+    private IEnumerator DisableLoadingPanelAfterSeconds()
     {
-        SceneManager.LoadSceneAsync(sceneName, mode);
+        // Esperar un frame
+        yield return null;
+
+        loadingPanel.SetActive(false);
     }
 
 
@@ -44,6 +93,14 @@ public class ScenesManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void DontDestroyOnLoadLoadingPanelInCanvas()
+    {
+        if (loadingPanel != null)
+        {
+            DontDestroyOnLoad(loadingPanel.transform.root.gameObject);
+        }
+    }
+
     // Este metodo solamente funciona para cuando se inicia el programa, es decir solamente una vez en toda la ejecucion
     private void SetInitializedScene()
     {
@@ -52,18 +109,24 @@ public class ScenesManager : MonoBehaviour
         switch (initializedCurrentScene.name)
         {
             case "MainMenu":
-                LoadScene("MainMenuUI", LoadSceneMode.Additive);
+                LoadSceneAdditive("MainMenuUI");
                 break;
 
             case "Tabern":
-                 LoadScene("TabernUI", LoadSceneMode.Additive);
-                 LoadScene("CompartidoUI", LoadSceneMode.Additive);
+                 LoadSceneAdditive("TabernUI");
+                 LoadSceneAdditive("CompartidoUI");
                 break;
 
             case "Dungeon":
-                LoadScene("DungeonUI", LoadSceneMode.Additive);
-                LoadScene("CompartidoUI", LoadSceneMode.Additive);
+                LoadSceneAdditive("DungeonUI");
+                LoadSceneAdditive("CompartidoUI");
                 break;
         }
+    }
+
+    // Para agregar escenas aditivas a la escena actual
+    private AsyncOperation LoadSceneAdditive(string sceneName)
+    {
+        return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
     }
 }
