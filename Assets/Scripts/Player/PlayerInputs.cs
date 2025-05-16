@@ -32,12 +32,12 @@ public class PlayerInputs : MonoBehaviour
 
     public bool Run()
     {
-        return Input.GetKey(run);
+        return Input.GetKeyDown(run);
     }
 
     public bool StopRun()
     {
-        return Input.GetKeyUp(run);
+        return Input.GetKeyDown(run);
     }
 
     public bool GrabFood()
@@ -85,6 +85,9 @@ public class PlayerInputs : MonoBehaviour
         else if (instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+
+        DontDestroyOnLoad(gameObject);
     }
 }
