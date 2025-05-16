@@ -6701,6 +6701,11 @@ MonoBehaviour:
   tablesPositions:
   - {fileID: 177028343}
   - {fileID: 155692888}
+  foodSpritePairs:
+  - foodType: 0
+    sprite: {fileID: 21300000, guid: 0ac7a1b060d56a740b477427b5cc7b82, type: 3}
+  - foodType: 1
+    sprite: {fileID: 21300000, guid: bf83094d3eb7aa1499c2d95a6c5d5038, type: 3}
 --- !u!1 &766216807
 GameObject:
   m_ObjectHideFlags: 0

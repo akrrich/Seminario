@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ClientView : MonoBehaviour
 {
     private PlayerController playerController;
+    private ClientManager clientManager;
 
     private Animator anim;
     private SpriteRenderer foodSpriteRenderer;
@@ -13,9 +14,6 @@ public class ClientView : MonoBehaviour
     private List<string> orderFoodNames = new List<string>();
 
     [SerializeField] private List<FoodType> favoritesFoodTypes; // Las comidas que puede pedir
-    [SerializeField] private List<FoodTypeSpritePair> foodSpritePairs; 
-
-    private Dictionary<FoodType, Sprite> foodSpriteDict = new();
 
     private static event Action onFoodChangeUI; // Modificar para que no sea statico
 
@@ -28,13 +26,12 @@ public class ClientView : MonoBehaviour
     {
         GetComponents();
         SuscribeToOwnEvent();
-        InitializeFoodSpriteDictionary();
     }
 
     void Update()
     {
         RotateOrderUIToLookAtPlayer();
-        //MoveAnimationTowardsRootNode();
+        //MoveAnimationTowardsRootGameObject();
     }
 
     void OnDestroy()
@@ -65,6 +62,7 @@ public class ClientView : MonoBehaviour
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
+        clientManager = FindFirstObjectByType<ClientManager>();
         //anim = GetComponentInChildren<Animator>();
         foodSpriteRenderer = transform.Find("Order").Find("SpriteFood").GetComponent<SpriteRenderer>();
         order = transform.Find("Order");
@@ -80,19 +78,6 @@ public class ClientView : MonoBehaviour
         onFoodChangeUI -= InitializeRandomFoodUI;
     }
 
-    private void InitializeFoodSpriteDictionary()
-    {
-        foodSpriteDict.Clear();
-
-        foreach (var pair in foodSpritePairs)
-        {
-            if (!foodSpriteDict.ContainsKey(pair.FoodType))
-            {
-                foodSpriteDict.Add(pair.FoodType, pair.Sprite);
-            }
-        }
-    }
-
     private void InitializeRandomFoodUI()
     {
         orderFoodNames.Clear();
@@ -100,7 +85,9 @@ public class ClientView : MonoBehaviour
         int randomIndex = UnityEngine.Random.Range(0, favoritesFoodTypes.Count);
         FoodType selectedFood = favoritesFoodTypes[randomIndex];
 
-        if (foodSpriteDict.TryGetValue(selectedFood, out Sprite sprite))
+        Sprite sprite = clientManager.GetSpriteForRandomFood(selectedFood);
+
+        if (sprite != null)
         {
             foodSpriteRenderer.sprite = sprite;
             foodSpriteRenderer.enabled = true;
@@ -130,7 +117,7 @@ public class ClientView : MonoBehaviour
         }
     }
 
-    private void MoveAnimationTowardsRootNode()
+    private void MoveAnimationTowardsRootGameObject()
     {
         anim.transform.position = transform.position;
     }
@@ -144,14 +131,4 @@ public class ClientView : MonoBehaviour
             anim.SetBool(parametersNames[i], false);
         }
     }
-}
-
-[Serializable]
-public class FoodTypeSpritePair
-{
-    [SerializeField] private FoodType foodType;
-    [SerializeField] private Sprite sprite;
-
-    public FoodType FoodType { get => foodType; } 
-    public Sprite Sprite { get => sprite; }
 }

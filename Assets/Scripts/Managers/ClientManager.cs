@@ -7,6 +7,9 @@ public class ClientManager : MonoBehaviour
 
     [SerializeField] private ObjectPooler clientPool;
     [SerializeField] private List<Table> tablesPositions;
+    [SerializeField] public List<FoodTypeSpritePair> foodSpritePairs;
+
+    public Dictionary<FoodType, Sprite> foodSpriteDict = new();
 
     private float instantiateTime = 0f;
     private float timeToWaitForInstantiateNewClient = 5f;
@@ -17,6 +20,8 @@ public class ClientManager : MonoBehaviour
 
     void Awake()
     {
+        InitializeFoodSpriteDictionary();
+
         // Prueba
         ClientController client = clientPool.GetObjectFromPool<ClientController>();
     }
@@ -26,6 +31,12 @@ public class ClientManager : MonoBehaviour
         GetClientFromPool();
     }
 
+
+    public Sprite GetSpriteForRandomFood(FoodType foodType)
+    {
+        foodSpriteDict.TryGetValue(foodType, out Sprite sprite);
+        return sprite;
+    }
 
     public void ReturnObjectToPool(ClientModel clientModel)
     {
@@ -66,4 +77,28 @@ public class ClientManager : MonoBehaviour
             instantiateTime = 0f;
         }
     }
+
+    private void InitializeFoodSpriteDictionary()
+    {
+        foodSpriteDict.Clear();
+
+        foreach (var pair in foodSpritePairs)
+        {
+            if (!foodSpriteDict.ContainsKey(pair.FoodType))
+            {
+                foodSpriteDict.Add(pair.FoodType, pair.Sprite);
+            }
+        }
+    }
+
+}
+
+[System.Serializable]
+public class FoodTypeSpritePair
+{
+    [SerializeField] private FoodType foodType;
+    [SerializeField] private Sprite sprite;
+
+    public FoodType FoodType { get => foodType; }
+    public Sprite Sprite { get => sprite; }
 }

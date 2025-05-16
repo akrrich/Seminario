@@ -8,7 +8,7 @@ public class IngredientInventoryManagerUI : MonoBehaviour
 {
     private PlayerModel playerModel;
 
-    [SerializeField] private List<GameObject> startSlotPrefabs;
+    [SerializeField] private List<Ingredients.IngredientSlotPrefab> startSlotPrefabs;
     [SerializeField] private RawImage inventoryPanel;
 
     private Transform slotParentObject;
@@ -71,13 +71,16 @@ public class IngredientInventoryManagerUI : MonoBehaviour
 
     private void InitializeSlots()
     {
-        var ingredientTypes = IngredientInventoryManager.Instance.GetAllIngredients();
+        foreach (var slotPrefab in startSlotPrefabs)
+        {
+            IngredientType type = slotPrefab.IngredientType;
+            if (!IngredientInventoryManager.Instance.GetAllIngredients().Contains(type))
+                continue;
 
-        for (int i = 0; i < startSlotPrefabs.Count && i < slotPositions.Count; i++)
-        { 
-            var type = ingredientTypes[i];
+            int index = slotPositions.Count > ingredientSlots.Count ? ingredientSlots.Count : -1;
+            if (index == -1) break;
 
-            GameObject slotInstance = Instantiate(startSlotPrefabs[i], slotPositions[i].position, Quaternion.identity, slotParentObject);
+            GameObject slotInstance = Instantiate(slotPrefab.Prefab, slotPositions[index].position, Quaternion.identity, slotParentObject);
             slotInstance.SetActive(false);
 
             TextMeshProUGUI stockText = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
