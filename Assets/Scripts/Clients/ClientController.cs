@@ -62,6 +62,8 @@ public class ClientController : MonoBehaviour
         ActionNode waitingFood = new ActionNode(() => fsm.TransitionTo(ClientStates.WaitingFood));
         ActionNode leave = new ActionNode(() => fsm.TransitionTo(ClientStates.Leave));
 
+        // Orden: GoChair, WaitingFood, Leave, Idle
+
         QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, leave, waitingFood);
         QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, qIsWaitingForFood);
         QuestionNode qCanLeave = new QuestionNode(QuestionLeave, leave, qCanGoToChair);

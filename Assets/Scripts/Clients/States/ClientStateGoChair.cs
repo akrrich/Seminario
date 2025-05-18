@@ -22,7 +22,8 @@ public class ClientStateGoChair<T> : State<T>
         Debug.Log("GoChair");
 
         clientModel.MoveToTarget(getTargetTransform());
-        //clientView.WalkAnim();
+        clientModel.LookAt(getTargetTransform());
+        clientView.WalkAnim();
     }
 
     public override void Execute()

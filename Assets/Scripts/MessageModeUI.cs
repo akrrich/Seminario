@@ -6,7 +6,7 @@ public class MessageModeUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI messageDesplayText;
 
-    private Action onCook, onAdministration, onHandOver;
+    private event Action onCook, onAdministration, onHandOver;
 
 
     void Awake()

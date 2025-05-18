@@ -17,6 +17,8 @@ public class ClientView : MonoBehaviour
 
     private static event Action onFoodChangeUI; // Modificar para que no sea statico
 
+    public Animator Anim { get => anim; }
+
     public List<string> OrderFoodNames { get => orderFoodNames; }
 
     public static Action OnFoodChangeUI { get => onFoodChangeUI; set => onFoodChangeUI = value; }
@@ -31,7 +33,6 @@ public class ClientView : MonoBehaviour
     void Update()
     {
         RotateOrderUIToLookAtPlayer();
-        //MoveAnimationTowardsRootGameObject();
     }
 
     void OnDestroy()
@@ -58,12 +59,19 @@ public class ClientView : MonoBehaviour
         anim.SetBool("StandUp", true);
     }
 
+    public void DuringSit()
+    {
+        RestartAnimationsValues();
+        anim.SetBool("DuringSit", true);
+    }
+
 
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
         clientManager = FindFirstObjectByType<ClientManager>();
-        //anim = GetComponentInChildren<Animator>();
+
+        anim = GetComponentInChildren<Animator>();
         foodSpriteRenderer = transform.Find("Order").Find("SpriteFood").GetComponent<SpriteRenderer>();
         order = transform.Find("Order");
     }
@@ -115,11 +123,6 @@ public class ClientView : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(lookDirection);
             order.rotation = rotation;
         }
-    }
-
-    private void MoveAnimationTowardsRootGameObject()
-    {
-        anim.transform.position = transform.position;
     }
 
     private void RestartAnimationsValues()

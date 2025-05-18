@@ -7,9 +7,9 @@ public class ClientManager : MonoBehaviour
 
     [SerializeField] private ObjectPooler clientPool;
     [SerializeField] private List<Table> tablesPositions;
-    [SerializeField] public List<FoodTypeSpritePair> foodSpritePairs;
+    [SerializeField] private List<FoodTypeSpritePair> foodSpritePairs;
 
-    public Dictionary<FoodType, Sprite> foodSpriteDict = new();
+    private Dictionary<FoodType, Sprite> foodSpriteDict = new();
 
     private float instantiateTime = 0f;
     private float timeToWaitForInstantiateNewClient = 5f;

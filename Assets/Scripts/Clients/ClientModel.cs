@@ -43,10 +43,15 @@ public class ClientModel : MonoBehaviour
     {
         Vector3 newDirection = (target.position - transform.position).normalized;
         currentDirection = newDirection;
+    }
+
+    public void LookAt(Transform target)
+    {
+        Vector3 newDirection = (target.position - transform.position).normalized;
         Vector3 lookDirection = new Vector3(newDirection.x, 0, newDirection.z);
 
         if (lookDirection != Vector3.zero)
-        { 
+        {
             Quaternion rotation = Quaternion.LookRotation(lookDirection);
             transform.rotation = rotation;
         }
