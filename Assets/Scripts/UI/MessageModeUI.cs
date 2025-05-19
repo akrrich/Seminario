@@ -66,9 +66,19 @@ public class MessageModeUI : MonoBehaviour
 
     private void ShowEnterMessageText(string finalMessage)
     {
-        string inputKey = "<color=yellow>'E'</color>";
+        string inputKey;
 
-        messageDesplayText.text = "Presione la tecla " + inputKey + finalMessage;
+        if (DeviceManager.Instance.CurrentDevice == Device.Joystick)
+        {
+            inputKey = "<color=yellow>" + PlayerInputs.Instance.JoystickInputs.HandOverFood.ToString() + "</color>";
+        }
+
+        else
+        {
+            inputKey = "<color=yellow>" + PlayerInputs.Instance.KeyboardInputs.HandOverFood.ToString() + "</color>";
+        }
+
+        messageDesplayText.text = "Presione" + inputKey + finalMessage;
     }
 
     private void DisapearMessageText()

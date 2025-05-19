@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         fsm.OnExecute();
-
         GrabOrHandOverFood();
     }
 

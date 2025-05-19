@@ -109,15 +109,18 @@ public class ScenesManager : MonoBehaviour
         switch (initializedCurrentScene.name)
         {
             case "MainMenu":
+                DeviceManager.Instance.IsUIActive = true;
                 LoadSceneAdditive("MainMenuUI");
                 break;
 
             case "Tabern":
-                 LoadSceneAdditive("TabernUI");
-                 LoadSceneAdditive("CompartidoUI");
+                DeviceManager.Instance.IsUIActive = false;
+                LoadSceneAdditive("TabernUI");
+                LoadSceneAdditive("CompartidoUI");
                 break;
 
             case "Dungeon":
+                DeviceManager.Instance.IsUIActive = false;
                 LoadSceneAdditive("DungeonUI");
                 LoadSceneAdditive("CompartidoUI");
                 break;

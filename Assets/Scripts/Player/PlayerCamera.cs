@@ -6,7 +6,6 @@ public class PlayerCamera : MonoBehaviour
 
     private Vector3 cameraOffset;
 
-    private float sensitivity = 2f;
     private float rotationX = 0f;
 
     private float offSetY = 1f; // Posicion de la camara en eje y
@@ -41,15 +40,25 @@ public class PlayerCamera : MonoBehaviour
         {
             cameraOffset = new Vector3(0f, offSetY, 0.3f);
 
-            float mouseX = Input.GetAxis("Mouse X") * sensitivity;
-            float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
+            float x, y;
 
-            rotationX -= mouseY;
+            if (DeviceManager.Instance.CurrentDevice == Device.Joystick)
+            {
+                x = PlayerInputs.Instance.JoystickRotation().x * Time.deltaTime;
+                y = PlayerInputs.Instance.JoystickRotation().y * Time.deltaTime;
+            }
+
+            else
+            {
+                x = PlayerInputs.Instance.MouseRotation().x * Time.deltaTime;
+                y = PlayerInputs.Instance.MouseRotation().y * Time.deltaTime;
+            }
+
+            rotationX -= y;
             rotationX = Mathf.Clamp(rotationX, -80f, 80f);
 
             transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
-
-            playerModel.transform.Rotate(Vector3.up * mouseX);
+            playerModel.transform.Rotate(Vector3.up * x);
         }
     }
 }
