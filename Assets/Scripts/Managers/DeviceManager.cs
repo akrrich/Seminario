@@ -31,8 +31,6 @@ public class DeviceManager : MonoBehaviour
         IsJoystickUsed();
         IsMouseAndKeyboardUsed();
         EnabledAndDisabledCursor();
-
-        print(isUIModeActive);
     }
 
 
