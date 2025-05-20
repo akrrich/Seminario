@@ -12,13 +12,13 @@ public class DeviceManager : MonoBehaviour
 
     private Device currentDevice;
 
-    private bool isUIActive = false; // Falso por defecto, se inicializa en ScenesManager y se setea cuando se quiere interactuar en la UI
+    private bool isUIModeActive = false; // Falso por defecto, se inicializa en ScenesManager y se setea cuando se quiere interactuar en la UI
 
     public static DeviceManager Instance { get => instance; }
 
     public Device CurrentDevice { get => currentDevice; set => currentDevice = value; }
 
-    public bool IsUIActive { get => isUIActive; set => isUIActive = value; }
+    public bool IsUIModeActive { get => isUIModeActive; set => isUIModeActive = value; }
 
 
     void Awake()
@@ -32,7 +32,7 @@ public class DeviceManager : MonoBehaviour
         IsMouseAndKeyboardUsed();
         EnabledAndDisabledCursor();
 
-        print(isUIActive);
+        print(isUIModeActive);
     }
 
 
@@ -61,7 +61,7 @@ public class DeviceManager : MonoBehaviour
 
         else if (currentDevice == Device.KeyboardMouse)
         {
-            if (isUIActive)
+            if (isUIModeActive)
             {
                 Cursor.visible = true;
             }

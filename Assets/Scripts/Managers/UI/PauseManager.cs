@@ -123,7 +123,7 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 0f;
         isGamePaused = true;
         pausePanel.SetActive(true);
-        DeviceManager.Instance.IsUIActive = true;
+        DeviceManager.Instance.IsUIModeActive = true;
     }
 
     private void HidePause()
@@ -133,7 +133,7 @@ public class PauseManager : MonoBehaviour
         isGamePaused = false;
         pausePanel.SetActive(false);
         settingsPanel.SetActive(false);
-        DeviceManager.Instance.IsUIActive = false;
+        DeviceManager.Instance.IsUIModeActive = false;
 
         onRestoreSelectedGameObject?.Invoke();
     }

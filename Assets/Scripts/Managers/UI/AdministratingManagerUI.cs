@@ -8,7 +8,7 @@ public class AdministratingManagerUI : MonoBehaviour
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones hijos
     private List<GameObject> buttonsAdministrating = new List<GameObject>();
 
-    [SerializeField] private GameObject lastSelectedButtonFromAdminPanel;
+    private GameObject lastSelectedButtonFromAdminPanel;
 
     private event Action onEnterAdmin, onExitAdmin;
 
@@ -116,13 +116,13 @@ public class AdministratingManagerUI : MonoBehaviour
 
         if (state == true)
         {
-            DeviceManager.Instance.IsUIActive = true;
+            DeviceManager.Instance.IsUIModeActive = true;
             onSetSelectedCurrentGameObject?.Invoke(buttonsAdministrating[0]);
         }
 
         else
         {
-            DeviceManager.Instance.IsUIActive = false;
+            DeviceManager.Instance.IsUIModeActive = false;
             onClearSelectedCurrentGameObject?.Invoke();
         }
     }
@@ -131,10 +131,11 @@ public class AdministratingManagerUI : MonoBehaviour
     {
         if (rootGameObject.activeSelf)
         {
-            DeviceManager.Instance.IsUIActive = true;
+            DeviceManager.Instance.IsUIModeActive = true;
             EventSystem.current.SetSelectedGameObject(lastSelectedButtonFromAdminPanel);
         }
     }
+
     private void CheckLastSelectedButtonIfAdminPanelIsOpen()
     {
         if (EventSystem.current != null && PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused && rootGameObject.activeSelf)

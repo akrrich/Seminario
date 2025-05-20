@@ -34,14 +34,14 @@ public class MainMenu : MonoBehaviour
     // Funcion asignada a boton en la UI
     public void ButtonPlay()
     {
-        DeviceManager.Instance.IsUIActive = false;
+        DeviceManager.Instance.IsUIModeActive = false;
         StartCoroutine(LoadSceneAfterButtonClick());
     }
 
     // Funcion asignada a boton en la UI
     public void ButtonExit()
     {
-        DeviceManager.Instance.IsUIActive = false;
+        DeviceManager.Instance.IsUIModeActive = false;
         StartCoroutine(CloseGameAfterClickButton());
     }
 

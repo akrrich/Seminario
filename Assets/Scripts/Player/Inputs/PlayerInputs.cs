@@ -83,7 +83,11 @@ public class PlayerInputs : MonoBehaviour
             joystick = ctx.ReadValue<Vector2>();
             if (ctx.control.device is Gamepad)
             {
-                DeviceManager.Instance.CurrentDevice = Device.Joystick;
+                // Necesario verificar que no este en pausa para que cuando este pausado no afecta a la UI por el cursor
+                if (PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
+                {
+                    DeviceManager.Instance.CurrentDevice = Device.Joystick;
+                }
             }
         };
 
@@ -97,7 +101,7 @@ public class PlayerInputs : MonoBehaviour
 [System.Serializable]
 public class Inputs
 {
-    [Header("Inputs")]
+    [Header("Inputs:")]
     [SerializeField] private KeyCode run;
     [SerializeField] private KeyCode grabFood;
     [SerializeField] private KeyCode handOverFood;
@@ -107,7 +111,7 @@ public class Inputs
     [SerializeField] private KeyCode inventory;
     [SerializeField] private KeyCode pause;
 
-    [Header("Sensitivity")]
+    [Header("Sensitivity:")]
     [SerializeField] private float sensitivityX;
     [SerializeField] private float sensitivityY;
 
