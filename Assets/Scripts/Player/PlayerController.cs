@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Teclas ocupadas: WASD, Q, E, R, X, Z, indicacion en la clase PlayerInputs
-
     private PlayerModel playerModel;
 
     private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
@@ -104,14 +102,17 @@ public class PlayerController : MonoBehaviour
 
     private void GrabOrHandOverFood()
     {
-        if (PlayerInputs.Instance.GrabFood())
+        if (PlayerInputs.Instance != null)
         {
-            onGrabFood?.Invoke();
-        }
+            if (PlayerInputs.Instance.GrabFood())
+            {
+                onGrabFood?.Invoke();
+            }
 
-        if (PlayerInputs.Instance.HandOverFood())
-        {
-            onHandOverFood?.Invoke();
+            if (PlayerInputs.Instance.HandOverFood())
+            {
+                onHandOverFood?.Invoke();
+            }
         }
     }
 }

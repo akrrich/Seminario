@@ -17,13 +17,13 @@ public class MainMenu : MonoBehaviour
 
     void Awake()
     {
-        GetComponents();
         InvokeEventToSendButtonsReferences();
+        GetComponents();
     }
 
 
     // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem
-    public void SetButtonAsSelectedGameObject(int indexButton)
+    public void SetButtonAsSelectedGameObjectIfHasBeenHover(int indexButton)
     {
         if (EventSystem.current != null)
         {

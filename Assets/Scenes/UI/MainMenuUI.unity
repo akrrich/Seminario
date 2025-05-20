@@ -544,7 +544,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1920011630}
           m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-          m_MethodName: SetButtonAsSelectedGameObject
+          m_MethodName: SetButtonAsSelectedGameObjectIfHasBeenHover
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -707,7 +707,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1920011630}
           m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-          m_MethodName: SetButtonAsSelectedGameObject
+          m_MethodName: SetButtonAsSelectedGameObjectIfHasBeenHover
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

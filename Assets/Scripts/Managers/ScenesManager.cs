@@ -15,7 +15,7 @@ public class ScenesManager : MonoBehaviour
     [SerializeField] private float duringTimeLoadingPanel;
 
 #pragma warning disable 0414
-    private bool isInLoadingScreen = false; // Esto sirve para el UpdateManager
+    private bool isInLoadingScreen = false; // Esto sirve para el UpdateManager, pero por ahora no srive de NADA
 #pragma warning restore 0414 
 
     public static ScenesManager Instance { get => instance; }
@@ -54,12 +54,8 @@ public class ScenesManager : MonoBehaviour
                     }
                 }
 
-                // Esperar 3 segundos aparte del tiempo de carga de escena, para que se carguen las aditivas
-                yield return new WaitForSeconds(3);
-
                 StartCoroutine(DisableLoadingPanelAfterSeconds());
 
-                isInLoadingScreen = false;
                 asyncLoad.allowSceneActivation = true;
             }
 
@@ -68,11 +64,12 @@ public class ScenesManager : MonoBehaviour
     }
 
 
+    // Esto sirve para que una vez cargada la nueva escena, espere 3 segundos para desactivar el panel, para que permita cargar Awake y Start de la nueva escena cargada
     private IEnumerator DisableLoadingPanelAfterSeconds()
     {
-        // Esperar un frame
-        yield return null;
+        yield return new WaitForSeconds(3);
 
+        isInLoadingScreen = false;
         loadingPanel.SetActive(false);
     }
 

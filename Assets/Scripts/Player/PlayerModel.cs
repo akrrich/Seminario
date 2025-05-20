@@ -107,7 +107,7 @@ public class PlayerModel : MonoBehaviour
 
     private void Movement()
     {
-        if (!isCoking && !isAdministrating)
+        if (PlayerInputs.Instance != null && !isCoking && !isAdministrating)
         {
             Vector3 cameraForward = playerCamera.transform.forward;
             cameraForward.y = 0;

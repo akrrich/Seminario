@@ -1,6 +1,8 @@
-using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PauseManager : MonoBehaviour
 {
@@ -11,10 +13,25 @@ public class PauseManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private List<GameObject> buttonsPause;
+
+    private static event Action<List<GameObject>> onSendButtonsToEventSystem;
+
+    private static event Action<GameObject> onSetSelectedCurrentGameObject;
+    private static event Action onClearSelectedCurrentGameObject;
+
+    private static event Action onRestoreSelectedGameObject; // Este evento es generico y sirve para todos los paneles de UI que esten abiertos cuando se pausa el juego
 
     private bool isGamePaused = false;
 
     public static PauseManager Instance { get => instance; }
+
+    public static Action<List<GameObject>> OnSendButtonsToEventSystem { get => onSendButtonsToEventSystem; set => onSendButtonsToEventSystem = value; }
+
+    public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
+    public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
+
+    public static Action OnRestoreSelectedGameObject { get => onRestoreSelectedGameObject; set => onRestoreSelectedGameObject = value; }    
 
     public bool IsGamePaused { get => isGamePaused; }
 
@@ -22,6 +39,7 @@ public class PauseManager : MonoBehaviour
     void Awake()
     {
         CreateSingleton();
+        InvokeEventToSendButtonsReferences();
         GetComponents();
     }
 
@@ -30,6 +48,15 @@ public class PauseManager : MonoBehaviour
         EnabledOrDisabledPausePanel();
     }
 
+
+    // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem
+    public void SetButtonAsSelectedGameObjectIfHasBeenHover(int indexButton)
+    {
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(buttonsPause[indexButton]);
+        }
+    }
 
     // Funciones asignadas a botones de la UI
     public void ButtonResume()
@@ -66,6 +93,7 @@ public class PauseManager : MonoBehaviour
     }
 
 
+    // Es si o si, sin DontDestroyOnLoad, ya que en algunas escenas no nos sirve y puede diferir entre la dungeon y la taberna
     private void CreateSingleton()
     {
         if (instance == null)
@@ -79,25 +107,35 @@ public class PauseManager : MonoBehaviour
         }
     }
 
+    private void InvokeEventToSendButtonsReferences()
+    {
+        onSendButtonsToEventSystem?.Invoke(buttonsPause);
+    }
+
     private void GetComponents()
     {
         buttonClick = GetComponent<AudioSource>();
     }
 
-
     private void ShowPause()
     {
+        onSetSelectedCurrentGameObject?.Invoke(buttonsPause[0]);
         Time.timeScale = 0f;
         isGamePaused = true;
         pausePanel.SetActive(true);
+        DeviceManager.Instance.IsUIActive = true;
     }
 
     private void HidePause()
     {
+        onClearSelectedCurrentGameObject?.Invoke();
         Time.timeScale = 1f;
         isGamePaused = false;
         pausePanel.SetActive(false);
         settingsPanel.SetActive(false);
+        DeviceManager.Instance.IsUIActive = false;
+
+        onRestoreSelectedGameObject?.Invoke();
     }
 
     private void ShowSettings()

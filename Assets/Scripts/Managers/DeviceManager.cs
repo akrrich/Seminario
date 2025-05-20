@@ -28,7 +28,11 @@ public class DeviceManager : MonoBehaviour
 
     void Update()
     {
+        IsJoystickUsed();
+        IsMouseAndKeyboardUsed();
         EnabledAndDisabledCursor();
+
+        print(isUIActive);
     }
 
 
@@ -50,16 +54,23 @@ public class DeviceManager : MonoBehaviour
 
     private void EnabledAndDisabledCursor()
     {
-        if (Time.timeScale == 0f || isUIActive)
+        if (currentDevice == Device.Joystick)
         {
-            IsJoystickUsed();
-            IsMouseAndKeyboardUsed();
+            Cursor.visible = false;    
         }
 
-        else
+        else if (currentDevice == Device.KeyboardMouse)
         {
-            Cursor.visible = false;
-        }        
+            if (isUIActive)
+            {
+                Cursor.visible = true;
+            }
+
+            else
+            {
+                Cursor.visible = false;
+            }
+        }
     }
 
     private void IsJoystickUsed()
@@ -69,7 +80,6 @@ public class DeviceManager : MonoBehaviour
             if (Input.GetKey((KeyCode)((int)KeyCode.JoystickButton0 + i)))
             {
                 currentDevice = Device.Joystick;
-                Cursor.visible = false;
                 return;
             }
         }
@@ -82,7 +92,6 @@ public class DeviceManager : MonoBehaviour
                 gamepad.dpad.left.isPressed || gamepad.dpad.right.isPressed)
             {
                 currentDevice = Device.Joystick;
-                Cursor.visible = false;
                 return;
             }
         }
@@ -90,7 +99,6 @@ public class DeviceManager : MonoBehaviour
         if (Mathf.Abs(Input.GetAxis("Joystick Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Joystick Vertical")) > 0.1f)
         {
             currentDevice = Device.Joystick;
-            Cursor.visible = false;
             return;
         }
     }
@@ -100,7 +108,6 @@ public class DeviceManager : MonoBehaviour
         if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
         {
             currentDevice = Device.KeyboardMouse;
-            Cursor.visible = true;
             return;
         }
 
@@ -119,7 +126,6 @@ public class DeviceManager : MonoBehaviour
                 if (Input.GetKeyDown(key))
                 {
                     currentDevice = Device.KeyboardMouse;
-                    Cursor.visible = true;
                     return;
                 }
             }

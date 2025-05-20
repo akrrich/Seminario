@@ -7,14 +7,14 @@ public class EventSystemMainMenu : MonoBehaviour
 {
     private EventSystem eventSystem;
 
-    [SerializeField] private List<GameObject> buttonsMainMenu;
+    private List<GameObject> buttonsMainMenu = new List<GameObject>();
 
 
     void Awake()
     {
         SuscribeToMainMenuEvent();
         GetComponents();
-        StartCoroutine(InitializeFirstSelectedButton());
+        StartCoroutine(InitializeFirstSelectedButtonByDefault());
     }
 
 
@@ -44,7 +44,7 @@ public class EventSystemMainMenu : MonoBehaviour
         this.buttonsMainMenu = buttonsMainMenu;
     }
 
-    private IEnumerator InitializeFirstSelectedButton()
+    private IEnumerator InitializeFirstSelectedButtonByDefault()
     {
         // Esperar 2 segundos para que cargue la escena additiva de MainMenu
         yield return new WaitForSeconds(2);
