@@ -4,6 +4,7 @@ public class ClientStateIdle<T> : State<T>
 {
     private ClientModel clientModel;
 
+
     public ClientStateIdle(ClientModel clientModel)
     {
         this.clientModel = clientModel;
@@ -16,11 +17,16 @@ public class ClientStateIdle<T> : State<T>
         Debug.Log("IdleClient");
 
         clientModel.StopVelocity();
-        clientModel.ClientManager.ReturnObjectToPool(clientModel);
+        clientModel.ClientManager.ReturnObjectToPool(clientModel.ClientType, clientModel);
     }
 
     public override void Execute()
     {
         base.Execute();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
     }
 }

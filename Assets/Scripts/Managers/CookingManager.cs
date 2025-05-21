@@ -5,7 +5,7 @@ using UnityEngine;
 public class CookingManager : MonoBehaviour
 {
     [SerializeField] private AbstractFactory foodAbstractFactory;
-    [SerializeField] private List<ObjectPooler> objectsPools;
+    [SerializeField] private List<ObjectPooler> foodPools;
 
     [Header("Positions")]
     // Para las posiciones de las sarten
@@ -216,12 +216,12 @@ public class CookingManager : MonoBehaviour
 
     private void InitializeFoodPoolDictionary()
     {
-        for (int i = 0; i < objectsPools.Count; i++)
+        for (int i = 0; i < foodPools.Count; i++)
         {
             if (Enum.IsDefined(typeof(FoodType), i)) 
             {
                 FoodType foodType = (FoodType) i;
-                foodPoolDictionary[foodType] = objectsPools[i]; 
+                foodPoolDictionary[foodType] = foodPools[i]; 
             }
         }
     }

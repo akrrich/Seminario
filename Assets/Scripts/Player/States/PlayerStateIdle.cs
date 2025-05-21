@@ -22,7 +22,7 @@ public class PlayerStateIdle<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Idle");
+        //Debug.Log("Idle");
     }
 
     public override void Execute()

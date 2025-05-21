@@ -2,7 +2,12 @@ using UnityEngine;
 
 public enum ClientStates
 {
-    idle, GoChair, WaitingFood, Leave
+    Idle, GoChair, WaitingFood, WaitingForChair, Leave
+}
+
+public enum ClientType
+{
+    Ogro, Orc, Goblin 
 }
 
 public class ClientModel : MonoBehaviour
@@ -10,17 +15,26 @@ public class ClientModel : MonoBehaviour
     private ClientManager clientManager;
 
     private Rigidbody rb;
-    private Table currentTablePosition;
+    [SerializeField] private Table currentTablePosition;
 
     private Vector3 currentDirection;
 
+    [SerializeField] private ClientType clientType;
+
     [SerializeField] private float speed;
+    [SerializeField] private float maxTimeWaitingFood;
+    [SerializeField] private float maxTimeWaitingForChair;
 
     private bool isInstantiateFirstTime = true;
 
     public ClientManager ClientManager { get => clientManager; }
 
-    public Table CurrentTablePosition { get => currentTablePosition; }
+    public Table CurrentTablePosition { get => currentTablePosition; set => currentTablePosition = value; }
+
+    public ClientType ClientType { get => clientType; }
+
+    public float MaxTimeWaitingFood { get => maxTimeWaitingFood; }
+    public float MaxTimeWaitingForChair { get => maxTimeWaitingForChair; }
 
 
     void Awake()
@@ -39,21 +53,22 @@ public class ClientModel : MonoBehaviour
     }
 
 
-    public void MoveToTarget(Transform target)
+    public void MoveToTarget(Vector3 target)
     {
-        Vector3 newDirection = (target.position - transform.position).normalized;
+        Vector3 newDirection = (target - transform.position).normalized;
         currentDirection = newDirection;
     }
 
-    public void LookAt(Transform target)
+    public void LookAt(Vector3 target, Transform animTransform)
     {
-        Vector3 newDirection = (target.position - transform.position).normalized;
+        Vector3 newDirection = (target - transform.position).normalized;
         Vector3 lookDirection = new Vector3(newDirection.x, 0, newDirection.z);
 
         if (lookDirection != Vector3.zero)
         {
             Quaternion rotation = Quaternion.LookRotation(lookDirection);
             transform.rotation = rotation;
+            animTransform.transform.rotation = rotation;
         }
     }
 
@@ -103,7 +118,12 @@ public class ClientModel : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void InitializeTablePosition()
+    private void InitializeSpawnPosition()
+    {
+        transform.position = clientManager.SpawnPosition.position;
+    }
+
+    public void InitializeTablePosition()
     {
         currentTablePosition = clientManager.GetRandomAvailableTable();
     }
@@ -112,9 +132,9 @@ public class ClientModel : MonoBehaviour
     {
         if (!isInstantiateFirstTime)
         {
-            transform.position = clientManager.SpawnPosition.position;
+            InitializeSpawnPosition();
             InitializeTablePosition();
-            ClientView.OnFoodChangeUI?.Invoke();
+            return;
         }
 
         isInstantiateFirstTime = false;

@@ -13,6 +13,9 @@ public class ActionNode : ITreeNode
 
     public void Execute()
     {
-        action();
+        if (PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
+        {
+            action();
+        }
     }
 }

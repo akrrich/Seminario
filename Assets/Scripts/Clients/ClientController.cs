@@ -1,10 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ClientController : MonoBehaviour
 {
     private ClientModel clientModel;
     private ClientView clientView;
+
+    private ClientStateLeave<ClientStates> csLeave;
 
     private FSM<ClientStates> fsm = new FSM<ClientStates>();
     private ITreeNode root;
@@ -41,39 +43,51 @@ public class ClientController : MonoBehaviour
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel);
         ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTablePosition.ChairPosition);
-        ClientStateWaiting<ClientStates> csWaitingFood = new ClientStateWaiting<ClientStates>(clientModel, clientView);
-        ClientStateLeave<ClientStates> csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
+        csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
+        ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave);
+        ClientStateWaitingForChair<ClientStates> csWaitingForChair = new ClientStateWaitingForChair<ClientStates>(clientModel, clientView, csLeave);
 
         csIdle.AddTransition(ClientStates.GoChair, csChair);
+        csIdle.AddTransition(ClientStates.WaitingForChair, csWaitingForChair);
 
         csChair.AddTransition(ClientStates.WaitingFood, csWaitingFood);
 
         csWaitingFood.AddTransition(ClientStates.Leave, csLeave);
 
-        csLeave.AddTransition(ClientStates.idle, csIdle);
+        csLeave.AddTransition(ClientStates.Idle, csIdle);
 
-        fsm.SetInit(csChair);
+        csWaitingForChair.AddTransition(ClientStates.GoChair, csChair);
+        csWaitingForChair.AddTransition(ClientStates.Leave, csLeave);
+
+        fsm.SetInit(csWaitingForChair);
     }
 
     private void InitializeTree()
     {
-        ActionNode idle = new ActionNode(() => fsm.TransitionTo(ClientStates.idle));
+        ActionNode idle = new ActionNode(() => fsm.TransitionTo(ClientStates.Idle));
         ActionNode goChair = new ActionNode(() => fsm.TransitionTo(ClientStates.GoChair));
         ActionNode waitingFood = new ActionNode(() => fsm.TransitionTo(ClientStates.WaitingFood));
         ActionNode leave = new ActionNode(() => fsm.TransitionTo(ClientStates.Leave));
+        ActionNode waitingForChair = new ActionNode(() => fsm.TransitionTo(ClientStates.WaitingForChair));
 
-        // Orden: GoChair, WaitingFood, Leave, Idle
+        // Orden: WaitingForChair, GoChair, WaitingFood, Leave, Idle
 
         QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, leave, waitingFood);
         QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, qIsWaitingForFood);
-        QuestionNode qCanLeave = new QuestionNode(QuestionLeave, leave, qCanGoToChair);
-        QuestionNode qIsOutside = new QuestionNode(QuestionIsOutside, idle, qCanLeave);
+        QuestionNode qIsChairFreeOrNoT = new QuestionNode(QuestionIsChairFreeOrNot, qCanGoToChair, waitingForChair);
+        //QuestionNode qCanLeave = new QuestionNode(QuestionLeave, leave, qIsChairFreeOrNoT);
+        QuestionNode qIsOutside = new QuestionNode(QuestionIsOutside, idle, qIsChairFreeOrNoT);
 
         root = qIsOutside;
     }
 
     private bool QuestionIsWaitingForFood()
     {
+        if (csLeave.SetInLeaveManualy)
+        {
+            return true;
+        }
+
         List<string> expectedDishNames = new List<string>();
         List<string> servedDishNames = new List<string>();
 
@@ -122,28 +136,55 @@ public class ClientController : MonoBehaviour
     }
 
     private bool QuestionCanGoToChair()
-    {                                                    // si esta fuera del rango de la silla
-        if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) > 2f)
+    {
+        if (clientModel.CurrentTablePosition != null)
         {
-            return true;
+            // si esta fuera del rango de la silla (lejos de la silla)
+            if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) > 2f)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         return false;
     }
 
-    private bool QuestionLeave()
-    {                                                    // si esta dentro del rango de la silla
-        if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) <= 1f)
+    /*private bool QuestionLeave()
+    {
+        if (clientModel.CurrentTablePosition != null) 
         {
-            return true;
+                                                                // si esta dentro del rango de la silla
+            if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) <= 1f)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         return false;
-    }
+    }*/
 
     private bool QuestionIsOutside()
-    {                                                    // si esta afuera del rango de OutsidePosition
+    {                                                            // si esta dentro del rango de OutsidePosition
         if (Vector3.Distance(clientModel.ClientManager.OutsidePosition.position, transform.position) <= 2f)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool QuestionIsChairFreeOrNot()
+    {
+        if (csLeave.SetInLeaveManualy)
+        {
+            return true;
+        }
+
+        if (clientModel.CurrentTablePosition != null)
         {
             return true;
         }

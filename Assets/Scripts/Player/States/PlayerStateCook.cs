@@ -16,7 +16,7 @@ public class PlayerStateCook<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Cook");
+        //Debug.Log("Cook");
 
         PlayerView.OnEnterInCookMode?.Invoke();
         PlayerView.OnDeactivateInventoryFoodUI?.Invoke();

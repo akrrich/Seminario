@@ -1,33 +1,47 @@
 using System.Collections;
 using UnityEngine;
 
-public class ClientStateWaiting<T> : State<T>
+public class ClientStateWaitingFood<T> : State<T>
 {
     private ClientModel clientModel;
     private ClientView clientView;
 
+    private ClientStateLeave<T> clientStateLeave;
 
-    public ClientStateWaiting(ClientModel clientModel, ClientView clientView)
+    private float waitingFoodTime = 0f;
+
+
+    public ClientStateWaitingFood(ClientModel clientModel, ClientView clientView, ClientStateLeave<T> clientStateLeave)
     {
         this.clientModel = clientModel;
         this.clientView = clientView;
+        this.clientStateLeave = clientStateLeave;
     }
 
 
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Waiting");
+        Debug.Log("WaitingFood");
 
         clientModel.StopVelocity();
-        clientModel.LookAt(clientModel.CurrentTablePosition.transform);
-        clientView.SitAnim();
+        clientModel.LookAt(clientModel.CurrentTablePosition.transform.position, clientView.Anim.transform);
+        clientView.ExecuteAnimParameterName("Sit");
         clientView.StartCoroutine(DuringSitAnimationAfterExitTime());
     }
 
     public override void Execute()
     {
         base.Execute();
+
+        waitingFoodTime += Time.deltaTime;
+
+        if (waitingFoodTime >= clientModel.MaxTimeWaitingFood)
+        {
+            clientStateLeave.SetInLeaveManualy = true;
+            waitingFoodTime = 0f;
+            return;
+        }
     }
 
     public override void Exit()
@@ -35,6 +49,7 @@ public class ClientStateWaiting<T> : State<T>
         base.Exit();
 
         clientView.Anim.transform.position += Vector3.down * 0.38f;
+        waitingFoodTime = 0f;
     }
 
 
@@ -42,7 +57,7 @@ public class ClientStateWaiting<T> : State<T>
     {
         yield return new WaitForSeconds(4.12f); // Tiempo que tarda en sentarse por completo
         
-        clientView.DuringSit();
+        clientView.ExecuteAnimParameterName("DuringSit");
         clientView.Anim.transform.position += Vector3.up * 0.38f;
     }
 }

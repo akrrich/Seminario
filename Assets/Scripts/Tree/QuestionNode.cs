@@ -17,13 +17,16 @@ public class QuestionNode : ITreeNode
 
     public void Execute()
     {
-        if (question())
+        if (PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
         {
-            tNode.Execute();
-        }
-        else
-        {
-            fNode.Execute();
+            if (question())
+            {
+                tNode.Execute();
+            }
+            else
+            {
+                fNode.Execute();
+            }
         }
     }
 }

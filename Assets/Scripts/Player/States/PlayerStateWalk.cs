@@ -24,7 +24,7 @@ public class PlayerStateWalk<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Walk");
+        //Debug.Log("Walk");
 
         playerModel.Speed = playerModel.WalkSpeed;
     }

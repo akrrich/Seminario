@@ -7,6 +7,10 @@ public class ClientStateLeave<T> : State<T>
     private ClientView clientView;
     private Transform newTransform;
 
+    private bool setInLeaveManualy = false;
+
+    public bool SetInLeaveManualy { get => setInLeaveManualy; set => setInLeaveManualy = value; }
+
 
     public ClientStateLeave(ClientModel clientModel, ClientView clientView, Transform newTransform)
     {
@@ -21,14 +25,34 @@ public class ClientStateLeave<T> : State<T>
         base.Enter();
         Debug.Log("Leave");
 
-        clientView.StandUpAnim();
-        clientView.Anim.transform.position += Vector3.up * 0.35f;
-        clientView.StartCoroutine(WalkAnimationAfterExitTime());
+        if (clientModel.CurrentTablePosition == null)
+        {
+            clientView.ExecuteAnimParameterName("Walk");
+            clientModel.MoveToTarget(newTransform.position);
+            clientModel.LookAt(newTransform.position, clientView.Anim.transform);
+        }
+
+        else
+        {
+            clientView.ExecuteAnimParameterName("StandUp");
+            clientView.Anim.transform.position += Vector3.up * 0.35f;
+            clientView.StartCoroutine(WalkAnimationAfterExitTime());
+        }
+
+
+        clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
     }
 
     public override void Execute()
     {
         base.Execute();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+
+        setInLeaveManualy = false;
     }
 
 
@@ -37,8 +61,8 @@ public class ClientStateLeave<T> : State<T>
         yield return new WaitForSeconds(3f);// Tiempo que tarda en pararse por completo 
 
         clientView.Anim.transform.position += Vector3.down * 0.35f;
-        clientModel.MoveToTarget(newTransform);
-        clientModel.LookAt(newTransform);
-        clientView.WalkAnim();
+        clientModel.MoveToTarget(newTransform.position);
+        clientModel.LookAt(newTransform.position, clientView.Anim.transform);
+        clientView.ExecuteAnimParameterName("Walk");
     }
 }

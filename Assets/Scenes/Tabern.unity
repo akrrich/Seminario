@@ -1103,7 +1103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6a16ea4ee90ad1489925bbba0f7cfdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonsCooking: []
 --- !u!1 &133820564
 GameObject:
   m_ObjectHideFlags: 0
@@ -2905,6 +2904,98 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263462290}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &281815105
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 281815106}
+  - component: {fileID: 281815107}
+  m_Layer: 0
+  m_Name: OgrePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &281815106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281815105}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 442943459}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &281815107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281815105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca38078cd505034f9dfabc69705f8bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8174932956925981841, guid: 2ff490485441024498ae24e3d0fdb2b7, type: 3}
+  poolSize: 2
+--- !u!1 &299144290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 299144291}
+  - component: {fileID: 299144292}
+  m_Layer: 0
+  m_Name: OrcPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &299144291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299144290}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 442943459}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &299144292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299144290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca38078cd505034f9dfabc69705f8bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8174932956925981841, guid: 1d03ccc3a7163084aa028d8c24022c83, type: 3}
+  poolSize: 2
 --- !u!1 &307085466
 GameObject:
   m_ObjectHideFlags: 0
@@ -3667,7 +3758,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 442943459}
-  - component: {fileID: 442943460}
   m_Layer: 0
   m_Name: Clients
   m_TagString: Untagged
@@ -3687,23 +3777,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 281815106}
+  - {fileID: 299144291}
   m_Father: {fileID: 773677853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &442943460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442943458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eca38078cd505034f9dfabc69705f8bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefab: {fileID: 8174932956925981841, guid: 2ff490485441024498ae24e3d0fdb2b7, type: 3}
-  poolSize: 1
 --- !u!1 &451803043
 GameObject:
   m_ObjectHideFlags: 0
@@ -6712,7 +6790,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPosition: {fileID: 1723860516}
   outsidePosition: {fileID: 723869295}
-  clientPool: {fileID: 442943460}
+  clientPools:
+  - {fileID: 281815107}
+  - {fileID: 299144292}
   tablesPositions:
   - {fileID: 177028343}
   - {fileID: 155692888}
@@ -6723,6 +6803,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: bf83094d3eb7aa1499c2d95a6c5d5038, type: 3}
   - foodType: 2
     sprite: {fileID: 21300000, guid: da6de235a0b5d044bbf3f7dac7b9f3b8, type: 3}
+  timeToWaitForSpawnNewClient: 5
 --- !u!1 &766216807
 GameObject:
   m_ObjectHideFlags: 0
@@ -15419,7 +15500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodAbstractFactory: {fileID: 1741175104}
-  objectsPools:
+  foodPools:
   - {fileID: 1421752242}
   - {fileID: 1413431578}
   - {fileID: 2088648134}

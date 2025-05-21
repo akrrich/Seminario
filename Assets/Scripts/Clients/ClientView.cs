@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 public class ClientView : MonoBehaviour
@@ -11,23 +10,25 @@ public class ClientView : MonoBehaviour
     private SpriteRenderer foodSpriteRenderer;
     private Transform order; // GameObject padre de la UI
 
-    private List<string> orderFoodNames = new List<string>();
+    private List<string> orderFoodNames = new List<string>(); // Modificar esto para que sea unicamente un string solo
 
     [SerializeField] private List<FoodType> favoritesFoodTypes; // Las comidas que puede pedir
 
-    private static event Action onFoodChangeUI; // Modificar para que no sea statico
+    private bool isInstantiateFirstTime = true;
 
     public Animator Anim { get => anim; }
 
     public List<string> OrderFoodNames { get => orderFoodNames; }
 
-    public static Action OnFoodChangeUI { get => onFoodChangeUI; set => onFoodChangeUI = value; }
-
 
     void Awake()
     {
         GetComponents();
-        SuscribeToOwnEvent();
+    }
+
+    void OnEnable()
+    {
+        InitializeClientForPool();
     }
 
     void Update()
@@ -35,34 +36,11 @@ public class ClientView : MonoBehaviour
         RotateOrderUIToLookAtPlayer();
     }
 
-    void OnDestroy()
-    {
-        UnsuscribeToOwnEvents();
-    }
 
-
-    public void WalkAnim()
+    public void ExecuteAnimParameterName(string animParameterName)
     {
         RestartAnimationsValues();
-        anim.SetBool("Walk", true);
-    }
-
-    public void SitAnim()
-    {
-        RestartAnimationsValues();
-        anim.SetBool("Sit", true);
-    }
-
-    public void StandUpAnim()
-    {
-        RestartAnimationsValues();
-        anim.SetBool("StandUp", true);
-    }
-
-    public void DuringSit()
-    {
-        RestartAnimationsValues();
-        anim.SetBool("DuringSit", true);
+        anim.SetBool(animParameterName, true);
     }
 
 
@@ -76,21 +54,22 @@ public class ClientView : MonoBehaviour
         order = transform.Find("Order");
     }
 
-    private void SuscribeToOwnEvent()
+    private void InitializeClientForPool()
     {
-        onFoodChangeUI += InitializeRandomFoodUI;
-    }
+        if (!isInstantiateFirstTime)
+        {
+            InitializeRandomFoodUI();
+            return;
+        }
 
-    private void UnsuscribeToOwnEvents()
-    {
-        onFoodChangeUI -= InitializeRandomFoodUI;
+        isInstantiateFirstTime = false;
     }
 
     private void InitializeRandomFoodUI()
     {
         orderFoodNames.Clear();
 
-        int randomIndex = UnityEngine.Random.Range(0, favoritesFoodTypes.Count);
+        int randomIndex = Random.Range(0, favoritesFoodTypes.Count);
         FoodType selectedFood = favoritesFoodTypes[randomIndex];
 
         Sprite sprite = clientManager.GetSpriteForRandomFood(selectedFood);
@@ -127,7 +106,7 @@ public class ClientView : MonoBehaviour
 
     private void RestartAnimationsValues()
     {
-        string[] parametersNames = { "Walk", "Sit", "StandUp" };
+        string[] parametersNames = { "Walk", "Sit", "StandUp", "DuringSit", "WaitingForChair" };
 
         for (int i = 0; i < parametersNames.Length; i++)
         {
