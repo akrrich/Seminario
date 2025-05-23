@@ -3,11 +3,13 @@ using UnityEngine;
 public class ClientStateIdle<T> : State<T>
 {
     private ClientModel clientModel;
+    private ClientView clientView;
 
 
-    public ClientStateIdle(ClientModel clientModel)
+    public ClientStateIdle(ClientModel clientModel, ClientView clientView)
     {
         this.clientModel = clientModel;
+        this.clientView = clientView;
     }
 
 
@@ -18,6 +20,7 @@ public class ClientStateIdle<T> : State<T>
 
         clientModel.StopVelocity();
         clientModel.ClientManager.ReturnObjectToPool(clientModel.ClientType, clientModel);
+        clientView.DisableAllSpriteTypes();
     }
 
     public override void Execute()

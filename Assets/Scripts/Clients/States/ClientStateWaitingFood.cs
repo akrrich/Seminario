@@ -28,6 +28,7 @@ public class ClientStateWaitingFood<T> : State<T>
         clientModel.LookAt(clientModel.CurrentTablePosition.transform.position, clientView.Anim.transform);
         clientView.ExecuteAnimParameterName("Sit");
         clientView.StartCoroutine(DuringSitAnimationAfterExitTime());
+        clientModel.transform.SetParent(clientModel.CurrentTablePosition.ChairPosition);
     }
 
     public override void Execute()
@@ -50,6 +51,7 @@ public class ClientStateWaitingFood<T> : State<T>
 
         clientView.Anim.transform.position += Vector3.down * 0.38f;
         waitingFoodTime = 0f;
+        clientModel.ClientManager.SetParentToHisPoolGameObject(clientModel.ClientType, clientModel);
     }
 
 
@@ -59,5 +61,6 @@ public class ClientStateWaitingFood<T> : State<T>
         
         clientView.ExecuteAnimParameterName("DuringSit");
         clientView.Anim.transform.position += Vector3.up * 0.38f;
+        clientView.SetSpriteType("SpriteWaitingFood");
     }
 }

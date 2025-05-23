@@ -15,7 +15,7 @@ public class ClientModel : MonoBehaviour
     private ClientManager clientManager;
 
     private Rigidbody rb;
-    [SerializeField] private Table currentTablePosition;
+    private Table currentTablePosition;
 
     private Vector3 currentDirection;
 

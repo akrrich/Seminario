@@ -39,7 +39,6 @@ public class ClientStateLeave<T> : State<T>
             clientView.StartCoroutine(WalkAnimationAfterExitTime());
         }
 
-
         clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
     }
 

@@ -60,8 +60,8 @@ public class Food : MonoBehaviour
         PlayerController.OnGrabFood += Grab;
         PlayerController.OnHandOverFood += HandOver;
 
-        PlayerController.OnTableCollisionEnter += SaveTable;
-        PlayerController.OnTableCollisionExit += ClearTable;
+        PlayerController.OnTableCollisionEnterToHandOverFood += SaveTable;
+        PlayerController.OnTableCollisionExitForHandOver += ClearTable;
     }
 
     private void UnsuscribeToPlayerControllerEvents()
@@ -69,8 +69,8 @@ public class Food : MonoBehaviour
         PlayerController.OnGrabFood -= Grab;
         PlayerController.OnHandOverFood -= HandOver;
 
-        PlayerController.OnTableCollisionEnter -= SaveTable;
-        PlayerController.OnTableCollisionExit -= ClearTable;
+        PlayerController.OnTableCollisionEnterToHandOverFood -= SaveTable;
+        PlayerController.OnTableCollisionExitForHandOver -= ClearTable;
     }
 
     private void GetComponents()
@@ -100,7 +100,7 @@ public class Food : MonoBehaviour
 
     private IEnumerator DisablePhysics()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return null; // Esperar un frame
         rb.isKinematic = true;
         boxCollider.enabled = false;
     }

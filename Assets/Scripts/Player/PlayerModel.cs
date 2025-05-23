@@ -34,7 +34,7 @@ public class PlayerModel : MonoBehaviour
     private bool isGrounded = true;
     private bool isCollidingOven = false;
     private bool isCollidingAdministration = false;
-    private bool isCoking = false;
+    private bool isCooking = false;
     private bool isAdministrating = false;
 
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
@@ -53,7 +53,7 @@ public class PlayerModel : MonoBehaviour
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
-    public bool IsCooking { get => isCoking; set => isCoking = value; }
+    public bool IsCooking { get => isCooking; set => isCooking = value; }
     public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
 
 
@@ -77,7 +77,7 @@ public class PlayerModel : MonoBehaviour
     }
 
 
-    // Solucionar los LineOfSight
+    // Solucionar los LineOfSight de que mirando hacia un poco fuera del rango funcionan
     public bool IsLookingAtOven()
     {
         return LineOfSight.LOS(playerCamera.transform, oven.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
@@ -107,7 +107,7 @@ public class PlayerModel : MonoBehaviour
 
     private void Movement()
     {
-        if (PlayerInputs.Instance != null && !isCoking && !isAdministrating)
+        if (PlayerInputs.Instance != null && !isCooking && !isAdministrating)
         {
             Vector3 cameraForward = playerCamera.transform.forward;
             cameraForward.y = 0;

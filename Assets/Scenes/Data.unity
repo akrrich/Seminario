@@ -345,6 +345,7 @@ MonoBehaviour:
     grabFood: 113
     handOverFood: 101
     cook: 101
+    takeClientOrder: 122
     administration: 101
     jump: 32
     inventory: 9
@@ -356,6 +357,7 @@ MonoBehaviour:
     grabFood: 333
     handOverFood: 330
     cook: 330
+    takeClientOrder: 0
     administration: 330
     jump: 331
     inventory: 343

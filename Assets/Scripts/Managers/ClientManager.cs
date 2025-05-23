@@ -1,14 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ClientManager : MonoBehaviour
 {
     [SerializeField] private Transform spawnPosition, outsidePosition;
 
+    [SerializeField] private AbstractFactory clientAbstractFactory;
     [SerializeField] private List<ObjectPooler> clientPools;
-    [SerializeField] private List<Table> tablesPositions;
     [SerializeField] private List<FoodTypeSpritePair> foodSpritePairs;
+    [SerializeField] private List<Table> tablesPositions;
 
     private Dictionary<ClientType, ObjectPooler> clientPoolDictionary = new();
     private Dictionary<FoodType, Sprite> foodSpriteDict = new();
@@ -25,8 +28,7 @@ public class ClientManager : MonoBehaviour
         InitializeClientPoolDictionary();
         InitializeFoodSpriteDictionary();
 
-        // Prueba para inicializar un cliente
-        ClientController client = clientPools[UnityEngine.Random.Range(0, clientPools.Count)].GetObjectFromPool<ClientController>();
+        StartCoroutine(InitializeRandomClient());
     }
 
     void Update()
@@ -41,11 +43,19 @@ public class ClientManager : MonoBehaviour
         return sprite;
     }
 
-    public void ReturnObjectToPool(ClientType clientType, ClientModel clientModel)
+    public void ReturnObjectToPool(ClientType clientType, ClientModel currentClient)
     {
         if (clientPoolDictionary.ContainsKey(clientType))
         {
-            clientPoolDictionary[clientType].ReturnObjectToPool(clientModel);
+            clientPoolDictionary[clientType].ReturnObjectToPool(currentClient);
+        }
+    }
+
+    public void SetParentToHisPoolGameObject(ClientType clientType, ClientModel currentClient)
+    {
+        if (clientPoolDictionary.TryGetValue(clientType, out ObjectPooler pooler))
+        {
+            currentClient.transform.SetParent(pooler.transform);
         }
     }
 
@@ -79,13 +89,25 @@ public class ClientManager : MonoBehaviour
     }
 
 
+    private IEnumerator InitializeRandomClient()
+    {
+        yield return new WaitUntil(() => clientPools.All(p => p != null && p.Prefab != null));
+
+        int randomIndex = UnityEngine.Random.Range(0, clientPools.Count);
+        string prefabName = clientPools[randomIndex].Prefab.name;
+        clientAbstractFactory.CreateObject(prefabName);
+    }
+
     private void GetClientRandomFromPool()
     {
         spawnTime += Time.deltaTime;
 
         if (spawnTime >= timeToWaitForSpawnNewClient)
         {
-            ClientController client = clientPools[UnityEngine.Random.Range(0, clientPools.Count)].GetObjectFromPool<ClientController>();
+            int randomIndex = UnityEngine.Random.Range(0, clientPools.Count);
+            string prefabName = clientPools[randomIndex].Prefab.name;
+            clientAbstractFactory.CreateObject(prefabName);
+            
             spawnTime = 0f;
         }
     }

@@ -20,7 +20,9 @@ public class AbstractFactory : MonoBehaviour
         ClearAllGameObjectsFromDictionary();
     }
 
-    // El Vector3 es opcional
+
+    // 2 Metodos con sobrecarga para CreateObject, con el objetivo de que se pueda setear en el momento la posicion de spawn si se quiere o no
+
     public GameObject CreateObject(string prefabName, Transform transform, Vector3 position)
     {
         if (!namePoolDictionary.TryGetValue(prefabName, out ObjectPooler pooler))
@@ -36,6 +38,23 @@ public class AbstractFactory : MonoBehaviour
         }
 
         pooledObject.transform.position = transform.position + position;
+        return pooledObject.gameObject;
+    }
+
+    public GameObject CreateObject(string prefabName)
+    {
+        if (!namePoolDictionary.TryGetValue(prefabName, out ObjectPooler pooler))
+        {
+            return null;
+        }
+
+        MonoBehaviour pooledObject = pooler.GetObjectFromPool<MonoBehaviour>();
+
+        if (pooledObject == null)
+        {
+            return null;
+        }
+
         return pooledObject.gameObject;
     }
 

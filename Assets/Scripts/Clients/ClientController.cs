@@ -41,7 +41,7 @@ public class ClientController : MonoBehaviour
 
     private void InitializeFSM()
     {
-        ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel);
+        ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel, clientView);
         ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTablePosition.ChairPosition);
         csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
         ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave);
@@ -75,7 +75,6 @@ public class ClientController : MonoBehaviour
         QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, leave, waitingFood);
         QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, qIsWaitingForFood);
         QuestionNode qIsChairFreeOrNoT = new QuestionNode(QuestionIsChairFreeOrNot, qCanGoToChair, waitingForChair);
-        //QuestionNode qCanLeave = new QuestionNode(QuestionLeave, leave, qIsChairFreeOrNoT);
         QuestionNode qIsOutside = new QuestionNode(QuestionIsOutside, idle, qIsChairFreeOrNoT);
 
         root = qIsOutside;
@@ -150,22 +149,6 @@ public class ClientController : MonoBehaviour
 
         return false;
     }
-
-    /*private bool QuestionLeave()
-    {
-        if (clientModel.CurrentTablePosition != null) 
-        {
-                                                                // si esta dentro del rango de la silla
-            if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) <= 1f)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        return false;
-    }*/
 
     private bool QuestionIsOutside()
     {                                                            // si esta dentro del rango de OutsidePosition

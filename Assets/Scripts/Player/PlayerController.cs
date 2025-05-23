@@ -11,16 +11,28 @@ public class PlayerController : MonoBehaviour
     private static event Action onGrabFood;
     private static event Action onHandOverFood;
 
-    private static event Action<Table> onTableCollisionEnter;
-    private static event Action onTableCollisionExit;
+    private static event Action onTakeOrder;
+
+    // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido
+    private static event Action<Table> onTableCollisionEnterForHandOverFood;
+    private static event Action onTableCollisionExitForHandOverFood;
+
+    // Estos 2 eventos corresponden a Tomar el pedido de un cliente
+    private static event Action<Table> onTableCollisionEnterForTakeOrder;
+    private static event Action onTableCollisionExitForTakeOrder;
 
     public PlayerModel PlayerModel { get => playerModel; }
 
     public static Action OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
 
-    public static Action<Table> OnTableCollisionEnter { get => onTableCollisionEnter; set => onTableCollisionEnter = value; }
-    public static Action OnTableCollisionExit { get => onTableCollisionExit; set => onTableCollisionExit = value; }
+    public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
+
+    public static Action<Table> OnTableCollisionEnterToHandOverFood { get => onTableCollisionEnterForHandOverFood; set => onTableCollisionEnterForHandOverFood = value; }
+    public static Action OnTableCollisionExitForHandOver { get => onTableCollisionExitForHandOverFood; set => onTableCollisionExitForHandOverFood = value; }
+
+    public static Action<Table> OnTableCollisionEnterForTakeOrder { get => onTableCollisionEnterForTakeOrder; set => onTableCollisionEnterForTakeOrder = value; }
+    public static Action OnTableCollisionExitForTakeOrder { get => onTableCollisionExitForTakeOrder; set => onTableCollisionExitForTakeOrder = value; }
 
 
     void Awake()
@@ -33,6 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         fsm.OnExecute();
         GrabOrHandOverFood();
+        TakeClientOrder();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -112,6 +125,17 @@ public class PlayerController : MonoBehaviour
             if (PlayerInputs.Instance.HandOverFood())
             {
                 onHandOverFood?.Invoke();
+            }
+        }
+    }
+
+    private void TakeClientOrder()
+    {
+        if (PlayerInputs.Instance != null)
+        {
+            if (PlayerInputs.Instance.TakeClientOrder())
+            {
+                onTakeOrder?.Invoke();
             }
         }
     }

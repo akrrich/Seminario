@@ -32,7 +32,7 @@ public class PlayerCollisions
 
     public void OnCollisionEnterWithTable(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Table"))
+        /*if (collision.gameObject.CompareTag("Table"))
         {
             bool hasChildren = false;
 
@@ -51,8 +51,24 @@ public class PlayerCollisions
 
                 if (table.IsOccupied)
                 {
-                    PlayerController.OnTableCollisionEnter?.Invoke(table);
+                    PlayerController.OnTableCollisionEnterToHandOverFood?.Invoke(table);
                     PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
+                }
+            }
+        }*/
+
+        if (collision.gameObject.CompareTag("Table"))
+        {
+            Table table = collision.gameObject.GetComponentInParent<Table>();
+
+            if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
+            {
+                ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
+                
+                if (!clientView.ReturnSpriteOrderIsActive())
+                {
+                    clientView.CanTakeOrder = true;
+                    PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(table);
                 }
             }
         }
@@ -118,10 +134,22 @@ public class PlayerCollisions
 
     public void OnCollisionExitWithTable(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Table"))
+        /*if (collision.gameObject.CompareTag("Table"))
         {
             PlayerController.OnTableCollisionExit?.Invoke();
             PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
+        }*/
+
+        if (collision.gameObject.CompareTag("Table"))
+        {
+            Table table = collision.gameObject.GetComponentInParent<Table>();
+
+            if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
+            {
+                ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
+                clientView.CanTakeOrder = false;
+                PlayerController.OnTableCollisionExitForTakeOrder?.Invoke();
+            }
         }
     }
 
