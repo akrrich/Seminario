@@ -22,8 +22,9 @@ public class ClientModel : MonoBehaviour
     [SerializeField] private ClientType clientType;
 
     [SerializeField] private float speed;
-    [SerializeField] private float maxTimeWaitingFood;
     [SerializeField] private float maxTimeWaitingForChair;
+    [SerializeField] private float maxTimeWaitingToBeAttended;
+    [SerializeField] private float maxTimeWaitingFood;
 
     private bool isInstantiateFirstTime = true;
 
@@ -33,8 +34,9 @@ public class ClientModel : MonoBehaviour
 
     public ClientType ClientType { get => clientType; }
 
-    public float MaxTimeWaitingFood { get => maxTimeWaitingFood; }
     public float MaxTimeWaitingForChair { get => maxTimeWaitingForChair; }
+    public float MaxTimeWaitingToBeAttended { get => maxTimeWaitingToBeAttended; }
+    public float MaxTimeWaitingFood { get => maxTimeWaitingFood; }
 
 
     void Awake()
@@ -118,7 +120,7 @@ public class ClientModel : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void InitializeSpawnPosition()
+    public void InitializeSpawnPosition()
     {
         transform.position = clientManager.SpawnPosition.position;
     }

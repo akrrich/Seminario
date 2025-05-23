@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 public class ClientView : MonoBehaviour
 {
+    // Recordatorio: Buscar en la mesa el componente hijo Food y tomar el tiempo que tarda en cocinarse en ese instante de forma local
+
     private PlayerController playerController;
     private ClientManager clientManager;
-    [SerializeField] private Table tablePlayerCollision; 
+    private Table tablePlayerCollision; 
 
     private Animator anim;
     private Transform order; // GameObject padre de la UI
@@ -17,13 +19,13 @@ public class ClientView : MonoBehaviour
 
     private Dictionary<string, SpriteRenderer> spriteTypeDict = new();
 
-    private bool canTakeOrder = false; // Se pone en true cuando nos acercamos a la mesa y no podio nada todavia
+    private bool canTakeOrder = false; // Se pone en true cuando nos acercamos a la mesa y no pidio nada todavia
 
     public Animator Anim { get => anim; }
 
     public List<string> OrderFoodNames { get => orderFoodNames; }
 
-    public bool CanTakeOrder {get => canTakeOrder; set => canTakeOrder = value; }
+    public bool CanTakeOrder { get => canTakeOrder; set => canTakeOrder = value; }
 
 
     void Awake()
@@ -66,14 +68,13 @@ public class ClientView : MonoBehaviour
         anim.SetBool(animParameterName, true);
     }
 
-    public void SetSpriteType(string spriteTypeNameGameObjectInHierarchy)
+    public void SetSpriteTypeName(string spriteTypeNameGameObjectInHierarchy)
     {
         DisableAllSpriteTypes();
 
         if (spriteTypeDict.TryGetValue(spriteTypeNameGameObjectInHierarchy, out var spriteRenderer))
         {
             spriteRenderer.gameObject.SetActive(true);
-            spriteRenderer.enabled = true;
         }
     }
 
@@ -85,16 +86,22 @@ public class ClientView : MonoBehaviour
         }
     }
 
-    // Verifica que no se haya hecho ningun pedido, es decir verifica que la orden de la comida no este activada
-    public bool ReturnSpriteOrderIsActive()
+    public bool ReturnSpriteFoodIsActive()
     {
         return spritesTypeList[0].gameObject.activeSelf;
+    }
+
+    public bool ReturnSpriteWaitingFoodIsActive()
+    {
+        return spritesTypeList[2].gameObject.activeSelf;
     }
 
     public void InitializeRandomFoodUI()
     {
         if (spritesTypeList[2].gameObject.activeSelf && tablePlayerCollision != null) // Si esta activado el sprite de pedir comida, quiere decir que ya se le puede tomar el pedido
         {
+            PlayerView.OnTakeOrderCompletedForHandOverMessage?.Invoke();
+
             orderFoodNames.Clear();
 
             int randomIndex = Random.Range(0, favoritesFoodTypes.Count);
@@ -108,13 +115,12 @@ public class ClientView : MonoBehaviour
                 spritesTypeList[0].gameObject.SetActive(true);
 
                 spritesTypeList[0].sprite = sprite;
-                spritesTypeList[0].enabled = true;
                 orderFoodNames.Add(selectedFood.ToString());
                 AutoAdjustSpriteScale(sprite);
-            }
 
-            canTakeOrder = false;
-            ClearTable();
+                canTakeOrder = false;
+                ClearTable();
+            }
         }
     }
 
@@ -135,6 +141,7 @@ public class ClientView : MonoBehaviour
         }
     }
 
+    // Corregir los indices en las escalas
     private void AutoAdjustSpriteScale(Sprite sprite)
     {
         float maxDimension = 0.5f; 
@@ -168,7 +175,7 @@ public class ClientView : MonoBehaviour
 
     private void SaveTable(Table table)
     {
-        if (canTakeOrder && !spritesTypeList[0].gameObject.activeSelf)
+        if (canTakeOrder && !spritesTypeList[0].gameObject.activeSelf) // No tiene activado el sprite de la comida
         {
             tablePlayerCollision = table;
         }

@@ -25,6 +25,7 @@ public class ClientStateLeave<T> : State<T>
         base.Enter();
         Debug.Log("Leave");
 
+        // Quiere decir que entro al estado leave porque todas las mesas estaban ocupadas
         if (clientModel.CurrentTablePosition == null)
         {
             clientView.ExecuteAnimParameterName("Walk");
@@ -32,6 +33,7 @@ public class ClientStateLeave<T> : State<T>
             clientModel.LookAt(newTransform.position, clientView.Anim.transform);
         }
 
+        // Sino quiere decir que se fue de leave porque estaba ya en una mesa
         else
         {
             clientView.ExecuteAnimParameterName("StandUp");

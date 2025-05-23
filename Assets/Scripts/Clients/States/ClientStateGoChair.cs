@@ -24,7 +24,7 @@ public class ClientStateGoChair<T> : State<T>
         clientModel.MoveToTarget(getTargetTransform().position);
         clientModel.LookAt(getTargetTransform().position, clientView.Anim.transform);
         clientView.ExecuteAnimParameterName("Walk");
-        clientView.SetSpriteType("SpriteGoChair");
+        clientView.SetSpriteTypeName("SpriteGoChair");
     }
 
     public override void Execute()

@@ -17,6 +17,10 @@ public class PlayerView : MonoBehaviour
     private static Action onCollisionExitWithTableForHandOverMessage; // Esconder el texto de la UI
     private static Action onHandOverCompletedForHandOverMessage; // Esconder el texto de la UI
 
+    private static Action onCollisionEnterWithTableForTakeOrderMessage; // Mostrar el texto de la UI
+    private static Action onCollisionExitWithTableForTakeOrderMessage; // Esconder el texto de la UI
+    private static Action onTakeOrderCompletedForHandOverMessage; // Esconder el texto de la UI
+
     private static Action onDeactivateInventoryFoodUI; // Esconder la UI del inventario
 
 
@@ -33,6 +37,10 @@ public class PlayerView : MonoBehaviour
     public static Action OnCollisionEnterWithTableForHandOverMessage { get => onCollisionEnterWithTableForHandOverMessage; set => onCollisionEnterWithTableForHandOverMessage = value; }
     public static Action OnCollisionExitWithTableForHandOverMessage { get => onCollisionExitWithTableForHandOverMessage; set => onCollisionExitWithTableForHandOverMessage = value; }
     public static Action OnHandOverCompletedForHandOverMessage { get => onHandOverCompletedForHandOverMessage; set => onHandOverCompletedForHandOverMessage = value; }
+
+    public static Action OnCollisionEnterWithTableForTakeOrderMessage { get => onCollisionEnterWithTableForTakeOrderMessage; set => onCollisionEnterWithTableForTakeOrderMessage = value; }
+    public static Action OnCollisionExitWithTableForTakeOrderMessage { get => onCollisionExitWithTableForTakeOrderMessage; set => onCollisionExitWithTableForTakeOrderMessage = value; }
+    public static Action OnTakeOrderCompletedForHandOverMessage { get => onTakeOrderCompletedForHandOverMessage; set => onTakeOrderCompletedForHandOverMessage = value; }
 
     public static Action OnDeactivateInventoryFoodUI { get => onDeactivateInventoryFoodUI; set => onDeactivateInventoryFoodUI = value; }
 

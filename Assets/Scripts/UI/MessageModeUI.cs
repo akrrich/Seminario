@@ -6,7 +6,7 @@ public class MessageModeUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI messageDesplayText;
 
-    private event Action onCook, onAdministration, onHandOver;
+    private event Action onCook, onAdministration, onHandOver, onTakeOrder;
 
 
     void Awake()
@@ -31,6 +31,7 @@ public class MessageModeUI : MonoBehaviour
         onCook += () => ShowEnterMessageText(" para entrar a cocinar");
         onAdministration += () => ShowEnterMessageText(" para entrar en administracion");
         onHandOver += () => ShowEnterMessageText(" para entregar el plato");
+        onTakeOrder += () => ShowEnterMessageText(" para tomar el pedido");
     }
 
     private void SuscribeToPlayerViewEvents()
@@ -44,6 +45,10 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionEnterWithTableForHandOverMessage += onHandOver;
         PlayerView.OnCollisionExitWithTableForHandOverMessage += DisapearMessageText;
         PlayerView.OnHandOverCompletedForHandOverMessage += DisapearMessageText;
+
+        PlayerView.OnCollisionEnterWithTableForTakeOrderMessage += onTakeOrder;
+        PlayerView.OnCollisionExitWithTableForTakeOrderMessage += DisapearMessageText;
+        PlayerView.OnTakeOrderCompletedForHandOverMessage += DisapearMessageText;
     }
 
     private void UnSuscribeToPlayerViewEvents()
@@ -57,6 +62,10 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionEnterWithTableForHandOverMessage -= onHandOver;
         PlayerView.OnCollisionExitWithTableForHandOverMessage -= DisapearMessageText;
         PlayerView.OnHandOverCompletedForHandOverMessage -= DisapearMessageText;
+
+        PlayerView.OnCollisionEnterWithTableForTakeOrderMessage -= onTakeOrder;
+        PlayerView.OnCollisionExitWithTableForTakeOrderMessage -= DisapearMessageText;
+        PlayerView.OnTakeOrderCompletedForHandOverMessage -= DisapearMessageText;
     }
 
     private void InitializeReferencs()

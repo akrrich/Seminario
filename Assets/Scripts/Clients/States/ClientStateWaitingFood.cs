@@ -8,6 +8,9 @@ public class ClientStateWaitingFood<T> : State<T>
 
     private ClientStateLeave<T> clientStateLeave;
 
+    private bool canExecuteTimers = false;
+
+    private float waitingToBeAttendedTime = 0f;
     private float waitingFoodTime = 0f;
 
 
@@ -35,13 +38,35 @@ public class ClientStateWaitingFood<T> : State<T>
     {
         base.Execute();
 
-        waitingFoodTime += Time.deltaTime;
-
-        if (waitingFoodTime >= clientModel.MaxTimeWaitingFood)
+        if (canExecuteTimers)
         {
-            clientStateLeave.SetInLeaveManualy = true;
-            waitingFoodTime = 0f;
-            return;
+            // Ejecuta el tiempo a ser atendido
+            if (clientView.ReturnSpriteWaitingFoodIsActive())
+            {
+                waitingToBeAttendedTime += Time.deltaTime;
+
+                if (waitingToBeAttendedTime >= clientModel.MaxTimeWaitingToBeAttended)
+                {
+                    clientStateLeave.SetInLeaveManualy = true;
+                    waitingToBeAttendedTime = 0f;
+                    canExecuteTimers = false;
+                    return;
+                }
+            }
+
+            // Ejecuta el tiempo a recibir el pedido
+            else
+            {
+                waitingFoodTime += Time.deltaTime;
+
+                if (waitingFoodTime >= clientModel.MaxTimeWaitingFood)
+                {
+                    clientStateLeave.SetInLeaveManualy = true;
+                    waitingFoodTime = 0f;
+                    canExecuteTimers = false;
+                    return;
+                }
+            }
         }
     }
 
@@ -50,8 +75,10 @@ public class ClientStateWaitingFood<T> : State<T>
         base.Exit();
 
         clientView.Anim.transform.position += Vector3.down * 0.38f;
+        waitingToBeAttendedTime = 0f;
         waitingFoodTime = 0f;
         clientModel.ClientManager.SetParentToHisPoolGameObject(clientModel.ClientType, clientModel);
+        canExecuteTimers = false;
     }
 
 
@@ -61,6 +88,7 @@ public class ClientStateWaitingFood<T> : State<T>
         
         clientView.ExecuteAnimParameterName("DuringSit");
         clientView.Anim.transform.position += Vector3.up * 0.38f;
-        clientView.SetSpriteType("SpriteWaitingFood");
+        clientView.SetSpriteTypeName("SpriteWaitingFood");
+        canExecuteTimers = true;
     }
 }

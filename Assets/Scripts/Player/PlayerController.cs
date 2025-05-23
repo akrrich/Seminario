@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
 
     private static event Action onGrabFood;
     private static event Action onHandOverFood;
-
     private static event Action onTakeOrder;
 
     // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido
@@ -25,12 +24,13 @@ public class PlayerController : MonoBehaviour
 
     public static Action OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
-
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
 
-    public static Action<Table> OnTableCollisionEnterToHandOverFood { get => onTableCollisionEnterForHandOverFood; set => onTableCollisionEnterForHandOverFood = value; }
-    public static Action OnTableCollisionExitForHandOver { get => onTableCollisionExitForHandOverFood; set => onTableCollisionExitForHandOverFood = value; }
+    // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido
+    public static Action<Table> OnTableCollisionEnterForHandOverFood { get => onTableCollisionEnterForHandOverFood; set => onTableCollisionEnterForHandOverFood = value; }
+    public static Action OnTableCollisionExitForHandOverFood { get => onTableCollisionExitForHandOverFood; set => onTableCollisionExitForHandOverFood = value; }
 
+    // Estos 2 eventos corresponden a Tomar el pedido de un cliente
     public static Action<Table> OnTableCollisionEnterForTakeOrder { get => onTableCollisionEnterForTakeOrder; set => onTableCollisionEnterForTakeOrder = value; }
     public static Action OnTableCollisionExitForTakeOrder { get => onTableCollisionExitForTakeOrder; set => onTableCollisionExitForTakeOrder = value; }
 
@@ -50,24 +50,17 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        playerCollisions.OnCollisionEnterWithFloor(collision);
-        playerCollisions.OnCollisionEnterWithOvenAndLOS(collision);
-        playerCollisions.OnCollisionEnterWithTable(collision);
-        playerCollisions.OnCollisionEnterWithAdministration(collision);
+        playerCollisions.OnCollisionsEnter(collision);
     }
 
     void OnCollisionStay(Collision collision)
     {
-        playerCollisions.OnCollisionStayWithOvenAndLOS(collision);
-        playerCollisions.OnCollisionStayWithAdministrationAndLOS(collision);
+        playerCollisions.OnCollisionsStay(collision);
     }
 
     void OnCollisionExit(Collision collision)
     {
-        playerCollisions.OnCollisionExitWithFloor(collision);
-        playerCollisions.OnCollisionExitWithOven(collision);
-        playerCollisions.OnCollisionExitWithTable(collision);
-        playerCollisions.OnCollisionExitWithAdministration(collision);
+        playerCollisions.OnCollisionsExit(collision);
     }
 
 

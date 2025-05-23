@@ -11,9 +11,32 @@ public class PlayerCollisions
     }
 
 
+    public void OnCollisionsEnter(Collision collision)
+    {
+        OnCollisionEnterWithFloor(collision);
+        OnCollisionEnterWithOvenAndLOS(collision);
+        OnCollisionEnterWithTable(collision);
+        OnCollisionEnterWithAdministration(collision);
+    }
+
+    public void OnCollisionsStay(Collision collision)
+    {
+        OnCollisionStayWithOvenAndLOS(collision);
+        OnCollisionStayWithAdministrationAndLOS(collision);
+    }
+
+    public void OnCollisionsExit(Collision collision)
+    {
+        OnCollisionExitWithFloor(collision);
+        OnCollisionExitWithOven(collision);
+        OnCollisionExitWithTable(collision);
+        OnCollisionExitWithAdministration(collision);
+    }
+
+
     /* ----------------------------------------ENTER-------------------------------------------------- */
 
-    public void OnCollisionEnterWithFloor(Collision collision)
+    private void OnCollisionEnterWithFloor(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
@@ -21,7 +44,7 @@ public class PlayerCollisions
         }
     }
 
-    public void OnCollisionEnterWithOvenAndLOS(Collision collision)
+    private void OnCollisionEnterWithOvenAndLOS(Collision collision)
     {
         if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
         {
@@ -30,9 +53,27 @@ public class PlayerCollisions
         }
     }
 
-    public void OnCollisionEnterWithTable(Collision collision)
+    private void OnCollisionEnterWithTable(Collision collision)
     {
-        /*if (collision.gameObject.CompareTag("Table"))
+        if (collision.gameObject.CompareTag("Table"))
+        {
+            Table table = collision.gameObject.GetComponentInParent<Table>();
+
+            if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
+            {
+                ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
+
+                if (table.IsOccupied && clientView.ReturnSpriteWaitingFoodIsActive())
+                {
+                    clientView.CanTakeOrder = true;
+                    PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(table);
+                    PlayerView.OnCollisionEnterWithTableForTakeOrderMessage?.Invoke();
+                    return;
+                }
+            }
+        }
+
+        if (collision.gameObject.CompareTag("Table"))
         {
             bool hasChildren = false;
 
@@ -49,32 +90,21 @@ public class PlayerCollisions
             {
                 Table table = collision.gameObject.GetComponentInParent<Table>();
 
-                if (table.IsOccupied)
+                if (table.ChairPosition.childCount > 0)
                 {
-                    PlayerController.OnTableCollisionEnterToHandOverFood?.Invoke(table);
-                    PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
-                }
-            }
-        }*/
+                    ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
 
-        if (collision.gameObject.CompareTag("Table"))
-        {
-            Table table = collision.gameObject.GetComponentInParent<Table>();
-
-            if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
-            {
-                ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
-                
-                if (!clientView.ReturnSpriteOrderIsActive())
-                {
-                    clientView.CanTakeOrder = true;
-                    PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(table);
+                    if (table.IsOccupied && clientView.ReturnSpriteFoodIsActive())
+                    {
+                        PlayerController.OnTableCollisionEnterForHandOverFood?.Invoke(table);
+                        PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
+                    }
                 }
             }
         }
     }
 
-    public void OnCollisionEnterWithAdministration(Collision collision)
+    private void OnCollisionEnterWithAdministration(Collision collision)
     {
         if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
         {
@@ -85,7 +115,7 @@ public class PlayerCollisions
 
     /* ------------------------------------------STAY----------------------------------------------- */
 
-    public void OnCollisionStayWithOvenAndLOS(Collision collision)
+    private void OnCollisionStayWithOvenAndLOS(Collision collision)
     {
         if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
         {
@@ -99,7 +129,7 @@ public class PlayerCollisions
         }
     }
 
-    public void OnCollisionStayWithAdministrationAndLOS(Collision collision)
+    private void OnCollisionStayWithAdministrationAndLOS(Collision collision)
     {
         if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
         {
@@ -115,7 +145,7 @@ public class PlayerCollisions
 
     /* -------------------------------------------EXIT--------------------------------------------- */
 
-    public void OnCollisionExitWithFloor(Collision collision)
+    private void OnCollisionExitWithFloor(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
@@ -123,7 +153,7 @@ public class PlayerCollisions
         }
     }
 
-    public void OnCollisionExitWithOven(Collision collision)
+    private void OnCollisionExitWithOven(Collision collision)
     {
         if (collision.gameObject.CompareTag("Oven"))
         {
@@ -132,14 +162,8 @@ public class PlayerCollisions
         }
     }
 
-    public void OnCollisionExitWithTable(Collision collision)
+    private void OnCollisionExitWithTable(Collision collision)
     {
-        /*if (collision.gameObject.CompareTag("Table"))
-        {
-            PlayerController.OnTableCollisionExit?.Invoke();
-            PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
-        }*/
-
         if (collision.gameObject.CompareTag("Table"))
         {
             Table table = collision.gameObject.GetComponentInParent<Table>();
@@ -149,11 +173,19 @@ public class PlayerCollisions
                 ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
                 clientView.CanTakeOrder = false;
                 PlayerController.OnTableCollisionExitForTakeOrder?.Invoke();
+                PlayerView.OnCollisionExitWithTableForTakeOrderMessage?.Invoke();
+                return;
             }
+        }
+
+        if (collision.gameObject.CompareTag("Table"))
+        {
+            PlayerController.OnTableCollisionExitForHandOverFood?.Invoke();
+            PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
         }
     }
 
-    public void OnCollisionExitWithAdministration(Collision collision)
+    private void OnCollisionExitWithAdministration(Collision collision)
     {
         if (collision.gameObject.CompareTag("Administration"))
         {

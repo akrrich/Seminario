@@ -10,9 +10,6 @@ public class Food : MonoBehaviour
 {
     // No usar el metodo OnDisabled de Unity
 
-    // Resolver problema que cuando al npc se le asigna una mesa, que no se pueda entregar el pedido
-    // hasta que realmente llegue a la silla
-
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
@@ -29,6 +26,8 @@ public class Food : MonoBehaviour
     private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
+
+    public float TimeToBeenCooked { get => timeToBeenCooked; }
 
 
     void Awake()
@@ -60,8 +59,8 @@ public class Food : MonoBehaviour
         PlayerController.OnGrabFood += Grab;
         PlayerController.OnHandOverFood += HandOver;
 
-        PlayerController.OnTableCollisionEnterToHandOverFood += SaveTable;
-        PlayerController.OnTableCollisionExitForHandOver += ClearTable;
+        PlayerController.OnTableCollisionEnterForHandOverFood += SaveTable;
+        PlayerController.OnTableCollisionExitForHandOverFood += ClearTable;
     }
 
     private void UnsuscribeToPlayerControllerEvents()
@@ -69,8 +68,8 @@ public class Food : MonoBehaviour
         PlayerController.OnGrabFood -= Grab;
         PlayerController.OnHandOverFood -= HandOver;
 
-        PlayerController.OnTableCollisionEnterToHandOverFood -= SaveTable;
-        PlayerController.OnTableCollisionExitForHandOver -= ClearTable;
+        PlayerController.OnTableCollisionEnterForHandOverFood -= SaveTable;
+        PlayerController.OnTableCollisionExitForHandOverFood -= ClearTable;
     }
 
     private void GetComponents()
