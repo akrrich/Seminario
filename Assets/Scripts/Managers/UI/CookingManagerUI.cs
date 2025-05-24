@@ -6,6 +6,13 @@ using UnityEngine.EventSystems;
 public class CookingManagerUI : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones de hijos
+
+    /// <summary>
+    /// Agregar ruido de cancelacion si no tiene ingredientes para cocinar una receta
+    /// </summary>
+    [SerializeField] private AudioSource buttonClick;
+    [SerializeField] private AudioSource buttonSelected;
+
     private List<GameObject> buttonsCooking  = new List<GameObject>();
 
     private GameObject lastSelectedButtonFromCookingPanel;
@@ -18,6 +25,8 @@ public class CookingManagerUI : MonoBehaviour
 
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
+
+    private bool ignoreFirstButtonSelected = true;
 
     public static Action<string> OnButtonSetFood { get => onButtonGetFood; set => onButtonGetFood = value; }
 
@@ -48,7 +57,7 @@ public class CookingManagerUI : MonoBehaviour
     }
 
 
-    // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem
+    // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem con Mouse
     public void SetButtonAsSelectedGameObjectIfHasBeenHover(int indexButton)
     {
         if (EventSystem.current != null)
@@ -57,9 +66,22 @@ public class CookingManagerUI : MonoBehaviour
         }
     }
 
+    // Funcion asignada a botones en la UI para reproducir el sonido selected
+    public void PlayAudioButtonSelectedWhenChangeSelectedGameObjectExceptFirstTime()
+    {
+        if (!ignoreFirstButtonSelected)
+        {
+            buttonClick.Play();
+            return;
+        }
+
+        ignoreFirstButtonSelected = false;
+    }
+
     // Funcion asignada a los botones de la UI
     public void ButtonGetFood(string foodName)
     {
+        buttonSelected.Play();
         onButtonGetFood?.Invoke(foodName);
     }
 
@@ -109,7 +131,7 @@ public class CookingManagerUI : MonoBehaviour
     {
         rootGameObject.SetActive(state);
 
-        if (state == true)
+        if (state)
         {
             DeviceManager.Instance.IsUIModeActive = true;
             onSetSelectedCurrentGameObject?.Invoke(buttonsCooking[0]);
@@ -117,6 +139,7 @@ public class CookingManagerUI : MonoBehaviour
 
         else
         {
+            ignoreFirstButtonSelected = true;
             DeviceManager.Instance.IsUIModeActive = false;
             onClearSelectedCurrentGameObject?.Invoke();
         }
@@ -126,6 +149,7 @@ public class CookingManagerUI : MonoBehaviour
     {
         if (rootGameObject.activeSelf)
         {
+            ignoreFirstButtonSelected = true;
             DeviceManager.Instance.IsUIModeActive = true;
             EventSystem.current.SetSelectedGameObject(lastSelectedButtonFromCookingPanel);
         }

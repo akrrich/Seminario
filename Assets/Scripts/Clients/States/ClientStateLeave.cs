@@ -42,6 +42,9 @@ public class ClientStateLeave<T> : State<T>
         }
 
         clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
+
+        /// provisorio preguntar al profesor
+        clientModel.CurrentTablePosition = null;
     }
 
     public override void Execute()

@@ -4,9 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class ScenesManager : MonoBehaviour
 {
-    // Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga
+    /// <summary>
+    /// Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga
+    /// </summary>
 
-    // Agregar metodo futuro para cerrar el juego con pantalla de carga y guardar los datos en ese tiempo
+    /// <sumary>
+    /// Agregar metodo futuro para cerrar el juego con pantalla de carga y guardar los datos en ese tiempo
+    /// </sumary>
 
     private static ScenesManager instance;
 
@@ -15,7 +19,9 @@ public class ScenesManager : MonoBehaviour
     [SerializeField] private float duringTimeLoadingPanel;
 
 #pragma warning disable 0414
-    private bool isInLoadingScreen = false; // Esto sirve para el UpdateManager, pero por ahora no srive de NADA
+    private bool isInLoadingScreen = false; /// <summary>
+    /// Esto sirve para el UpdateManager, pero por ahora no srive de NADA
+    /// </summary>
 #pragma warning restore 0414 
 
     public static ScenesManager Instance { get => instance; }

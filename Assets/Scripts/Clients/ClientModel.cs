@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum ClientStates
 {
@@ -15,7 +16,7 @@ public class ClientModel : MonoBehaviour
     private ClientManager clientManager;
 
     private Rigidbody rb;
-    private Table currentTablePosition;
+    [SerializeField] private Table currentTablePosition;
 
     private Vector3 currentDirection;
 
@@ -93,7 +94,6 @@ public class ClientModel : MonoBehaviour
             }
 
             currentTablePosition.CurrentFoods.Clear();
-            clientManager.FreeTable(currentTablePosition);
 
             if (dishesMatch)
             {

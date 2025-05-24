@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 public class ClientView : MonoBehaviour
 {
-    // Recordatorio: Buscar en la mesa el componente hijo Food y tomar el tiempo que tarda en cocinarse en ese instante de forma local
+    /// <summary>
+    /// Recordatorio: Buscar en la mesa el componente hijo Food y tomar el tiempo que tarda en cocinarse en ese instante de forma local
+    /// </summary>
 
     private PlayerController playerController;
     private ClientManager clientManager;
@@ -13,7 +15,9 @@ public class ClientView : MonoBehaviour
     private Transform order; // GameObject padre de la UI
     private List<SpriteRenderer> spritesTypeList = new List<SpriteRenderer>();
 
-    private List<string> orderFoodNames = new List<string>(); // Modificar esto para que sea unicamente un string solo
+    private List<string> orderFoodNames = new List<string>(); /// <summary>
+    /// Modificar esto para que sea unicamente un string solo
+    /// </summary>
 
     [SerializeField] private List<FoodType> favoritesFoodTypes; // Las comidas que puede pedir
 
@@ -141,7 +145,10 @@ public class ClientView : MonoBehaviour
         }
     }
 
-    // Corregir los indices en las escalas
+
+    /// <summary>
+    /// Corregir la escala de los sprites en todos los indices
+    /// </summary>
     private void AutoAdjustSpriteScale(Sprite sprite)
     {
         float maxDimension = 0.5f; 

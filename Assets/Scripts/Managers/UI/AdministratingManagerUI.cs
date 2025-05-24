@@ -6,6 +6,13 @@ using UnityEngine.EventSystems;
 public class AdministratingManagerUI : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones hijos
+
+    /// <summary>
+    /// Agregar que sonido de cancelacion si no puede comprar el ingrediente
+    /// </summary>
+    [SerializeField] private AudioSource buttonClick;
+    [SerializeField] private AudioSource buttonSelected;
+
     private List<GameObject> buttonsAdministrating = new List<GameObject>();
 
     private GameObject lastSelectedButtonFromAdminPanel;
@@ -16,6 +23,8 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
+
+    private bool ignoreFirstButtonSelected = true;
 
     public static Action<List<GameObject>> OnSendButtonsToEventSystem { get => onSendButtonsToEventSystem; set => onSendButtonsToEventSystem = value; }
 
@@ -44,13 +53,25 @@ public class AdministratingManagerUI : MonoBehaviour
     }
 
 
-    // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem
+    // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem con Mouse
     public void SetButtonAsSelectedGameObjectIfHasBeenHover(int indexButton)
     {
         if (EventSystem.current != null)
         {
             EventSystem.current.SetSelectedGameObject(buttonsAdministrating[indexButton]);
         }
+    }
+
+    // Funcion asignada a botones en la UI para reproducir el sonido selected
+    public void PlayAudioButtonSelectedWhenChangeSelectedGameObjectExceptFirstTime()
+    {
+        if (!ignoreFirstButtonSelected)
+        {
+            buttonSelected.Play();
+            return;
+        }
+
+        ignoreFirstButtonSelected = false;
     }
 
     // Funcion asignada a boton UI
@@ -62,6 +83,7 @@ public class AdministratingManagerUI : MonoBehaviour
 
             if (MoneyManager.Instance.CurrentMoney >= price)
             {
+                buttonClick.Play();
                 IngredientInventoryManager.Instance.IncreaseIngredientStock(ingredient);
                 MoneyManager.Instance.SubMoney(price);
             }
@@ -114,7 +136,7 @@ public class AdministratingManagerUI : MonoBehaviour
     {
         rootGameObject.SetActive(state);
 
-        if (state == true)
+        if (state)
         {
             DeviceManager.Instance.IsUIModeActive = true;
             onSetSelectedCurrentGameObject?.Invoke(buttonsAdministrating[0]);
@@ -122,6 +144,7 @@ public class AdministratingManagerUI : MonoBehaviour
 
         else
         {
+            ignoreFirstButtonSelected = true;
             DeviceManager.Instance.IsUIModeActive = false;
             onClearSelectedCurrentGameObject?.Invoke();
         }
@@ -131,6 +154,7 @@ public class AdministratingManagerUI : MonoBehaviour
     {
         if (rootGameObject.activeSelf)
         {
+            ignoreFirstButtonSelected = true;
             DeviceManager.Instance.IsUIModeActive = true;
             EventSystem.current.SetSelectedGameObject(lastSelectedButtonFromAdminPanel);
         }

@@ -8,7 +8,8 @@ public class PauseManager : MonoBehaviour
 {
     private static PauseManager instance;
 
-    private AudioSource buttonClick;
+    [SerializeField] private AudioSource buttonClick;
+    [SerializeField] private AudioSource buttonSelected;
 
     [Header("UI")]
     [SerializeField] private GameObject pausePanel;
@@ -40,7 +41,6 @@ public class PauseManager : MonoBehaviour
     {
         CreateSingleton();
         InvokeEventToSendButtonsReferences();
-        GetComponents();
     }
 
     void Update()
@@ -49,13 +49,19 @@ public class PauseManager : MonoBehaviour
     }
 
 
-    // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem
+    // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem con Mouse
     public void SetButtonAsSelectedGameObjectIfHasBeenHover(int indexButton)
     {
         if (EventSystem.current != null)
         {
             EventSystem.current.SetSelectedGameObject(buttonsPause[indexButton]);
         }
+    }
+
+    // Funcion asignada a botones en la UI para reproducir el sonido selected
+    public void PlayAudioButtonSelectedWhenChangeSelectedGameObjectExceptFirstTime()
+    {
+        buttonSelected.Play();
     }
 
     // Funciones asignadas a botones de la UI
@@ -110,11 +116,6 @@ public class PauseManager : MonoBehaviour
     private void InvokeEventToSendButtonsReferences()
     {
         onSendButtonsToEventSystem?.Invoke(buttonsPause);
-    }
-
-    private void GetComponents()
-    {
-        buttonClick = GetComponent<AudioSource>();
     }
 
     private void ShowPause()
