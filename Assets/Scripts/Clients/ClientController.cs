@@ -13,6 +13,9 @@ public class ClientController : MonoBehaviour
 
     private float arrivalTime = 0f; // Provisorio
 
+    private float eatingStartTime = 0f;
+    private bool isEating = false;
+
 
     void Awake()
     {
@@ -54,11 +57,14 @@ public class ClientController : MonoBehaviour
         csChair.AddTransition(ClientStates.WaitingFood, csWaitingFood);
 
         csWaitingFood.AddTransition(ClientStates.Leave, csLeave);
+        csWaitingFood.AddTransition(ClientStates.Eating, csEating);
 
         csLeave.AddTransition(ClientStates.Idle, csIdle);
 
         csWaitingForChair.AddTransition(ClientStates.GoChair, csChair);
         csWaitingForChair.AddTransition(ClientStates.Leave, csLeave);
+
+        csEating.AddTransition(ClientStates.Leave, csLeave);
 
         fsm.SetInit(csWaitingForChair);
     }
@@ -70,8 +76,9 @@ public class ClientController : MonoBehaviour
         ActionNode waitingFood = new ActionNode(() => fsm.TransitionTo(ClientStates.WaitingFood));
         ActionNode leave = new ActionNode(() => fsm.TransitionTo(ClientStates.Leave));
         ActionNode waitingForChair = new ActionNode(() => fsm.TransitionTo(ClientStates.WaitingForChair));
+        ActionNode eating = new ActionNode(() => fsm.TransitionTo(ClientStates.Eating));
 
-        // Orden: WaitingForChair, GoChair, WaitingFood, Leave, Idle
+        // Orden: WaitingForChair, GoChair, WaitingFood, Eating, Leave, Idle
 
         QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, leave, waitingFood);
         QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, qIsWaitingForFood);
@@ -173,6 +180,11 @@ public class ClientController : MonoBehaviour
             return true;
         }
 
+        return false;
+    }
+
+    public bool QuestionCanEat()
+    {
         return false;
     }
 }
