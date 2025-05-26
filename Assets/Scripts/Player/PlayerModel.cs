@@ -12,9 +12,6 @@ public class PlayerModel : MonoBehaviour
     private PlayerCamera playerCamera;
 
     private Rigidbody rb;
-    private Transform cookingPosition;
-    private Transform administratingPosition;
-    private GameObject dish; // GameObject hijo del player que representa la bandeja
     private GameObject oven;
     private GameObject administration;
 
@@ -40,9 +37,8 @@ public class PlayerModel : MonoBehaviour
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
 
     public Rigidbody Rb { get => rb; }
-    public Transform CookingPosition { get => cookingPosition; }
-    public Transform AdministratingPosition { get => administratingPosition; }
-    public GameObject Dish { get => dish; }
+    public GameObject Oven { get => oven; }
+    public GameObject Administration { get => administration; }
 
     public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
@@ -77,7 +73,9 @@ public class PlayerModel : MonoBehaviour
     }
 
 
-    // Solucionar los LineOfSight de que mirando hacia un poco fuera del rango funcionan
+    /// <summary>
+    /// Solucionar los LineOfSight de que mirando hacia un poco fuera del rango funcionan
+    /// </summary>
     public bool IsLookingAtOven()
     {
         return LineOfSight.LOS(playerCamera.transform, oven.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
@@ -88,9 +86,16 @@ public class PlayerModel : MonoBehaviour
         return LineOfSight.LOS(playerCamera.transform, administration.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
     }
 
-    public void ShowOrHideDish(bool current)
+    public void LookAt(Vector3 target)
     {
-        dish.SetActive(current);
+        Vector3 newDirection = (target - transform.position).normalized;
+        Vector3 lookDirection = new Vector3(newDirection.x, 0, newDirection.z);
+
+        if (lookDirection != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = rotation;
+        }
     }
 
 
@@ -98,9 +103,6 @@ public class PlayerModel : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<PlayerCamera>();
         rb = GetComponent<Rigidbody>();
-        cookingPosition = GameObject.Find("CookingPosition").transform;
-        administratingPosition = GameObject.Find("AdministratingPosition").transform;
-        dish = transform.Find("Dish").gameObject;
         oven = GameObject.FindGameObjectWithTag("Oven");
         administration = GameObject.FindGameObjectWithTag("Administration");
     }

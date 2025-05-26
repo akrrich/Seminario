@@ -71,7 +71,7 @@ public class CookingManagerUI : MonoBehaviour
     {
         if (!ignoreFirstButtonSelected)
         {
-            buttonClick.Play();
+            buttonSelected.Play();
             return;
         }
 
@@ -81,7 +81,7 @@ public class CookingManagerUI : MonoBehaviour
     // Funcion asignada a los botones de la UI
     public void ButtonGetFood(string foodName)
     {
-        buttonSelected.Play();
+        buttonClick.Play();
         onButtonGetFood?.Invoke(foodName);
     }
 

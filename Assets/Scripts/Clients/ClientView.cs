@@ -90,12 +90,12 @@ public class ClientView : MonoBehaviour
         }
     }
 
-    public bool ReturnSpriteFoodIsActive()
+    public bool ReturnSpriteFoodIsActive() // Hace referencia al sprite que ya puede recibir comida
     {
         return spritesTypeList[0].gameObject.activeSelf;
     }
 
-    public bool ReturnSpriteWaitingFoodIsActive()
+    public bool ReturnSpriteWaitingFoodIsActive() // Hace referencia al sprite para ser atendido
     {
         return spritesTypeList[2].gameObject.activeSelf;
     }
@@ -105,7 +105,6 @@ public class ClientView : MonoBehaviour
         if (spritesTypeList[2].gameObject.activeSelf && tablePlayerCollision != null) // Si esta activado el sprite de pedir comida, quiere decir que ya se le puede tomar el pedido
         {
             PlayerView.OnTakeOrderCompletedForHandOverMessage?.Invoke();
-
             orderFoodNames.Clear();
 
             int randomIndex = Random.Range(0, favoritesFoodTypes.Count);
@@ -144,7 +143,6 @@ public class ClientView : MonoBehaviour
             spriteTypeDict.Add(child.name, spriteRenderer);
         }
     }
-
 
     /// <summary>
     /// Corregir la escala de los sprites en todos los indices

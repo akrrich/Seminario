@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
+    private GameObject dish; // Representa la bandeja del player
+
     private static Action onCollisionEnterWithOvenForCookModeMessage; // Mostrar el texto de la UI
     private static Action onCollisionExitWithOvenForCookModeMessage; // Esconder el texto de la UI
     private static Action onEnterInCookMode; // Entrar en el modo cocinar para mostrar la UI de cocina
@@ -23,6 +25,7 @@ public class PlayerView : MonoBehaviour
 
     private static Action onDeactivateInventoryFoodUI; // Esconder la UI del inventario
 
+    public GameObject Dish { get => dish; }
 
     public static Action OnCollisionEnterWithOvenForCookModeMessage { get => onCollisionEnterWithOvenForCookModeMessage; set => onCollisionEnterWithOvenForCookModeMessage = value; }
     public static Action OnCollisionExitWithOvenForCookModeMessage { get => onCollisionExitWithOvenForCookModeMessage; set => onCollisionExitWithOvenForCookModeMessage = value; }    
@@ -44,4 +47,21 @@ public class PlayerView : MonoBehaviour
 
     public static Action OnDeactivateInventoryFoodUI { get => onDeactivateInventoryFoodUI; set => onDeactivateInventoryFoodUI = value; }
 
+
+    void Awake()
+    {
+        GetComponents();
+    }
+
+
+    public void ShowOrHideDish(bool current)
+    {
+        dish.SetActive(current);
+    }
+
+
+    private void GetComponents()
+    {
+        dish = transform.Find("Dish").gameObject;
+    }
 }

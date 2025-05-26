@@ -28,10 +28,10 @@ public class MessageModeUI : MonoBehaviour
 
     private void InitializeLamdaEventMessages()
     {
-        onCook += () => ShowEnterMessageText(" para entrar a cocinar");
-        onAdministration += () => ShowEnterMessageText(" para entrar en administracion");
-        onHandOver += () => ShowEnterMessageText(" para entregar el plato");
-        onTakeOrder += () => ShowEnterMessageText(" para tomar el pedido");
+        onCook += () => ShowEnterMessageText(" para entrar a cocinar", GetCookKey());
+        onAdministration += () => ShowEnterMessageText(" para entrar en administracion", GetAdministrationKey());
+        onHandOver += () => ShowEnterMessageText(" para entregar el plato", GetHandOverKey());
+        onTakeOrder += () => ShowEnterMessageText(" para tomar el pedido", GetTakeOrderKey());
     }
 
     private void SuscribeToPlayerViewEvents()
@@ -73,15 +73,42 @@ public class MessageModeUI : MonoBehaviour
         messageDesplayText.alignment = TextAlignmentOptions.Center;
     }
 
-    private void ShowEnterMessageText(string finalMessage)
+    private void ShowEnterMessageText(string finalMessage, KeyCode inputKey)
     {
-        string inputKey = "<color=yellow> "+ 'E' + "</color>"; ;
-
-        messageDesplayText.text = "Presione" + inputKey + finalMessage;
+        string keyText = $"<color=yellow> {inputKey} </color>";
+        messageDesplayText.text = "Presione" + keyText + finalMessage;
     }
 
     private void DisapearMessageText()
     {
         messageDesplayText.text = "";
+    }
+
+    private KeyCode GetCookKey()
+    {
+        return DeviceManager.Instance.CurrentDevice == Device.Joystick
+            ? PlayerInputs.Instance.JoystickInputs.Cook
+            : PlayerInputs.Instance.KeyboardInputs.Cook;
+    }
+
+    private KeyCode GetAdministrationKey()
+    {
+        return DeviceManager.Instance.CurrentDevice == Device.Joystick
+            ? PlayerInputs.Instance.JoystickInputs.Administration
+            : PlayerInputs.Instance.KeyboardInputs.Administration;
+    }
+
+    private KeyCode GetHandOverKey()
+    {
+        return DeviceManager.Instance.CurrentDevice == Device.Joystick
+            ? PlayerInputs.Instance.JoystickInputs.HandOverFood
+            : PlayerInputs.Instance.KeyboardInputs.HandOverFood;
+    }
+
+    private KeyCode GetTakeOrderKey()
+    {
+        return DeviceManager.Instance.CurrentDevice == Device.Joystick
+            ? PlayerInputs.Instance.JoystickInputs.TakeClientOrder
+            : PlayerInputs.Instance.KeyboardInputs.TakeClientOrder;
     }
 }

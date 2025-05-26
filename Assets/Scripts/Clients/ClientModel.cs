@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public enum ClientStates
 {
-    Idle, GoChair, WaitingFood, WaitingForChair, Leave
+    Idle, GoChair, WaitingFood, WaitingForChair, Leave, Eating
 }
 
 public enum ClientType
@@ -15,8 +14,9 @@ public class ClientModel : MonoBehaviour
 {
     private ClientManager clientManager;
 
+    private ObstacleAvoidance obstacleAvoidance;
     private Rigidbody rb;
-    [SerializeField] private Table currentTablePosition;
+    private Table currentTablePosition;
 
     private Vector3 currentDirection;
 
@@ -31,6 +31,7 @@ public class ClientModel : MonoBehaviour
 
     public ClientManager ClientManager { get => clientManager; }
 
+    public ObstacleAvoidance ObstacleAvoidance { get => obstacleAvoidance; }
     public Table CurrentTablePosition { get => currentTablePosition; set => currentTablePosition = value; }
 
     public ClientType ClientType { get => clientType; }
@@ -62,7 +63,13 @@ public class ClientModel : MonoBehaviour
         currentDirection = newDirection;
     }
 
-    public void LookAt(Vector3 target, Transform animTransform)
+    // Para ObstacleAvoidance
+    /*public void MoveToTarget(Vector3 target)
+    {
+        currentDirection = target;
+    }*/
+
+    public void LookAt(Vector3 target, Transform anim)
     {
         Vector3 newDirection = (target - transform.position).normalized;
         Vector3 lookDirection = new Vector3(newDirection.x, 0, newDirection.z);
@@ -71,7 +78,7 @@ public class ClientModel : MonoBehaviour
         {
             Quaternion rotation = Quaternion.LookRotation(lookDirection);
             transform.rotation = rotation;
-            animTransform.transform.rotation = rotation;
+            anim.transform.rotation = rotation;
         }
     }
 
@@ -117,6 +124,7 @@ public class ClientModel : MonoBehaviour
     {
         clientManager = FindFirstObjectByType<ClientManager>();
 
+        obstacleAvoidance = GetComponent<ObstacleAvoidance>();
         rb = GetComponent<Rigidbody>();
     }
 

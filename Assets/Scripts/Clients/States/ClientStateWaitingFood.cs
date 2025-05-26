@@ -57,6 +57,7 @@ public class ClientStateWaitingFood<T> : State<T>
             // Ejecuta el tiempo a recibir el pedido
             else
             {
+                /// Agregar que solamente cuente el tiempo si no se le puso un plato en la mesa
                 waitingFoodTime += Time.deltaTime;
 
                 if (waitingFoodTime >= clientModel.MaxTimeWaitingFood)
@@ -68,6 +69,9 @@ public class ClientStateWaitingFood<T> : State<T>
                 }
             }
         }
+
+        Debug.Log("waitingToBeAttendedTime: " + waitingToBeAttendedTime);
+        Debug.Log("waitingFoodTime" + waitingFoodTime);
     }
 
     public override void Exit()

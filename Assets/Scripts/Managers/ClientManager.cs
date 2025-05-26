@@ -19,6 +19,8 @@ public class ClientManager : MonoBehaviour
     [SerializeField] private float timeToWaitForSpawnNewClient;
     private float spawnTime = 0f;
 
+    [SerializeField] private bool InstantiateClients;
+
     public Transform SpawnPosition { get => spawnPosition; }
     public Transform OutsidePosition { get => outsidePosition; }
 
@@ -33,7 +35,11 @@ public class ClientManager : MonoBehaviour
 
     void Update()
     {
-        GetClientRandomFromPool();
+        // Provisorio
+        if (InstantiateClients)
+        {
+            GetClientRandomFromPool();
+        }
     }
 
 
@@ -79,7 +85,7 @@ public class ClientManager : MonoBehaviour
         return tablesPositions[randomAvailableIndex];
     }
 
-    // Liberar unicamente la mesa si ya tenia asignada una, se libera la variable, pero en si la mesa la sigue almacenando hasta que cambie a otra llamando al metodo GetRandomAvailableTable
+    // Liberar unicamente la mesa si ya tenia asignada una
     public void FreeTable(Table tableToFree)
     {
         if (tableToFree != null)

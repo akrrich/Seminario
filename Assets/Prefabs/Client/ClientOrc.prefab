@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 2494063933914625052}
   - component: {fileID: 2773331705948015977}
   - component: {fileID: 7928818473667244909}
+  - component: {fileID: 6186350716124192679}
   m_Layer: 8
   m_Name: ClientOrc
   m_TagString: Untagged
@@ -477,6 +478,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 689525d684d781447a3540d1a7f2319b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6186350716124192679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8174932956925981841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 792c2468d78971747a1a5719962f6577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxObs: 5
+  radius: 0.68
+  angle: 90
+  personalArea: 0.88
+  obsMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &884727950479726257
 PrefabInstance:
   m_ObjectHideFlags: 0

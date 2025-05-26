@@ -1,8 +1,18 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerCollisions
 {
     private PlayerController playerController;
+
+    private Table auxiliarTable;
+    private ClientView auxiliarClientView;
+
+
+    public void UpdateColls()
+    {
+        //Debug.Log("AuxiliarTable: " + auxiliarTable);
+        //Debug.Log("AuxiliarClient: " + auxiliarClientView);
+    }
 
 
     public PlayerCollisions(PlayerController playerController)
@@ -23,6 +33,7 @@ public class PlayerCollisions
     {
         OnCollisionStayWithOvenAndLOS(collision);
         OnCollisionStayWithAdministrationAndLOS(collision);
+        OnCollisionStayWithTable(collision);
     }
 
     public void OnCollisionsExit(Collision collision)
@@ -77,7 +88,7 @@ public class PlayerCollisions
         {
             bool hasChildren = false;
 
-            foreach (Transform child in playerController.PlayerModel.Dish.transform)
+            foreach (Transform child in playerController.PlayerView.Dish.transform)
             {
                 if (child.childCount > 0)
                 {
@@ -143,6 +154,71 @@ public class PlayerCollisions
         }
     }
 
+    private void OnCollisionStayWithTable(Collision collision)
+    {
+        if (!collision.gameObject.CompareTag("Table"))
+            return;
+
+        Table table = collision.gameObject.GetComponentInParent<Table>();
+        if (table == null) return;
+
+        if (auxiliarTable == null || auxiliarTable != table)
+        {
+            auxiliarTable = table;
+            auxiliarClientView = table.GetComponentInChildren<ClientView>();
+        }
+
+        // Si hay un cliente sentado
+        if (table.ChairPosition.childCount > 0 && auxiliarClientView != null)
+        {
+            // Tomar pedido
+            if (table.IsOccupied && auxiliarClientView.ReturnSpriteWaitingFoodIsActive())
+            {
+                if (!auxiliarClientView.CanTakeOrder)
+                {
+                    auxiliarClientView.CanTakeOrder = true;
+                    PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(table);
+                    PlayerView.OnCollisionEnterWithTableForTakeOrderMessage?.Invoke();
+                }
+            }
+
+            // Entregar pedido
+            bool hasChildren = false;
+            foreach (Transform child in playerController.PlayerView.Dish.transform)
+            {
+                if (child.childCount > 0)
+                {
+                    hasChildren = true;
+                    break;
+                }
+            }
+
+            if (hasChildren && table.IsOccupied && auxiliarClientView.ReturnSpriteFoodIsActive())
+            {
+                PlayerController.OnTableCollisionEnterForHandOverFood?.Invoke(table);
+                PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
+            }
+        }
+
+        // Si no hay un cliente sentado
+        else
+        {
+            // El cliente se fue
+            if (auxiliarClientView != null)
+            {
+                auxiliarClientView.CanTakeOrder = false;
+            }
+
+            PlayerController.OnTableCollisionExitForTakeOrder?.Invoke();
+            PlayerController.OnTableCollisionExitForHandOverFood?.Invoke();
+            PlayerView.OnCollisionExitWithTableForTakeOrderMessage?.Invoke();
+            PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
+
+            auxiliarTable = null;
+            auxiliarClientView = null;
+        }
+    }
+
     /* -------------------------------------------EXIT--------------------------------------------- */
 
     private void OnCollisionExitWithFloor(Collision collision)
@@ -173,16 +249,24 @@ public class PlayerCollisions
                 ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
                 clientView.CanTakeOrder = false;
                 PlayerController.OnTableCollisionExitForTakeOrder?.Invoke();
+                PlayerController.OnTableCollisionExitForHandOverFood?.Invoke();
                 PlayerView.OnCollisionExitWithTableForTakeOrderMessage?.Invoke();
+                PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
+
+                auxiliarTable = null;
+                auxiliarClientView = null;
+
                 return;
             }
         }
 
-        if (collision.gameObject.CompareTag("Table"))
+
+        // No eliminar este comentario
+        /*if (collision.gameObject.CompareTag("Table"))
         {
             PlayerController.OnTableCollisionExitForHandOverFood?.Invoke();
             PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
-        }
+        }*/
     }
 
     private void OnCollisionExitWithAdministration(Collision collision)

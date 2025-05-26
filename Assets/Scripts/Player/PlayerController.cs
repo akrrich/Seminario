@@ -4,9 +4,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private PlayerModel playerModel;
+    private PlayerView playerView;
+    private PlayerCollisions playerCollisions;
 
     private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
-    private PlayerCollisions playerCollisions;
 
     private static event Action onGrabFood;
     private static event Action onHandOverFood;
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private static event Action onTableCollisionExitForTakeOrder;
 
     public PlayerModel PlayerModel { get => playerModel; }
+    public PlayerView PlayerView { get => playerView; }
 
     public static Action OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
@@ -46,6 +48,8 @@ public class PlayerController : MonoBehaviour
         fsm.OnExecute();
         GrabOrHandOverFood();
         TakeClientOrder();
+
+        playerCollisions.UpdateColls();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -67,6 +71,7 @@ public class PlayerController : MonoBehaviour
     private void GetComponentsAndInitializeReferences()
     {
         playerModel = GetComponent<PlayerModel>();
+        playerView = GetComponent<PlayerView>();
         playerCollisions = new PlayerCollisions(this);
     }
 
@@ -75,9 +80,9 @@ public class PlayerController : MonoBehaviour
         PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
         PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Run, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
         PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, playerModel);
-        PlayerStateCook<PlayerStates> psCook = new PlayerStateCook<PlayerStates>(PlayerStates.Idle, playerModel);
+        PlayerStateCook<PlayerStates> psCook = new PlayerStateCook<PlayerStates>(PlayerStates.Idle, playerModel, playerView);
         PlayerStateRun<PlayerStates> psRun = new PlayerStateRun<PlayerStates>(PlayerStates.Idle, PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
-        PlayerStateAdministration<PlayerStates> psAdmin = new PlayerStateAdministration<PlayerStates>(PlayerStates.Idle, playerModel);
+        PlayerStateAdministration<PlayerStates> psAdmin = new PlayerStateAdministration<PlayerStates>(PlayerStates.Idle, playerModel, playerView);
 
         psIdle.AddTransition(PlayerStates.Walk, psWalk);
         psIdle.AddTransition(PlayerStates.Jump, psJump);

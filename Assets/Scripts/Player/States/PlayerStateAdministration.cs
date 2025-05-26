@@ -3,14 +3,19 @@ using UnityEngine;
 public class PlayerStateAdministration<T> : State<T>
 {
     private PlayerModel playerModel;
+    private PlayerView playerView;
+    private Transform administratingPosition;
 
     private T inputToIdle;
 
 
-    public PlayerStateAdministration(T inputToIdle, PlayerModel playerModel)
+    public PlayerStateAdministration(T inputToIdle, PlayerModel playerModel, PlayerView playerView)
     {
         this.inputToIdle = inputToIdle;
         this.playerModel = playerModel;
+        this.playerView = playerView;
+
+        administratingPosition = GameObject.Find("AdministratingPosition").transform;
     }
 
 
@@ -21,10 +26,11 @@ public class PlayerStateAdministration<T> : State<T>
 
         PlayerView.OnEnterInAdministrationMode?.Invoke();
         PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
-        playerModel.ShowOrHideDish(false);
+
+        playerView.ShowOrHideDish(false);
         playerModel.IsAdministrating = true;
-        playerModel.transform.position = playerModel.AdministratingPosition.transform.position;
-        playerModel.transform.rotation = Quaternion.Euler(0, 90, 0);
+        playerModel.transform.position = administratingPosition.transform.position;
+        playerModel.LookAt(playerModel.Administration.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 
@@ -43,7 +49,7 @@ public class PlayerStateAdministration<T> : State<T>
         base.Exit();
 
         PlayerView.OnExitInAdministrationMode?.Invoke();
-        playerModel.ShowOrHideDish(true);
+        playerView.ShowOrHideDish(true);
         playerModel.IsAdministrating = false;
     }
 }

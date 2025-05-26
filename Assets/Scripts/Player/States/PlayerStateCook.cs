@@ -3,14 +3,19 @@ using UnityEngine;
 public class PlayerStateCook<T> : State<T>
 {
     private PlayerModel playerModel;
+    private PlayerView playerView;
+    private Transform cookingPosition;
 
     private T inputToIdle;
 
 
-    public PlayerStateCook(T inputToIdle, PlayerModel playerModel)
+    public PlayerStateCook(T inputToIdle, PlayerModel playerModel, PlayerView playerView)
     {
         this.inputToIdle = inputToIdle;
         this.playerModel = playerModel;
+        this.playerView = playerView;
+
+        cookingPosition = GameObject.Find("CookingPosition").transform;
     }
 
     public override void Enter()
@@ -20,10 +25,11 @@ public class PlayerStateCook<T> : State<T>
 
         PlayerView.OnEnterInCookMode?.Invoke();
         PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
-        playerModel.ShowOrHideDish(false);
+
+        playerView.ShowOrHideDish(false);
         playerModel.IsCooking = true;
-        playerModel.transform.position = playerModel.CookingPosition.transform.position;
-        playerModel.transform.rotation = Quaternion.Euler(0, -90, 0);
+        playerModel.transform.position = cookingPosition.transform.position;
+        playerModel.LookAt(playerModel.Oven.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 
@@ -40,7 +46,7 @@ public class PlayerStateCook<T> : State<T>
     public override void Exit()
     {
         PlayerView.OnExitInCookMode?.Invoke();
-        playerModel.ShowOrHideDish(true);
+        playerView.ShowOrHideDish(true);
         playerModel.IsCooking = false;
     }
 }

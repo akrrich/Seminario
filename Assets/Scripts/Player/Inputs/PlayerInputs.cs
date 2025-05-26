@@ -14,6 +14,9 @@ public class PlayerInputs : MonoBehaviour
 
     public static PlayerInputs Instance { get => instance; }
 
+    public Inputs KeyboardInputs { get => keyboardInputs; }
+    public Inputs JoystickInputs { get => joystickInputs; }
+
 
     void Awake()
     {

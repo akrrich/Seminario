@@ -46,6 +46,7 @@ public class ClientController : MonoBehaviour
         csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
         ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave);
         ClientStateWaitingForChair<ClientStates> csWaitingForChair = new ClientStateWaitingForChair<ClientStates>(clientModel, clientView, csLeave);
+        ClientStateEating<ClientStates> csEating = new ClientStateEating<ClientStates>(clientModel, clientView);
 
         csIdle.AddTransition(ClientStates.GoChair, csChair);
         csIdle.AddTransition(ClientStates.WaitingForChair, csWaitingForChair);
