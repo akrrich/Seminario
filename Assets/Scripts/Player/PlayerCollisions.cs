@@ -74,7 +74,7 @@ public class PlayerCollisions
             {
                 ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
 
-                if (table.IsOccupied && clientView.ReturnSpriteWaitingFoodIsActive())
+                if (table.IsOccupied && clientView.ReturnSpriteWaitingToBeAttendedIsActive())
                 {
                     clientView.CanTakeOrder = true;
                     PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(table);
@@ -172,7 +172,7 @@ public class PlayerCollisions
         if (table.ChairPosition.childCount > 0 && auxiliarClientView != null)
         {
             // Tomar pedido
-            if (table.IsOccupied && auxiliarClientView.ReturnSpriteWaitingFoodIsActive())
+            if (table.IsOccupied && auxiliarClientView.ReturnSpriteWaitingToBeAttendedIsActive())
             {
                 if (!auxiliarClientView.CanTakeOrder)
                 {

@@ -39,9 +39,9 @@ public class ClientStateWaitingForChair<T> : State<T>
 
         waitingForChairTime += Time.deltaTime;
 
-        if (waitingForChairTime >= clientModel.MaxTimeWaitingForChair)
+        if (waitingForChairTime >= clientModel.ClientData.MaxTimeWaitingForChair)
         {
-            clientStateLeave.SetInLeaveManualy = true;
+            clientStateLeave.CanLeave = true;
             return;
         }
     }

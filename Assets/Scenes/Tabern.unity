@@ -2958,7 +2958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8174932956925981841, guid: 2ff490485441024498ae24e3d0fdb2b7, type: 3}
-  poolSize: 2
+  poolSize: 1
 --- !u!1 &299144290
 GameObject:
   m_ObjectHideFlags: 0
@@ -6869,6 +6869,7 @@ MonoBehaviour:
   - {fileID: 155692888}
   timeToWaitForSpawnNewClient: 5
   InstantiateClients: 0
+  InstantiateTheSameClient: 1
 --- !u!1 &766216807
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,11 +7,13 @@ public enum ClientStates
 
 public enum ClientType
 {
-    Ogro, Orc, Goblin 
+    Ogre, Orc, Goblin 
 }
 
 public class ClientModel : MonoBehaviour
 {
+    [SerializeField] private ClientData clientData;
+
     private ClientManager clientManager;
 
     private ObstacleAvoidance obstacleAvoidance;
@@ -22,12 +24,9 @@ public class ClientModel : MonoBehaviour
 
     [SerializeField] private ClientType clientType;
 
-    [SerializeField] private float speed;
-    [SerializeField] private float maxTimeWaitingForChair;
-    [SerializeField] private float maxTimeWaitingToBeAttended;
-    [SerializeField] private float maxTimeWaitingFood;
-
     private bool isInstantiateFirstTime = true;
+
+    public ClientData ClientData { get => clientData; }
 
     public ClientManager ClientManager { get => clientManager; }
 
@@ -35,10 +34,6 @@ public class ClientModel : MonoBehaviour
     public Table CurrentTablePosition { get => currentTablePosition; set => currentTablePosition = value; }
 
     public ClientType ClientType { get => clientType; }
-
-    public float MaxTimeWaitingForChair { get => maxTimeWaitingForChair; }
-    public float MaxTimeWaitingToBeAttended { get => maxTimeWaitingToBeAttended; }
-    public float MaxTimeWaitingFood { get => maxTimeWaitingFood; }
 
 
     void Awake()
@@ -87,36 +82,24 @@ public class ClientModel : MonoBehaviour
         currentDirection = Vector3.zero;
     }
 
-    public bool ReturnFoodFromTableToPool(ref float arrivalTime, bool dishesMatch)
+    public void ReturnFoodFromTableToPool(bool dishesMatch)
     {
-        arrivalTime += Time.deltaTime;
-
-        if (arrivalTime >= 5f)
+        foreach (Food food in currentTablePosition.CurrentFoods)
         {
-            arrivalTime = 0f;
-
-            foreach (Food food in currentTablePosition.CurrentFoods)
-            {
-                food.ReturnObjetToPool();
-            }
-
-            currentTablePosition.CurrentFoods.Clear();
-
-            if (dishesMatch)
-            {
-                MoneyManager.Instance.AddMoney(500);
-            }
-
-            else
-            {
-                MoneyManager.Instance.SubMoney(250);
-            }
-
-
-            return true;
+            food.ReturnObjetToPool();
         }
 
-        return false;
+        currentTablePosition.CurrentFoods.Clear();
+
+        if (dishesMatch)
+        {
+            MoneyManager.Instance.AddMoney(500);
+        }
+
+        else
+        {
+            MoneyManager.Instance.SubMoney(250);
+        }
     }
 
 
@@ -152,6 +135,6 @@ public class ClientModel : MonoBehaviour
 
     private void Movement()
     {
-        rb.velocity = currentDirection * speed * Time.fixedDeltaTime;
+        rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
     }
 }

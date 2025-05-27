@@ -7,9 +7,9 @@ public class ClientStateLeave<T> : State<T>
     private ClientView clientView;
     private Transform newTransform;
 
-    private bool setInLeaveManualy = false;
+    private bool canLeave = false;
 
-    public bool SetInLeaveManualy { get => setInLeaveManualy; set => setInLeaveManualy = value; }
+    public bool CanLeave { get => canLeave; set => canLeave = value; }
 
 
     public ClientStateLeave(ClientModel clientModel, ClientView clientView, Transform newTransform)
@@ -56,7 +56,7 @@ public class ClientStateLeave<T> : State<T>
     {
         base.Exit();
 
-        setInLeaveManualy = false;
+        canLeave = false;
     }
 
 

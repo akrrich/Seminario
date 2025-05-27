@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ClientController : MonoBehaviour
 {
@@ -7,14 +6,10 @@ public class ClientController : MonoBehaviour
     private ClientView clientView;
 
     private ClientStateLeave<ClientStates> csLeave;
+    private ClientStateEating<ClientStates> csEating;
 
     private FSM<ClientStates> fsm = new FSM<ClientStates>();
     private ITreeNode root;
-
-    private float arrivalTime = 0f; // Provisorio
-
-    private float eatingStartTime = 0f;
-    private bool isEating = false;
 
 
     void Awake()
@@ -47,9 +42,9 @@ public class ClientController : MonoBehaviour
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel, clientView);
         ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTablePosition.ChairPosition);
         csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
-        ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave);
+        csEating = new ClientStateEating<ClientStates>(clientModel, clientView, csLeave);
+        ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave, csEating);
         ClientStateWaitingForChair<ClientStates> csWaitingForChair = new ClientStateWaitingForChair<ClientStates>(clientModel, clientView, csLeave);
-        ClientStateEating<ClientStates> csEating = new ClientStateEating<ClientStates>(clientModel, clientView);
 
         csIdle.AddTransition(ClientStates.GoChair, csChair);
         csIdle.AddTransition(ClientStates.WaitingForChair, csWaitingForChair);
@@ -80,7 +75,8 @@ public class ClientController : MonoBehaviour
 
         // Orden: WaitingForChair, GoChair, WaitingFood, Eating, Leave, Idle
 
-        QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, leave, waitingFood);
+        QuestionNode qLeaveOrEat = new QuestionNode(QuestionLeaveOrEat, eating, leave);
+        QuestionNode qIsWaitingForFood = new QuestionNode(QuestionIsWaitingForFood, qLeaveOrEat, waitingFood);
         QuestionNode qCanGoToChair = new QuestionNode(QuestionCanGoToChair, goChair, qIsWaitingForFood);
         QuestionNode qIsChairFreeOrNoT = new QuestionNode(QuestionIsChairFreeOrNot, qCanGoToChair, waitingForChair);
         QuestionNode qIsOutside = new QuestionNode(QuestionIsOutside, idle, qIsChairFreeOrNoT);
@@ -88,58 +84,29 @@ public class ClientController : MonoBehaviour
         root = qIsOutside;
     }
 
-    private bool QuestionIsWaitingForFood()
+    private bool QuestionLeaveOrEat()
     {
-        if (csLeave.SetInLeaveManualy)
+        if (csEating.IsEating)
         {
             return true;
         }
 
-        List<string> expectedDishNames = new List<string>();
-        List<string> servedDishNames = new List<string>();
+        return false;
+    }
 
-        foreach (string food in clientView.OrderFoodNames)
+    private bool QuestionIsWaitingForFood()
+    {
+        if (csLeave.CanLeave)
         {
-            expectedDishNames.Add(food + "(Clone)");
+            return true;
         }
 
-        foreach (Transform dishSpot in clientModel.CurrentTablePosition.DishPositions)
+        if (csEating.IsEating)
         {
-            if (dishSpot.childCount > 0)
-            {
-                servedDishNames.Add(dishSpot.GetChild(0).name);
-            }
+            return true;
         }
 
-        if (servedDishNames.Count == 0)
-        {
-            arrivalTime = 0f;
-            return false;
-        }
-
-        expectedDishNames.Sort();
-        servedDishNames.Sort();
-
-        bool dishesMatch = expectedDishNames.Count == servedDishNames.Count;
-
-        if (dishesMatch)
-        {
-            for (int i = 0; i < expectedDishNames.Count; i++)
-            {
-                if (expectedDishNames[i] != servedDishNames[i])
-                {
-                    dishesMatch = false;
-                    break;
-                }
-            }
-        }
-
-        if (!dishesMatch)
-        {
-            return clientModel.ReturnFoodFromTableToPool(ref arrivalTime, false);
-        }
-
-        return clientModel.ReturnFoodFromTableToPool(ref arrivalTime, true);
+        return false;
     }
 
     private bool QuestionCanGoToChair()
@@ -158,19 +125,9 @@ public class ClientController : MonoBehaviour
         return false;
     }
 
-    private bool QuestionIsOutside()
-    {                                                            // si esta dentro del rango de OutsidePosition
-        if (Vector3.Distance(clientModel.ClientManager.OutsidePosition.position, transform.position) <= 2f)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     private bool QuestionIsChairFreeOrNot()
     {
-        if (csLeave.SetInLeaveManualy)
+        if (csLeave.CanLeave)
         {
             return true;
         }
@@ -183,8 +140,13 @@ public class ClientController : MonoBehaviour
         return false;
     }
 
-    public bool QuestionCanEat()
-    {
+    private bool QuestionIsOutside()
+    {                                                            // si esta dentro del rango de OutsidePosition
+        if (Vector3.Distance(clientModel.ClientManager.OutsidePosition.position, transform.position) <= 2f)
+        {
+            return true;
+        }
+
         return false;
     }
 }

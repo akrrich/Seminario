@@ -20,6 +20,7 @@ public class ClientManager : MonoBehaviour
     private float spawnTime = 0f;
 
     [SerializeField] private bool InstantiateClients;
+    [SerializeField] private bool InstantiateTheSameClient;
 
     public Transform SpawnPosition { get => spawnPosition; }
     public Transform OutsidePosition { get => outsidePosition; }
@@ -30,13 +31,22 @@ public class ClientManager : MonoBehaviour
         InitializeClientPoolDictionary();
         InitializeFoodSpriteDictionary();
 
-        StartCoroutine(InitializeRandomClient());
+        // Provisorio
+        if (!InstantiateClients && !InstantiateTheSameClient)
+        {
+            StartCoroutine(InitializeRandomClient());
+        }
     }
 
     void Update()
     {
         // Provisorio
-        if (InstantiateClients)
+        if (InstantiateTheSameClient)
+        {
+            GetTheSameClientFromPool();
+        }
+
+        else if (InstantiateClients)
         {
             GetClientRandomFromPool();
         }
@@ -114,6 +124,19 @@ public class ClientManager : MonoBehaviour
             string prefabName = clientPools[randomIndex].Prefab.name;
             clientAbstractFactory.CreateObject(prefabName);
             
+            spawnTime = 0f;
+        }
+    }
+
+    // Provisorio
+    private void GetTheSameClientFromPool()
+    {
+        spawnTime += Time.deltaTime;
+
+        if (spawnTime > timeToWaitForSpawnNewClient)
+        {
+            clientAbstractFactory.CreateObject("ClientOgre");
+
             spawnTime = 0f;
         }
     }

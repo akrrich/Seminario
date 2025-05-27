@@ -95,7 +95,7 @@ public class ClientView : MonoBehaviour
         return spritesTypeList[0].gameObject.activeSelf;
     }
 
-    public bool ReturnSpriteWaitingFoodIsActive() // Hace referencia al sprite para ser atendido
+    public bool ReturnSpriteWaitingToBeAttendedIsActive()
     {
         return spritesTypeList[2].gameObject.activeSelf;
     }
