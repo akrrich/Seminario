@@ -51,6 +51,8 @@ public class PlayerInputs : MonoBehaviour
     
     public bool TakeClientOrder() => Input.GetKeyDown(keyboardInputs.TakeClientOrder) || Input.GetKeyDown(joystickInputs.TakeClientOrder);
 
+    public bool ClearTable() => Input.GetKey(keyboardInputs.ClearTable) || Input.GetKey(joystickInputs.ClearTable);
+
     public bool Jump() => Input.GetKeyDown(keyboardInputs.Jump) || Input.GetKeyDown(joystickInputs.Jump);
     
     public bool Cook() => Input.GetKeyDown(keyboardInputs.Cook) || Input.GetKeyDown(joystickInputs.Cook);
@@ -112,6 +114,7 @@ public class Inputs
     [SerializeField] private KeyCode handOverFood;
     [SerializeField] private KeyCode cook;
     [SerializeField] private KeyCode takeClientOrder;
+    [SerializeField] private KeyCode clearTable;
     [SerializeField] private KeyCode administration;
     [SerializeField] private KeyCode jump;
     [SerializeField] private KeyCode inventory;
@@ -126,6 +129,7 @@ public class Inputs
     public KeyCode HandOverFood { get => handOverFood; }
     public KeyCode Cook { get => cook; }
     public KeyCode TakeClientOrder { get => takeClientOrder; }
+    public KeyCode ClearTable { get => clearTable; }
     public KeyCode Administration { get => administration; }
     public KeyCode Jump { get => jump; }
     public KeyCode Inventory { get => inventory; }

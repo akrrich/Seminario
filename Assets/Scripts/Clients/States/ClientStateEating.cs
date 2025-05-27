@@ -48,6 +48,9 @@ public class ClientStateEating<T> : State<T>
         base.Exit();
 
         clientModel.ReturnFoodFromTableToPool(true);
+        clientModel.CurrentTablePosition.IsDirty = true;
+        clientModel.CurrentTablePosition.Dirty.SetActive(true);
+
         isEating = false;
         clientView.Anim.transform.position += Vector3.down * 0.38f;
         eatingTime = 0f;

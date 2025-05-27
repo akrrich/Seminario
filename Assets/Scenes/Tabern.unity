@@ -1046,7 +1046,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
-  m_CurrentSelected: {fileID: 0}
 --- !u!4 &107881069
 Transform:
   m_ObjectHideFlags: 0
@@ -2958,7 +2957,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8174932956925981841, guid: 2ff490485441024498ae24e3d0fdb2b7, type: 3}
-  poolSize: 1
+  poolSize: 2
 --- !u!1 &299144290
 GameObject:
   m_ObjectHideFlags: 0
@@ -6868,8 +6867,8 @@ MonoBehaviour:
   - {fileID: 177028343}
   - {fileID: 155692888}
   timeToWaitForSpawnNewClient: 5
-  InstantiateClients: 0
-  InstantiateTheSameClient: 1
+  InstantiateClients: 1
+  InstantiateTheSameClient: 0
 --- !u!1 &766216807
 GameObject:
   m_ObjectHideFlags: 0
