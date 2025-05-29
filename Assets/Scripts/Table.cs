@@ -7,6 +7,8 @@ public class Table : MonoBehaviour
     private GameObject dish;
     private GameObject dirty;
 
+    //private SphereCollider sphereCollider;
+
     private List<Transform> dishPositions = new List<Transform>(); // Representa las posiciones hijas del plato
 
     private List<Food> currentFoods = new List<Food>();
@@ -30,7 +32,7 @@ public class Table : MonoBehaviour
 
     void Awake()
     {
-        FindObjects();
+        FindObjectsAndComponents();
     }
 
 
@@ -41,11 +43,13 @@ public class Table : MonoBehaviour
     }
 
 
-    private void FindObjects()
+    private void FindObjectsAndComponents()
     {
         chair = transform.Find("Chair").gameObject;
         dish = transform.Find("Dish").gameObject;
         dirty = transform.Find("Dirty").gameObject;
+
+        //sphereCollider =  GetComponent<SphereCollider>();
 
         foreach (Transform childs in dish.transform)
         {

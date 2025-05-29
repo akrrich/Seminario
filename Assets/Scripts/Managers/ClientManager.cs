@@ -11,7 +11,6 @@ public class ClientManager : MonoBehaviour
     [SerializeField] private AbstractFactory clientAbstractFactory;
     [SerializeField] private List<ObjectPooler> clientPools;
     [SerializeField] private List<FoodTypeSpritePair> foodSpritePairs;
-    [SerializeField] private List<Table> tablesPositions;
 
     private Dictionary<ClientType, ObjectPooler> clientPoolDictionary = new();
     private Dictionary<FoodType, Sprite> foodSpriteDict = new();
@@ -72,35 +71,6 @@ public class ClientManager : MonoBehaviour
         if (clientPoolDictionary.TryGetValue(clientType, out ObjectPooler pooler))
         {
             currentClient.transform.SetParent(pooler.transform);
-        }
-    }
-
-    public Table GetRandomAvailableTable()
-    {
-        List<int> availableIndexes = new List<int>();
-
-        for (int i = 0; i < tablesPositions.Count; i++)
-        {
-            if (!tablesPositions[i].IsOccupied)
-            {
-                availableIndexes.Add(i);
-            }
-        }
-
-        if (availableIndexes.Count == 0) return null;
-
-        int randomAvailableIndex = availableIndexes[UnityEngine.Random.Range(0, availableIndexes.Count)];
-
-        tablesPositions[randomAvailableIndex].IsOccupied = true;
-        return tablesPositions[randomAvailableIndex];
-    }
-
-    // Liberar unicamente la mesa si ya tenia asignada una
-    public void FreeTable(Table tableToFree)
-    {
-        if (tableToFree != null)
-        {
-            tableToFree.IsOccupied = false;
         }
     }
 

@@ -18,6 +18,7 @@ public class ClientModel : MonoBehaviour
 
     private ObstacleAvoidance obstacleAvoidance;
     private Rigidbody rb;
+    private CapsuleCollider capsuleCollider;
     private Table currentTablePosition;
 
     private Vector3 currentDirection;
@@ -82,6 +83,13 @@ public class ClientModel : MonoBehaviour
         currentDirection = Vector3.zero;
     }
 
+    /// Metodo para futuro setea del npc correctamente
+    public void SetRbAndCollider(bool rb, bool collider)
+    {
+        this.rb.isKinematic = rb;
+        capsuleCollider.enabled = collider;
+    }
+
     public void ReturnFoodFromTableToPool(bool dishesMatch)
     {
         foreach (Food food in currentTablePosition.CurrentFoods)
@@ -109,6 +117,7 @@ public class ClientModel : MonoBehaviour
 
         obstacleAvoidance = GetComponent<ObstacleAvoidance>();
         rb = GetComponent<Rigidbody>();
+        capsuleCollider =  GetComponent<CapsuleCollider>();
     }
 
     public void InitializeSpawnPosition()
@@ -118,7 +127,7 @@ public class ClientModel : MonoBehaviour
 
     public void InitializeTablePosition()
     {
-        currentTablePosition = clientManager.GetRandomAvailableTable();
+        currentTablePosition = TablesManager.Instance.GetRandomAvailableTableForClient();
     }
 
     private void InitializeClientForPool()
@@ -135,6 +144,9 @@ public class ClientModel : MonoBehaviour
 
     private void Movement()
     {
-        rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
+        if (!rb.isKinematic)
+        {
+            rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
+        }
     }
 }

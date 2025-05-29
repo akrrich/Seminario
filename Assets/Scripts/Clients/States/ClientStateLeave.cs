@@ -5,6 +5,7 @@ public class ClientStateLeave<T> : State<T>
 {
     private ClientModel clientModel;
     private ClientView clientView;
+    private ClientController clientController;
     private Transform newTransform;
 
     private bool canLeave = false;
@@ -12,8 +13,9 @@ public class ClientStateLeave<T> : State<T>
     public bool CanLeave { get => canLeave; set => canLeave = value; }
 
 
-    public ClientStateLeave(ClientModel clientModel, ClientView clientView, Transform newTransform)
+    public ClientStateLeave(ClientController clientController, ClientModel clientModel, ClientView clientView, Transform newTransform)
     {
+        this.clientController = clientController;
         this.clientModel = clientModel;
         this.clientView = clientView;
         this.newTransform = newTransform;
@@ -41,10 +43,7 @@ public class ClientStateLeave<T> : State<T>
             clientView.StartCoroutine(WalkAnimationAfterExitTime());
         }
 
-        clientModel.ClientManager.FreeTable(clientModel.CurrentTablePosition);
-
-        /// provisorio preguntar al profesor
-        clientModel.CurrentTablePosition = null;
+        clientModel.CurrentTablePosition = TablesManager.Instance.FreeTable(clientModel.CurrentTablePosition);
     }
 
     public override void Execute()
@@ -68,5 +67,15 @@ public class ClientStateLeave<T> : State<T>
         clientModel.MoveToTarget(newTransform.position);
         clientModel.LookAt(newTransform.position, clientView.Anim.transform);
         clientView.ExecuteAnimParameterName("Walk");
+
+        yield return clientController.StartCoroutine(EnabledTriggerFromTable());
+    }
+
+    private IEnumerator EnabledTriggerFromTable()
+    {
+        /// Ajustar tiempo segun sea necesario
+        yield return new WaitForSeconds(2f);
+
+        clientController.OnCollisionEnterWithTrigger = false;
     }
 }

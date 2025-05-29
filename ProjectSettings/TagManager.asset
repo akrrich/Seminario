@@ -8,6 +8,7 @@ TagManager:
   - Oven
   - Table
   - Administration
+  - Chair
   layers:
   - Default
   - TransparentFX

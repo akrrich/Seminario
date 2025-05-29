@@ -1,13 +1,10 @@
 using UnityEngine;
 using System;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class SliderCleanDirtyTableUI : MonoBehaviour
 {
     [SerializeField] private Slider sliderCleanDirtyTable;
-
-    private List<Table> allTables =  new List<Table>();  
 
     private Table currentTable;
 
@@ -18,7 +15,6 @@ public class SliderCleanDirtyTableUI : MonoBehaviour
 
     void Awake()
     {
-        FindAllTables();
         SuscribeToLamdaEvents();
         SuscribeToPlayerViewEvents();
         SuscribeToPlayerControllerEvents();
@@ -36,28 +32,6 @@ public class SliderCleanDirtyTableUI : MonoBehaviour
         UnsuscribeToPlayerControllerEvents();
     }
 
-    /// <summary>
-    /// Este metodo va a ser util para cuando se expanda la taberna, asi se agregan las nuevas mesas a la lista si es necesario
-    /// </summary>
-    public void AddNewTableToList()
-    {
-
-    }
-
-
-    private void FindAllTables()
-    {
-        GameObject[] tableObjects = GameObject.FindGameObjectsWithTag("Table");
-
-        foreach (GameObject obj in tableObjects)
-        {
-            Table table = obj.GetComponentInParent<Table>();
-            if (table != null)
-            {
-                allTables.Add(table);
-            }
-        }
-    }
 
     private void SuscribeToLamdaEvents()
     {
@@ -149,9 +123,9 @@ public class SliderCleanDirtyTableUI : MonoBehaviour
 
     private void DecreaseAllSliderValuesExceptCurrentTable()
     {
-        for (int i = 0; i < allTables.Count; i++)
+        for (int i = 0; i < TablesManager.Instance.Tables.Count; i++)
         {
-            Table table = allTables[i];
+            Table table = TablesManager.Instance.Tables[i];
 
             if (sliderCleanDirtyTable.gameObject.activeSelf && currentTable != null && table == currentTable)
             {

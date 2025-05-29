@@ -11,6 +11,10 @@ public class ClientController : MonoBehaviour
     private FSM<ClientStates> fsm = new FSM<ClientStates>();
     private ITreeNode root;
 
+    private bool onCollisionEnterWithTrigger = false;
+
+    public bool OnCollisionEnterWithTrigger { get => onCollisionEnterWithTrigger; set => onCollisionEnterWithTrigger = value; }
+
 
     void Awake()
     {
@@ -30,6 +34,14 @@ public class ClientController : MonoBehaviour
         root.Execute();
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Chair"))
+        {
+            onCollisionEnterWithTrigger = true;
+        }
+    }
+
 
     private void GetComponents()
     {
@@ -41,7 +53,7 @@ public class ClientController : MonoBehaviour
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel, clientView);
         ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTablePosition.ChairPosition);
-        csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
+        csLeave = new ClientStateLeave<ClientStates>(this, clientModel, clientView, clientModel.ClientManager.OutsidePosition);
         csEating = new ClientStateEating<ClientStates>(clientModel, clientView, csLeave);
         ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave, csEating);
         ClientStateWaitingForChair<ClientStates> csWaitingForChair = new ClientStateWaitingForChair<ClientStates>(clientModel, clientView, csLeave);
@@ -114,7 +126,7 @@ public class ClientController : MonoBehaviour
         if (clientModel.CurrentTablePosition != null)
         {
             // si esta fuera del rango de la silla (lejos de la silla)
-            if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) > 2f)
+            if (!onCollisionEnterWithTrigger)
             {
                 return true;
             }
