@@ -25,7 +25,7 @@ public class PlayerCollisions
     {
         OnCollisionEnterWithFloor(collision);
         OnCollisionEnterWithOvenAndLOS(collision);
-        OnCollisionEnterWithTable(collision);
+        OnCollisionEnterWithTable(collision); 
         OnCollisionEnterWithAdministration(collision);
     }
 
@@ -70,9 +70,14 @@ public class PlayerCollisions
         {
             Table table = collision.gameObject.GetComponentInParent<Table>();
 
-            if (table.IsDirty) return;
+            if (table.IsDirty)
+            {
+                PlayerView.OnActivateSliderCleanDirtyTable?.Invoke();
+                PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage?.Invoke();
+                return;
+            }
 
-            if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
+            /*if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
             {
                 // Tomar Pedido
                 ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
@@ -104,7 +109,7 @@ public class PlayerCollisions
                         PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
                     }  
                 }
-            }
+            }*/
         }
     }
 
@@ -153,7 +158,20 @@ public class PlayerCollisions
         {
             Table table = collision.gameObject.GetComponentInParent<Table>();
 
-            if (table.IsDirty) return;
+            if (table.IsDirty)
+            {
+                if (PlayerInputs.Instance.CleanDirtyTable())
+                {
+                    PlayerController.OnCleanDirtyTableIncreaseSlider?.Invoke(table);
+                    return;
+                }
+
+                else
+                {
+                    PlayerController.OnCleanDirtyTableDecreaseSlider?.Invoke(table);
+                    return;
+                }
+            }
 
             if (auxiliarTable == null || auxiliarTable != table)
             {
@@ -206,6 +224,7 @@ public class PlayerCollisions
                 PlayerController.OnTableCollisionExitForHandOverFood?.Invoke();
                 PlayerView.OnCollisionExitWithTableForTakeOrderMessage?.Invoke();
                 PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
+                PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage?.Invoke();
 
                 auxiliarTable = null;
                 auxiliarClientView = null;
@@ -237,6 +256,9 @@ public class PlayerCollisions
         if (collision.gameObject.CompareTag("Table"))
         {
             Table table = collision.gameObject.GetComponentInParent<Table>();
+
+            PlayerView.OnDeactivateSliderCleanDirtyTable?.Invoke();
+            PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage?.Invoke();
 
             if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
             {

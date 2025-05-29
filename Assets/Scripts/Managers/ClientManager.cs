@@ -32,7 +32,7 @@ public class ClientManager : MonoBehaviour
         InitializeFoodSpriteDictionary();
 
         // Provisorio
-        if (!InstantiateClients && !InstantiateTheSameClient)
+        if (InstantiateClients && !InstantiateTheSameClient)
         {
             StartCoroutine(InitializeRandomClient());
         }

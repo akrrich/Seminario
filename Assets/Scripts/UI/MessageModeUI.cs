@@ -6,7 +6,7 @@ public class MessageModeUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI messageDesplayText;
 
-    private event Action onCook, onAdministration, onHandOver, onTakeOrder;
+    private event Action onCook, onAdministration, onHandOver, onTakeOrder, onCleanDirtyTable;
 
 
     void Awake()
@@ -28,10 +28,11 @@ public class MessageModeUI : MonoBehaviour
 
     private void InitializeLamdaEventMessages()
     {
-        onCook += () => ShowEnterMessageText(" para entrar a cocinar", GetCookKey());
-        onAdministration += () => ShowEnterMessageText(" para entrar en administracion", GetAdministrationKey());
-        onHandOver += () => ShowEnterMessageText(" para entregar el plato", GetHandOverKey());
-        onTakeOrder += () => ShowEnterMessageText(" para tomar el pedido", GetTakeOrderKey());
+        onCook += () => ShowEnterMessageText("para entrar a cocinar", GetCookKey());
+        onAdministration += () => ShowEnterMessageText("para entrar en administracion", GetAdministrationKey());
+        onHandOver += () => ShowEnterMessageText("para entregar el plato", GetHandOverKey());
+        onTakeOrder += () => ShowEnterMessageText("para tomar el pedido", GetTakeOrderKey());
+        onCleanDirtyTable += () => ShowEnterMessageText("para limpiar la mesa", GetCleanDirtyTableKey());
     }
 
     private void SuscribeToPlayerViewEvents()
@@ -49,6 +50,9 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionEnterWithTableForTakeOrderMessage += onTakeOrder;
         PlayerView.OnCollisionExitWithTableForTakeOrderMessage += DisapearMessageText;
         PlayerView.OnTakeOrderCompletedForHandOverMessage += DisapearMessageText;
+
+        PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage += onCleanDirtyTable;
+        PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage += DisapearMessageText;
     }
 
     private void UnSuscribeToPlayerViewEvents()
@@ -66,6 +70,10 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionEnterWithTableForTakeOrderMessage -= onTakeOrder;
         PlayerView.OnCollisionExitWithTableForTakeOrderMessage -= DisapearMessageText;
         PlayerView.OnTakeOrderCompletedForHandOverMessage -= DisapearMessageText;
+
+        /// Falta agregar cuando termina
+        PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage -= onCleanDirtyTable;
+        PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage -= DisapearMessageText;
     }
 
     private void InitializeReferencs()
@@ -110,5 +118,12 @@ public class MessageModeUI : MonoBehaviour
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
             ? PlayerInputs.Instance.JoystickInputs.TakeClientOrder
             : PlayerInputs.Instance.KeyboardInputs.TakeClientOrder;
+    }
+
+    private KeyCode GetCleanDirtyTableKey()
+    {
+        return DeviceManager.Instance.CurrentDevice == Device.Joystick
+            ? PlayerInputs.Instance.JoystickInputs.CleanDirtyTable
+            : PlayerInputs.Instance.KeyboardInputs.CleanDirtyTable;
     }
 }

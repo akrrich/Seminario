@@ -23,7 +23,13 @@ public class PlayerView : MonoBehaviour
     private static Action onCollisionExitWithTableForTakeOrderMessage; // Esconder el texto de la UI
     private static Action onTakeOrderCompletedForHandOverMessage; // Esconder el texto de la UI
 
+    private static Action onCollisionEnterWithTableForCleanDirtyTableMessage; // Mostrar el texto de la UI
+    private static Action onCollisionExitWithTableForCleanDirtyTableMessage; // Esconder el texto de la UI
+
     private static Action onDeactivateInventoryFoodUI; // Esconder la UI del inventario
+
+    private static Action onActivateSliderCleanDirtyTable; // Mostrar la UI del slider
+    private static Action onDeactivateSliderCleanDirtyTable; // Esconder la UI del slider
 
     public GameObject Dish { get => dish; }
 
@@ -45,7 +51,13 @@ public class PlayerView : MonoBehaviour
     public static Action OnCollisionExitWithTableForTakeOrderMessage { get => onCollisionExitWithTableForTakeOrderMessage; set => onCollisionExitWithTableForTakeOrderMessage = value; }
     public static Action OnTakeOrderCompletedForHandOverMessage { get => onTakeOrderCompletedForHandOverMessage; set => onTakeOrderCompletedForHandOverMessage = value; }
 
+    public static Action OnCollisionEnterWithTableForCleanDirtyTableMessage { get => onCollisionEnterWithTableForCleanDirtyTableMessage; set => onCollisionEnterWithTableForCleanDirtyTableMessage = value; }
+    public static Action OnCollisionExitWithTableForCleanDirtyTableMessage { get => onCollisionExitWithTableForCleanDirtyTableMessage; set => onCollisionExitWithTableForCleanDirtyTableMessage = value; }
+
     public static Action OnDeactivateInventoryFoodUI { get => onDeactivateInventoryFoodUI; set => onDeactivateInventoryFoodUI = value; }
+
+    public static Action OnActivateSliderCleanDirtyTable { get => onActivateSliderCleanDirtyTable; set => onActivateSliderCleanDirtyTable = value; }
+    public static Action OnDeactivateSliderCleanDirtyTable { get => onDeactivateSliderCleanDirtyTable; set => onDeactivateSliderCleanDirtyTable = value; }
 
 
     void Awake()

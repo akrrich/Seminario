@@ -12,15 +12,18 @@ public class PlayerController : MonoBehaviour
     private static event Action onGrabFood;
     private static event Action onHandOverFood;
     private static event Action onTakeOrder;
-    private static event Action onClearTable;
 
-    // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido
+    // Estos 2 eventos corresponden a entregar el plato una vez tomado el pedido
     private static event Action<Table> onTableCollisionEnterForHandOverFood;
     private static event Action onTableCollisionExitForHandOverFood;
 
-    // Estos 2 eventos corresponden a Tomar el pedido de un cliente
+    // Estos 2 eventos corresponden a tomar el pedido de un cliente
     private static event Action<Table> onTableCollisionEnterForTakeOrder;
     private static event Action onTableCollisionExitForTakeOrder;
+
+    // Estos 2 eventos corresponden a limpiar la mesa sucia
+    private static event Action<Table> onCleanDirtyTableIncreaseSlider;
+    private static event Action<Table> onCleanDirtyTableDecreaseSlider;
 
     public PlayerModel PlayerModel { get => playerModel; }
     public PlayerView PlayerView { get => playerView; }
@@ -28,7 +31,6 @@ public class PlayerController : MonoBehaviour
     public static Action OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
-    public static Action OnClearTable { get => onClearTable; set => onClearTable = value; }
 
     // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido
     public static Action<Table> OnTableCollisionEnterForHandOverFood { get => onTableCollisionEnterForHandOverFood; set => onTableCollisionEnterForHandOverFood = value; }
@@ -37,6 +39,10 @@ public class PlayerController : MonoBehaviour
     // Estos 2 eventos corresponden a Tomar el pedido de un cliente
     public static Action<Table> OnTableCollisionEnterForTakeOrder { get => onTableCollisionEnterForTakeOrder; set => onTableCollisionEnterForTakeOrder = value; }
     public static Action OnTableCollisionExitForTakeOrder { get => onTableCollisionExitForTakeOrder; set => onTableCollisionExitForTakeOrder = value; }
+
+    // Estos 2 eventos corresponden a limpiar la mesa sucia
+    public static Action<Table> OnCleanDirtyTableIncreaseSlider { get => onCleanDirtyTableIncreaseSlider; set => onCleanDirtyTableIncreaseSlider = value; }
+    public static Action<Table> OnCleanDirtyTableDecreaseSlider { get => onCleanDirtyTableDecreaseSlider; set => onCleanDirtyTableDecreaseSlider = value; }
 
 
     void Awake()
@@ -50,7 +56,6 @@ public class PlayerController : MonoBehaviour
         fsm.OnExecute();
         GrabOrHandOverFood();
         TakeClientOrder();
-        ClearTable();
 
         playerCollisions.UpdateColls();
     }
@@ -137,17 +142,6 @@ public class PlayerController : MonoBehaviour
             if (PlayerInputs.Instance.TakeClientOrder())
             {
                 onTakeOrder?.Invoke();
-            }
-        }
-    }
-
-    private void ClearTable()
-    {
-        if (PlayerInputs.Instance != null)
-        {
-            if (PlayerInputs.Instance.ClearTable())
-            {
-                onClearTable?.Invoke();
             }
         }
     }

@@ -11,23 +11,33 @@ public class Table : MonoBehaviour
 
     private List<Food> currentFoods = new List<Food>();
 
+    private float currentCleanProgress = 0f;
+
     private bool isOccupied = false;
-    [SerializeField] private bool isDirty = false;
+    private bool isDirty = false;
 
     public Transform ChairPosition { get => chair.transform; }
-    public GameObject Dirty { get => dirty; }
 
     public List<Transform> DishPositions { get => dishPositions; }
 
     public List<Food> CurrentFoods { get => currentFoods; set => currentFoods = value; }
 
+    public float CurrentCleanProgress { get => currentCleanProgress; set => currentCleanProgress = value; }
+    
     public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
-    public bool IsDirty { get => isDirty; set => isDirty = value; }
+    public bool IsDirty { get => isDirty; }
 
 
     void Awake()
     {
         FindObjects();
+    }
+
+
+    public void SetDirty(bool current)
+    {
+        isDirty = current;
+        dirty.SetActive(current);
     }
 
 

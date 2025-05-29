@@ -346,7 +346,7 @@ MonoBehaviour:
     handOverFood: 101
     cook: 101
     takeClientOrder: 101
-    clearTable: 101
+    cleanDirtyTable: 101
     administration: 101
     jump: 32
     inventory: 9
@@ -359,7 +359,7 @@ MonoBehaviour:
     handOverFood: 330
     cook: 330
     takeClientOrder: 330
-    clearTable: 330
+    cleanDirtyTable: 330
     administration: 330
     jump: 331
     inventory: 343
