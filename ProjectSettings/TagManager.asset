@@ -17,9 +17,9 @@ TagManager:
   - Water
   - UI
   - Obstacles
-  - 
+  - Player
   - Clients
-  - 
+  - Enemy
   - 
   - whatIsGround
   - 
