@@ -4,32 +4,71 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public GameObject Sword;
-    public bool canAttack = true;
-    public float AttackCooldown = 1f;
+    [Header("Weapon Settings")]
+    [SerializeField] private GameObject sword;
+    [SerializeField] private float attackCooldown = 1f;
+
+    private Animator swordAnimator;
+    private float lastAttackTime = -Mathf.Infinity;
+
+    private void Awake()
+    {
+        if (sword != null)
+        {
+            swordAnimator = sword.GetComponent<Animator>();
+        }
+
+        if (swordAnimator == null)
+        {
+            Debug.LogWarning("WeaponController: No Animator found on sword object.");
+        }
+    }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!CanAttack()) return;
+
+        // Optional: Use PlayerInputs instead of hard-coded input
+        if (PlayerInputs.Instance != null)
         {
-            if (canAttack)
+            if (PlayerInputs.Instance.Attack())
             {
-                SwordAttack();                
+                PerformAttack();
+            }
+        }
+        else
+        {
+            // Fallback for testing
+            if (Input.GetMouseButtonDown(0))
+            {
+                PerformAttack();
             }
         }
     }
 
-    public void SwordAttack()
+    private bool CanAttack()
     {
-        canAttack = false;
-        Animator Anim = Sword.GetComponent<Animator>();
-        Anim.SetTrigger("Attack");
-        StartCoroutine(ResetAttackCooldown());
+        return Time.time >= lastAttackTime + attackCooldown;
     }
 
-    IEnumerator ResetAttackCooldown()
+    private void PerformAttack()
     {
-        yield return new WaitForSeconds(AttackCooldown);
-        canAttack = true;
+        lastAttackTime = Time.time;
+
+        if (swordAnimator != null)
+        {
+            swordAnimator.SetTrigger("Attack");
+        }
+    }
+
+    // Optional: For future hit detection support
+    public void EnableHitbox()
+    {
+        // Enable collider or VFX here
+    }
+
+    public void DisableHitbox()
+    {
+        // Disable collider or VFX here
     }
 }
