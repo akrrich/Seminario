@@ -15,15 +15,7 @@ public class PlayerStateDungeonDead<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-        model.RequestPhaseChange(PlayerPhase.Dead);
-        model.Speed = 0f;
-        model.MoveDirection = Vector3.zero;
-
-        // Play death animation if available
-        view.PlayDeathAnimation();
-
-        // Optional: disable collider, UI, etc.
-        model.Rb.velocity = Vector3.zero;
+       
         
     }
 }

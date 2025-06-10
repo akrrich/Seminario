@@ -6,38 +6,60 @@ public class DashHandler : MonoBehaviour
 {
     private PlayerDungeonModel model;
     private PlayerDungeonView view;
+    private Rigidbody rb;
 
-    [SerializeField] private float dashForce = 10f;
-    [SerializeField] private float invulnDuration = 0.3f;
+    [Header("Dash Settings")]
+    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
+    [SerializeField] private float dashBufferTime = 0.1f;
+    [SerializeField] private bool allowAirDash = false;
+
+    private bool isDashing;
+    private Vector3 dashDirection;
 
     private void Awake()
     {
         model = GetComponent<PlayerDungeonModel>();
         view = GetComponent<PlayerDungeonView>();
+        rb = GetComponent<Rigidbody>();
     }
-
     public void ExecuteDash()
     {
-        model.RegisterDash();
-        model.SetInvulnerable(true);
-        view.PlayDashAnimation();
+        if (isDashing || !model.CanDash) return;
 
-        Vector3 dashDir = PlayerInputs.Instance.GetMoveAxis().normalized;
+        Vector2 input = PlayerInputs.Instance.GetMoveAxis();
 
-        if (dashDir.sqrMagnitude > 0.01f)
-        {
-            // Move via Rigidbody if available
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.AddForce(transform.TransformDirection(dashDir) * dashForce, ForceMode.Impulse);
-            }
-            else
-            {
-                transform.position += transform.TransformDirection(dashDir) * dashForce;
-            }
-        }
+        dashDirection = input.sqrMagnitude > 0.1f
+            ? transform.TransformDirection(new Vector3(input.x, 0, input.y).normalized)
+            : transform.forward; // default forward dash
+
+        StartCoroutine(DashRoutine());
     }
 
-    public float GetDashDuration() => invulnDuration;
+    private IEnumerator DashRoutine()
+    {
+        isDashing = true;
+        model.CanMove = false;
+        model.SetInvulnerable(true);
+        model.RegisterDash();
+
+        view?.PlayDashAnimation();
+
+        float startTime = Time.time;
+
+        while (Time.time < startTime + dashDuration)
+        {
+            rb.velocity = dashDirection * dashSpeed;
+            yield return null;
+        }
+
+        // Opcional: seguir moviéndote por inercia o parar en seco
+        rb.velocity = Vector3.zero;
+
+        model.CanMove = true;
+        model.SetInvulnerable(false);
+
+        isDashing = false;
+    }
 }
