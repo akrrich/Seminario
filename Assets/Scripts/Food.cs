@@ -3,13 +3,15 @@ using UnityEngine;
 
 public enum FoodType
 {
-    Mouse,
-    Fish,
+    VegetableSoup, BeefStew, TomatoAndLettuceSalad, BeastMeatPie, HumanFleshStew
 }
 
 public class Food : MonoBehaviour
 {
+    // No usar el metodo OnDisabled de Unity
+
     private CookingManager cookingManager;
+    private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
     private Transform stovePosition;
     private Transform cookedPosition;
@@ -18,15 +20,19 @@ public class Food : MonoBehaviour
     private Rigidbody rb;
     private BoxCollider boxCollider;
 
-    [SerializeField] private float timeToBeenCooked;
     [SerializeField] private FoodType foodType;
+    [SerializeField] private float timeToBeenCooked;
 
+    private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
+
+    public float TimeToBeenCooked { get => timeToBeenCooked; }
 
 
     void Awake()
     {
+        SuscribeToPlayerControllerEvents();
         GetComponents();
     }
 
@@ -35,29 +41,36 @@ public class Food : MonoBehaviour
         StartCoroutine(CookGameObject());
     }
 
-    void Update()
+    void OnDestroy()
     {
-        // Provisorio para agarrar las comidas
-        if (Input.GetKeyDown(KeyCode.Q) && isCooked && !isInPlayerDishPosition)
-        {
-            cookingManager.ReleaseCookedPosition(cookedPosition);
-            dishPosition = cookingManager.MoveFoodToDish(this);
-
-            StartCoroutine(DisablePhysics());
-
-            isInPlayerDishPosition = true;
-        }
-
-        // Provisorio para "entregar" las comidas
-        if (Input.GetKeyDown(KeyCode.Z) && isInPlayerDishPosition)
-        {
-            cookingManager.ReleaseDishPosition(dishPosition);
-            cookingManager.ReturnObjectToPool(foodType, this);
-
-            RestartValues();
-        }
+        UnsuscribeToPlayerControllerEvents();
     }
 
+
+    public void ReturnObjetToPool()
+    {
+        cookingManager.ReturnObjectToPool(foodType, this);
+        RestartValues();
+    }
+
+
+    private void SuscribeToPlayerControllerEvents()
+    {
+        PlayerController.OnGrabFood += Grab;
+        PlayerController.OnHandOverFood += HandOver;
+
+        PlayerController.OnTableCollisionEnterForHandOverFood += SaveTable;
+        PlayerController.OnTableCollisionExitForHandOverFood += ClearTable;
+    }
+
+    private void UnsuscribeToPlayerControllerEvents()
+    {
+        PlayerController.OnGrabFood -= Grab;
+        PlayerController.OnHandOverFood -= HandOver;
+
+        PlayerController.OnTableCollisionEnterForHandOverFood -= SaveTable;
+        PlayerController.OnTableCollisionExitForHandOverFood -= ClearTable;
+    }
 
     private void GetComponents()
     {
@@ -69,7 +82,7 @@ public class Food : MonoBehaviour
     // Ejecutar unicamente la corrutina cuando se activa el objeto, si se activo porque entrego la comida
     private IEnumerator CookGameObject()
     {
-        if (!isInPlayerDishPosition)
+        if (!isInPlayerDishPosition && !isInstantiateFirstTime)
         {
             stovePosition = cookingManager.CurrentStove;
 
@@ -80,11 +93,13 @@ public class Food : MonoBehaviour
 
             isCooked = true;
         }
+
+        isInstantiateFirstTime = false;
     }
 
     private IEnumerator DisablePhysics()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return null; // Esperar un frame
         rb.isKinematic = true;
         boxCollider.enabled = false;
     }
@@ -100,5 +115,67 @@ public class Food : MonoBehaviour
 
         isCooked = false;
         isInPlayerDishPosition = false;
+    }
+
+    private void SaveTable(Table table)
+    {
+        if (isInPlayerDishPosition)
+        {
+            currentTable = table;
+        }
+    }
+
+    private void ClearTable()
+    {
+        currentTable = null;
+    }
+
+    private void Grab()
+    {                                               // Si hay posiciones disponibles en la bandeja
+        if (isCooked && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
+        {
+            cookingManager.ReleaseCookedPosition(cookedPosition);
+            dishPosition = cookingManager.MoveFoodToDish(this);
+
+            StartCoroutine(DisablePhysics());
+
+            isInPlayerDishPosition = true;
+        }
+    }
+
+    private void HandOver()
+    {
+        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
+        {
+            PlayerView.OnHandOverCompletedForHandOverMessage?.Invoke();
+
+            cookingManager.ReleaseDishPosition(dishPosition);
+
+            Transform freeSpot = null;
+
+            foreach (Transform spot in currentTable.DishPositions)
+            {
+                if (spot.childCount == 0)
+                {
+                    freeSpot = spot;
+                    break;
+                }
+            }
+
+            if (freeSpot != null)
+            {
+                transform.SetParent(freeSpot);
+                transform.position = freeSpot.position + new Vector3(0, 0.1f, 0);
+
+                rb.isKinematic = false;
+                boxCollider.enabled = true;
+                isInPlayerDishPosition = false;
+                isCooked = false;
+
+                currentTable.CurrentFoods.Add(this); 
+
+                ClearTable();
+            }
+        }
     }
 }

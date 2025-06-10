@@ -1,21 +1,27 @@
 using UnityEngine;
+using System;
+using System.Collections;
 
 public enum PlayerStates
 {
-    Idle, Walk, Run, Jump, Cook, Grab
+    Idle, Walk, Run, Jump, Cook, Admin
 }
 
 public class PlayerModel : MonoBehaviour
 {
     private PlayerCamera playerCamera;
-    private InventoryManager inventoryManager; // Manager del Inventario
 
     private Rigidbody rb;
-    private Transform inventory; // GameObject hijo del player que representa el inventario
-    private Transform cookingPosition;
-    private GameObject dish; // GameObject hijo del player que representa la bandeja
-    private GameObject currentItem = null;
+    private GameObject oven;
+    private GameObject administration;
 
+    private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
+
+    [Header("LineOfSight")]
+    [SerializeField] private float rangeVision;
+    [SerializeField] private float angleVision;
+
+    [Header("Variables")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
@@ -24,16 +30,17 @@ public class PlayerModel : MonoBehaviour
 
     private bool isGrounded = true;
     private bool isCollidingOven = false;
-    private bool isCollidingItem = false;
-    private bool isCoking = false;
+    private bool isCollidingAdministration = false;
+    private bool isCooking = false;
+    private bool isAdministrating = false;
 
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
-    public InventoryManager InventoryManager { get => inventoryManager; }
 
     public Rigidbody Rb { get => rb; }
-    public Transform Inventory { get => inventory; }
-    public Transform CookingPosition { get => cookingPosition; }
-    public GameObject CurrentItem { get => currentItem; set => currentItem = value; }
+    public GameObject Oven { get => oven; }
+    public GameObject Administration { get => administration; }
+
+    public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
     public float WalkSpeed { get => walkSpeed; }
     public float RunSpeed { get => runSpeed; } 
@@ -41,79 +48,84 @@ public class PlayerModel : MonoBehaviour
     public float JumpForce { get => jumpForce; }
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
-    public bool IsCollidingItem { get => isCollidingItem; set => isCollidingItem = value; }
-    public bool IsCooking { get => isCoking; set => isCoking = value; }
+    public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
+    public bool IsCooking { get => isCooking; set => isCooking = value; }
+    public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
 
 
     void Awake()
     {
         GetComponents();
+
+        // Provisorio
+        StartCoroutine(InvokeEventInitializationPlayer());
     }
+
 
     void FixedUpdate()
     {
         Movement();
     }
 
-
-    public Vector2 GetMoveAxis()
+    void OnDrawGizmosSelected()
     {
-        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        LineOfSight.DrawLOSOnGizmos(transform, angleVision, rangeVision);
     }
 
-    // Provisorio
+
+    /// <summary>
+    /// Solucionar los LineOfSight de que mirando hacia un poco fuera del rango funcionan
+    /// </summary>
     public bool IsLookingAtOven()
     {
-        // Solucionar la parte comentada
-
-        /*GameObject oven = GameObject.FindGameObjectWithTag("Oven");
-
-        Vector3 directionToOven = oven.transform.position - transform.position;
-        float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
-
-        return LineOfSight.LOS(playerCamera.transform, oven.transform, 50, angle, LayerMask.NameToLayer("Oven"));*/
-
-        GameObject oven = GameObject.FindGameObjectWithTag("Oven");
-
-        Vector3 directionToOven = oven.transform.position - transform.position;
-        float angle = Vector3.Angle(playerCamera.transform.forward, directionToOven);
-
-        if (angle <= 90f)
-        {
-            return true;
-        }
-
-        return false;
+        return LineOfSight.LOS(playerCamera.transform, oven.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
     }
 
-    public void ShowOrHideDish(bool current)
+    public bool IsLookingAtAdministration()
     {
-        dish.SetActive(current);
+        return LineOfSight.LOS(playerCamera.transform, administration.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
+    }
+
+    public void LookAt(Vector3 target)
+    {
+        Vector3 newDirection = (target - transform.position).normalized;
+        Vector3 lookDirection = new Vector3(newDirection.x, 0, newDirection.z);
+
+        if (lookDirection != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = rotation;
+        }
     }
 
 
     private void GetComponents()
     {
         playerCamera = GetComponentInChildren<PlayerCamera>();
-        inventoryManager = FindFirstObjectByType<InventoryManager>();
         rb = GetComponent<Rigidbody>();
-        inventory = transform.Find("Inventory").transform;
-        cookingPosition = GameObject.Find("CookingPosition").transform;
-        dish = transform.Find("Dish").gameObject;
+        oven = GameObject.FindGameObjectWithTag("Oven");
+        administration = GameObject.FindGameObjectWithTag("Administration");
     }
 
     private void Movement()
     {
-        if (!isCoking)
+        if (PlayerInputs.Instance != null && !isCooking && !isAdministrating)
         {
             Vector3 cameraForward = playerCamera.transform.forward;
             cameraForward.y = 0;
             cameraForward.Normalize();
 
             Vector3 right = playerCamera.transform.right;
-            Vector3 movement = (cameraForward * GetMoveAxis().y + right * GetMoveAxis().x).normalized * speed * Time.deltaTime;
+            Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
 
             rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
         }
+    }
+
+    private IEnumerator InvokeEventInitializationPlayer()
+    {
+        yield return new WaitForSeconds(1);
+
+        onPlayerInitialized?.Invoke(this);
     }
 }

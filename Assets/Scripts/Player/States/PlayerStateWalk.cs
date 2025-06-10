@@ -8,23 +8,23 @@ public class PlayerStateWalk<T> : State<T>
     private T inputToRun;
     private T inputToJump;
     private T inputToCook;
-    private T inputToGrab;
+    private T inputToAdmin;
 
 
-    public PlayerStateWalk(T inputToIdle, T inputToRun, T inputToJump, T inputToCook, T inputToGrab, PlayerModel playerModel)
+    public PlayerStateWalk(T inputToIdle, T inputToRun, T inputToJump, T inputToCook, T inputToAdmin, PlayerModel playerModel)
     {
         this.inputToIdle = inputToIdle;
         this.inputToRun = inputToRun;
         this.inputToJump = inputToJump;
         this.inputToCook = inputToCook;
-        this.inputToGrab = inputToGrab;
+        this.inputToAdmin = inputToAdmin;
         this.playerModel = playerModel;
     }
 
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Walk");
+        //Debug.Log("Walk");
 
         playerModel.Speed = playerModel.WalkSpeed;
     }
@@ -33,31 +33,29 @@ public class PlayerStateWalk<T> : State<T>
     {
         base.Execute();
 
-        Vector3 direction = new Vector3(playerModel.GetMoveAxis().x, 0, playerModel.GetMoveAxis().y);
-
-        if (direction == Vector3.zero)
+        if (PlayerInputs.Instance.GetMoveAxis() == Vector2.zero)
         {
             Fsm.TransitionTo(inputToIdle);
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (PlayerInputs.Instance.Run())
         {
             Fsm.TransitionTo(inputToRun);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && playerModel.IsGrounded)
+        if (PlayerInputs.Instance.Jump() && playerModel.IsGrounded)
         {
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
+        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
         {
             Fsm.TransitionTo(inputToCook);
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && playerModel.IsCollidingItem)
+        if (PlayerInputs.Instance.Administration() && playerModel.IsCollidingAdministration && playerModel.IsLookingAtAdministration())
         {
-            Fsm.TransitionTo(inputToGrab);
+            Fsm.TransitionTo(inputToAdmin);
         }
     }
 }

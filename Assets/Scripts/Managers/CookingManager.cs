@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CookingManager : MonoBehaviour
 {
-    [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones hijos
-
     [SerializeField] private AbstractFactory foodAbstractFactory;
-    [SerializeField] private List<ObjectPooler> objectsPools;
-    [SerializeField] private List<Button> buttonsFoods;
+    [SerializeField] private List<ObjectPooler> foodPools;
 
+    [Header("Positions")]
     // Para las posiciones de las sarten
     [SerializeField] private List<Transform> stovesPositions;
     private Transform currentStove;
@@ -30,11 +27,12 @@ public class CookingManager : MonoBehaviour
     private Dictionary<FoodType, ObjectPooler> foodPoolDictionary = new Dictionary<FoodType, ObjectPooler>();
 
     public Transform CurrentStove { get => currentStove; }
+    public Queue<Transform> AvailableDishPositions { get => availableDishPositions; }
 
 
     void Awake()
     {
-        SuscribeToPlayerViewEvents();
+        SuscribeToCookingManagerUIEvent();
         EnqueueStovesPositions();
         EnqueueCookedPosition();
         EnqueueDishPositions();
@@ -43,20 +41,9 @@ public class CookingManager : MonoBehaviour
 
     void OnDestroy()
     {
-        UnSuscribeToPlayerViewEvents();
+        UnsuscribeToCookingManagerUIEvent();
     }
 
-
-    // Funcion asignada a los botones de la UI
-    public void ButtonGetFood(string prefabFoodName)
-    {
-        currentStove = GetNextAvailableStove();
-
-        if (currentStove != null)
-        {
-            foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
-        }
-    }
 
     public void ReturnObjectToPool(FoodType foodType, Food currentFood)
     {
@@ -150,6 +137,33 @@ public class CookingManager : MonoBehaviour
         }
     }
 
+
+    private void SuscribeToCookingManagerUIEvent()
+    {
+        CookingManagerUI.OnButtonSetFood += GetFood;
+    }
+
+    private void UnsuscribeToCookingManagerUIEvent()
+    {
+        CookingManagerUI.OnButtonSetFood -= GetFood;
+    }
+
+    private void GetFood(string prefabFoodName)
+    {
+        if (Enum.TryParse(prefabFoodName, out FoodType foodType))
+        {
+            if (IngredientInventoryManager.Instance.TryCraftFood(foodType))
+            {
+                currentStove = GetNextAvailableStove();
+
+                if (currentStove != null)
+                {
+                    foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
+                }
+            }
+        }
+    }
+
     private Transform GetNextAvailableStove()
     {
         Transform targetPosition = null;
@@ -174,23 +188,6 @@ public class CookingManager : MonoBehaviour
         }
 
         return targetPosition;
-    }
-
-    private void SuscribeToPlayerViewEvents()
-    {
-        PlayerView.OnEnterInCookMode += () => ActiveOrDeactivateRootGameObject(true);
-        PlayerView.OnExitInCookMode += () => ActiveOrDeactivateRootGameObject(false);
-    }
-
-    private void UnSuscribeToPlayerViewEvents()
-    {
-        PlayerView.OnEnterInCookMode -= () => ActiveOrDeactivateRootGameObject(true);
-        PlayerView.OnExitInCookMode -= () => ActiveOrDeactivateRootGameObject(false);
-    }
-
-    private void ActiveOrDeactivateRootGameObject(bool state)
-    {
-        rootGameObject.SetActive(state);
     }
 
     private void EnqueueStovesPositions()
@@ -219,12 +216,12 @@ public class CookingManager : MonoBehaviour
 
     private void InitializeFoodPoolDictionary()
     {
-        for (int i = 0; i < objectsPools.Count; i++)
+        for (int i = 0; i < foodPools.Count; i++)
         {
             if (Enum.IsDefined(typeof(FoodType), i)) 
             {
                 FoodType foodType = (FoodType) i;
-                foodPoolDictionary[foodType] = objectsPools[i]; 
+                foodPoolDictionary[foodType] = foodPools[i]; 
             }
         }
     }

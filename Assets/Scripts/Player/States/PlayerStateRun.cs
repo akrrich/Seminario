@@ -8,21 +8,23 @@ public class PlayerStateRun<T> : State<T>
     private T inputToWalk;
     private T inputToJump;
     private T inputToCook;
+    private T inputToAdmin;
 
 
-    public PlayerStateRun(T inputToIdle, T inputToWalk, T inputToJump, T inputToCook, PlayerModel playerModel)
+    public PlayerStateRun(T inputToIdle, T inputToWalk, T inputToJump, T inputToCook, T inputToAdmin, PlayerModel playerModel)
     {
         this.inputToIdle = inputToIdle;
         this.inputToWalk = inputToWalk;
         this.inputToJump = inputToJump;
         this.inputToCook = inputToCook;
+        this.inputToAdmin = inputToAdmin;
         this.playerModel = playerModel;
     }
 
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Run");
+        //Debug.Log("Run");
 
         playerModel.Speed = playerModel.RunSpeed;
     }
@@ -31,26 +33,29 @@ public class PlayerStateRun<T> : State<T>
     {
         base.Execute();
 
-        Vector3 direction = new Vector3(playerModel.GetMoveAxis().x, 0, playerModel.GetMoveAxis().y);
-
-        if (direction == Vector3.zero)
+        if (PlayerInputs.Instance.GetMoveAxis() == Vector2.zero)
         {
             Fsm.TransitionTo(inputToIdle);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (PlayerInputs.Instance.StopRun())
         {
             Fsm.TransitionTo(inputToWalk);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (PlayerInputs.Instance.Jump())
         {
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
+        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
         {
             Fsm.TransitionTo(inputToCook);
+        }
+
+        if (PlayerInputs.Instance.Administration() && playerModel.IsCollidingAdministration && playerModel.IsLookingAtAdministration())
+        {
+            Fsm.TransitionTo(inputToAdmin);
         }
     }
 }

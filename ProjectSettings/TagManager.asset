@@ -6,7 +6,9 @@ TagManager:
   tags:
   - Floor
   - Oven
-  - Item
+  - Table
+  - Administration
+  - Chair
   layers:
   - Default
   - TransparentFX
@@ -14,12 +16,12 @@ TagManager:
   - Post Processing
   - Water
   - UI
-  - Oven
+  - Obstacles
+  - 
+  - Clients
   - 
   - 
-  - 
-  - 
-  - 
+  - whatIsGround
   - 
   - 
   - 

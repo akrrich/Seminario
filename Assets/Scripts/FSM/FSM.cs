@@ -11,9 +11,13 @@ public class FSM<T>
 
     public void OnExecute()
     {
-        if (currentState != null)
+        // Provisorio
+        if (PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
         {
-            currentState.Execute();
+            if (currentState != null)
+            {
+                currentState.Execute();
+            }
         }
     }
 
