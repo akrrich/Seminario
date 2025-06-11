@@ -8,6 +8,8 @@ public class ClientStateLeave<T> : State<T>
     private ClientController clientController;
     private Transform newTransform;
 
+    private float waitingTimeToFreeTable = 6f;
+
     private bool canLeave = false;
 
     public bool CanLeave { get => canLeave; set => canLeave = value; }
@@ -43,7 +45,7 @@ public class ClientStateLeave<T> : State<T>
             clientView.StartCoroutine(WalkAnimationAfterExitTime());
         }
 
-        clientModel.CurrentTablePosition = TablesManager.Instance.FreeTable(clientModel.CurrentTablePosition);
+        clientModel.StartCoroutine(FreeCurrentTableAfterSeconds());
     }
 
     public override void Execute()
@@ -77,5 +79,13 @@ public class ClientStateLeave<T> : State<T>
         yield return new WaitForSeconds(2f);
 
         clientController.OnCollisionEnterWithTrigger = false;
+    }
+
+    private IEnumerator FreeCurrentTableAfterSeconds()
+    {
+        yield return new WaitForSeconds(waitingTimeToFreeTable);
+
+        clientModel.CurrentTablePosition.SetNavMeshObstacles(true);
+        clientModel.CurrentTablePosition = TablesManager.Instance.FreeTable(clientModel.CurrentTablePosition);
     }
 }

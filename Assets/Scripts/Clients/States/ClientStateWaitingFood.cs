@@ -31,7 +31,7 @@ public class ClientStateWaitingFood<T> : State<T>
         Debug.Log("WaitingFood");
 
         clientModel.StopVelocity();
-        clientModel.LookAt(clientModel.CurrentTablePosition.transform.position, clientView.Anim.transform);
+        clientModel.LookAt(clientModel.CurrentTablePosition.DishPosition.position, clientView.Anim.transform);
         clientView.ExecuteAnimParameterName("Sit");
         clientView.StartCoroutine(DuringSitAnimationAfterExitTime());
         clientModel.transform.SetParent(clientModel.CurrentTablePosition.ChairPosition);
