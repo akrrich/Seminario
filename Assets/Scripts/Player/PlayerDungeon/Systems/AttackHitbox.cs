@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AttackHitbox : MonoBehaviour
 {
+    private PlayerDungeonModel model;
     [Header("Hitbox Settings")]
     [SerializeField] private float radius = 1.5f;
     [SerializeField] private Vector3 offset = Vector3.forward;
@@ -17,6 +18,7 @@ public class AttackHitbox : MonoBehaviour
     private void Awake()
     {
         hitOrigin = transform;
+        model = GetComponent<PlayerDungeonModel>();
     }
 
     public void TriggerHit()
@@ -28,7 +30,7 @@ public class AttackHitbox : MonoBehaviour
         {
             if (hit.TryGetComponent<IDamageable>(out var target))
             {
-                target.TakeDamage(10); // TEMP: hardcoded, delegate later
+                target.TakeDamage(model.CurrentWeaponDamage);
             }
         }
     }

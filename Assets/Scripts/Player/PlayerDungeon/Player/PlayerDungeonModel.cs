@@ -1,16 +1,24 @@
+using System.Collections;
 using UnityEngine;
-
 public class PlayerDungeonModel : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
+    [Header("HP")]
     [SerializeField] private float maxHP = 100f;
+    [Header("Movement")]
     [SerializeField] private float speed;
     [SerializeField] private float walkSpeed = 5f;
     [SerializeField] private float runSpeed = 10f;
+    [SerializeField] private float acceleration = 20f;
+    [SerializeField] private float deceleration = 10f;
     [SerializeField] private float airMultiplier = 5f;
-    [SerializeField] private float groundDrag;
+    [SerializeField] private float groundDrag=5f;
+    [Header("Jump")]
     [SerializeField] private float jumpForce = 7f;
-    [SerializeField] private float dashCooldown = 1.5f;
+    private float dashCooldown = 1.5f;
+    [Header("Combat")]
+    [SerializeField] private int currentWeaponDamage = 5;
+    [SerializeField] private float attackCooldown = 1f;
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckDistance = 0.3f;
@@ -37,14 +45,16 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public float RunSpeed => runSpeed;
     public float JumpForce => jumpForce;
     public float DashCooldown => dashCooldown;
-    public bool CanDash => Time.time >= lastDashTime + dashCooldown;
-
-    public Rigidbody Rb => rb;
     public float CurrentHP => currentHP;
+    //===WEAPON===
+    public int CurrentWeaponDamage {get=> currentWeaponDamage; set=> currentWeaponDamage = value; }
+    public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
+    public Rigidbody Rb => rb;
+    public Vector3 MoveDirection { get=> _moveDirection; set=>_moveDirection=value; }
+    public bool CanDash => Time.time >= lastDashTime + dashCooldown;
     public bool IsDead => isDead;
     public bool IsGrounded => Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
     public bool IsFalling => rb.velocity.y < -0.1f && !IsGrounded;
-    public Vector3 MoveDirection { get=> _moveDirection; set=>_moveDirection=value; }
     public bool IsInvulnerable { get; private set; }
     public bool CanMove { get; set; } = true;
     #endregion
@@ -54,7 +64,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody>();
         dash = GetComponent<DashHandler>();
         combat = GetComponent<CombatHandler>();
-        orientation = GetComponent<Transform>();
+        orientation = transform.Find("Orientation");
         rb.freezeRotation = true;
 
         currentHP = maxHP;
@@ -82,6 +92,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         {
             currentHP = 0;
             isDead = true;
+            HandleDeath();
         }
     }
     public void SetInvulnerable(bool value)
@@ -102,17 +113,52 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         }
         
     }
-    private void MovePlayer()
+    public void MovePlayer()
     {
-        _moveDirection = orientation.forward * PlayerInputs.Instance.GetMoveAxis().x + orientation.right * PlayerInputs.Instance.GetMoveAxis().y;
+        // INPUT DE MOVIMIENTO
+        Vector2 input = PlayerInputs.Instance.GetMoveAxis(); // (horizontal, vertical)
+        Vector3 targetDirection = (orientation.forward * input.y + orientation.right * input.x).normalized;
 
-        //on ground
+        // VELOCIDADES
+        float targetSpeed = PlayerInputs.Instance.RunHeld() ? runSpeed : walkSpeed;
+        Vector3 targetVelocity = targetDirection * targetSpeed;
+        Vector3 currentVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        // CALCULO DE CAMBIO DE VELOCIDAD
+        Vector3 velocityChange = targetVelocity - currentVelocity;
+
+        // ACELERACIÓN O DESACELERACIÓN SEGÚN HAYA INPUT
+        float accelRate = (targetDirection.magnitude > 0.1f) ? acceleration : deceleration;
+
+        // EXTRA FRENADO AL SOLTAR LOS CONTROLES
+        float frictionBoost = (targetDirection.magnitude == 0f) ? 1.5f : 1f;
+
+        // FUERZA TOTAL CALCULADA
+        Vector3 force = velocityChange * accelRate * frictionBoost;
+
+        // LIMITAR FUERZA MÁXIMA PARA SUAVIDAD
+        float maxForce = 50f;
+        if (force.magnitude > maxForce)
+            force = force.normalized * maxForce;
+
+        // MULTIPLICAR POR MASA
+        force *= rb.mass;
+
+        // APLICAR FUERZA
         if (IsGrounded)
-            rb.AddForce(_moveDirection * walkSpeed * 10f, ForceMode.Force);
+        {
+            rb.AddForce(new Vector3(force.x, 0f, force.z), ForceMode.Force);
+        }
+        else
+        {
+            // CONTROL EN EL AIRE (LIMITADO)
+            float airControlFactor = 0.5f; // control parcial en el aire
+            rb.AddForce(new Vector3(force.x, 0f, force.z) * airControlFactor * airMultiplier, ForceMode.Force);
+        }
 
-        //in air
-        else if (!IsGrounded)
-            rb.AddForce(_moveDirection * walkSpeed * 10f * airMultiplier, ForceMode.Force);
+        // INTERPOLAR DRAG (SUAVIZA FRENO)
+        float targetDrag = IsGrounded ? groundDrag : 0f;
+        rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.deltaTime * 10f);
     }
     private void SpeedControl()
     {
@@ -136,5 +182,42 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     {
         dash.ExecuteDash();
     }
-    
+    private void HandleDeath()
+    {
+        CanMove = false;
+        rb.velocity = Vector3.zero;
+        SetInvulnerable(true);
+        //        IngredientInventoryManager.Instance      ====== Aca iria el manejo de resetear el inventario temporal
+        StartCoroutine(DeathSequence());
+    }
+    private IEnumerator DeathSequence()
+    {
+        // Mostrar pantalla de muerte 
+        //UIManager.Instance.ShowDeathScreen(); 
+
+        yield return new WaitForSeconds(2f);
+
+        // 1. Reiniciar estado del jugador
+        currentHP = maxHP;
+        isDead = false;
+        SetInvulnerable(false);
+        CanMove = true;
+        /*
+        // 2. Teleport al lobby
+        DungeonManager.Instance.ReturnToLobby();
+
+        // 3. Resetear el dungeon
+        DungeonManager.Instance.ResetDungeon();
+        */
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (!showGroundGizmo) return;
+
+        Gizmos.color = Color.green;
+        Vector3 start = transform.position;
+        Vector3 end = start + Vector3.down * groundCheckDistance;
+        Gizmos.DrawLine(start, end);
+        Gizmos.DrawWireSphere(end, 0.05f); // pequeño punto para ver el final
+    }
 }

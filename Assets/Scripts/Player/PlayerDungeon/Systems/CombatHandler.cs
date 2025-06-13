@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class CombatHandler : MonoBehaviour
@@ -7,28 +6,37 @@ public class CombatHandler : MonoBehaviour
     private PlayerDungeonModel model;
     private PlayerDungeonView view;
 
-    private float lastAttackTime = -999f;
-    private float attackCooldown = 1f;
-
     [SerializeField] private AttackHitbox attackHitbox;
+    [SerializeField] private WeaponController weaponController;
+
+    private float lastAttackTime = -999f;
+
 
     private void Awake()
     {
-        model = GetComponent<PlayerDungeonModel>();
-        view = GetComponent<PlayerDungeonView>();
-        attackHitbox = GetComponent<AttackHitbox>();
+        GetComponents();
+      
     }
 
     public void TryAttack()
     {
-        if (Time.time < lastAttackTime + attackCooldown) return;
+        if (Time.time < lastAttackTime + model.AttackCooldown) return;
 
         lastAttackTime = Time.time;
-        view.PlayAttackAnimation();
+        
+        view?.PlayAttackAnimation();
+        weaponController?.PerformAttack();
         PerformHit();
     }
     public void PerformHit()
     {
         attackHitbox.TriggerHit();
+    }
+    private void GetComponents()
+    {
+        model = GetComponent<PlayerDungeonModel>();
+        view = GetComponent<PlayerDungeonView>();
+        attackHitbox = GetComponent<AttackHitbox>();
+        weaponController = GetComponentInChildren<WeaponController>();
     }
 }

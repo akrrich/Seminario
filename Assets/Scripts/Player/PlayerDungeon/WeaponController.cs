@@ -51,7 +51,7 @@ public class WeaponController : MonoBehaviour
         return Time.time >= lastAttackTime + attackCooldown;
     }
 
-    private void PerformAttack()
+    public void PerformAttack()
     {
         lastAttackTime = Time.time;
 
@@ -62,13 +62,4 @@ public class WeaponController : MonoBehaviour
     }
 
     // Optional: For future hit detection support
-    public void EnableHitbox()
-    {
-        // Enable collider or VFX here
-    }
-
-    public void DisableHitbox()
-    {
-        // Disable collider or VFX here
-    }
 }

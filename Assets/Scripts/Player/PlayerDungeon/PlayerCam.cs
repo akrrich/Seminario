@@ -20,17 +20,18 @@ public class PlayerCam : MonoBehaviour
 
     private void Update()
     {
-        //Input del mouse
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
 
-
         _yRotation += mouseX;
         _xRotation -= mouseY;
-        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f); //Forzar a que no se pueda ver mas de 90° arriba y abajo
+        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
 
-        //rotacion de camara
-        transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, _yRotation, 0);
+        // Cámara rota con X e Y (para mirar)
+        transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0f);
+
+        // Orientation solo rota en Y (para movimiento)
+        if (orientation != null)
+            orientation.rotation = Quaternion.Euler(0f, _yRotation, 0f);
     }
 }

@@ -17,12 +17,14 @@ public class DashHandler : MonoBehaviour
 
     private bool isDashing;
     private Vector3 dashDirection;
+    private Transform orientation;
 
     private void Awake()
     {
         model = GetComponent<PlayerDungeonModel>();
         view = GetComponent<PlayerDungeonView>();
         rb = GetComponent<Rigidbody>();
+        orientation = model.transform.Find("Orientation");
     }
     public void ExecuteDash()
     {
@@ -30,9 +32,11 @@ public class DashHandler : MonoBehaviour
 
         Vector2 input = PlayerInputs.Instance.GetMoveAxis();
 
-        dashDirection = input.sqrMagnitude > 0.1f
-            ? transform.TransformDirection(new Vector3(input.x, 0, input.y).normalized)
-            : transform.forward; // default forward dash
+        Vector3 inputDir = (orientation.forward * input.y + orientation.right * input.x).normalized;
+
+        // Normal horizontal dash basado en orientación
+        dashDirection = inputDir.sqrMagnitude > 0.01f ? inputDir : orientation.forward;
+
 
         StartCoroutine(DashRoutine());
     }

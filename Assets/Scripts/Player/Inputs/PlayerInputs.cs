@@ -62,11 +62,12 @@ public class PlayerInputs : MonoBehaviour
     
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);
 
-    public bool Attack() => Input.GetMouseButtonDown(1);
+    public bool Attack() => Input.GetMouseButtonDown(0); //Click izquierdo
     public bool Dash() => Input.GetKeyDown(keyboardInputs.Dash);
+    public bool RunHeld() => Input.GetKey(keyboardInputs.Run) || Input.GetKey(joystickInputs.Run);
+    public bool Interact() => Input.GetKeyDown(keyboardInputs.Interact);
 
-
-private void CreateSingleton()
+    private void CreateSingleton()
     {
         if (instance == null)
         {
@@ -123,8 +124,9 @@ public class Inputs
     [SerializeField] private KeyCode inventory;
     [SerializeField] private KeyCode pause;
 
-    [Header("Dungeon Combat Inputs:")]
+    [Header("Dungeon Inputs:")]
     [SerializeField] private KeyCode dash;
+    [SerializeField] private KeyCode interact;
 
     [Header("Sensitivity:")]
     [SerializeField] private float sensitivityX;
@@ -141,6 +143,7 @@ public class Inputs
     public KeyCode Inventory { get => inventory; }
     public KeyCode Pause { get => pause; }
     public KeyCode Dash => dash;
+    public KeyCode Interact => interact;
     public float SensitivityX { get => sensitivityX; }
     public float SensitivityY { get => sensitivityY; }
 }

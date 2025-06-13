@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bf1f58d10191942a464f84504206df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sword: {fileID: 0}
+  sword: {fileID: 5044173737315696286}
   attackCooldown: 1
 --- !u!1 &543094954
 GameObject:
@@ -515,13 +515,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 645086608}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1120711720}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1422855995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &645086610
 MonoBehaviour:
@@ -992,7 +992,6 @@ GameObject:
   - component: {fileID: 1422855994}
   - component: {fileID: 1422855997}
   - component: {fileID: 1422856005}
-  - component: {fileID: 1422856004}
   - component: {fileID: 1422856003}
   - component: {fileID: 1422856002}
   - component: {fileID: 1422856001}
@@ -1046,6 +1045,7 @@ Transform:
   m_Children:
   - {fileID: 1776466984}
   - {fileID: 1597491577}
+  - {fileID: 645086609}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1422855997
@@ -1154,6 +1154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackHitbox: {fileID: 0}
+  weaponController: {fileID: 0}
 --- !u!114 &1422856002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1183,18 +1184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf0b41cb605c8040b9091d220c66cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1422856004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1422855993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7801bbd72c384a48b842af6fe3edd6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1422856005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1211,11 +1200,14 @@ MonoBehaviour:
   speed: 0
   walkSpeed: 5
   runSpeed: 8
+  acceleration: 20
+  deceleration: 10
   airMultiplier: 5
   groundDrag: 0
   jumpForce: 7
-  dashCooldown: 1.5
-  groundCheckDistance: 0.3
+  currentWeaponDamage: 5
+  attackCooldown: 1
+  groundCheckDistance: 1.05
   groundLayer:
     serializedVersion: 2
     m_Bits: 2048
@@ -1275,13 +1267,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776466983}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0, w: -1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1422855995}
-  m_LocalEulerAnglesHint: {x: 0, y: 360, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &5044173737315394616
 Transform:
   m_ObjectHideFlags: 0
@@ -1323,7 +1315,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5044173737315696286}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1396,7 +1388,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 543094956}
   - {fileID: 636680731}
-  - {fileID: 645086609}
   - {fileID: 1422855995}
   - {fileID: 985147206}
   - {fileID: 183128444}
