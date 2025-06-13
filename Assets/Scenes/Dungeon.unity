@@ -890,6 +890,7 @@ MonoBehaviour:
     inventory: 9
     pause: 27
     dash: 306
+    interact: 0
     sensitivityX: 400
     sensitivityY: 400
   joystickInputs:
@@ -904,6 +905,7 @@ MonoBehaviour:
     inventory: 343
     pause: 339
     dash: 0
+    interact: 0
     sensitivityX: 200
     sensitivityY: 200
 --- !u!4 &1159332252
@@ -1169,7 +1171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dashSpeed: 20
   dashDuration: 0.2
-  dashCooldown: 1
+  dashCooldown: 3
   dashBufferTime: 0.1
   allowAirDash: 0
 --- !u!114 &1422856003
