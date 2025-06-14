@@ -8,6 +8,8 @@ public enum Device
 
 public class DeviceManager : MonoBehaviour
 {
+    // El script funciona a la perfeccion el cursor, simplemente hay que correrlo en modo build para que se vea plasmado correctamente
+
     private static DeviceManager instance;
 
     private Device currentDevice;
@@ -71,7 +73,9 @@ public class DeviceManager : MonoBehaviour
         }
     }
 
-    // Averiguar por el metodo Input.GetJoystickNames()
+    /// <summary>
+    /// Averiguar por el metodo Input.GetJoystickNames()
+    /// </summary>
     private void IsJoystickUsed()
     {
         for (int i = 0; i < 20; i++)

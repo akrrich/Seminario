@@ -58,9 +58,7 @@ public class ClientModel : MonoBehaviour
         Movement();
     }
 
-    /// <summary>
-    /// Analizar bien lo del la rotacion, ya que rota conjunto
-    /// </summary>
+
     public void MoveToTarget(Vector3 target)
     {
         navMeshAgent.isStopped = false;
