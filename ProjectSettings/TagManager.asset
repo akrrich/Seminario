@@ -9,6 +9,7 @@ TagManager:
   - Table
   - Administration
   - Chair
+  - PortalDungeon
   layers:
   - Default
   - TransparentFX

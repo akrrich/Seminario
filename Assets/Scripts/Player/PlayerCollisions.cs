@@ -8,6 +8,7 @@ public class PlayerCollisions
     private ClientView auxiliarClientView;
 
 
+    // Test
     public void UpdateColls()
     {
         //Debug.Log("AuxiliarTable: " + auxiliarTable);
@@ -44,8 +45,13 @@ public class PlayerCollisions
         OnCollisionExitWithAdministration(collision);
     }
 
+    public void OnTriggerEnter(Collider collider)
+    {
+        OnTriggerEnterWithPortalDungeon(collider);
+    }
 
-    /* ----------------------------------------ENTER-------------------------------------------------- */
+
+    /* ----------------------------------------COLLISION ENTER-------------------------------------------- */
 
     private void OnCollisionEnterWithFloor(Collision collision)
     {
@@ -122,7 +128,7 @@ public class PlayerCollisions
         }
     }
 
-    /* ------------------------------------------STAY----------------------------------------------- */
+    /* ------------------------------------------COLLISION STAY------------------------------------------- */
 
     private void OnCollisionStayWithOvenAndLOS(Collision collision)
     {
@@ -232,7 +238,7 @@ public class PlayerCollisions
         }
     }
 
-    /* -------------------------------------------EXIT--------------------------------------------- */
+    /* -------------------------------------------COLLISION EXIT----------------------------------------- */
 
     private void OnCollisionExitWithFloor(Collision collision)
     {
@@ -283,6 +289,18 @@ public class PlayerCollisions
         {
             playerController.PlayerModel.IsCollidingAdministration = false;
             PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage?.Invoke();
+        }
+    }
+
+    /* -------------------------------------------TRIGGER ENTER----------------------------------------- */
+
+    private void OnTriggerEnterWithPortalDungeon(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("PortalDungeon"))
+        {
+            string[] additiveScenes = { "DungeonUI", "CompartidoUI" };
+            // Se usa el playerController porque hereda de Monobehaviour para llamar a la corrutina
+            playerController.StartCoroutine(ScenesManager.Instance.LoadScene("Dungeon", additiveScenes));
         }
     }
 }

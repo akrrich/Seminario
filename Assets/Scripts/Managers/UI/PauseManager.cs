@@ -165,12 +165,8 @@ public class PauseManager : MonoBehaviour
 
     private IEnumerator ExitGameAfterSeconds()
     {
-        yield return new WaitForSeconds(buttonClick.clip.length);
+        /// Recordar el tema de que se puede seguir interactuando en esos segundos en los cuales se esta en cualquier tipo de pantalla de carga
 
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
-
-        Application.Quit();
+        yield return StartCoroutine(ScenesManager.Instance.ExitGame());
     }
 }

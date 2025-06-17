@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afdfd4dde2f8a80478663ff496377515, type: 3}
   m_Name: ClientData
   m_EditorClassIdentifier: 
-  speed: 140
+  speed: 3
   maxTimeWaitingForChair: 7
   maxTimeWaitingToBeAttended: 7
   maxTimeWaitingFood: 7

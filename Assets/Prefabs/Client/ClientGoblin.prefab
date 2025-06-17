@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 200546582753670412}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.598, z: 0}
+  m_LocalPosition: {x: 0, y: 2.6099, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 2494063933914625052}
   - component: {fileID: 2773331705948015977}
   - component: {fileID: 7928818473667244909}
-  - component: {fileID: 3133549794010445375}
+  - component: {fileID: 1164463274464968398}
   m_Layer: 8
   m_Name: ClientGoblin
   m_TagString: Untagged
@@ -408,7 +408,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &3152556851330731188
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -448,13 +448,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54e793f196876fa4ebfb5768d15ea157, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clientType: 2
   clientData: {fileID: 11400000, guid: 2cf7e520710ff8645b474ff03e64d8d0, type: 2}
-  speed: 140
-  maxTimeWaitingForChair: 7
-  maxTimeWaitingToBeAttended: 7
-  maxTimeWaitingFood: 20
-  maxTimeEating: 10
+  clientType: 2
 --- !u!114 &2773331705948015977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,25 +475,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 689525d684d781447a3540d1a7f2319b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3133549794010445375
-MonoBehaviour:
+--- !u!195 &1164463274464968398
+NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8174932956925981841}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 792c2468d78971747a1a5719962f6577, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxObs: 5
-  radius: 1
-  angle: 90
-  personalArea: 1
-  obsMask:
-    serializedVersion: 2
-    m_Bits: 64
+  m_AgentTypeID: -1372625422
+  m_Radius: 1.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2.2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &1842368949692753040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -510,6 +508,10 @@ PrefabInstance:
     - target: {fileID: 1652650793432430, guid: d9162a78a8deb714a9bddd8038021008, type: 3}
       propertyPath: m_Name
       value: Animations
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652650793432430, guid: d9162a78a8deb714a9bddd8038021008, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4804301688967996, guid: d9162a78a8deb714a9bddd8038021008, type: 3}
       propertyPath: m_LocalScale.x
@@ -529,7 +531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4804301688967996, guid: d9162a78a8deb714a9bddd8038021008, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9589
+      value: 0.053
       objectReference: {fileID: 0}
     - target: {fileID: 4804301688967996, guid: d9162a78a8deb714a9bddd8038021008, type: 3}
       propertyPath: m_LocalPosition.z

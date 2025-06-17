@@ -7,7 +7,7 @@ public class ClientStateGoChair<T> : State<T>
     private ClientView clientView;
     private Func<Transform> getTargetTransform;
 
-    //private Seek seek;
+    private float distanceToChair = 6f;
 
 
     public ClientStateGoChair(ClientModel clientModel, ClientView clientView, Func<Transform> getTargetTransform)
@@ -15,8 +15,6 @@ public class ClientStateGoChair<T> : State<T>
         this.clientModel = clientModel;
         this.clientView = clientView;
         this.getTargetTransform = getTargetTransform;
-
-        //seek = new Seek(clientModel.transform, null); 
     }
 
 
@@ -24,11 +22,6 @@ public class ClientStateGoChair<T> : State<T>
     {
         base.Enter();
         Debug.Log("GoChair");
-
-        //clientModel.CurrentTablePosition.ChairPosition.gameObject.layer = LayerMask.NameToLayer("Default");
-
-        //Transform target = getTargetTransform();
-        //seek.SetTarget(target);
 
         clientModel.MoveToTarget(getTargetTransform().position);
         clientModel.LookAt(getTargetTransform().position, clientView.Anim.transform);
@@ -40,19 +33,20 @@ public class ClientStateGoChair<T> : State<T>
     {
         base.Execute();
 
-        /*Vector3 dir = seek.GetDir();
-        Vector3 finalDir = clientModel.ObstacleAvoidance.GetDir(dir);
-
-        Vector3 lookCurrentTransform = clientView.transform.position + finalDir;
-
-        clientModel.LookAt(lookCurrentTransform, clientView.Anim.rootRotation);
-        clientModel.MoveToTarget(finalDir);*/
+        CheckDistanceFromTransformToCurrentChair();
     }
 
     public override void Exit() 
     { 
         base.Exit();
+    }
 
-        //clientModel.CurrentTablePosition.ChairPosition.gameObject.layer = LayerMask.NameToLayer("Obstacles");
+
+    private void CheckDistanceFromTransformToCurrentChair()
+    {
+        if (Vector3.Distance(clientModel.transform.position, clientModel.CurrentTablePosition.ChairPosition.position) <= distanceToChair)
+        {
+            clientModel.CurrentTablePosition.SetNavMeshObstacles(false);
+        }
     }
 }

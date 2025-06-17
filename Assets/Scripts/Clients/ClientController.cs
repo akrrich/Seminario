@@ -125,7 +125,7 @@ public class ClientController : MonoBehaviour
     {
         if (clientModel.CurrentTablePosition != null)
         {
-            // si esta fuera del rango de la silla (lejos de la silla)
+            // si no esta colisionando con el trigger de la silla
             if (!onCollisionEnterWithTrigger)
             {
                 return true;
