@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 public class Table : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class Table : MonoBehaviour
     private GameObject dish;
     private GameObject dirty;
 
-    //private SphereCollider sphereCollider;
+    private NavMeshObstacle[] navMeshObstacle;
 
     private List<Transform> dishPositions = new List<Transform>(); // Representa las posiciones hijas del plato
 
@@ -19,6 +20,7 @@ public class Table : MonoBehaviour
     private bool isDirty = false;
 
     public Transform ChairPosition { get => chair.transform; }
+    public Transform DishPosition { get => dish.transform; } // Solamente para que mire hacia adelante que es esta posicion
 
     public List<Transform> DishPositions { get => dishPositions; }
 
@@ -42,6 +44,23 @@ public class Table : MonoBehaviour
         dirty.SetActive(current);
     }
 
+    /// <summary>
+    /// Analizar el metodo por el tema de el NavMesh del NPC
+    /// </summary>
+    public void SetNavMeshObstacles(bool current)
+    {
+        for (int i = 0; i < navMeshObstacle.Length; i++)
+        {
+            // No ejecutar si ya estaba activado y current es true, esto sirve por si se fue de la cola de espera porque no se libero ninguna silla
+            if (navMeshObstacle[i].isActiveAndEnabled && current)
+            {
+                continue;
+            }
+
+            navMeshObstacle[i].enabled = current;
+        }
+    }
+
 
     private void FindObjectsAndComponents()
     {
@@ -49,7 +68,7 @@ public class Table : MonoBehaviour
         dish = transform.Find("Dish").gameObject;
         dirty = transform.Find("Dirty").gameObject;
 
-        //sphereCollider =  GetComponent<SphereCollider>();
+        navMeshObstacle = GetComponentsInChildren<NavMeshObstacle>();
 
         foreach (Transform childs in dish.transform)
         {

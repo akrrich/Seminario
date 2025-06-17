@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum ClientStates
 {
@@ -12,12 +13,16 @@ public enum ClientType
 
 public class ClientModel : MonoBehaviour
 {
+    /// <summary>
+    /// Analizar el tema del Capusle collider, ya que se desincroniza del Animation gameObject
+    /// </summary>
+    /// 
     [SerializeField] private ClientData clientData;
 
     private ClientManager clientManager;
 
-    private ObstacleAvoidance obstacleAvoidance;
     private Rigidbody rb;
+    private NavMeshAgent navMeshAgent;
     private CapsuleCollider capsuleCollider;
     private Table currentTablePosition;
 
@@ -31,7 +36,7 @@ public class ClientModel : MonoBehaviour
 
     public ClientManager ClientManager { get => clientManager; }
 
-    public ObstacleAvoidance ObstacleAvoidance { get => obstacleAvoidance; }
+    public NavMeshAgent NavMeshAgent { get => navMeshAgent; }
     public Table CurrentTablePosition { get => currentTablePosition; set => currentTablePosition = value; }
 
     public ClientType ClientType { get => clientType; }
@@ -40,6 +45,7 @@ public class ClientModel : MonoBehaviour
     void Awake()
     {
         GetComponents();
+        InitializeValuesFromNavMeshAgent();
     }
 
     void OnEnable()
@@ -55,15 +61,12 @@ public class ClientModel : MonoBehaviour
 
     public void MoveToTarget(Vector3 target)
     {
-        Vector3 newDirection = (target - transform.position).normalized;
-        currentDirection = newDirection;
-    }
+        navMeshAgent.isStopped = false;
+        navMeshAgent.SetDestination(target);
 
-    // Para ObstacleAvoidance
-    /*public void MoveToTarget(Vector3 target)
-    {
-        currentDirection = target;
-    }*/
+        //Vector3 newDirection = (target - transform.position).normalized;
+        //currentDirection = newDirection;
+    }
 
     public void LookAt(Vector3 target, Transform anim)
     {
@@ -80,7 +83,9 @@ public class ClientModel : MonoBehaviour
 
     public void StopVelocity()
     {
-        currentDirection = Vector3.zero;
+        //currentDirection = Vector3.zero;
+        navMeshAgent.isStopped = true;
+        navMeshAgent.velocity = Vector3.zero;
     }
 
     /// Metodo para futuro setea del npc correctamente
@@ -115,9 +120,14 @@ public class ClientModel : MonoBehaviour
     {
         clientManager = FindFirstObjectByType<ClientManager>();
 
-        obstacleAvoidance = GetComponent<ObstacleAvoidance>();
         rb = GetComponent<Rigidbody>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         capsuleCollider =  GetComponent<CapsuleCollider>();
+    }
+
+    private void InitializeValuesFromNavMeshAgent()
+    {
+        navMeshAgent.speed = clientData.Speed;
     }
 
     public void InitializeSpawnPosition()

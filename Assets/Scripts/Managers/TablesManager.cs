@@ -33,7 +33,7 @@ public class TablesManager : MonoBehaviour
 
         if (availableIndexes.Count == 0) return null;
 
-        int randomAvailableIndex = availableIndexes[UnityEngine.Random.Range(0, availableIndexes.Count)];
+        int randomAvailableIndex = availableIndexes[Random.Range(0, availableIndexes.Count)];
 
         tables[randomAvailableIndex].IsOccupied = true;
         return tables[randomAvailableIndex];
@@ -61,7 +61,6 @@ public class TablesManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(instance);
-            return;
         }
     }
 
