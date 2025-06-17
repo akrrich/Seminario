@@ -75,13 +75,6 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator CloseGameAfterClickButton()
     {
-        buttonClick.Play();
-
-        yield return new WaitForSeconds(buttonClick.clip.length);
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
-        Application.Quit();
+        yield return StartCoroutine(ScenesManager.Instance.ExitGame());
     }
 }

@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
         GrabOrHandOverFood();
         TakeClientOrder();
 
+        // Provisorio
         playerCollisions.UpdateColls();
     }
 
@@ -73,6 +74,11 @@ public class PlayerController : MonoBehaviour
     void OnCollisionExit(Collision collision)
     {
         playerCollisions.OnCollisionsExit(collision);
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        playerCollisions.OnTriggerEnter(collider);
     }
 
 
@@ -102,7 +108,7 @@ public class PlayerController : MonoBehaviour
         psWalk.AddTransition(PlayerStates.Cook, psCook);
         psWalk.AddTransition(PlayerStates.Run, psRun);
         psWalk.AddTransition(PlayerStates.Admin, psAdmin);
-
+        
         psJump.AddTransition(PlayerStates.Idle, psIdle);
         psJump.AddTransition(PlayerStates.Walk, psWalk);
 

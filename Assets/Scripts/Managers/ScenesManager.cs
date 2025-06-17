@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class ScenesManager : MonoBehaviour
 {
     /// <summary>
-    /// Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga
+    /// Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga, por ejemplo para que no pueda poner pausa
     /// </summary>
 
     /// <sumary>
@@ -14,15 +14,20 @@ public class ScenesManager : MonoBehaviour
 
     private static ScenesManager instance;
 
-    [SerializeField] private GameObject loadingPanel;
+    [SerializeField] private GameObject loadingScenePanel;
+    [SerializeField] private GameObject exitGamePanel;
 
-    [SerializeField] private float duringTimeLoadingPanel;
+    [SerializeField] private float duringTimeLoadingScenePanel;
+    [SerializeField] private float duringTimeExitGamePanel;
+
 
 #pragma warning disable 0414
-    private bool isInLoadingScreen = false; /// <summary>
+    /// <summary>
     /// Esto sirve para el UpdateManager, pero por ahora no srive de NADA
     /// </summary>
-#pragma warning restore 0414 
+    private bool isInLoadingScenePanel = false; 
+    private bool isInExitGamePanel = false;
+#pragma warning restore 0414
 
     public static ScenesManager Instance { get => instance; }
 
@@ -30,7 +35,7 @@ public class ScenesManager : MonoBehaviour
     void Awake()
     {
         CreateSingleton();
-        DontDestroyOnLoadLoadingPanelInCanvas();
+        DontDestroyOnLoadPanels();
         SetInitializedScene();
     }
 
@@ -38,8 +43,8 @@ public class ScenesManager : MonoBehaviour
     // Para pasar de una escena a otra con pantalla de carga
     public IEnumerator LoadScene(string sceneName, string[] additiveScenes)
     {
-        loadingPanel.SetActive(true);
-        isInLoadingScreen = true;
+        loadingScenePanel.SetActive(true);
+        isInLoadingScenePanel = true;
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
@@ -50,7 +55,7 @@ public class ScenesManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            if (asyncLoad.progress >= 0.9f && elapsedTime >= duringTimeLoadingPanel)
+            if (asyncLoad.progress >= 0.9f && elapsedTime >= duringTimeLoadingScenePanel)
             {
                 if (additiveScenes != null)
                 {
@@ -60,7 +65,7 @@ public class ScenesManager : MonoBehaviour
                     }
                 }
 
-                StartCoroutine(DisableLoadingPanelAfterSeconds());
+                StartCoroutine(DisableLoadingScenePanelAfterSeconds());
 
                 asyncLoad.allowSceneActivation = true;
             }
@@ -69,16 +74,29 @@ public class ScenesManager : MonoBehaviour
         }
     }
 
+    // Para cerrar el juego con pantalla de carga
+    public IEnumerator ExitGame()
+    {
+        exitGamePanel.SetActive(true);
+        isInExitGamePanel = true;
+
+        yield return new WaitForSecondsRealtime(duringTimeExitGamePanel);
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
+        Application.Quit();
+    }
+
 
     // Esto sirve para que una vez cargada la nueva escena, espere 3 segundos para desactivar el panel, para que permita cargar Awake y Start de la nueva escena cargada
-    private IEnumerator DisableLoadingPanelAfterSeconds()
+    private IEnumerator DisableLoadingScenePanelAfterSeconds()
     {
         yield return new WaitForSeconds(3);
 
-        isInLoadingScreen = false;
-        loadingPanel.SetActive(false);
+        isInLoadingScenePanel = false;
+        loadingScenePanel.SetActive(false);
     }
-
 
     private void CreateSingleton()
     {
@@ -96,11 +114,16 @@ public class ScenesManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void DontDestroyOnLoadLoadingPanelInCanvas()
+    private void DontDestroyOnLoadPanels()
     {
-        if (loadingPanel != null)
+        if (loadingScenePanel != null)
         {
-            DontDestroyOnLoad(loadingPanel.transform.root.gameObject);
+            DontDestroyOnLoad(loadingScenePanel.transform.root.gameObject);
+        }
+
+        if (exitGamePanel != null)
+        {
+            DontDestroyOnLoad(exitGamePanel.transform.root.gameObject);
         }
     }
 

@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Tabern.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
+    path: Assets/Scenes/Dungeon.unity
+    guid: 4bb0570c4f3c87c45a53d53831c87cfe
+  - enabled: 1
     path: Assets/Scenes/UI/MainMenuUI.unity
     guid: 85941b0120fc5a643a212462e7c814da
   - enabled: 1
