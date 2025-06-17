@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   maxTimeWaitingForChair: 7
-  maxTimeWaitingToBeAttended: 7
-  maxTimeWaitingFood: 7
-  maxTimeEating: 7
+  maxTimeWaitingToBeAttended: 10
+  maxTimeWaitingFood: 15
+  maxTimeEating: 5
