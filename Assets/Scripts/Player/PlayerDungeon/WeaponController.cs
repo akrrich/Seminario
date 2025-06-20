@@ -24,35 +24,15 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!CanAttack()) return;
-
-        // Optional: Use PlayerInputs instead of hard-coded input
-        if (PlayerInputs.Instance != null)
-        {
-            if (PlayerInputs.Instance.Attack())
-            {
-                PerformAttack();
-            }
-        }
-        else
-        {
-            // Fallback for testing
-            if (Input.GetMouseButtonDown(0))
-            {
-                PerformAttack();
-            }
-        }
-    }
-
-    private bool CanAttack()
+    public bool CanAttack()
     {
         return Time.time >= lastAttackTime + attackCooldown;
     }
 
     public void PerformAttack()
     {
+        if (!CanAttack()) return;
+
         lastAttackTime = Time.time;
 
         if (swordAnimator != null)
@@ -61,5 +41,5 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    // Optional: For future hit detection support
+    public float AttackCooldown => attackCooldown;
 }

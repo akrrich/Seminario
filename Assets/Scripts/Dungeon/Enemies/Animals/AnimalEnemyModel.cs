@@ -20,18 +20,7 @@ public class AnimalEnemyModel : BaseEnemyModel
     /// <summary>
     /// Movimiento aleatorio en idle, para todos los animales
     /// </summary>
-    public void IdleRoam()
-    {
-        roamTimer += Time.deltaTime;
-        if (roamTimer >= idleRoamInterval)
-        {
-            roamTimer = 0f;
-            Vector3 randomOffset = Random.insideUnitSphere * idleRoamRadius;
-            randomOffset.y = 0f;
-            Vector3 target = transform.position + randomOffset;
-            MoveTo(target);
-        }
-    }
+ 
 
     public virtual void OnPlayerSpotted()
     {

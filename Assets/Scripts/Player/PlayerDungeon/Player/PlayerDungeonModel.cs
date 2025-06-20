@@ -111,52 +111,45 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         {
             ExecuteDash();
         }
+        if (PlayerInputs.Instance.Attack())
+        {
+            combat.TryAttack();
+        }
         
     }
     public void MovePlayer()
     {
-        // INPUT DE MOVIMIENTO
         Vector2 input = PlayerInputs.Instance.GetMoveAxis(); // (horizontal, vertical)
         Vector3 targetDirection = (orientation.forward * input.y + orientation.right * input.x).normalized;
 
-        // VELOCIDADES
         float targetSpeed = PlayerInputs.Instance.RunHeld() ? runSpeed : walkSpeed;
         Vector3 targetVelocity = targetDirection * targetSpeed;
         Vector3 currentVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        // CALCULO DE CAMBIO DE VELOCIDAD
+        
         Vector3 velocityChange = targetVelocity - currentVelocity;
 
-        // ACELERACIÓN O DESACELERACIÓN SEGÚN HAYA INPUT
         float accelRate = (targetDirection.magnitude > 0.1f) ? acceleration : deceleration;
 
-        // EXTRA FRENADO AL SOLTAR LOS CONTROLES
         float frictionBoost = (targetDirection.magnitude == 0f) ? 1.5f : 1f;
 
-        // FUERZA TOTAL CALCULADA
         Vector3 force = velocityChange * accelRate * frictionBoost;
 
-        // LIMITAR FUERZA MÁXIMA PARA SUAVIDAD
         float maxForce = 50f;
         if (force.magnitude > maxForce)
             force = force.normalized * maxForce;
 
-        // MULTIPLICAR POR MASA
         force *= rb.mass;
 
-        // APLICAR FUERZA
         if (IsGrounded)
         {
             rb.AddForce(new Vector3(force.x, 0f, force.z), ForceMode.Force);
         }
         else
         {
-            // CONTROL EN EL AIRE (LIMITADO)
             float airControlFactor = 0.5f; // control parcial en el aire
             rb.AddForce(new Vector3(force.x, 0f, force.z) * airControlFactor * airMultiplier, ForceMode.Force);
         }
 
-        // INTERPOLAR DRAG (SUAVIZA FRENO)
         float targetDrag = IsGrounded ? groundDrag : 0f;
         rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.deltaTime * 10f);
     }
