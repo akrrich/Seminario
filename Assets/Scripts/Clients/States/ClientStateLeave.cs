@@ -78,7 +78,7 @@ public class ClientStateLeave<T> : State<T>
         /// Ajustar tiempo segun sea necesario
         yield return new WaitForSeconds(2f);
 
-        clientController.OnCollisionEnterWithTrigger = false;
+        clientController.OnCollisionEnterWithTriggerChair = false;
     }
 
     private IEnumerator FreeCurrentTableAfterSeconds()

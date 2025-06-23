@@ -11,9 +11,9 @@ public class ClientController : MonoBehaviour
     private FSM<ClientStates> fsm = new FSM<ClientStates>();
     private ITreeNode root;
 
-    private bool onCollisionEnterWithTrigger = false;
+    private bool onCollisionEnterWithTriggerChair = false;
 
-    public bool OnCollisionEnterWithTrigger { get => onCollisionEnterWithTrigger; set => onCollisionEnterWithTrigger = value; }
+    public bool OnCollisionEnterWithTriggerChair { get => onCollisionEnterWithTriggerChair; set => onCollisionEnterWithTriggerChair = value; }
 
 
     void Awake()
@@ -34,12 +34,9 @@ public class ClientController : MonoBehaviour
         root.Execute();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider collider)
     {
-        if (other.gameObject.CompareTag("Chair"))
-        {
-            onCollisionEnterWithTrigger = true;
-        }
+        OnTriggerEnterWithChair(collider);
     }
 
 
@@ -126,7 +123,7 @@ public class ClientController : MonoBehaviour
         if (clientModel.CurrentTablePosition != null)
         {
             // si no esta colisionando con el trigger de la silla
-            if (!onCollisionEnterWithTrigger)
+            if (!onCollisionEnterWithTriggerChair)
             {
                 return true;
             }
@@ -153,12 +150,21 @@ public class ClientController : MonoBehaviour
     }
 
     private bool QuestionIsOutside()
-    {                                                            // si esta dentro del rango de OutsidePosition
+    {
+        // si esta cerca del Transform de OutsidePosition
         if (Vector3.Distance(clientModel.ClientManager.OutsidePosition.position, transform.position) <= 2f)
         {
             return true;
         }
 
         return false;
+    }
+
+    private void OnTriggerEnterWithChair(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Chair"))
+        {
+            onCollisionEnterWithTriggerChair = true;
+        }
     }
 }

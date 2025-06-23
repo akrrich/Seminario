@@ -63,9 +63,6 @@ public class ClientModel : MonoBehaviour
     {
         navMeshAgent.isStopped = false;
         navMeshAgent.SetDestination(target);
-
-        //Vector3 newDirection = (target - transform.position).normalized;
-        //currentDirection = newDirection;
     }
 
     public void LookAt(Vector3 target, Transform anim)
@@ -83,7 +80,6 @@ public class ClientModel : MonoBehaviour
 
     public void StopVelocity()
     {
-        //currentDirection = Vector3.zero;
         navMeshAgent.isStopped = true;
         navMeshAgent.velocity = Vector3.zero;
     }
