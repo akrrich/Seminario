@@ -503,7 +503,7 @@ MonoBehaviour:
     inventory: 9
     pause: 27
     dash: 0
-    interact: 0
+    interact: 101
     sensitivityX: 400
     sensitivityY: 400
   joystickInputs:

@@ -1,36 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
+
+
 using UnityEngine;
 
 public class InteractionHandler : MonoBehaviour
 {
-    [SerializeField] private float interactionRange = 3f;
+    [SerializeField] private float range = 3f;
     [SerializeField] private LayerMask interactableLayer;
-    private IInteractable currentInteractable;
 
-    void Update()
+    private IInteractable current;
+    private readonly Collider[] hits = new Collider[10];
+
+
+    private void Update()
     {
-        DetectInteractable();
+        Detect();
 
-        if (PlayerInputs.Instance.Interact() && currentInteractable != null)
-        {
-            currentInteractable.Interact();
-        }
+        if (PlayerInputs.Instance.Interact() && current != null)
+            current.Interact();
     }
 
-    void DetectInteractable()
+    private void Detect()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, interactionRange, interactableLayer);
-        currentInteractable = null;
+        current = null;
+        int count = Physics.OverlapSphereNonAlloc(transform.position, range,
+                                                  hits, interactableLayer);
 
-        foreach (var hit in hits)
+        float best = float.MaxValue;
+        for (int i = 0; i < count; i++)
         {
-            if (hit.TryGetComponent(out IInteractable interactable))
+            if (hits[i].TryGetComponent(out IInteractable cand))
             {
-                currentInteractable = interactable;
-                // Mostrar mensaje de interacción si se desea
-                break;
+                float d = Vector3.SqrMagnitude(hits[i].transform.position - transform.position);
+                if (d < best)
+                {
+                    best = d;
+                    current = cand;
+                }
             }
         }
+
+        // TODO: mostrar/ocultar prompt UI aquí con (current != null)
     }
 }

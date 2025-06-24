@@ -1,10 +1,13 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
+
 public class PlayerDungeonModel : MonoBehaviour, IDamageable
 {
+    #region Inspector Fields
     [Header("Stats")]
     [Header("HP")]
     [SerializeField] private float maxHP = 100f;
+
     [Header("Movement")]
     [SerializeField] private float speed;
     [SerializeField] private float walkSpeed = 5f;
@@ -12,10 +15,14 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     [SerializeField] private float acceleration = 20f;
     [SerializeField] private float deceleration = 10f;
     [SerializeField] private float airMultiplier = 5f;
-    [SerializeField] private float groundDrag=5f;
+    [SerializeField] private float groundDrag = 5f;
+
     [Header("Jump")]
     [SerializeField] private float jumpForce = 7f;
-    private float dashCooldown = 1.5f;
+
+    [Header("Dash")]
+    [SerializeField] private float dashCooldown = 3f;   
+
     [Header("Combat")]
     [SerializeField] private int currentWeaponDamage = 5;
     [SerializeField] private float attackCooldown = 1f;
@@ -24,65 +31,72 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     [SerializeField] private float groundCheckDistance = 0.3f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private bool showGroundGizmo = true;
+    #endregion
 
+    #region Private Fields
     private float currentHP;
     private float lastDashTime = -Mathf.Infinity;
-    
+
     private bool isDead = false;
     private bool invulnerable = false;
-    private bool canDash = true;
-    
-    private Vector3 _moveDirection;
+
+    private Vector3 moveDirection;
     private Transform orientation;
     private Rigidbody rb;
-    private DashHandler dash;
-    private CombatHandler combat;
+    private DashHandler dashHandler;
+    private CombatHandler combatHandler;
+    #endregion
 
-    #region PROPERTIES
-    // === Properties ===
+    #region Properties
+    // -------- Estado general --------
+    public float CurrentHP => currentHP;
+    public bool IsDead => isDead;
+    public bool IsInvulnerable => invulnerable;
+    public bool CanMove { get; set; } = true;
+
+    // -------- Movimiento --------
     public float Speed { get => speed; set => speed = value; }
     public float WalkSpeed => walkSpeed;
     public float RunSpeed => runSpeed;
     public float JumpForce => jumpForce;
-    public float DashCooldown => dashCooldown;
-    public float CurrentHP => currentHP;
-    //===WEAPON===
-    public int CurrentWeaponDamage {get=> currentWeaponDamage; set=> currentWeaponDamage = value; }
-    public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
     public Rigidbody Rb => rb;
-    public Vector3 MoveDirection { get=> _moveDirection; set=>_moveDirection=value; }
-    public bool CanDash => Time.time >= lastDashTime + dashCooldown;
-    public bool IsDead => isDead;
+    public Vector3 MoveDirection { get => moveDirection; set => moveDirection = value; }
+
     public bool IsGrounded => Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
     public bool IsFalling => rb.velocity.y < -0.1f && !IsGrounded;
-    public bool IsInvulnerable { get; private set; }
-    public bool CanMove { get; set; } = true;
+
+    // -------- Dash --------
+    public bool DashEnabled { get; set; } = true;
+    public bool CanDash => DashEnabled && Time.time >= lastDashTime + dashCooldown;
+
+    // -------- Combate --------
+    public int CurrentWeaponDamage { get => currentWeaponDamage; set => currentWeaponDamage = value; }
+    public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
     #endregion
 
+    #region Unity Callbacks
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        dash = GetComponent<DashHandler>();
-        combat = GetComponent<CombatHandler>();
+        dashHandler = GetComponent<DashHandler>();
+        combatHandler = GetComponent<CombatHandler>();
         orientation = transform.Find("Orientation");
-        rb.freezeRotation = true;
 
+        rb.freezeRotation = true;
         currentHP = maxHP;
-       
     }
-    private void FixedUpdate()
-    {
-        MovePlayer();
-        
-    }
+
+    private void FixedUpdate() => MovePlayer();
+
     private void Update()
     {
-        Inputs();
+        HandleInputs();
         SpeedControl();
-
-        if (IsGrounded) rb.drag = groundDrag;
-        else rb.drag = 0;
+        rb.drag = IsGrounded ? groundDrag : 0f;
     }
+    #endregion
+
+    #region Public Methods
     public void TakeDamage(int amount)
     {
         if (invulnerable) return;
@@ -95,49 +109,38 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
             HandleDeath();
         }
     }
-    public void SetInvulnerable(bool value)
-    {
-        invulnerable = value;
-    }
-    public void RegisterDash() => lastDashTime = Time.time;
-   
-    private void Inputs()
-    {
-        if (PlayerInputs.Instance.Jump())
-        {
-            Jump();
-        }
-        if (PlayerInputs.Instance.Dash())
-        {
-            ExecuteDash();
-        }
-        if (PlayerInputs.Instance.Attack())
-        {
-            combat.TryAttack();
-        }
-        
-    }
-    public void MovePlayer()
-    {
-        Vector2 input = PlayerInputs.Instance.GetMoveAxis(); // (horizontal, vertical)
-        Vector3 targetDirection = (orientation.forward * input.y + orientation.right * input.x).normalized;
 
+    public void SetInvulnerable(bool value) => invulnerable = value;
+
+    /// <summary>Se llama desde DashHandler cuando inicia un dash para arrancar el cooldown.</summary>
+    public void RegisterDash() => lastDashTime = Time.time;
+    #endregion
+
+    #region Inputs & Movimiento
+    private void HandleInputs()
+    {
+        if (PlayerInputs.Instance.Jump()) Jump();
+        if (PlayerInputs.Instance.Dash()) dashHandler.ExecuteDashRequest();
+        if (PlayerInputs.Instance.Attack()) combatHandler.TryAttack();
+    }
+
+    private void MovePlayer()
+    {
+        Vector2 input = PlayerInputs.Instance.GetMoveAxis(); // (x = horizontal, y = vertical)
+        Vector3 targetDir = (orientation.forward * input.y + orientation.right * input.x).normalized;
         float targetSpeed = PlayerInputs.Instance.RunHeld() ? runSpeed : walkSpeed;
-        Vector3 targetVelocity = targetDirection * targetSpeed;
+
+        Vector3 targetVelocity = targetDir * targetSpeed;
         Vector3 currentVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        
         Vector3 velocityChange = targetVelocity - currentVelocity;
 
-        float accelRate = (targetDirection.magnitude > 0.1f) ? acceleration : deceleration;
-
-        float frictionBoost = (targetDirection.magnitude == 0f) ? 1.5f : 1f;
+        float accelRate = (targetDir.magnitude > 0.1f) ? acceleration : deceleration;
+        float frictionBoost = (targetDir.magnitude == 0f) ? 1.5f : 1f;
 
         Vector3 force = velocityChange * accelRate * frictionBoost;
 
-        float maxForce = 50f;
-        if (force.magnitude > maxForce)
-            force = force.normalized * maxForce;
-
+        const float maxForce = 50f;
+        if (force.magnitude > maxForce) force = force.normalized * maxForce;
         force *= rb.mass;
 
         if (IsGrounded)
@@ -146,13 +149,14 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         }
         else
         {
-            float airControlFactor = 0.5f; // control parcial en el aire
-            rb.AddForce(new Vector3(force.x, 0f, force.z) * airControlFactor * airMultiplier, ForceMode.Force);
+            const float airControl = 0.5f;
+            rb.AddForce(new Vector3(force.x, 0f, force.z) * airControl * airMultiplier, ForceMode.Force);
         }
 
         float targetDrag = IsGrounded ? groundDrag : 0f;
         rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.deltaTime * 10f);
     }
+
     private void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -163,46 +167,43 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
+
     private void Jump()
     {
-        if (IsGrounded)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-            rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-        }
+        if (!IsGrounded) return;
+
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
-    private void ExecuteDash()
-    {
-        dash.ExecuteDash();
-    }
+    #endregion
+
+    #region Death & Respawn
     private void HandleDeath()
     {
         CanMove = false;
         rb.velocity = Vector3.zero;
         SetInvulnerable(true);
-        //        IngredientInventoryManager.Instance      ====== Aca iria el manejo de resetear el inventario temporal
         StartCoroutine(DeathSequence());
     }
+
     private IEnumerator DeathSequence()
     {
-        // Mostrar pantalla de muerte 
-        //UIManager.Instance.ShowDeathScreen(); 
-
+        // TODO: UIManager.Instance.ShowDeathScreen();
         yield return new WaitForSeconds(2f);
 
-        // 1. Reiniciar estado del jugador
+        // Reset stats
         currentHP = maxHP;
         isDead = false;
         SetInvulnerable(false);
         CanMove = true;
-        /*
-        // 2. Teleport al lobby
-        DungeonManager.Instance.ReturnToLobby();
 
-        // 3. Resetear el dungeon
-        DungeonManager.Instance.ResetDungeon();
-        */
+        // TODO:
+        // DungeonManager.Instance.ReturnToLobby();
+        // DungeonManager.Instance.ResetDungeon();
     }
+    #endregion
+
+    #region Gizmos
     private void OnDrawGizmosSelected()
     {
         if (!showGroundGizmo) return;
@@ -211,6 +212,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         Vector3 start = transform.position;
         Vector3 end = start + Vector3.down * groundCheckDistance;
         Gizmos.DrawLine(start, end);
-        Gizmos.DrawWireSphere(end, 0.05f); // pequeño punto para ver el final
+        Gizmos.DrawWireSphere(end, 0.05f);
     }
+    #endregion
 }

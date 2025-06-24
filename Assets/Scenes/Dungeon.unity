@@ -816,80 +816,6 @@ MonoBehaviour:
   sensX: 400
   sensY: 400
   orientation: {fileID: 1776466984}
---- !u!1 &1159332250
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1159332252}
-  - component: {fileID: 1159332251}
-  m_Layer: 0
-  m_Name: PlayerInputs (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1159332251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1159332250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7934f06307a42e499a8c54a9947ed76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  keyboardInputs:
-    run: 304
-    grabFood: 113
-    handOverFood: 101
-    cook: 101
-    takeClientOrder: 101
-    cleanDirtyTable: 101
-    administration: 101
-    jump: 32
-    inventory: 9
-    pause: 27
-    dash: 306
-    interact: 0
-    sensitivityX: 400
-    sensitivityY: 400
-  joystickInputs:
-    run: 337
-    grabFood: 333
-    handOverFood: 330
-    cook: 330
-    takeClientOrder: 330
-    cleanDirtyTable: 330
-    administration: 330
-    jump: 331
-    inventory: 343
-    pause: 339
-    dash: 0
-    interact: 0
-    sensitivityX: 200
-    sensitivityY: 200
---- !u!4 &1159332252
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1159332250}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 550.12305, y: 872.4044, z: 5.741988}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1369412242
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -965,8 +891,9 @@ GameObject:
   - component: {fileID: 1422856002}
   - component: {fileID: 1422856001}
   - component: {fileID: 1422856000}
+  - component: {fileID: 1422856007}
   m_Layer: 7
-  m_Name: Player
+  m_Name: DungeonPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1082,10 +1009,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 1.5
-  offset: {x: 0, y: 0, z: 1}
+  localOffset: {x: 0, y: 0, z: 1.2}
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
+  pivot: {fileID: 1776466984}
   showGizmos: 1
 --- !u!114 &1422856001
 MonoBehaviour:
@@ -1115,7 +1043,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dashSpeed: 20
   dashDuration: 0.2
-  dashCooldown: 3
   dashBufferTime: 0.1
   allowAirDash: 0
 --- !u!114 &1422856003
@@ -1151,6 +1078,7 @@ MonoBehaviour:
   airMultiplier: 5
   groundDrag: 0
   jumpForce: 7
+  dashCooldown: 1.5
   currentWeaponDamage: 5
   attackCooldown: 1
   groundCheckDistance: 1.05
@@ -1181,6 +1109,22 @@ CapsuleCollider:
   m_Height: 2.0000002
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1422856007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422855993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a491df8b7c87b6a44a0c048395302334, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 3
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &1597491576
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,6 +1203,7 @@ GameObject:
   - component: {fileID: 2061912434}
   - component: {fileID: 2061912441}
   - component: {fileID: 2061912440}
+  - component: {fileID: 2061912442}
   m_Layer: 9
   m_Name: Rat
   m_TagString: Untagged
@@ -1431,6 +1376,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 67b3ab554f5f75c4cb1402a0e7827f3d, type: 2}
+  circleRadius: 2
+  directionChangeInterval: 0.4
+--- !u!114 &2061912442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061912433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbba756c468054c4bb333cc65ff8e4ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashTime: 0.08
+  flashes: 3
 --- !u!4 &5044173737315394616
 Transform:
   m_ObjectHideFlags: 0
@@ -1551,5 +1513,4 @@ SceneRoots:
   - {fileID: 1369412242}
   - {fileID: 873410830}
   - {fileID: 640889178}
-  - {fileID: 1159332252}
   - {fileID: 2061912439}

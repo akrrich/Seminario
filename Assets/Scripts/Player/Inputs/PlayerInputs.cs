@@ -1,29 +1,39 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInputs : MonoBehaviour
 {
+    // ────────────────────── Singleton ──────────────────────
     private static PlayerInputs instance;
+    public static PlayerInputs Instance => instance;
 
+    // ────────────────── Asignables en Inspector ─────────────
     [SerializeField] private Inputs keyboardInputs;
-    [Header("")]
     [SerializeField] private Inputs joystickInputs;
 
-    private PlayerInputActions inputActions; // Representa la clase creada por default del nuevo Inputsystem
-    private Vector2 joystick = Vector2.zero;
-    public static PlayerInputs Instance { get => instance; }
+    [Header("Dash/Run Settings")]
+    [Tooltip("Máximo tiempo (s) que cuenta como TAP para dash")]
+    [SerializeField] private float dashTapThreshold = 0.2f;
+
+    // ────────────────── Internos ────────────────────────────
+    private PlayerInputActions inputActions;          // Input System asset
+    private Vector2 joystick = Vector2.zero;          // rotación analógico
+
+    // Dash / Run state machine
+    private bool runKeyDown;
+    private float runKeyDownTime;
+    private bool runHeldFlag;
+    private bool dashThisFrame;
 
     public Inputs KeyboardInputs { get => keyboardInputs; }
     public Inputs JoystickInputs { get => joystickInputs; }
-
-
     void Awake()
     {
         CreateSingleton();
         InitializePlayerInputActions();
     }
 
-
+    private void Update() => HandleRunDashTap();
     public Vector2 GetMoveAxis()
     {
         return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -63,8 +73,16 @@ public class PlayerInputs : MonoBehaviour
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);
 
     public bool Attack() => Input.GetMouseButtonDown(0); //Click izquierdo
-    public bool Dash() => Input.GetKeyDown(keyboardInputs.Dash);
-    public bool RunHeld() => Input.GetKey(keyboardInputs.Run) || Input.GetKey(joystickInputs.Run);
+    public bool Dash()
+    {
+        if (dashThisFrame)
+        {
+            dashThisFrame = false;      // Consumimos
+            return true;
+        }
+        return false;
+    }
+    public bool RunHeld() => runHeldFlag;
     public bool Interact() => Input.GetKeyDown(keyboardInputs.Interact);
 
     private void CreateSingleton()
@@ -107,6 +125,37 @@ public class PlayerInputs : MonoBehaviour
         };
 
     }
+    private void HandleRunDashTap()
+    {
+        bool down = Input.GetKeyDown(keyboardInputs.Run) || Input.GetKeyDown(joystickInputs.Run);
+        bool held = Input.GetKey(keyboardInputs.Run) || Input.GetKey(joystickInputs.Run);
+        bool up = Input.GetKeyUp(keyboardInputs.Run) || Input.GetKeyUp(joystickInputs.Run);
+
+        // ── Al presionar ──
+        if (down)
+        {
+            runKeyDown = true;
+            runKeyDownTime = Time.time;
+            runHeldFlag = false;
+        }
+
+        // ── Manteniendo ──
+        if (runKeyDown && !runHeldFlag && held &&
+            Time.time - runKeyDownTime >= dashTapThreshold)
+        {
+            runHeldFlag = true;            // ahora es carrera
+        }
+
+        // ── Al soltar ──
+        if (up && runKeyDown)
+        {
+            if (!runHeldFlag && Time.time - runKeyDownTime < dashTapThreshold)
+                dashThisFrame = true;      // fue un TAP ⇒ dash
+
+            runKeyDown = false;
+            runHeldFlag = false;
+        }
+    }
 }
 
 [System.Serializable]
@@ -125,7 +174,6 @@ public class Inputs
     [SerializeField] private KeyCode pause;
 
     [Header("Dungeon Inputs:")]
-    [SerializeField] private KeyCode dash;
     [SerializeField] private KeyCode interact;
 
     [Header("Sensitivity:")]
@@ -142,7 +190,6 @@ public class Inputs
     public KeyCode Jump { get => jump; }
     public KeyCode Inventory { get => inventory; }
     public KeyCode Pause { get => pause; }
-    public KeyCode Dash => dash;
     public KeyCode Interact => interact;
     public float SensitivityX { get => sensitivityX; }
     public float SensitivityY { get => sensitivityY; }

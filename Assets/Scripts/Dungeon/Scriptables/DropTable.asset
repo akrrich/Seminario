@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d92e67bf1800bf44ae902212b0f8704, type: 3}
-  m_Name: Rat Data
+  m_Script: {fileID: 11500000, guid: 274d08194b1cebc4bb7a45e592f54662, type: 3}
+  m_Name: DropTable
   m_EditorClassIdentifier: 
-  HP: 30
-  Damage: 5
-  Speed: 6
-  AttackCooldown: 1.5
-  DistanceToPlayer: 3
+  entries: []

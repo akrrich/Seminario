@@ -28,9 +28,17 @@ public class IngredientInventoryManager : MonoBehaviour
     }
 
 
+    public void IncreaseIngredientStock(IngredientType ingredient, int amount)
+    {
+        if (!ingredientInventory.ContainsKey(ingredient))
+            ingredientInventory[ingredient] = 0;
+
+        ingredientInventory[ingredient] += amount;
+
+    }
     public void IncreaseIngredientStock(IngredientType ingredient)
     {
-        ingredientInventory[ingredient]++;
+        IncreaseIngredientStock(ingredient, 1);
     }
 
     public bool TryCraftFood(FoodType foodType)
@@ -39,7 +47,7 @@ public class IngredientInventoryManager : MonoBehaviour
 
         var recipe = recipeDict[foodType];
 
-        foreach (var ing in recipe.Ingridients)
+        foreach (var ing in recipe.Ingredients)
         {
             if (!ingredientInventory.ContainsKey(ing.IngredientType) || ingredientInventory[ing.IngredientType] < ing.Amount)
             {
@@ -47,7 +55,7 @@ public class IngredientInventoryManager : MonoBehaviour
             }
         }
 
-        foreach (var ing in recipe.Ingridients)
+        foreach (var ing in recipe.Ingredients)
         {
             ingredientInventory[ing.IngredientType] -= ing.Amount;
         }

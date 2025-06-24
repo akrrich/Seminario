@@ -13,10 +13,10 @@ public class Ingredients
     public class FoodRecipe // Para machear la cantidad de ingredientes por comida
     {
         [SerializeField] private FoodType foodType;
-        [SerializeField] private List<IngredientAmount> ingridients;
+        [SerializeField] private List<IngredientAmount> ingredients;
 
         public FoodType FoodType { get => foodType; }
-        public List<IngredientAmount> Ingridients { get => ingridients; }
+        public List<IngredientAmount> Ingredients { get => ingredients; }
     }
 
     [Serializable]
@@ -32,10 +32,10 @@ public class Ingredients
     [Serializable]
     public class IngredientData // Para datos de los ingredientes si es necesario en un futuro agregar mas
     {
-        [SerializeField] private IngredientType ingridientType;
+        [SerializeField] private IngredientType ingredientType;
         [SerializeField] private int price;
 
-        public IngredientType IngredientType { get => ingridientType; }
+        public IngredientType IngredientType { get => ingredientType; }
         public int Price { get => price; }
     }
 
