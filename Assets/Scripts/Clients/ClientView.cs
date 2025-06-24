@@ -144,12 +144,9 @@ public class ClientView : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Corregir la escala de los sprites en todos los indices
-    /// </summary>
     private void AutoAdjustSpriteScale(Sprite sprite)
     {
-        float maxDimension = 0.5f; 
+        float maxDimension = 0.75f; 
         Vector2 spriteSize = sprite.bounds.size;
 
         float scaleFactor = maxDimension / Mathf.Max(spriteSize.x, spriteSize.y);

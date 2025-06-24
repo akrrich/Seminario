@@ -28,11 +28,11 @@ public class MessageModeUI : MonoBehaviour
 
     private void InitializeLamdaEventMessages()
     {
-        onCook += () => ShowEnterMessageText("para entrar a cocinar", GetCookKey());
-        onAdministration += () => ShowEnterMessageText("para entrar en administracion", GetAdministrationKey());
-        onHandOver += () => ShowEnterMessageText("para entregar el plato", GetHandOverKey());
-        onTakeOrder += () => ShowEnterMessageText("para tomar el pedido", GetTakeOrderKey());
-        onCleanDirtyTable += () => ShowEnterMessageText("para limpiar la mesa", GetCleanDirtyTableKey());
+        onCook += () => ShowEnterMessageText("Presione", GetCookKey(), "para entrar a cocinar");
+        onAdministration += () => ShowEnterMessageText("Presione", GetAdministrationKey(), "para entrar en administracion");
+        onHandOver += () => ShowEnterMessageText("Presione", GetHandOverKey(), "para entregar el plato");
+        onTakeOrder += () => ShowEnterMessageText("Presione", GetTakeOrderKey(), "para tomar el pedido");
+        onCleanDirtyTable += () => ShowEnterMessageText("Mantener", GetCleanDirtyTableKey(), "para limpiar la mesa");
     }
 
     private void SuscribeToPlayerViewEvents()
@@ -71,7 +71,6 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionExitWithTableForTakeOrderMessage -= DisapearMessageText;
         PlayerView.OnTakeOrderCompletedForHandOverMessage -= DisapearMessageText;
 
-        /// Falta agregar cuando termina
         PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage -= onCleanDirtyTable;
         PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage -= DisapearMessageText;
     }
@@ -81,10 +80,10 @@ public class MessageModeUI : MonoBehaviour
         messageDesplayText.alignment = TextAlignmentOptions.Center;
     }
 
-    private void ShowEnterMessageText(string finalMessage, KeyCode inputKey)
+    private void ShowEnterMessageText(string actionText, KeyCode inputKey, string finalMessage)
     {
         string keyText = $"<color=yellow> {inputKey} </color>";
-        messageDesplayText.text = "Presione" + keyText + finalMessage;
+        messageDesplayText.text = $"{actionText} {keyText} {finalMessage}";
     }
 
     private void DisapearMessageText()
