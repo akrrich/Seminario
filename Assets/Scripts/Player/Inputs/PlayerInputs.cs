@@ -71,7 +71,8 @@ public class PlayerInputs : MonoBehaviour
     public bool Inventory() => Input.GetKeyDown(keyboardInputs.Inventory) || Input.GetKeyDown(joystickInputs.Inventory);
     
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);
-
+    public bool R1() => Input.GetKeyDown(KeyCode.Joystick1Button5);
+    public bool L1() => Input.GetKeyDown(KeyCode.Joystick1Button4);
     public bool Attack() => Input.GetMouseButtonDown(0); //Click izquierdo
     public bool Dash()
     {
