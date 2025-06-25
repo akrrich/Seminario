@@ -913,9 +913,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 1779945894}
-          m_TargetAssemblyTypeName: RecipeInfoUI, Assembly-CSharp
-          m_MethodName: ShowRecipeIngredients
+        - m_Target: {fileID: 1165425112}
+          m_TargetAssemblyTypeName: CookingManagerUI, Assembly-CSharp
+          m_MethodName: ShowInformationRecipe
           m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -2822,9 +2822,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 1779945894}
-          m_TargetAssemblyTypeName: RecipeInfoUI, Assembly-CSharp
-          m_MethodName: ShowRecipeIngredients
+        - m_Target: {fileID: 1165425112}
+          m_TargetAssemblyTypeName: CookingManagerUI, Assembly-CSharp
+          m_MethodName: ShowInformationRecipe
           m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -4410,6 +4410,13 @@ MonoBehaviour:
   panelInformation: {fileID: 1779945890}
   buttonClick: {fileID: 1165425114}
   buttonSelected: {fileID: 1165425113}
+  recipesInformationUI:
+  - ingredientImage: {fileID: 895021037}
+    ingredientAmountText: {fileID: 814738979}
+  - ingredientImage: {fileID: 1790248864}
+    ingredientAmountText: {fileID: 1920177322}
+  - ingredientImage: {fileID: 821147}
+    ingredientAmountText: {fileID: 1600033955}
 --- !u!82 &1165425113
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6903,9 +6910,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 1779945894}
-          m_TargetAssemblyTypeName: RecipeInfoUI, Assembly-CSharp
-          m_MethodName: ShowRecipeIngredients
+        - m_Target: {fileID: 1165425112}
+          m_TargetAssemblyTypeName: CookingManagerUI, Assembly-CSharp
+          m_MethodName: ShowInformationRecipe
           m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -6963,14 +6970,13 @@ GameObject:
   - component: {fileID: 1779945891}
   - component: {fileID: 1779945893}
   - component: {fileID: 1779945892}
-  - component: {fileID: 1779945894}
   m_Layer: 5
-  m_Name: ImageBorderInformation
+  m_Name: PanelRecipeInformation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1779945891
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7032,33 +7038,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1779945890}
   m_CullTransparentMesh: 1
---- !u!114 &1779945894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1779945890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f974d0d186a504b429efea78449d126c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slots:
-  - ingredientImage: {fileID: 895021037}
-    amountText: {fileID: 814738979}
-  - ingredientImage: {fileID: 1790248864}
-    amountText: {fileID: 1920177322}
-  - ingredientImage: {fileID: 821147}
-    amountText: {fileID: 1600033955}
-  defaultSprite: {fileID: 21300000, guid: fd1eec400449922439cdaa3320612afe, type: 3}
-  ingredientSprites:
-  - type: 0
-    sprite: {fileID: 21300000, guid: 121be038c07ca904ba58700786c0e642, type: 3}
-  - type: 1
-    sprite: {fileID: 21300000, guid: fba8d16bf4cf78d41b8987e9e633b5d6, type: 3}
-  - type: 2
-    sprite: {fileID: 21300000, guid: 121be038c07ca904ba58700786c0e642, type: 3}
 --- !u!1 &1790248862
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,9 +33,11 @@ public class Ingredients
     public class IngredientData // Para datos de los ingredientes si es necesario en un futuro agregar mas
     {
         [SerializeField] private IngredientType ingridientType;
+        [SerializeField] private Sprite sprite;
         [SerializeField] private int price;
 
         public IngredientType IngredientType { get => ingridientType; }
+        public Sprite Sprite { get => sprite; }
         public int Price { get => price; }
     }
 

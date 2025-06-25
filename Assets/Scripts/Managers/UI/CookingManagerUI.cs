@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
 
 public class CookingManagerUI : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class CookingManagerUI : MonoBehaviour
     /// </summary>
     [SerializeField] private AudioSource buttonClick;
     [SerializeField] private AudioSource buttonSelected;
+
+    [SerializeField] private List<RecipeInformationUI> recipesInformationUI;
 
     private List<GameObject> buttonsCooking  = new List<GameObject>();
 
@@ -74,10 +78,33 @@ public class CookingManagerUI : MonoBehaviour
         ignoreFirstButtonSelected = false;
     }
 
-
-    public void ShowInformationRecipe()
+    // Funcion asignada a event trigger de la UI para mostrar la informacion de las recetas
+    public void ShowInformationRecipe(string foodTypeName)
     {
+        if (!Enum.TryParse(foodTypeName, out FoodType foodType)) return;
 
+        var recipe = IngredientInventoryManager.Instance.GetRecipe(foodType);
+        if (recipe == null) return;
+
+        for (int i = 0; i < recipesInformationUI.Count; i++)
+        {
+            if (i < recipe.Ingridients.Count)
+            {
+                var ing = recipe.Ingridients[i];
+                recipesInformationUI[i].IngredientAmountText.text = ing.Amount.ToString();
+
+                if (IngredientInventoryManager.Instance.IngredientDataDict.TryGetValue(ing.IngredientType, out var data))
+                {
+                    recipesInformationUI[i].IngredientImage.sprite = data.Sprite;
+                }
+            }
+
+            else
+            {
+                recipesInformationUI[i].IngredientAmountText.text = "";
+                recipesInformationUI[i].IngredientImage.sprite = null;
+            }
+        }
     }
 
     // Funcion asignada a los botones de la UI
@@ -160,4 +187,14 @@ public class CookingManagerUI : MonoBehaviour
             lastSelectedButtonFromCookingPanel = EventSystem.current.currentSelectedGameObject;
         }
     }
+}
+
+[Serializable]
+public class RecipeInformationUI
+{
+    [SerializeField] private Image ingredientImage;
+    [SerializeField] private TextMeshProUGUI ingredientAmountText;
+
+    public Image IngredientImage { get => ingredientImage; }
+    public TextMeshProUGUI IngredientAmountText { get => ingredientAmountText; }
 }

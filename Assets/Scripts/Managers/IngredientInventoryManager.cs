@@ -18,6 +18,8 @@ public class IngredientInventoryManager : MonoBehaviour
     
     public static IngredientInventoryManager Instance { get => instance; }
 
+    public Dictionary<IngredientType, Ingredients.IngredientData> IngredientDataDict { get =>  ingredientDataDict; }
+
 
     void Awake()
     {

@@ -863,24 +863,34 @@ MonoBehaviour:
       amount: 1
   ingredientData:
   - ingridientType: 0
+    sprite: {fileID: 21300000, guid: 8b04f198cfd6e884e888cbdb87706353, type: 3}
     price: 15
   - ingridientType: 1
+    sprite: {fileID: 21300000, guid: 420bfe9ea5448904f9dd283f3ea209cf, type: 3}
     price: 15
   - ingridientType: 2
+    sprite: {fileID: 21300000, guid: 6f2e8ebbb26127244ab6a6388bc9f79b, type: 3}
     price: 15
   - ingridientType: 3
+    sprite: {fileID: 21300000, guid: a5fd3a083a75c4342a7fae2d8b72bb2f, type: 3}
     price: 15
   - ingridientType: 4
+    sprite: {fileID: 21300000, guid: 31fb8d5613126114db5fa596579adde7, type: 3}
     price: 15
   - ingridientType: 5
+    sprite: {fileID: 0}
     price: 15
   - ingridientType: 6
+    sprite: {fileID: 0}
     price: 15
   - ingridientType: 7
+    sprite: {fileID: 0}
     price: 15
   - ingridientType: 8
+    sprite: {fileID: 0}
     price: 15
   - ingridientType: 9
+    sprite: {fileID: 0}
     price: 15
   initializeStockIngredients: 10
 --- !u!4 &1302569140
