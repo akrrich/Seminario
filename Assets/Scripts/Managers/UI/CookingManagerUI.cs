@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class CookingManagerUI : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones de hijos
+    [SerializeField] private GameObject panelInformation;
 
     /// <summary>
     /// Agregar ruido de cancelacion si no tiene ingredientes para cocinar una receta
@@ -21,16 +22,12 @@ public class CookingManagerUI : MonoBehaviour
 
     private event Action onEnterCook, onExitCook;
 
-    private static event Action<List<GameObject>> onSendButtonsToEventSystem;
-
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
 
     private bool ignoreFirstButtonSelected = true;
 
     public static Action<string> OnButtonSetFood { get => onButtonGetFood; set => onButtonGetFood = value; }
-
-    public static Action<List<GameObject>> OnSendButtonsToEventSystem { get => onSendButtonsToEventSystem; set => onSendButtonsToEventSystem = value; }
 
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
     public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
@@ -42,7 +39,6 @@ public class CookingManagerUI : MonoBehaviour
         SuscribeToPlayerViewEvents();
         SuscribeToPauseManagerRestoreSelectedGameObjectEvent();
         GetComponents();
-        InvokeEventToSendButtonsReferences();
     }
 
     void Update()
@@ -76,6 +72,12 @@ public class CookingManagerUI : MonoBehaviour
         }
 
         ignoreFirstButtonSelected = false;
+    }
+
+
+    public void ShowInformationRecipe()
+    {
+
     }
 
     // Funcion asignada a los botones de la UI
@@ -122,14 +124,10 @@ public class CookingManagerUI : MonoBehaviour
         }
     }
 
-    private void InvokeEventToSendButtonsReferences()
-    {
-        onSendButtonsToEventSystem?.Invoke(buttonsCooking);
-    }
-
     private void ActiveOrDeactivateRootGameObject(bool state)
     {
         rootGameObject.SetActive(state);
+        panelInformation.SetActive(state);
 
         if (state)
         {

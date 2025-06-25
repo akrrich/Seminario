@@ -122,7 +122,7 @@ public class IngredientInventoryManagerUI : MonoBehaviour
 
     private void EnabledOrDisabledInventoryPanel()
     {
-        if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating)
+        if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating && !PauseManager.Instance.IsGamePaused)
         {
             if (PlayerInputs.Instance.Inventory())
             {

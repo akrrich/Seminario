@@ -12,6 +12,8 @@ public class PlayerModel : MonoBehaviour
     private PlayerCamera playerCamera;
 
     private Rigidbody rb;
+    private CapsuleCollider capsuleCollider;
+    private PhysicMaterial physicMaterial;
     private GameObject oven;
     private GameObject administration;
 
@@ -37,6 +39,8 @@ public class PlayerModel : MonoBehaviour
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
 
     public Rigidbody Rb { get => rb; }
+    public CapsuleCollider CapsuleCollider { get => capsuleCollider; set => capsuleCollider = value; }
+    public PhysicMaterial PhysicsMaterial { get => physicMaterial; }
     public GameObject Oven { get => oven; }
     public GameObject Administration { get => administration; }
 
@@ -56,11 +60,11 @@ public class PlayerModel : MonoBehaviour
     void Awake()
     {
         GetComponents();
+        Initialize();
 
         // Provisorio
         StartCoroutine(InvokeEventInitializationPlayer());
     }
-
 
     void FixedUpdate()
     {
@@ -103,8 +107,14 @@ public class PlayerModel : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<PlayerCamera>();
         rb = GetComponent<Rigidbody>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
         oven = GameObject.FindGameObjectWithTag("Oven");
         administration = GameObject.FindGameObjectWithTag("Administration");
+    }
+
+    private void Initialize()
+    {
+        physicMaterial = capsuleCollider.material;
     }
 
     private void Movement()

@@ -65,6 +65,11 @@ public class IngredientInventoryManager : MonoBehaviour
         return ingredientInventory.TryGetValue(ingredient, out var stock) ? stock : 0;
     }
 
+    public Ingredients.FoodRecipe GetRecipe(FoodType foodType)
+    {
+        return recipeDict.TryGetValue(foodType, out var recipe) ? recipe : null;
+    }
+
     public List<IngredientType> GetAllIngredients() => new List<IngredientType>(ingredientInventory.Keys);
 
 

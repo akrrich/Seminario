@@ -26,6 +26,9 @@ public class PlayerStateCook<T> : State<T>
         PlayerView.OnEnterInCookMode?.Invoke();
         PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
 
+        playerModel.Rb.velocity = Vector3.zero;
+        playerModel.CapsuleCollider.material = null;
+
         playerView.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = cookingPosition.transform.position;
@@ -48,5 +51,7 @@ public class PlayerStateCook<T> : State<T>
         PlayerView.OnExitInCookMode?.Invoke();
         playerView.ShowOrHideDish(true);
         playerModel.IsCooking = false;
+
+        playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;
     }
 }

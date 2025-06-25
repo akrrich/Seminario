@@ -25,7 +25,7 @@ public class PlayerInputs : MonoBehaviour
 
     void Update()
     {
-        // Test
+        // Test JoystickButtons
         /*for (int i = 0; i < 20; i++) 
         {
             if (Input.GetKeyDown(KeyCode.JoystickButton0 + i))
