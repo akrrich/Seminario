@@ -7,24 +7,33 @@ using System.Collections;
 /// Se apoya en un NavMeshAgent para navegar.
 /// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
-public class RatAI : MonoBehaviour
+public class RatAI : EnemyBase
 {
-    [Header("Stats / Data")]
-    public EnemyData enemyData;
-
+    
     [Header("Movimiento errático")]
     [SerializeField] private float circleRadius = 2f;  // radio del órbita
     [SerializeField] private float directionChangeInterval = 0.4f;
+ 
+    [Header("LoS")]
+    [SerializeField] private float visionRange = 8f;
+    [SerializeField] private float visionAngle = 100f;
+    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private float chaseSpeedMultiplier = 1.5f;
+    [SerializeField] private float loseSightDelay = 1.5f; // segundos antes de volver al movimiento errático
+
 
     // --- Internos ---
     private Transform player;
     private IDamageable playerDamageable;
-    private NavMeshAgent agent;
     private Vector3 currentOffset;
     private float dirTimer;
 
     private float attackCooldownTimer;
     private bool isAttacking;
+
+    //----Vision----
+    private float loseSightTimer = 0f;
+    private bool canSeePlayer = false;
 
     #region Unity
     private void Start()
@@ -65,7 +74,64 @@ public class RatAI : MonoBehaviour
 
         attackCooldownTimer += Time.deltaTime;
 
-        // ---------- Movimiento errático ----------
+        PerceptionUpdate();
+
+        if (canSeePlayer)
+            ChasePlayer();
+        else
+            ErraticMove();
+    }
+    #endregion
+    #region Percepción
+
+    private void PerceptionUpdate()
+    {
+        bool seesPlayer = LineOfSight.LOS(transform, player, visionRange, visionAngle, obstacleMask);
+
+        if (seesPlayer)
+        {
+            loseSightTimer = 0f;
+            if (!canSeePlayer)
+            {
+                canSeePlayer = true;
+                agent.speed = enemyData.Speed * chaseSpeedMultiplier;
+            }
+        }
+        else
+        {
+            if (canSeePlayer)
+            {
+                loseSightTimer += Time.deltaTime;
+                if (loseSightTimer >= loseSightDelay)
+                {
+                    canSeePlayer = false;
+                    agent.speed = enemyData.Speed;
+                    loseSightTimer = 0f;
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    #region Movimiento
+
+    private void ChasePlayer()
+    {
+        float dist = Vector3.Distance(transform.position, player.position);
+
+        agent.isStopped = false;
+        agent.SetDestination(player.position);
+
+        if (dist <= enemyData.DistanceToPlayer)
+        {
+            agent.isStopped = true;
+            TryAttack();
+        }
+    }
+
+    private void ErraticMove()
+    {
         dirTimer -= Time.deltaTime;
         if (dirTimer <= 0f)
         {
@@ -88,8 +154,8 @@ public class RatAI : MonoBehaviour
             TryAttack();
         }
     }
-    #endregion
 
+    #endregion
     #region Ataque
     private void TryAttack()
     {

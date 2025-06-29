@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class InteractionHandler : MonoBehaviour
 {
-    [SerializeField] private float range = 3f;
+    [Header("Interaction variables")]
+    [SerializeField] private float range = 5f;
+    [SerializeField] private float radius = 0.5f;
     [SerializeField] private LayerMask interactableLayer;
+    [SerializeField,Tooltip("El Punto de vista o donde apunta")]
+    private Transform rayOrigin; 
 
     private IInteractable current;
-    private readonly Collider[] hits = new Collider[10];
+    private IInteractable lastCurrent;
 
-
+    
     private void Update()
     {
         Detect();
@@ -21,24 +25,34 @@ public class InteractionHandler : MonoBehaviour
 
     private void Detect()
     {
+        lastCurrent = current;
         current = null;
-        int count = Physics.OverlapSphereNonAlloc(transform.position, range,
-                                                  hits, interactableLayer);
 
-        float best = float.MaxValue;
-        for (int i = 0; i < count; i++)
+        // SphereCast en la dirección de la vista
+        if (Physics.SphereCast(rayOrigin.position, radius, rayOrigin.forward,
+                               out RaycastHit hit, range, interactableLayer))
         {
-            if (hits[i].TryGetComponent(out IInteractable cand))
+            Debug.Log("Tire esfera");
+            if (hit.collider.TryGetComponent(out IInteractable interactable))
             {
-                float d = Vector3.SqrMagnitude(hits[i].transform.position - transform.position);
-                if (d < best)
-                {
-                    best = d;
-                    current = cand;
-                }
+                Debug.Log("Le di a un interactable");
+                current = interactable;
             }
         }
 
-        // TODO: mostrar/ocultar prompt UI aquí con (current != null)
+        // Solo actualizar la UI si cambia el objeto bajo la mira
+        if (current != lastCurrent)
+        {
+            if (current != null)
+            {
+                // Mostrar el prompt de interacción
+                // UIManager.Instance.ShowInteractionPrompt(current); // ejemplo
+            }
+            else
+            {
+                // Ocultar el prompt de interacción
+                // UIManager.Instance.HideInteractionPrompt(); // ejemplo
+            }
+        }
     }
 }
