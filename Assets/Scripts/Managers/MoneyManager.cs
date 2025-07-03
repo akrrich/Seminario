@@ -5,9 +5,10 @@ public class MoneyManager : MonoBehaviour
 {
     private static MoneyManager instance;
 
+    [SerializeField] private MoneyManagerData moneyManagerData;
+
     private TextMeshProUGUI moneyText;
 
-    [SerializeField] private float initializeCurrentMoneyValue;
     private float currentMoney;
 
     public static MoneyManager Instance { get => instance; }
@@ -67,7 +68,7 @@ public class MoneyManager : MonoBehaviour
 
     private void InitializeCurrentMoney()
     {
-        currentMoney = initializeCurrentMoneyValue;
+        currentMoney = moneyManagerData.InitializeCurrentMoneyValue;
     }
 
     private void UpdateMoneyText()

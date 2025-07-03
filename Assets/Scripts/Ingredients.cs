@@ -40,14 +40,4 @@ public class Ingredients
         public Sprite Sprite { get => sprite; }
         public int Price { get => price; }
     }
-
-    [Serializable]
-    public class IngredientSlotPrefab // Para machear el prefab del slot del inventario con cada ingrediente
-    {
-        [SerializeField] private IngredientType ingredientType;
-        [SerializeField] private GameObject prefab;
-
-        public IngredientType IngredientType { get => ingredientType; }
-        public GameObject Prefab { get => prefab; }
-    }
 }

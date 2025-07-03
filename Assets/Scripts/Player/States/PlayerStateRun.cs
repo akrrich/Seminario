@@ -26,7 +26,7 @@ public class PlayerStateRun<T> : State<T>
         base.Enter();
         //Debug.Log("Run");
 
-        playerModel.Speed = playerModel.RunSpeed;
+        playerModel.Speed = playerModel.PlayerTabernData.RunSpeed;
     }
 
     public override void Execute()

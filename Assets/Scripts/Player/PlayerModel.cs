@@ -9,6 +9,8 @@ public enum PlayerStates
 
 public class PlayerModel : MonoBehaviour
 {
+    [SerializeField] private PlayerTabernData playerTabernData;
+
     private PlayerCamera playerCamera;
 
     private Rigidbody rb;
@@ -19,15 +21,6 @@ public class PlayerModel : MonoBehaviour
 
     private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
 
-    [Header("LineOfSight")]
-    [SerializeField] private float rangeVision;
-    [SerializeField] private float angleVision;
-
-    [Header("Variables")]
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float runSpeed;
-    [SerializeField] private float jumpForce;
-
     private float speed;
 
     private bool isGrounded = true;
@@ -35,6 +28,8 @@ public class PlayerModel : MonoBehaviour
     private bool isCollidingAdministration = false;
     private bool isCooking = false;
     private bool isAdministrating = false;
+
+    public PlayerTabernData PlayerTabernData { get => playerTabernData; }
 
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
 
@@ -46,10 +41,7 @@ public class PlayerModel : MonoBehaviour
 
     public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
-    public float WalkSpeed { get => walkSpeed; }
-    public float RunSpeed { get => runSpeed; } 
     public float Speed { get => speed; set => speed = value; }
-    public float JumpForce { get => jumpForce; }
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
@@ -73,7 +65,7 @@ public class PlayerModel : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        LineOfSight.DrawLOSOnGizmos(transform, angleVision, rangeVision);
+        LineOfSight.DrawLOSOnGizmos(transform, playerTabernData.AngleVision, playerTabernData.RangeVision);
     }
 
 
@@ -82,12 +74,12 @@ public class PlayerModel : MonoBehaviour
     /// </summary>
     public bool IsLookingAtOven()
     {
-        return LineOfSight.LOS(playerCamera.transform, oven.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
+        return LineOfSight.LOS(playerCamera.transform, oven.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
     }
 
     public bool IsLookingAtAdministration()
     {
-        return LineOfSight.LOS(playerCamera.transform, administration.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
+        return LineOfSight.LOS(playerCamera.transform, administration.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
     }
 
     public void LookAt(Vector3 target)

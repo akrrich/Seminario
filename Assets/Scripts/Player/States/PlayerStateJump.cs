@@ -18,7 +18,7 @@ public class PlayerStateJump<T> : State<T>
         base.Enter();
         //Debug.Log("Jump");
 
-        playerModel.Rb.AddForce(Vector3.up * playerModel.JumpForce, ForceMode.Impulse);
+        playerModel.Rb.AddForce(Vector3.up * playerModel.PlayerTabernData.JumpForce, ForceMode.Impulse);
     }
 
     public override void Execute()

@@ -2,13 +2,12 @@ using UnityEngine;
 
 public class ZoneUnlock : MonoBehaviour
 {
-    [SerializeField] private Sprite imageZoneUnlock;
-    [SerializeField] private int cost;
+    [SerializeField] private ZoneUnlockData zoneUnlockData;
 
     private bool isUnlocked = false;
 
-    public Sprite ImageZoneUnlock { get => imageZoneUnlock; }
-    public int Cost { get => cost; }
+    public ZoneUnlockData ZoneUnlockData { get => zoneUnlockData; }
+
     public bool IsUnlocked { get => isUnlocked; set => isUnlocked = value; }
 
 

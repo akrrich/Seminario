@@ -94,8 +94,8 @@ public class AdministratingManagerUI : MonoBehaviour
     /// </summary>
     public void ShowCurrentZoneInformation(int index)
     {
-        currentImageZoneUnlock.sprite = zoneUnlocks[index].ImageZoneUnlock;
-        textPriceCurrentZoneUnlock.text = "Price: " + zoneUnlocks[index].Cost.ToString();
+        currentImageZoneUnlock.sprite = zoneUnlocks[index].ZoneUnlockData.ImageZoneUnlock;
+        textPriceCurrentZoneUnlock.text = "Price: " + zoneUnlocks[index].ZoneUnlockData.Cost.ToString();
     }
 
     // Funcion asignada a boton UI
@@ -119,7 +119,7 @@ public class AdministratingManagerUI : MonoBehaviour
     {
         if (zoneUnlocks[index].IsUnlocked) return;
 
-        int price = zoneUnlocks[index].Cost;
+        int price = zoneUnlocks[index].ZoneUnlockData.Cost;
 
         if (MoneyManager.Instance.CurrentMoney >= price)
         {

@@ -10,6 +10,8 @@ public class Food : MonoBehaviour
 {
     // No usar el metodo OnDisabled de Unity
 
+    [SerializeField] private FoodData foodData;
+
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
@@ -21,13 +23,10 @@ public class Food : MonoBehaviour
     private BoxCollider boxCollider;
 
     [SerializeField] private FoodType foodType;
-    [SerializeField] private float timeToBeenCooked;
 
     private bool isInstantiateFirstTime = true;
     private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
-
-    public float TimeToBeenCooked { get => timeToBeenCooked; }
 
 
     void Awake()
@@ -86,7 +85,7 @@ public class Food : MonoBehaviour
         {
             stovePosition = cookingManager.CurrentStove;
 
-            yield return new WaitForSeconds(timeToBeenCooked);
+            yield return new WaitForSeconds(foodData.TimeToBeenCooked);
 
             cookingManager.ReleaseStovePosition(stovePosition);
             cookedPosition = cookingManager.MoveFoodWhenIsCooked(this);

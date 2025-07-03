@@ -148,5 +148,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86082d48524a9a243bbfc995a809360f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foodData: {fileID: 11400000, guid: 944dcb1978895b44ead695db26ef3457, type: 2}
   foodType: 2
-  timeToBeenCooked: 3

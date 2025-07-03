@@ -14,12 +14,10 @@ public class ScenesManager : MonoBehaviour
 
     private static ScenesManager instance;
 
+    [SerializeField] private ScenesManagerData scenesManagerData;
+
     [SerializeField] private GameObject loadingScenePanel;
     [SerializeField] private GameObject exitGamePanel;
-
-    [SerializeField] private float duringTimeLoadingScenePanel;
-    [SerializeField] private float duringTimeExitGamePanel;
-
 
 #pragma warning disable 0414
     /// <summary>
@@ -55,7 +53,7 @@ public class ScenesManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            if (asyncLoad.progress >= 0.9f && elapsedTime >= duringTimeLoadingScenePanel)
+            if (asyncLoad.progress >= 0.9f && elapsedTime >= scenesManagerData.DuringTimeLoadingScenePanel)
             {
                 if (additiveScenes != null)
                 {
@@ -80,7 +78,7 @@ public class ScenesManager : MonoBehaviour
         exitGamePanel.SetActive(true);
         isInExitGamePanel = true;
 
-        yield return new WaitForSecondsRealtime(duringTimeExitGamePanel);
+        yield return new WaitForSecondsRealtime(scenesManagerData.DuringTimeExitGamePanel);
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

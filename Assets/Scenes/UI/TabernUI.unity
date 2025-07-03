@@ -4692,8 +4692,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15104ba8cfa10d843809ada041546b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sliderCleanDiirtyTableUIData: {fileID: 11400000, guid: bcc47d3ee7fc9e6498dbeb43f6c17d11, type: 2}
   sliderCleanDirtyTable: {fileID: 878434704}
-  maxHoldTime: 5
 --- !u!1 &1277502344
 GameObject:
   m_ObjectHideFlags: 0

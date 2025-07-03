@@ -5,16 +5,15 @@ public class PlayerInputs : MonoBehaviour
 {
     private static PlayerInputs instance;
 
-    [SerializeField] private Inputs keyboardInputs;
-    [Header("")]
-    [SerializeField] private Inputs joystickInputs;
+    [SerializeField] private InputsData keyboardInputs;
+    [SerializeField] private InputsData joystickInputs;
 
     private PlayerInputActions inputActions; // Representa la clase creada por default del nuevo Inputsystem
     private Vector2 joystick = Vector2.zero;
     public static PlayerInputs Instance { get => instance; }
 
-    public Inputs KeyboardInputs { get => keyboardInputs; }
-    public Inputs JoystickInputs { get => joystickInputs; }
+    public InputsData KeyboardInputs { get => keyboardInputs; }
+    public InputsData JoystickInputs { get => joystickInputs; }
 
 
     void Awake()
@@ -53,25 +52,15 @@ public class PlayerInputs : MonoBehaviour
 
 
     public bool Run() => Input.GetKeyDown(keyboardInputs.Run) || Input.GetKeyDown(joystickInputs.Run);
-
     public bool StopRun() => Input.GetKeyDown(keyboardInputs.Run) || Input.GetKeyDown(joystickInputs.Run);
-    
     public bool GrabFood() => Input.GetKeyDown(keyboardInputs.GrabFood) || Input.GetKeyDown(joystickInputs.GrabFood);
-    
     public bool HandOverFood() => Input.GetKeyDown(keyboardInputs.HandOverFood) || Input.GetKeyDown(joystickInputs.HandOverFood);
-    
     public bool TakeClientOrder() => Input.GetKeyDown(keyboardInputs.TakeClientOrder) || Input.GetKeyDown(joystickInputs.TakeClientOrder);
-
     public bool CleanDirtyTable() => Input.GetKey(keyboardInputs.CleanDirtyTable) || Input.GetKey(joystickInputs.CleanDirtyTable);
-
     public bool Jump() => Input.GetKeyDown(keyboardInputs.Jump) || Input.GetKeyDown(joystickInputs.Jump);
-    
     public bool Cook() => Input.GetKeyDown(keyboardInputs.Cook) || Input.GetKeyDown(joystickInputs.Cook);
-    
     public bool Administration() => Input.GetKeyDown(keyboardInputs.Administration) || Input.GetKeyDown(joystickInputs.Administration);
-    
     public bool Inventory() => Input.GetKeyDown(keyboardInputs.Inventory) || Input.GetKeyDown(joystickInputs.Inventory);
-    
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);
 
     public bool R1() => Input.GetKeyDown(KeyCode.Joystick1Button5);
@@ -81,6 +70,7 @@ public class PlayerInputs : MonoBehaviour
     public bool Dash() => Input.GetKeyDown(keyboardInputs.Dash);
     public bool RunHeld() => Input.GetKey(keyboardInputs.Run) || Input.GetKey(joystickInputs.Run);
     public bool Interact() => Input.GetKeyDown(keyboardInputs.Interact);
+
 
     private void CreateSingleton()
     {
@@ -122,43 +112,4 @@ public class PlayerInputs : MonoBehaviour
         };
 
     }
-}
-
-[System.Serializable]
-public class Inputs
-{
-    [Header("Inputs:")]
-    [SerializeField] private KeyCode run;
-    [SerializeField] private KeyCode grabFood;
-    [SerializeField] private KeyCode handOverFood;
-    [SerializeField] private KeyCode cook;
-    [SerializeField] private KeyCode takeClientOrder;
-    [SerializeField] private KeyCode cleanDirtyTable;
-    [SerializeField] private KeyCode administration;
-    [SerializeField] private KeyCode jump;
-    [SerializeField] private KeyCode inventory;
-    [SerializeField] private KeyCode pause;
-
-    [Header("Dungeon Inputs:")]
-    [SerializeField] private KeyCode dash;
-    [SerializeField] private KeyCode interact;
-
-    [Header("Sensitivity:")]
-    [SerializeField] private float sensitivityX;
-    [SerializeField] private float sensitivityY;
-
-    public KeyCode Run { get => run; }
-    public KeyCode GrabFood { get => grabFood; }
-    public KeyCode HandOverFood { get => handOverFood; }
-    public KeyCode Cook { get => cook; }
-    public KeyCode TakeClientOrder { get => takeClientOrder; }
-    public KeyCode CleanDirtyTable { get => cleanDirtyTable; }
-    public KeyCode Administration { get => administration; }
-    public KeyCode Jump { get => jump; }
-    public KeyCode Inventory { get => inventory; }
-    public KeyCode Pause { get => pause; }
-    public KeyCode Dash => dash;
-    public KeyCode Interact => interact;
-    public float SensitivityX { get => sensitivityX; }
-    public float SensitivityY { get => sensitivityY; }
 }

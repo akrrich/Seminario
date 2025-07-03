@@ -381,8 +381,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d68098172e04e274bb733e534b5262c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zoneUnlockData: {fileID: 11400000, guid: 892d429cb3e60904fb9c19a2b5aac81f, type: 2}
   imageZoneUnlock: {fileID: 21300000, guid: e3ab8164cd8ffe344a201a690ccc5b6b, type: 3}
-  cost: 200
 --- !u!1 &66947652
 GameObject:
   m_ObjectHideFlags: 0
@@ -3280,6 +3280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2ee7024166dfd4b9a92fc2cae2f510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clientManagerData: {fileID: 11400000, guid: e57a36ad143446246a1f01977f246a90, type: 2}
   spawnPosition: {fileID: 1723860516}
   outsidePosition: {fileID: 723869295}
   clientAbstractFactory: {fileID: 498648864}
@@ -3294,7 +3295,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 1503a68a87216b34791d6edbfe42250f, type: 3}
   - foodType: 2
     sprite: {fileID: 21300000, guid: 51d27cd2fc47b3b49ba285ccce8c418f, type: 3}
-  timeToWaitForSpawnNewClient: 5
   InstantiateClients: 1
   InstantiateTheSameClient: 0
 --- !u!1 &773677852
@@ -7094,12 +7094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cdc5b4d2744cf749bbf22ed6b7ee15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeVision: 2
-  angleVision: 180
-  walkSpeed: 300
-  runSpeed: 500
-  jumpForce: 5
-  physicsMaterial: {fileID: 13400000, guid: 3e888375b0c98f74ba50a63c1d0d6c80, type: 2}
+  playerTabernData: {fileID: 11400000, guid: 544d1c0df7c42c648bb302aaa7fb069b, type: 2}
 --- !u!1 &1707060127
 GameObject:
   m_ObjectHideFlags: 0

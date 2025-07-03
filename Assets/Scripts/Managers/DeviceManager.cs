@@ -12,6 +12,8 @@ public class DeviceManager : MonoBehaviour
 
     private static DeviceManager instance;
 
+    [SerializeField] private DeviceManagerData deviceManagerData;
+
     private Device currentDevice;
 
     private bool isUIModeActive = false; // Falso por defecto, se inicializa en ScenesManager y se setea cuando se quiere interactuar en la UI
@@ -56,19 +58,28 @@ public class DeviceManager : MonoBehaviour
     {
         if (currentDevice == Device.Joystick)
         {
-            Cursor.visible = false;    
+            if (!deviceManagerData.UseCursorAllTime)
+            {
+                Cursor.visible = false;
+            }
         }
 
         else if (currentDevice == Device.KeyboardMouse)
         {
             if (isUIModeActive)
             {
-                Cursor.visible = true;
+                if (!deviceManagerData.UseCursorAllTime)
+                {
+                    Cursor.visible = true;
+                }
             }
 
             else
             {
-                Cursor.visible = false;
+                if (!deviceManagerData.UseCursorAllTime)
+                {
+                    Cursor.visible = false;
+                }
             }
         }
     }

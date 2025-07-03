@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class ClientManager : MonoBehaviour
 {
+    [SerializeField] private ClientManagerData clientManagerData;
+
     [SerializeField] private Transform spawnPosition, outsidePosition;
 
     [SerializeField] private AbstractFactory clientAbstractFactory;
@@ -15,7 +17,6 @@ public class ClientManager : MonoBehaviour
     private Dictionary<ClientType, ObjectPooler> clientPoolDictionary = new();
     private Dictionary<FoodType, Sprite> foodSpriteDict = new();
 
-    [SerializeField] private float timeToWaitForSpawnNewClient;
     private float spawnTime = 0f;
 
     [SerializeField] private bool InstantiateClients;
@@ -88,7 +89,7 @@ public class ClientManager : MonoBehaviour
     {
         spawnTime += Time.deltaTime;
 
-        if (spawnTime >= timeToWaitForSpawnNewClient)
+        if (spawnTime >= clientManagerData.TimeToWaitForSpawnNewClient)
         {
             int randomIndex = UnityEngine.Random.Range(0, clientPools.Count);
             string prefabName = clientPools[randomIndex].Prefab.name;
@@ -103,7 +104,7 @@ public class ClientManager : MonoBehaviour
     {
         spawnTime += Time.deltaTime;
 
-        if (spawnTime > timeToWaitForSpawnNewClient)
+        if (spawnTime > clientManagerData.TimeToWaitForSpawnNewClient)
         {
             clientAbstractFactory.CreateObject("ClientOgre");
 
