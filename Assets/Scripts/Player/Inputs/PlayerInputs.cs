@@ -10,6 +10,7 @@ public class PlayerInputs : MonoBehaviour
 
     private PlayerInputActions inputActions; // Representa la clase creada por default del nuevo Inputsystem
     private Vector2 joystick = Vector2.zero;
+
     public static PlayerInputs Instance { get => instance; }
 
     public InputsData KeyboardInputs { get => keyboardInputs; }
@@ -110,6 +111,5 @@ public class PlayerInputs : MonoBehaviour
         {
             joystick = Vector2.zero;
         };
-
     }
 }

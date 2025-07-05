@@ -7,6 +7,9 @@ public class MoneyManager : MonoBehaviour
 
     [SerializeField] private MoneyManagerData moneyManagerData;
 
+    [SerializeField] private ObjectPooler floatingMoneyTextPool;
+    [SerializeField] private FloatingMoneyText floatingMoneyText;
+
     private TextMeshProUGUI moneyText;
 
     private float currentMoney;
@@ -24,16 +27,18 @@ public class MoneyManager : MonoBehaviour
     }
 
 
-    public void AddMoney(float money)
+    public void AddMoney(float amount)
     {
-        currentMoney += money;
+        currentMoney += amount;
         UpdateMoneyText();
+        ShowFloatingMoneyText(amount, true);
     }
 
-    public void SubMoney(float money)
+    public void SubMoney(float amount)
     {
-        currentMoney -= money;
+        currentMoney -= amount;
         UpdateMoneyText();
+        ShowFloatingMoneyText(amount, false);
     }
 
 
@@ -74,5 +79,58 @@ public class MoneyManager : MonoBehaviour
     private void UpdateMoneyText()
     {
         moneyText.text = currentMoney.ToString();
+    }
+
+    private void ShowFloatingMoneyText(float amount, bool positive)
+    {
+        /*FloatingMoneyText obj = floatingMoneyTextPool.GetObjectFromPool<FloatingMoneyText>();
+
+        if (positive)
+        {
+            obj.TextAmount.text = "+" + amount.ToString();
+        }
+
+        else
+        {
+            obj.TextAmount.text = "-" + amount.ToString();
+        }
+
+        StartCoroutine(floatingMoneyTextPool.ReturnObjectToPool(obj, obj.MaxTimeToReturnObjectToPool));*/
+
+        FloatingMoneyText go = Instantiate(floatingMoneyText, moneyText.transform.position, Quaternion.identity);
+
+        if (positive)
+        {
+            go.TextAmount.text = "+" + amount.ToString();
+        }
+
+        else
+        {
+            go.TextAmount.text = "-" + amount.ToString();
+        }
+
+        Destroy(go.gameObject, go.MaxTimeToReturnObjectToPool);
+    }
+}
+
+public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+{
+    protected static T instance;
+
+    public static T Instance => instance;
+
+    protected virtual void CreateSingleton()
+    {
+        if (instance == null)
+        {
+            instance = this as T;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
     }
 }
