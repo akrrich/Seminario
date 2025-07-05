@@ -61,6 +61,7 @@ public class PlayerInputs : MonoBehaviour
     public bool Jump() => Input.GetKeyDown(keyboardInputs.Jump) || Input.GetKeyDown(joystickInputs.Jump);
     public bool Cook() => Input.GetKeyDown(keyboardInputs.Cook) || Input.GetKeyDown(joystickInputs.Cook);
     public bool Administration() => Input.GetKeyDown(keyboardInputs.Administration) || Input.GetKeyDown(joystickInputs.Administration);
+    public bool ThrowFoodToTrash() => Input.GetKeyDown(keyboardInputs.ThrowFoodToTrash) || Input.GetKeyDown(joystickInputs.ThrowFoodToTrash);
     public bool Inventory() => Input.GetKeyDown(keyboardInputs.Inventory) || Input.GetKeyDown(joystickInputs.Inventory);
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);
 

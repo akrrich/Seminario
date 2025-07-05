@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class IngredientInventoryManager : MonoBehaviour
+public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 {
-    private static IngredientInventoryManager instance;
-
     private List<IngredientType> availableIngredients;
     [SerializeField] private List<Ingredients.FoodRecipe> foodRecipes;
     [SerializeField] private List<Ingredients.IngredientData> ingredientData;
@@ -16,14 +14,12 @@ public class IngredientInventoryManager : MonoBehaviour
     private Dictionary<FoodType, Ingredients.FoodRecipe> recipeDict = new();
     private Dictionary<IngredientType, Ingredients.IngredientData> ingredientDataDict = new();
     
-    public static IngredientInventoryManager Instance { get => instance; }
-
     public Dictionary<IngredientType, Ingredients.IngredientData> IngredientDataDict { get =>  ingredientDataDict; }
 
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
         InitializeInventory();
         InitializeIngredientData();
         InitializeRecipes();
@@ -74,22 +70,6 @@ public class IngredientInventoryManager : MonoBehaviour
 
     public List<IngredientType> GetAllIngredients() => new List<IngredientType>(ingredientInventory.Keys);
 
-
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void InitializeInventory()
     {

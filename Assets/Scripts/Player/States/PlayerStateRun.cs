@@ -48,7 +48,7 @@ public class PlayerStateRun<T> : State<T>
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
+        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingCookingDeskUI && playerModel.IsLookingAtCookingDeskUI())
         {
             Fsm.TransitionTo(inputToCook);
         }

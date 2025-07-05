@@ -1,10 +1,8 @@
 using TMPro;
 using UnityEngine;
 
-public class MoneyManager : MonoBehaviour
+public class MoneyManager : Singleton<MoneyManager>
 {
-    private static MoneyManager instance;
-
     [SerializeField] private MoneyManagerData moneyManagerData;
 
     [SerializeField] private ObjectPooler floatingMoneyTextPool;
@@ -14,14 +12,12 @@ public class MoneyManager : MonoBehaviour
 
     private float currentMoney;
 
-    public static MoneyManager Instance { get => instance; }
-
     public float CurrentMoney { get => currentMoney; }
 
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
         InitializeCurrentMoney();
         SuscribeToMoneyTextEvent();
     }
@@ -41,22 +37,6 @@ public class MoneyManager : MonoBehaviour
         ShowFloatingMoneyText(amount, false);
     }
 
-
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
 
     // No es necesario desuscribirse porque es singleton
     private void SuscribeToMoneyTextEvent()
@@ -110,27 +90,5 @@ public class MoneyManager : MonoBehaviour
         }
 
         Destroy(go.gameObject, go.MaxTimeToReturnObjectToPool);
-    }
-}
-
-public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
-{
-    protected static T instance;
-
-    public static T Instance => instance;
-
-    protected virtual void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this as T;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
     }
 }

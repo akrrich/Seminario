@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
         fsm.OnExecute();
         GrabOrHandOverFood();
         TakeClientOrder();
+        ThrowFoodToTrash();
 
         // Provisorio
         playerCollisions.UpdateColls();
@@ -129,7 +130,7 @@ public class PlayerController : MonoBehaviour
     {
         if (PlayerInputs.Instance != null)
         {
-            if (PlayerInputs.Instance.GrabFood())
+            if (PlayerInputs.Instance.GrabFood() && playerModel.IsLookingAtFood())
             {
                 onGrabFood?.Invoke();
             }
@@ -148,6 +149,17 @@ public class PlayerController : MonoBehaviour
             if (PlayerInputs.Instance.TakeClientOrder())
             {
                 onTakeOrder?.Invoke();
+            }
+        }
+    }
+
+    private void ThrowFoodToTrash()
+    {
+        if (PlayerInputs.Instance != null)
+        {
+            if (PlayerInputs.Instance.ThrowFoodToTrash())
+            {
+                /// Invocar evento
             }
         }
     }

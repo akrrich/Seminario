@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: FoodTomatoAndLettuceSalad
   m_EditorClassIdentifier: 
   timeToBeenCooked: 4
+  timeToBeenBurned: 5

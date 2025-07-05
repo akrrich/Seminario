@@ -32,7 +32,7 @@ public class PlayerStateCook<T> : State<T>
         playerView.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = cookingPosition.transform.position;
-        playerModel.LookAt(playerModel.Oven.transform.position);
+        playerModel.LookAt(playerModel.CookingDeskUI.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 

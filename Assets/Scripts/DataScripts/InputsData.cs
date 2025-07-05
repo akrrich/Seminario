@@ -10,6 +10,7 @@ public class InputsData : ScriptableObject
     [SerializeField] private KeyCode takeClientOrder;
     [SerializeField] private KeyCode cleanDirtyTable;
     [SerializeField] private KeyCode administration;
+    [SerializeField] private KeyCode throwFoodToTrash;
 
     [Header("Dungeon Inputs:")]
     [SerializeField] private KeyCode dash;
@@ -31,6 +32,7 @@ public class InputsData : ScriptableObject
     public KeyCode TakeClientOrder { get => takeClientOrder; }
     public KeyCode CleanDirtyTable { get => cleanDirtyTable; }
     public KeyCode Administration { get => administration; }
+    public KeyCode ThrowFoodToTrash { get => throwFoodToTrash; }
 
     public KeyCode Run { get => run; }
     public KeyCode Jump { get => jump; }

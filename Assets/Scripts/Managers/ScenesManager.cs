@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ScenesManager : MonoBehaviour
+public class ScenesManager : Singleton<ScenesManager>
 {
     /// <summary>
     /// Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga, por ejemplo para que no pueda poner pausa
@@ -11,8 +11,6 @@ public class ScenesManager : MonoBehaviour
     /// <sumary>
     /// Agregar metodo futuro para cerrar el juego con pantalla de carga y guardar los datos en ese tiempo
     /// </sumary>
-
-    private static ScenesManager instance;
 
     [SerializeField] private ScenesManagerData scenesManagerData;
 
@@ -27,12 +25,10 @@ public class ScenesManager : MonoBehaviour
     private bool isInExitGamePanel = false;
 #pragma warning restore 0414
 
-    public static ScenesManager Instance { get => instance; }
-
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
         DontDestroyOnLoadPanels();
         SetInitializedScene();
     }
@@ -94,22 +90,6 @@ public class ScenesManager : MonoBehaviour
 
         isInLoadingScenePanel = false;
         loadingScenePanel.SetActive(false);
-    }
-
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void DontDestroyOnLoadPanels()

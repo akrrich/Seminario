@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: FoodBeefStew
   m_EditorClassIdentifier: 
   timeToBeenCooked: 3
+  timeToBeenBurned: 5

@@ -10,6 +10,8 @@ TagManager:
   - Administration
   - Chair
   - PortalDungeon
+  - CookingDeskUI
+  - FoodTrigger
   layers:
   - Default
   - TransparentFX
