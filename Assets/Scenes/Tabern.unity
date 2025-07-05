@@ -3249,7 +3249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &753195110
 Transform:
   m_ObjectHideFlags: 0
@@ -7094,7 +7094,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTabernData: {fileID: 11400000, guid: 544d1c0df7c42c648bb302aaa7fb069b, type: 2}
-  cookingDeskUI: {fileID: 0}
 --- !u!1 &1707060127
 GameObject:
   m_ObjectHideFlags: 0

@@ -85,12 +85,12 @@ public class PlayerModel : MonoBehaviour
     }
 
     // Ajustar el rayo correctamente
-    public bool IsLookingAtFood()
+    public Food IsLookingAtFood()
     {
-        if (Vector3.Distance(transform.position, oven.transform.position) <= 3.5f)
+        if (Vector3.Distance(transform.position, oven.transform.position) <= 5f)
         {
             Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward + Vector3.up * 0.05f);
-            float rayDistance = 3.5f;
+            float rayDistance = 5f;
 
             Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 0.2f);
 
@@ -98,12 +98,13 @@ public class PlayerModel : MonoBehaviour
             {
                 if (hit.collider.CompareTag("FoodTrigger"))
                 {
-                    return true;
+                    Debug.Log("Yes");
+                    return hit.collider.GetComponentInParent<Food>();
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
     public void LookAt(Vector3 target)

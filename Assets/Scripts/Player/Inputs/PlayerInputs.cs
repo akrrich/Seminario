@@ -1,17 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputs : MonoBehaviour
+public class PlayerInputs : Singleton<PlayerInputs>
 {
-    private static PlayerInputs instance;
-
     [SerializeField] private InputsData keyboardInputs;
     [SerializeField] private InputsData joystickInputs;
 
     private PlayerInputActions inputActions; // Representa la clase creada por default del nuevo Inputsystem
     private Vector2 joystick = Vector2.zero;
-
-    public static PlayerInputs Instance { get => instance; }
 
     public InputsData KeyboardInputs { get => keyboardInputs; }
     public InputsData JoystickInputs { get => joystickInputs; }
@@ -19,7 +15,7 @@ public class PlayerInputs : MonoBehaviour
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
         InitializePlayerInputActions();
     }
 
@@ -73,22 +69,6 @@ public class PlayerInputs : MonoBehaviour
     public bool RunHeld() => Input.GetKey(keyboardInputs.Run) || Input.GetKey(joystickInputs.Run);
     public bool Interact() => Input.GetKeyDown(keyboardInputs.Interact);
 
-
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void InitializePlayerInputActions()
     {

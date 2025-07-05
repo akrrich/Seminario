@@ -6,7 +6,7 @@ public enum FoodType
     VegetableSoup, BeefStew, TomatoAndLettuceSalad, BeastMeatPie, HumanFleshStew
 }
 
-public enum CookingState
+public enum CookingStates
 {
     Raw,
     Cooked,
@@ -22,17 +22,18 @@ public class Food : MonoBehaviour
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
-    private Transform stovePosition; // Posicion de las hornallas
-    private Transform dishPosition; // Posicion del plato del player
-
     private Rigidbody rb;
     private BoxCollider boxCollider;
     private MeshRenderer meshRenderer;
+    private GameObject foodTrigger;
     private Color originalColor;
+
+    private Transform stovePosition; // Posicion de las hornallas
+    private Transform dishPosition; // Posicion del plato del player
 
 
     [SerializeField] private FoodType foodType;
-    private CookingState currentCookingState = CookingState.Raw;
+    private CookingStates currentCookingState;
 
     private float cookTimeCounter = 0f;
 
@@ -89,12 +90,13 @@ public class Food : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         meshRenderer = GetComponent<MeshRenderer>();
+        foodTrigger = transform.Find("FoodTrigger").gameObject;
     }
 
     private void Initialize()
     {
         originalColor = meshRenderer.material.color;
-        currentCookingState = CookingState.Raw;
+        currentCookingState = CookingStates.Raw;
     }
 
     // Ejecutar unicamente la corrutina cuando se activa el objeto en caso de que se haya puesto en la hornalla
@@ -138,6 +140,7 @@ public class Food : MonoBehaviour
 
     private void RestartValues()
     {
+        foodTrigger.tag = "FoodTrigger";
         meshRenderer.material.color = originalColor;
 
         stovePosition = null;
@@ -146,7 +149,7 @@ public class Food : MonoBehaviour
         rb.isKinematic = false;
         boxCollider.enabled = true;
 
-        currentCookingState = CookingState.Raw;
+        currentCookingState = CookingStates.Raw;
 
         cookTimeCounter = 0f;
         isInPlayerDishPosition = false;
@@ -167,40 +170,43 @@ public class Food : MonoBehaviour
 
     private void CheckCookingState()
     {
-        float cookedTime = foodData.TimeToBeenCooked;
-
-        if (cookTimeCounter < cookedTime)
+        if (cookTimeCounter < foodData.TimeToBeenCooked)
         {
             Debug.Log("Crudo");
-            currentCookingState = CookingState.Raw;
+            currentCookingState = CookingStates.Raw;
         }
 
-        else if (cookTimeCounter <= cookedTime + foodData.TimeToBeenBurned)
+        else if (cookTimeCounter >= foodData.TimeToBeenCooked && cookTimeCounter <= foodData.TimeToBeenCooked + foodData.TimeToBeenBurned)
         {
             Debug.Log("Cocinado");
-            currentCookingState = CookingState.Cooked;
+            currentCookingState = CookingStates.Cooked;
         }
 
-        else
+        else if (cookTimeCounter > foodData.TimeToBeenCooked + foodData.TimeToBeenBurned)
         {
             Debug.Log("Quemado");
-            currentCookingState = CookingState.Burned;
+            currentCookingState = CookingStates.Burned;
         }
     }
 
     /// <summary>
-    /// Solucionar el problema de que agarra todas las comidas que estan en las hornallas, unicamente tiene que agarrar la que esta mirando
+    /// Solucionar el problema de que no se agarra la comida en el tercer slot de la bandeja
     /// </summary>
-    private void Grab()
-    {   // Es importante que este activo para que no haya errores cuando se invoca el evento      // Si hay posiciones disponibles en la bandeja
-        if (gameObject.activeSelf && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
+    private void Grab(Food currentFood)
+    {
+        if (currentFood == this)
         {
-            cookingManager.ReleaseStovePosition(stovePosition);
-            dishPosition = cookingManager.MoveFoodToDish(this);
+            // Es importante que este activo para que no haya errores cuando se invoca el evento      // Si hay posiciones disponibles en la bandeja
+            if (gameObject.activeSelf && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
+            {
+                isInPlayerDishPosition = true;
+                foodTrigger.tag = "Untagged";
 
-            StartCoroutine(DisablePhysics());
+                cookingManager.ReleaseStovePosition(stovePosition);
+                dishPosition = cookingManager.MoveFoodToDish(this);
 
-            isInPlayerDishPosition = true;
+                StartCoroutine(DisablePhysics());
+            }
         }
     }
 
