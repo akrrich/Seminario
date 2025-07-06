@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public enum FoodType
+public enum FoodType // FrutosDelBosqueOscuro, SopaDeLaLunaPlateada, CarneDeBestia, CarneCuradaDelAbismo, SusurroDelElixir
 {
-    VegetableSoup, BeefStew, TomatoAndLettuceSalad, BeastMeatPie, HumanFleshStew
+    DarkWoodBerries, SoupOfTheSilverMoon, BeastStew, AbyssCuredMeet, LastWhisperElixir
 }
 
 public enum CookingStates
@@ -28,8 +28,8 @@ public class Food : MonoBehaviour
     private GameObject foodTriggerGameObject;
     private Color originalColor;
 
-    private Transform stovePosition; // Posicion de las hornallas
-    private Transform dishPosition; // Posicion del plato del player
+    private Transform stovePosition;
+    private Transform playerDishPosition;
 
     [SerializeField] private FoodType foodType;
     private CookingStates currentCookingState;
@@ -148,7 +148,7 @@ public class Food : MonoBehaviour
         meshRenderer.material.color = originalColor;
 
         stovePosition = null;
-        dishPosition = null;
+        playerDishPosition = null;
 
         rb.isKinematic = false;
         boxCollider.enabled = true;
@@ -205,7 +205,7 @@ public class Food : MonoBehaviour
                 foodTriggerGameObject.layer = LayerMask.NameToLayer("Default");
 
                 cookingManager.ReleaseStovePosition(stovePosition);
-                dishPosition = cookingManager.MoveFoodToDish(this);
+                playerDishPosition = cookingManager.MoveFoodToDish(this);
 
                 StartCoroutine(DisablePhysics());
             }
@@ -218,7 +218,7 @@ public class Food : MonoBehaviour
         {
             PlayerView.OnHandOverCompletedForHandOverMessage?.Invoke();
 
-            cookingManager.ReleaseDishPosition(dishPosition);
+            cookingManager.ReleaseDishPosition(playerDishPosition);
 
             Transform freeSpot = null;
 
@@ -251,6 +251,7 @@ public class Food : MonoBehaviour
     {
         if (gameObject.activeSelf && isInPlayerDishPosition)
         {
+            cookingManager.ReleaseDishPosition(playerDishPosition);
             ReturnObjetToPool();
         }
     }

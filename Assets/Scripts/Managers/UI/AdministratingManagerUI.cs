@@ -293,14 +293,20 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private void CheckJoystickInputsToInteractWithPanels()
     {
-        if (PlayerInputs.Instance.R1())
+        if (panelAdministrating.activeSelf)
         {
-            SetPanelTabern();
-        }
+            if (PlayerInputs.Instance != null)
+            {
+                if (PlayerInputs.Instance.R1())
+                {
+                    SetPanelTabern();
+                }
 
-        if (PlayerInputs.Instance.L1())
-        {
-            SetPanelIngredients();
+                if (PlayerInputs.Instance.L1())
+                {
+                    SetPanelIngredients();
+                }
+            }
         }
     }
 }
