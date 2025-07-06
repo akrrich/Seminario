@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerDungeonModel : MonoBehaviour, IDamageable
@@ -72,6 +73,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     // -------- Combate --------
     public int CurrentWeaponDamage { get => currentWeaponDamage; set => currentWeaponDamage = value; }
     public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
+
+    //------Provisorio, para el alpha------
+    public event Action<float, float> OnHealthChanged;
+    public event Action OnPlayerDied;
+
     #endregion
 
     #region Unity Callbacks
@@ -84,6 +90,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
         rb.freezeRotation = true;
         currentHP = maxHP;
+        OnHealthChanged?.Invoke(currentHP, maxHP);
     }
 
     private void FixedUpdate() => MovePlayer();
@@ -101,11 +108,14 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     {
         if (invulnerable) return;
 
-        currentHP -= amount;
-        if (currentHP <= 0)
+        currentHP = Mathf.Clamp(currentHP - amount, 0, maxHP);
+        OnHealthChanged?.Invoke(currentHP, maxHP); 
+
+        if (currentHP <= 0 && !isDead)
         {
             currentHP = 0;
             isDead = true;
+            OnPlayerDied?.Invoke(); 
             HandleDeath();
         }
     }
