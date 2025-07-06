@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ScenesManager : MonoBehaviour
+public class ScenesManager : Singleton<ScenesManager>
 {
     /// <summary>
     /// Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga, por ejemplo para que no pueda poner pausa
@@ -12,14 +12,10 @@ public class ScenesManager : MonoBehaviour
     /// Agregar metodo futuro para cerrar el juego con pantalla de carga y guardar los datos en ese tiempo
     /// </sumary>
 
-    private static ScenesManager instance;
+    [SerializeField] private ScenesManagerData scenesManagerData;
 
     [SerializeField] private GameObject loadingScenePanel;
     [SerializeField] private GameObject exitGamePanel;
-
-    [SerializeField] private float duringTimeLoadingScenePanel;
-    [SerializeField] private float duringTimeExitGamePanel;
-
 
 #pragma warning disable 0414
     /// <summary>
@@ -29,12 +25,10 @@ public class ScenesManager : MonoBehaviour
     private bool isInExitGamePanel = false;
 #pragma warning restore 0414
 
-    public static ScenesManager Instance { get => instance; }
-
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
         DontDestroyOnLoadPanels();
         SetInitializedScene();
     }
@@ -55,7 +49,7 @@ public class ScenesManager : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            if (asyncLoad.progress >= 0.9f && elapsedTime >= duringTimeLoadingScenePanel)
+            if (asyncLoad.progress >= 0.9f && elapsedTime >= scenesManagerData.DuringTimeLoadingScenePanel)
             {
                 if (additiveScenes != null)
                 {
@@ -80,7 +74,7 @@ public class ScenesManager : MonoBehaviour
         exitGamePanel.SetActive(true);
         isInExitGamePanel = true;
 
-        yield return new WaitForSecondsRealtime(duringTimeExitGamePanel);
+        yield return new WaitForSecondsRealtime(scenesManagerData.DuringTimeExitGamePanel);
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -96,22 +90,6 @@ public class ScenesManager : MonoBehaviour
 
         isInLoadingScenePanel = false;
         loadingScenePanel.SetActive(false);
-    }
-
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void DontDestroyOnLoadPanels()

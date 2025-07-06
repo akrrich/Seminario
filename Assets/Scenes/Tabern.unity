@@ -381,8 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d68098172e04e274bb733e534b5262c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageZoneUnlock: {fileID: 21300000, guid: e3ab8164cd8ffe344a201a690ccc5b6b, type: 3}
-  cost: 200
+  zoneUnlockData: {fileID: 11400000, guid: 892d429cb3e60904fb9c19a2b5aac81f, type: 2}
 --- !u!1 &66947652
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,7 +407,7 @@ Transform:
   m_GameObject: {fileID: 66947652}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1192.37, y: 2.584, z: -9.334}
+  m_LocalPosition: {x: -1192.37, y: 2.584, z: -14.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3250,7 +3249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &753195110
 Transform:
   m_ObjectHideFlags: 0
@@ -3280,6 +3279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b2ee7024166dfd4b9a92fc2cae2f510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clientManagerData: {fileID: 11400000, guid: e57a36ad143446246a1f01977f246a90, type: 2}
   spawnPosition: {fileID: 1723860516}
   outsidePosition: {fileID: 723869295}
   clientAbstractFactory: {fileID: 498648864}
@@ -3294,7 +3294,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 1503a68a87216b34791d6edbfe42250f, type: 3}
   - foodType: 2
     sprite: {fileID: 21300000, guid: 51d27cd2fc47b3b49ba285ccce8c418f, type: 3}
-  timeToWaitForSpawnNewClient: 5
   InstantiateClients: 1
   InstantiateTheSameClient: 0
 --- !u!1 &773677852
@@ -6708,7 +6707,7 @@ GameObject:
   - component: {fileID: 1610775657}
   m_Layer: 0
   m_Name: CookedFoodDesk
-  m_TagString: Untagged
+  m_TagString: CookingDeskUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6722,8 +6721,8 @@ Transform:
   m_GameObject: {fileID: 1610775655}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710677, w: 0.7071068}
-  m_LocalPosition: {x: -1196.0605, y: 2.1636655, z: -12.669239}
-  m_LocalScale: {x: 0.9116929, y: 1.8472364, z: 1.7919264}
+  m_LocalPosition: {x: -1196.0605, y: 2.1636655, z: -14.5819}
+  m_LocalScale: {x: 0.9116929, y: 1.8472364, z: 5.6171517}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2032866321}
@@ -7023,7 +7022,7 @@ Transform:
   m_GameObject: {fileID: 1706764447}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1146.82, y: 2.61, z: 10.15}
+  m_LocalPosition: {x: -1191.28, y: 2.61, z: -8.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7094,11 +7093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cdc5b4d2744cf749bbf22ed6b7ee15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeVision: 2
-  angleVision: 180
-  walkSpeed: 300
-  runSpeed: 500
-  jumpForce: 5
+  playerTabernData: {fileID: 11400000, guid: 544d1c0df7c42c648bb302aaa7fb069b, type: 2}
 --- !u!1 &1707060127
 GameObject:
   m_ObjectHideFlags: 0

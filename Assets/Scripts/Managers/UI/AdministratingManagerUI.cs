@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class AdministratingManagerUI : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private List<ZoneUnlock> zoneUnlocks = new List<ZoneUnlock>();
     private Image currentImageZoneUnlock;
+    private TextMeshProUGUI textPriceCurrentZoneUnlock;
 
     private List<Button> buttonsPanelAdministrating = new List<Button>(); // Botones de arriba de todo
 
@@ -87,6 +89,15 @@ public class AdministratingManagerUI : MonoBehaviour
         ignoreFirstButtonSelected = false;
     }
 
+    /// <summary>
+    /// Funcion hay que ajustarla en un futuro para que funcione con varias zonas de desbloqueo, actualmente funciona desde codigo
+    /// </summary>
+    public void ShowCurrentZoneInformation(int index)
+    {
+        currentImageZoneUnlock.sprite = zoneUnlocks[index].ZoneUnlockData.ImageZoneUnlock;
+        textPriceCurrentZoneUnlock.text = "Price: " + zoneUnlocks[index].ZoneUnlockData.Cost.ToString();
+    }
+
     // Funcion asignada a boton UI
     public void ButtonBuyIngredient(string ingredientName)
     {
@@ -106,14 +117,15 @@ public class AdministratingManagerUI : MonoBehaviour
     // Funcion asignada a boton UI
     public void ButtonUnlockNewZone(int index)
     {
-        int price = zoneUnlocks[index].Cost;
+        if (zoneUnlocks[index].IsUnlocked) return;
+
+        int price = zoneUnlocks[index].ZoneUnlockData.Cost;
 
         if (MoneyManager.Instance.CurrentMoney >= price)
         {
-            // La linea de codigo de abajo hay que hacerlo con selected en un metodo en OnPointerEnter
-            currentImageZoneUnlock.sprite = zoneUnlocks[index].ImageZoneUnlock;
             buttonClick.Play();
             zoneUnlocks[index].UnlockZone();
+            MoneyManager.Instance.SubMoney(price);
         }
     }
 
@@ -150,6 +162,7 @@ public class AdministratingManagerUI : MonoBehaviour
         {
             // Aca se podria agregar que selecione el ultimo que tenia antes
             onSetSelectedCurrentGameObject?.Invoke(buttonsTabern[0]);
+            ShowCurrentZoneInformation(0);
 
             buttonSelected.Play();            
 
@@ -207,6 +220,7 @@ public class AdministratingManagerUI : MonoBehaviour
         }
 
         currentImageZoneUnlock = panelTabern.transform.transform.Find("ImageBorderCurrentZone").transform.Find("ImageCurrentZone").GetComponent<Image>();
+        textPriceCurrentZoneUnlock = panelTabern.transform.transform.Find("ImageBorderCurrentZone").transform.Find("TextPriceCurrentZone").GetComponent<TextMeshProUGUI>();
     }
 
     private void FindGameObjectsReferences(GameObject panel, List<GameObject> buttons)

@@ -9,45 +9,43 @@ public enum PlayerStates
 
 public class PlayerModel : MonoBehaviour
 {
+    [SerializeField] private PlayerTabernData playerTabernData;
+
     private PlayerCamera playerCamera;
 
     private Rigidbody rb;
+    private CapsuleCollider capsuleCollider;
+    private PhysicMaterial physicMaterial;
+
+    private GameObject cookingDeskUI;
     private GameObject oven;
     private GameObject administration;
 
     private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
 
-    [Header("LineOfSight")]
-    [SerializeField] private float rangeVision;
-    [SerializeField] private float angleVision;
-
-    [Header("Variables")]
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float runSpeed;
-    [SerializeField] private float jumpForce;
-
     private float speed;
 
     private bool isGrounded = true;
-    private bool isCollidingOven = false;
+    private bool isCollidingCookingDeskUI = false;
     private bool isCollidingAdministration = false;
     private bool isCooking = false;
     private bool isAdministrating = false;
 
+    public PlayerTabernData PlayerTabernData { get => playerTabernData; }
+
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
 
     public Rigidbody Rb { get => rb; }
-    public GameObject Oven { get => oven; }
+    public CapsuleCollider CapsuleCollider { get => capsuleCollider; set => capsuleCollider = value; }
+    public PhysicMaterial PhysicsMaterial { get => physicMaterial; }
+    public GameObject CookingDeskUI { get => cookingDeskUI; }
     public GameObject Administration { get => administration; }
 
     public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
-    public float WalkSpeed { get => walkSpeed; }
-    public float RunSpeed { get => runSpeed; } 
     public float Speed { get => speed; set => speed = value; }
-    public float JumpForce { get => jumpForce; }
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
-    public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
+    public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCooking { get => isCooking; set => isCooking = value; }
     public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
@@ -56,11 +54,11 @@ public class PlayerModel : MonoBehaviour
     void Awake()
     {
         GetComponents();
+        Initialize();
 
         // Provisorio
         StartCoroutine(InvokeEventInitializationPlayer());
     }
-
 
     void FixedUpdate()
     {
@@ -69,21 +67,44 @@ public class PlayerModel : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        LineOfSight.DrawLOSOnGizmos(transform, angleVision, rangeVision);
+        LineOfSight.DrawLOSOnGizmos(transform, playerTabernData.AngleVision, playerTabernData.RangeVision);
     }
 
 
     /// <summary>
     /// Solucionar los LineOfSight de que mirando hacia un poco fuera del rango funcionan
     /// </summary>
-    public bool IsLookingAtOven()
+    public bool IsLookingAtCookingDeskUI()
     {
-        return LineOfSight.LOS(playerCamera.transform, oven.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
+        return LineOfSight.LOS(playerCamera.transform, cookingDeskUI.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
     }
 
     public bool IsLookingAtAdministration()
     {
-        return LineOfSight.LOS(playerCamera.transform, administration.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
+        return LineOfSight.LOS(playerCamera.transform, administration.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
+    }
+
+    // Ajustar el rayo correctamente
+    public Food IsLookingAtFood()
+    {
+        if (Vector3.Distance(transform.position, oven.transform.position) <= 5f)
+        {
+            Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward + Vector3.up * 0.05f);
+            float rayDistance = 5f;
+
+            Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 0.2f);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
+            {
+                if (hit.collider.CompareTag("FoodTrigger"))
+                {
+                    Debug.Log("Yes");
+                    return hit.collider.GetComponentInParent<Food>();
+                }
+            }
+        }
+
+        return null;
     }
 
     public void LookAt(Vector3 target)
@@ -103,8 +124,16 @@ public class PlayerModel : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<PlayerCamera>();
         rb = GetComponent<Rigidbody>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
+
+        cookingDeskUI = GameObject.FindGameObjectWithTag("CookingDeskUI");
         oven = GameObject.FindGameObjectWithTag("Oven");
         administration = GameObject.FindGameObjectWithTag("Administration");
+    }
+
+    private void Initialize()
+    {
+        physicMaterial = capsuleCollider.material;
     }
 
     private void Movement()

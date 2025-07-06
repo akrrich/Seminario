@@ -2,16 +2,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
 
 public class CookingManagerUI : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones de hijos
+    [SerializeField] private GameObject panelInformation;
 
     /// <summary>
     /// Agregar ruido de cancelacion si no tiene ingredientes para cocinar una receta
     /// </summary>
     [SerializeField] private AudioSource buttonClick;
     [SerializeField] private AudioSource buttonSelected;
+
+    [SerializeField] private List<RecipeInformationUI> recipesInformationUI;
 
     private List<GameObject> buttonsCooking  = new List<GameObject>();
 
@@ -21,16 +26,12 @@ public class CookingManagerUI : MonoBehaviour
 
     private event Action onEnterCook, onExitCook;
 
-    private static event Action<List<GameObject>> onSendButtonsToEventSystem;
-
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
 
     private bool ignoreFirstButtonSelected = true;
 
     public static Action<string> OnButtonSetFood { get => onButtonGetFood; set => onButtonGetFood = value; }
-
-    public static Action<List<GameObject>> OnSendButtonsToEventSystem { get => onSendButtonsToEventSystem; set => onSendButtonsToEventSystem = value; }
 
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
     public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
@@ -42,7 +43,6 @@ public class CookingManagerUI : MonoBehaviour
         SuscribeToPlayerViewEvents();
         SuscribeToPauseManagerRestoreSelectedGameObjectEvent();
         GetComponents();
-        InvokeEventToSendButtonsReferences();
     }
 
     void Update()
@@ -76,6 +76,35 @@ public class CookingManagerUI : MonoBehaviour
         }
 
         ignoreFirstButtonSelected = false;
+    }
+
+    // Funcion asignada a event trigger de la UI para mostrar la informacion de las recetas
+    public void ShowInformationRecipe(string foodTypeName)
+    {
+        if (!Enum.TryParse(foodTypeName, out FoodType foodType)) return;
+
+        var recipe = IngredientInventoryManager.Instance.GetRecipe(foodType);
+        if (recipe == null) return;
+
+        for (int i = 0; i < recipesInformationUI.Count; i++)
+        {
+            if (i < recipe.Ingridients.Count)
+            {
+                var ing = recipe.Ingridients[i];
+                recipesInformationUI[i].IngredientAmountText.text = ing.Amount.ToString();
+
+                if (IngredientInventoryManager.Instance.IngredientDataDict.TryGetValue(ing.IngredientType, out var data))
+                {
+                    recipesInformationUI[i].IngredientImage.sprite = data.Sprite;
+                }
+            }
+
+            else
+            {
+                recipesInformationUI[i].IngredientAmountText.text = "";
+                recipesInformationUI[i].IngredientImage.sprite = null;
+            }
+        }
     }
 
     // Funcion asignada a los botones de la UI
@@ -122,14 +151,10 @@ public class CookingManagerUI : MonoBehaviour
         }
     }
 
-    private void InvokeEventToSendButtonsReferences()
-    {
-        onSendButtonsToEventSystem?.Invoke(buttonsCooking);
-    }
-
     private void ActiveOrDeactivateRootGameObject(bool state)
     {
         rootGameObject.SetActive(state);
+        panelInformation.SetActive(state);
 
         if (state)
         {
@@ -162,4 +187,14 @@ public class CookingManagerUI : MonoBehaviour
             lastSelectedButtonFromCookingPanel = EventSystem.current.currentSelectedGameObject;
         }
     }
+}
+
+[Serializable]
+public class RecipeInformationUI
+{
+    [SerializeField] private Image ingredientImage;
+    [SerializeField] private TextMeshProUGUI ingredientAmountText;
+
+    public Image IngredientImage { get => ingredientImage; }
+    public TextMeshProUGUI IngredientAmountText { get => ingredientAmountText; }
 }

@@ -9,9 +9,10 @@ public class PlayerController : MonoBehaviour
 
     private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
 
-    private static event Action onGrabFood;
+    private static event Action<Food> onGrabFood;
     private static event Action onHandOverFood;
     private static event Action onTakeOrder;
+    private static event Action onThrowFoodToTrash;
 
     // Estos 2 eventos corresponden a entregar el plato una vez tomado el pedido
     private static event Action<Table> onTableCollisionEnterForHandOverFood;
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour
     public PlayerModel PlayerModel { get => playerModel; }
     public PlayerView PlayerView { get => playerView; }
 
-    public static Action OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
+    public static Action<Food> OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
 
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviour
         fsm.OnExecute();
         GrabOrHandOverFood();
         TakeClientOrder();
+        ThrowFoodToTrash();
 
         // Provisorio
         playerCollisions.UpdateColls();
@@ -131,7 +133,12 @@ public class PlayerController : MonoBehaviour
         {
             if (PlayerInputs.Instance.GrabFood())
             {
-                onGrabFood?.Invoke();
+                Food currentFood = playerModel.IsLookingAtFood();
+
+                if (currentFood != null)
+                {
+                    onGrabFood?.Invoke(currentFood);
+                } 
             }
 
             if (PlayerInputs.Instance.HandOverFood())
@@ -148,6 +155,17 @@ public class PlayerController : MonoBehaviour
             if (PlayerInputs.Instance.TakeClientOrder())
             {
                 onTakeOrder?.Invoke();
+            }
+        }
+    }
+
+    private void ThrowFoodToTrash()
+    {
+        if (PlayerInputs.Instance != null)
+        {
+            if (PlayerInputs.Instance.ThrowFoodToTrash())
+            {
+                onThrowFoodToTrash?.Invoke();
             }
         }
     }
