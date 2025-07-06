@@ -2414,6 +2414,8 @@ Transform:
   - {fileID: 1421752241}
   - {fileID: 1413431577}
   - {fileID: 2088648133}
+  - {fileID: 1091906604}
+  - {fileID: 1561157345}
   m_Father: {fileID: 773677853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &498648862
@@ -2593,7 +2595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &593297777
 Transform:
   m_ObjectHideFlags: 0
@@ -3321,11 +3323,11 @@ MonoBehaviour:
   - {fileID: 1158146571}
   foodSpritePairs:
   - foodType: 0
-    sprite: {fileID: 21300000, guid: 0edd945519f3fb44aa38b8b365a50a35, type: 3}
+    sprite: {fileID: 21300000, guid: e4693a2985b7de84eb776e06ef6e45d2, type: 3}
   - foodType: 1
-    sprite: {fileID: 21300000, guid: 1503a68a87216b34791d6edbfe42250f, type: 3}
+    sprite: {fileID: 21300000, guid: 6c5ca998c52da454e9a7e694c81beeb4, type: 3}
   - foodType: 2
-    sprite: {fileID: 21300000, guid: 51d27cd2fc47b3b49ba285ccce8c418f, type: 3}
+    sprite: {fileID: 21300000, guid: c6e7a45efb35fa442a3e5901df6df32b, type: 3}
   InstantiateClients: 1
   InstantiateTheSameClient: 0
 --- !u!1 &773677852
@@ -4552,6 +4554,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1041360624}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1091906603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1091906604}
+  - component: {fileID: 1091906605}
+  m_Layer: 0
+  m_Name: LastWhisperElixir
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1091906604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091906603}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 459319640}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1091906605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091906603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca38078cd505034f9dfabc69705f8bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 4359163396843218094, guid: b61dd41d4bead9c4e8aa9d07aabccc83, type: 3}
+  poolSize: 10
 --- !u!1 &1094032504
 GameObject:
   m_ObjectHideFlags: 0
@@ -5873,7 +5921,7 @@ GameObject:
   - component: {fileID: 1413431577}
   - component: {fileID: 1413431578}
   m_Layer: 0
-  m_Name: FishPool
+  m_Name: BeastStew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5919,7 +5967,7 @@ GameObject:
   - component: {fileID: 1421752241}
   - component: {fileID: 1421752242}
   m_Layer: 0
-  m_Name: MousePool
+  m_Name: DarkWoodBarries
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6618,6 +6666,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 430054, guid: d9dd031618d649541a5fadd4c573e31c, type: 3}
   m_PrefabInstance: {fileID: 1554493271}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1561157344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1561157345}
+  - component: {fileID: 1561157346}
+  m_Layer: 0
+  m_Name: AbyssCuredMeet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1561157345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561157344}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 459319640}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1561157346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1561157344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca38078cd505034f9dfabc69705f8bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 4359163396843218094, guid: 3f18c4566c934294cbed5b5ed1df5d81, type: 3}
+  poolSize: 10
 --- !u!1 &1597986852
 GameObject:
   m_ObjectHideFlags: 0
@@ -7669,10 +7763,14 @@ MonoBehaviour:
   - {fileID: 4359163396843218094, guid: beb6cb53225ae2e48b470ed168c2c63c, type: 3}
   - {fileID: 8249197201356797330, guid: 06b9a4409ba2d304e94e2aa2cfeade63, type: 3}
   - {fileID: 4359163396843218094, guid: 30ee3905dc7c75045bb5f5004d06da22, type: 3}
+  - {fileID: 4359163396843218094, guid: b61dd41d4bead9c4e8aa9d07aabccc83, type: 3}
+  - {fileID: 4359163396843218094, guid: 3f18c4566c934294cbed5b5ed1df5d81, type: 3}
   objectsPools:
   - {fileID: 1421752242}
   - {fileID: 1413431578}
   - {fileID: 2088648134}
+  - {fileID: 1091906605}
+  - {fileID: 1561157346}
 --- !u!1001 &1744544934
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8320,6 +8418,8 @@ MonoBehaviour:
   - {fileID: 1421752242}
   - {fileID: 1413431578}
   - {fileID: 2088648134}
+  - {fileID: 1091906605}
+  - {fileID: 1561157346}
   stovesPositions:
   - {fileID: 156368231}
   - {fileID: 1729669543}
@@ -8374,7 +8474,7 @@ GameObject:
   - component: {fileID: 2088648133}
   - component: {fileID: 2088648134}
   m_Layer: 0
-  m_Name: TomatoAndLettuceSaladPool
+  m_Name: SoupOfTheSilverMoon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
