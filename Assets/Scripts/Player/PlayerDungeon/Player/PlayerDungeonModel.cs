@@ -77,7 +77,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     //------Provisorio, para el alpha------
     public event Action<float, float> OnHealthChanged;
     public event Action OnPlayerDied;
-
+    public static Action<PlayerDungeonModel> onPlayerInitialized;
     #endregion
 
     #region Unity Callbacks
@@ -91,9 +91,16 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         rb.freezeRotation = true;
         currentHP = maxHP;
         OnHealthChanged?.Invoke(currentHP, maxHP);
+        StartCoroutine(InvokeEventInitializationPlayer());
     }
 
-    private void FixedUpdate() => MovePlayer();
+    private void FixedUpdate()
+    {
+        if (PlayerInputs.Instance != null)
+        {
+            MovePlayer();
+        }
+    }
 
     private void Update()
     {
@@ -129,8 +136,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     #region Inputs & Movimiento
     private void HandleInputs()
     {
-        if (PlayerInputs.Instance.Jump()) Jump();
-        if (PlayerInputs.Instance.Attack()) combatHandler.TryAttack();
+        if(PlayerInputs.Instance != null)
+        {
+         if (PlayerInputs.Instance.Jump()) Jump();
+         if (PlayerInputs.Instance.Attack()) combatHandler.TryAttack();
+        }
     }
 
     private void MovePlayer()
@@ -185,7 +195,12 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     #endregion
+    private IEnumerator InvokeEventInitializationPlayer()
+    {
+        yield return new WaitForSeconds(1);
 
+        onPlayerInitialized?.Invoke(this);
+    }
     #region Death & Respawn
     private void HandleDeath()
     {

@@ -21,7 +21,7 @@ MonoBehaviour:
   throwFoodToTrash: 101
   showOrHideDish: 113
   dash: 0
-  interact: 0
+  interact: 101
   run: 304
   jump: 32
   inventory: 9
