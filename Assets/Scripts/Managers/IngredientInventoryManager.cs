@@ -45,7 +45,7 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 
         var recipe = recipeDict[foodType];
 
-        foreach (var ing in recipe.Ingredients)
+        foreach (var ing in recipe.Ingridients)
         {
             if (!ingredientInventory.ContainsKey(ing.IngredientType) || ingredientInventory[ing.IngredientType] < ing.Amount)
             {
@@ -53,7 +53,7 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
             }
         }
 
-        foreach (var ing in recipe.Ingredients)
+        foreach (var ing in recipe.Ingridients)
         {
             ingredientInventory[ing.IngredientType] -= ing.Amount;
         }
