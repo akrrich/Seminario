@@ -58,6 +58,7 @@ public class PlayerInputs : Singleton<PlayerInputs>
     public bool Cook() => Input.GetKeyDown(keyboardInputs.Cook) || Input.GetKeyDown(joystickInputs.Cook);
     public bool Administration() => Input.GetKeyDown(keyboardInputs.Administration) || Input.GetKeyDown(joystickInputs.Administration);
     public bool ThrowFoodToTrash() => Input.GetKeyDown(keyboardInputs.ThrowFoodToTrash) || Input.GetKeyDown(joystickInputs.ThrowFoodToTrash);
+    public bool ShowOrHideDish() => Input.GetKeyDown(keyboardInputs.ShowOrHideDish) || Input.GetKeyDown(joystickInputs.ShowOrHideDish);
     public bool Inventory() => Input.GetKeyDown(keyboardInputs.Inventory) || Input.GetKeyDown(joystickInputs.Inventory);
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);
 

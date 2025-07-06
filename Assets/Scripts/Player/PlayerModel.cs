@@ -20,6 +20,7 @@ public class PlayerModel : MonoBehaviour
     private GameObject cookingDeskUI;
     private GameObject oven;
     private GameObject administration;
+    private GameObject trash;
 
     private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
 
@@ -28,6 +29,7 @@ public class PlayerModel : MonoBehaviour
     private bool isGrounded = true;
     private bool isCollidingCookingDeskUI = false;
     private bool isCollidingAdministration = false;
+    private bool isCollidingTrash = false;
     private bool isCooking = false;
     private bool isAdministrating = false;
 
@@ -47,6 +49,7 @@ public class PlayerModel : MonoBehaviour
     public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
     public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
+    public bool IsCollidingTrash { get => isCollidingTrash; set => isCollidingTrash = value; }
     public bool IsCooking { get => isCooking; set => isCooking = value; }
     public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
 
@@ -84,21 +87,35 @@ public class PlayerModel : MonoBehaviour
         return LineOfSight.LOS(playerCamera.transform, administration.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
     }
 
-    // Ajustar el rayo correctamente
+    public bool IsLookingAtTrash(PlayerController playerController)
+    {
+        foreach (Transform child in playerController.PlayerView.Dish.transform)
+        {
+            // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS)
+            if (child.childCount > 0)
+            {
+                return LineOfSight.LOS(playerCamera.transform, trash.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Ajustar el rayo correctamente
+    /// </summary>
     public Food IsLookingAtFood()
     {
-        if (Vector3.Distance(transform.position, oven.transform.position) <= 5f)
+        if (Vector3.Distance(transform.position, oven.transform.position) <= playerTabernData.DistanceToGrabFood)
         {
             Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward + Vector3.up * 0.05f);
-            float rayDistance = 5f;
 
-            Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 0.2f);
+            Debug.DrawRay(ray.origin, ray.direction * playerTabernData.DistanceToGrabFood, Color.red, 0.2f);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
+            if (Physics.Raycast(ray, out RaycastHit hit, playerTabernData.DistanceToGrabFood, LayerMask.GetMask("FoodTrigger")))
             {
                 if (hit.collider.CompareTag("FoodTrigger"))
                 {
-                    Debug.Log("Yes");
                     return hit.collider.GetComponentInParent<Food>();
                 }
             }
@@ -129,6 +146,7 @@ public class PlayerModel : MonoBehaviour
         cookingDeskUI = GameObject.FindGameObjectWithTag("CookingDeskUI");
         oven = GameObject.FindGameObjectWithTag("Oven");
         administration = GameObject.FindGameObjectWithTag("Administration");
+        trash = GameObject.FindGameObjectWithTag("Trash");
     }
 
     private void Initialize()

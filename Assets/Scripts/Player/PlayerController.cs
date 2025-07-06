@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public static Action<Food> OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
+    public static Action OnThrowFoodToTrash { get => onThrowFoodToTrash; set => onThrowFoodToTrash = value; }
 
     // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido
     public static Action<Table> OnTableCollisionEnterForHandOverFood { get => onTableCollisionEnterForHandOverFood; set => onTableCollisionEnterForHandOverFood = value; }
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
         GrabOrHandOverFood();
         TakeClientOrder();
         ThrowFoodToTrash();
+        ShowOrHideDish();
 
         // Provisorio
         playerCollisions.UpdateColls();
@@ -137,6 +139,7 @@ public class PlayerController : MonoBehaviour
 
                 if (currentFood != null)
                 {
+                    playerView.ShowOrHideDish(true);
                     onGrabFood?.Invoke(currentFood);
                 } 
             }
@@ -163,9 +166,34 @@ public class PlayerController : MonoBehaviour
     {
         if (PlayerInputs.Instance != null)
         {
-            if (PlayerInputs.Instance.ThrowFoodToTrash())
+            if (PlayerInputs.Instance.ThrowFoodToTrash() && playerModel.IsCollidingTrash && playerModel.IsLookingAtTrash(this))
             {
                 onThrowFoodToTrash?.Invoke();
+            }
+        }
+    }
+
+    private void ShowOrHideDish()
+    {
+        if (PlayerInputs.Instance != null)
+        {
+            if (PlayerInputs.Instance.ShowOrHideDish())
+            {
+                foreach (Transform child in playerView.Dish.transform)
+                {
+                    // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS), es decir si tienen hijos termina el metodo
+                    if (child.childCount > 0) return;
+                }
+
+                if (playerView.Dish.activeSelf)
+                {
+                    playerView.ShowOrHideDish(false);
+                }
+
+                else
+                {
+                    playerView.ShowOrHideDish(true);
+                }
             }
         }
     }

@@ -34,6 +34,7 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
         ingredientInventory[ingredient] += amount;
 
     }
+
     public void IncreaseIngredientStock(IngredientType ingredient)
     {
         IncreaseIngredientStock(ingredient, 1);

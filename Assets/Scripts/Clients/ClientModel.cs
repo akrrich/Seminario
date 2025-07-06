@@ -91,7 +91,10 @@ public class ClientModel : MonoBehaviour
         capsuleCollider.enabled = collider;
     }
 
-    public void ReturnFoodFromTableToPool(bool dishesMatch)
+    /// <summary>
+    /// Por ahora por como esta hecho siempre va a dar plata y nunca va a restar
+    /// </summary>
+    public void ReturnFoodFromTableToPool()
     {
         foreach (Food food in currentTablePosition.CurrentFoods)
         {
@@ -100,7 +103,7 @@ public class ClientModel : MonoBehaviour
 
         currentTablePosition.CurrentFoods.Clear();
 
-        if (dishesMatch)
+        /*if (dishesMatch)
         {
             MoneyManager.Instance.AddMoney(500);
         }
@@ -108,7 +111,7 @@ public class ClientModel : MonoBehaviour
         else
         {
             MoneyManager.Instance.SubMoney(250);
-        }
+        }*/
     }
 
 

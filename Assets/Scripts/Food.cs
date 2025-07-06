@@ -25,12 +25,11 @@ public class Food : MonoBehaviour
     private Rigidbody rb;
     private BoxCollider boxCollider;
     private MeshRenderer meshRenderer;
-    private GameObject foodTrigger;
+    private GameObject foodTriggerGameObject;
     private Color originalColor;
 
     private Transform stovePosition; // Posicion de las hornallas
     private Transform dishPosition; // Posicion del plato del player
-
 
     [SerializeField] private FoodType foodType;
     private CookingStates currentCookingState;
@@ -39,6 +38,8 @@ public class Food : MonoBehaviour
 
     private bool isInstantiateFirstTime = true;
     private bool isInPlayerDishPosition = false;
+
+    public CookingStates CurrentCookingState { get => currentCookingState; }
 
 
     void Awake()
@@ -70,6 +71,7 @@ public class Food : MonoBehaviour
     {
         PlayerController.OnGrabFood += Grab;
         PlayerController.OnHandOverFood += HandOver;
+        PlayerController.OnThrowFoodToTrash += ThrowFoodToTrash;
 
         PlayerController.OnTableCollisionEnterForHandOverFood += SaveTable;
         PlayerController.OnTableCollisionExitForHandOverFood += ClearTable;
@@ -79,6 +81,7 @@ public class Food : MonoBehaviour
     {
         PlayerController.OnGrabFood -= Grab;
         PlayerController.OnHandOverFood -= HandOver;
+        PlayerController.OnThrowFoodToTrash -= ThrowFoodToTrash;
 
         PlayerController.OnTableCollisionEnterForHandOverFood -= SaveTable;
         PlayerController.OnTableCollisionExitForHandOverFood -= ClearTable;
@@ -90,7 +93,7 @@ public class Food : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         meshRenderer = GetComponent<MeshRenderer>();
-        foodTrigger = transform.Find("FoodTrigger").gameObject;
+        foodTriggerGameObject = transform.Find("FoodTrigger").gameObject;
     }
 
     private void Initialize()
@@ -140,7 +143,8 @@ public class Food : MonoBehaviour
 
     private void RestartValues()
     {
-        foodTrigger.tag = "FoodTrigger";
+        foodTriggerGameObject.tag = "FoodTrigger";
+        foodTriggerGameObject.layer = LayerMask.NameToLayer("FoodTrigger");
         meshRenderer.material.color = originalColor;
 
         stovePosition = null;
@@ -189,9 +193,6 @@ public class Food : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Solucionar el problema de que no se agarra la comida en el tercer slot de la bandeja
-    /// </summary>
     private void Grab(Food currentFood)
     {
         if (currentFood == this)
@@ -200,7 +201,8 @@ public class Food : MonoBehaviour
             if (gameObject.activeSelf && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
             {
                 isInPlayerDishPosition = true;
-                foodTrigger.tag = "Untagged";
+                foodTriggerGameObject.tag = "Untagged";
+                foodTriggerGameObject.layer = LayerMask.NameToLayer("Default");
 
                 cookingManager.ReleaseStovePosition(stovePosition);
                 dishPosition = cookingManager.MoveFoodToDish(this);
@@ -242,6 +244,14 @@ public class Food : MonoBehaviour
 
                 ClearTable();
             }
+        }
+    }
+
+    private void ThrowFoodToTrash()
+    {
+        if (gameObject.activeSelf && isInPlayerDishPosition)
+        {
+            ReturnObjetToPool();
         }
     }
 }

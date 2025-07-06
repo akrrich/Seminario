@@ -17,3 +17,4 @@ MonoBehaviour:
   walkSpeed: 300
   runSpeed: 500
   jumpForce: 5
+  distanceToGrabFood: 5

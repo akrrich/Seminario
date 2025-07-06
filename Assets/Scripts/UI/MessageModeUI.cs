@@ -6,7 +6,7 @@ public class MessageModeUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI messageDesplayText;
 
-    private event Action onCook, onAdministration, onHandOver, onTakeOrder, onCleanDirtyTable;
+    private event Action onCook, onAdministration, onHandOver, onTakeOrder, onCleanDirtyTable, onThrowFoodToTrash;
 
 
     void Awake()
@@ -33,6 +33,7 @@ public class MessageModeUI : MonoBehaviour
         onHandOver += () => ShowEnterMessageText("Presione", GetHandOverKey(), "para entregar el plato");
         onTakeOrder += () => ShowEnterMessageText("Presione", GetTakeOrderKey(), "para tomar el pedido");
         onCleanDirtyTable += () => ShowEnterMessageText("Mantener", GetCleanDirtyTableKey(), "para limpiar la mesa");
+        onThrowFoodToTrash += () => ShowEnterMessageText("Presione", GetThrowFoodToTrashKey(), "para tirar la comida a la basura");
     }
 
     private void SuscribeToPlayerViewEvents()
@@ -53,6 +54,9 @@ public class MessageModeUI : MonoBehaviour
 
         PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage += onCleanDirtyTable;
         PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage += DisapearMessageText;
+
+        PlayerView.OnCollisionEnterWithTrashForTrashModeMessage += onThrowFoodToTrash;
+        PlayerView.OnCollisionExitWithTrashForTrashModeMessage += DisapearMessageText;
     }
 
     private void UnSuscribeToPlayerViewEvents()
@@ -73,6 +77,9 @@ public class MessageModeUI : MonoBehaviour
 
         PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage -= onCleanDirtyTable;
         PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage -= DisapearMessageText;
+
+        PlayerView.OnCollisionEnterWithTrashForTrashModeMessage -= onThrowFoodToTrash;
+        PlayerView.OnCollisionExitWithTrashForTrashModeMessage -= DisapearMessageText;
     }
 
     private void InitializeReferencs()
@@ -124,5 +131,12 @@ public class MessageModeUI : MonoBehaviour
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
             ? PlayerInputs.Instance.JoystickInputs.CleanDirtyTable
             : PlayerInputs.Instance.KeyboardInputs.CleanDirtyTable;
+    }
+
+    private KeyCode GetThrowFoodToTrashKey()
+    {
+        return DeviceManager.Instance.CurrentDevice == Device.Joystick
+            ? PlayerInputs.Instance.JoystickInputs.ThrowFoodToTrash
+            : PlayerInputs.Instance.KeyboardInputs.ThrowFoodToTrash;
     }
 }

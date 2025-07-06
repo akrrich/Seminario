@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095b00a556a04fa4eb756d06d3566dac, type: 3}
   m_Name: InputsJoystick
   m_EditorClassIdentifier: 
-  grabFood: 333
+  grabFood: 330
   handOverFood: 330
   cook: 330
   takeClientOrder: 330
   cleanDirtyTable: 330
   administration: 330
   throwFoodToTrash: 330
+  showOrHideDish: 333
   dash: 0
   interact: 0
   run: 337

@@ -47,7 +47,7 @@ public class ClientStateEating<T> : State<T>
     {
         base.Exit();
 
-        clientModel.ReturnFoodFromTableToPool(true);
+        clientModel.ReturnFoodFromTableToPool();
         clientModel.CurrentTablePosition.SetDirty(true);
 
         isEating = false;

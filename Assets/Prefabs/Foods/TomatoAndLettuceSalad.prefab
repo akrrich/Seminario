@@ -161,7 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7836161355284874033}
   - component: {fileID: 7737657818342226197}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FoodTrigger
   m_TagString: FoodTrigger
   m_Icon: {fileID: 0}

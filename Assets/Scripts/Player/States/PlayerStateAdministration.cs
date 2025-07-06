@@ -52,9 +52,27 @@ public class PlayerStateAdministration<T> : State<T>
         base.Exit();
 
         PlayerView.OnExitInAdministrationMode?.Invoke();
-        playerView.ShowOrHideDish(true);
+
         playerModel.IsAdministrating = false;
 
         playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;
+
+        foreach (Transform child in playerView.Dish.transform)
+        {
+            // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS)
+            if (child.childCount > 0)
+            {
+                playerView.ShowOrHideDish(true);
+                return;
+            }
+
+            else
+            {
+                /// Agregar aca una verificacion del estado anterior de la bandeja, es decir como era el estado de la bandeja antes de entrar al estado, para que cuando sale del estado aparezca o no
+
+                playerView.ShowOrHideDish(false);
+                return;
+            }
+        }
     }
 }

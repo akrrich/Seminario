@@ -12,6 +12,7 @@ TagManager:
   - PortalDungeon
   - CookingDeskUI
   - FoodTrigger
+  - Trash
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - Enemy
   - Interactable
   - whatIsGround
-  - 
+  - FoodTrigger
   - 
   - 
   - 
