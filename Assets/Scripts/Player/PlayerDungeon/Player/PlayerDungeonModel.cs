@@ -120,7 +120,6 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     private void HandleInputs()
     {
         if (PlayerInputs.Instance.Jump()) Jump();
-        if (PlayerInputs.Instance.Dash()) dashHandler.ExecuteDashRequest();
         if (PlayerInputs.Instance.Attack()) combatHandler.TryAttack();
     }
 

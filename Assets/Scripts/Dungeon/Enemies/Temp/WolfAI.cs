@@ -7,7 +7,9 @@ public class WolfAI : EnemyBase
     [Header("Lobo")]
     [SerializeField] private float attackRange = 5f; // área de impacto del salto
     [SerializeField] private float leapDelay = 0.5f; // Pausa antes de saltar
-
+    [Space(2)]
+    [Header("Audio")]
+    [SerializeField] private AudioClip atkClip;
     private Transform player;
     private float attackCooldownTimer = 0f;
     private bool isAttacking;
@@ -46,7 +48,7 @@ public class WolfAI : EnemyBase
         isAttacking = true;
         // Aquí puedes poner animación de agacharse
         yield return new WaitForSeconds(leapDelay);
-        // Aquí animación de salto (agrega Rigidbody o movimiento rápido)
+        audioSource.PlayOneShot(atkClip);
         // Ataque en área pequeña
         Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Player"));
 

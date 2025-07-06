@@ -13,14 +13,16 @@ public class RatAI : EnemyBase
     [Header("Movimiento errático")]
     [SerializeField] private float circleRadius = 2f;  // radio del órbita
     [SerializeField] private float directionChangeInterval = 0.4f;
- 
+    [Space(2)]
     [Header("LoS")]
     [SerializeField] private float visionRange = 8f;
     [SerializeField] private float visionAngle = 100f;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private float chaseSpeedMultiplier = 1.5f;
     [SerializeField] private float loseSightDelay = 1.5f; // segundos antes de volver al movimiento errático
-
+    [Space(2)]
+    [Header("Audio")]
+    [SerializeField] private AudioClip atkClip;
 
     // --- Internos ---
     private Transform player;
@@ -53,7 +55,7 @@ public class RatAI : EnemyBase
             enabled = false;
             return;
         }
-
+        
         player = playerObj.transform;
         playerDamageable = playerObj.GetComponent<IDamageable>();
 
@@ -162,8 +164,9 @@ public class RatAI : EnemyBase
         if (attackCooldownTimer < enemyData.AttackCooldown) return;
 
         playerDamageable?.TakeDamage(enemyData.Damage);
-        Debug.Log($"[{name}] Mordisco al jugador ({enemyData.Damage} de daño).");
 
+        Debug.Log($"[{name}] Mordisco al jugador ({enemyData.Damage} de daño).");
+        audioSource.PlayOneShot(atkClip);
         attackCooldownTimer = 0f;
         StartCoroutine(AttackDelay());
     }

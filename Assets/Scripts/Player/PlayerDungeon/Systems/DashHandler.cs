@@ -13,13 +13,23 @@ public class DashHandler : MonoBehaviour
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashBufferTime = 0.1f;
     [SerializeField] private bool allowAirDash = false;
-
+    [SerializeField] private float dashTapThreshold = 0.25f;
+   
     private bool isDashing;
     private float bufferTimer;   
     private bool dashQueued;    
     private Vector3 dashDirection;
     private Transform orientation;
 
+    private bool runKeyDown = false;
+    private float runKeyDownTime = 0f;
+    private bool runHeldFlag = false;
+    private bool dashThisFrame = false;
+
+    private bool runButtonDown = false;
+    private bool runButtonHeld = false;
+    private bool runButtonUp = false;
+    
     #region Unity Lifecycle
     private void Awake()
     {
@@ -31,9 +41,16 @@ public class DashHandler : MonoBehaviour
 
     private void Update()
     {
-        BufferTick();      // gestiona el dash en cola (nuevo)
+        HandleRunDashInput();
+        BufferTick();
+        if (dashThisFrame)
+        {
+            dashThisFrame = false;
+            ExecuteDashRequest();
+        }
     }
     #endregion
+    public bool IsRunHeld() => runHeldFlag;
     public void ExecuteDashRequest()
     {
         // 1-) ¿Se permite dash en el aire?
@@ -99,4 +116,36 @@ public class DashHandler : MonoBehaviour
         model.SetInvulnerable(false);
         isDashing = false;
     }
+    private void HandleRunDashInput()
+    {
+        var key = PlayerInputs.Instance.KeyboardInputs.Run;
+        var joy = PlayerInputs.Instance.JoystickInputs.Run;
+
+        runButtonDown = Input.GetKeyDown(key) || Input.GetKeyDown(joy);
+        runButtonHeld = Input.GetKey(key) || Input.GetKey(joy);
+        runButtonUp = Input.GetKeyUp(key) || Input.GetKeyUp(joy);
+       
+        if (runButtonDown)
+        {
+            runKeyDown = true;
+            runKeyDownTime = Time.time;
+            runHeldFlag = false;
+        }
+
+        if (runKeyDown && !runHeldFlag && runButtonHeld &&
+            Time.time - runKeyDownTime >= dashTapThreshold)
+        {
+            runHeldFlag = true;
+        }
+
+        if (runButtonUp && runKeyDown)
+        {
+            if (!runHeldFlag && Time.time - runKeyDownTime < dashTapThreshold)
+                dashThisFrame = true;
+
+            runKeyDown = false;
+            runHeldFlag = false;
+        }
+    }
+    
 }

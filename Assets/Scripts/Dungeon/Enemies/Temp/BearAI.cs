@@ -6,7 +6,9 @@ public class BearAI : EnemyBase
     [Header("Oso")]
     [SerializeField] private float attackRange = 4f; // Distancia para atacar
     [SerializeField] private float attackArea = 5f;  // Área del ataque frontal
-
+    [Space(2)]
+    [Header("Audio")]
+    [SerializeField] private AudioClip atkClip;
     private Transform player;
     private float attackCooldownTimer = 0f;
     private bool isAttacking;
@@ -42,7 +44,7 @@ public class BearAI : EnemyBase
         isAttacking = true;
         // Animación de ataque
         yield return new WaitForSeconds(0.4f); // simula animación
-
+        audioSource.PlayOneShot(atkClip);
         // Ataque en área grande frente a él
         Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * 2f, attackArea);
         foreach (var hit in hits)

@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Audio;
 
 /// <summary>
 /// Componente principal del enemigo. Gestiona HP, muerte
@@ -18,7 +19,8 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     [Header("Health (runtime)")]
     protected int currentHP;
     protected bool isDead = false;
-
+    protected AudioSource audioSource;
+    
     protected virtual void Awake()
     {
         if (enemyData == null)
@@ -28,6 +30,7 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
             return;
         }
         currentHP = enemyData.HP;
+        audioSource = GetComponent<AudioSource>();
         agent = GetComponent<NavMeshAgent>();
         damageFlash = GetComponent<DamageFlash>();
     }
