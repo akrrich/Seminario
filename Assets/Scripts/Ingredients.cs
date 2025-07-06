@@ -13,10 +13,10 @@ public class Ingredients
     public class FoodRecipe // Para machear la cantidad de ingredientes por comida
     {
         [SerializeField] private FoodType foodType;
-        [SerializeField] private List<IngredientAmount> ingredients;
+        [SerializeField] private List<IngredientAmount> ingridients;
 
         public FoodType FoodType { get => foodType; }
-        public List<IngredientAmount> Ingredients { get => ingredients; }
+        public List<IngredientAmount> Ingridients { get => ingridients; }
     }
 
     [Serializable]
@@ -32,20 +32,12 @@ public class Ingredients
     [Serializable]
     public class IngredientData // Para datos de los ingredientes si es necesario en un futuro agregar mas
     {
-        [SerializeField] private IngredientType ingredientType;
+        [SerializeField] private IngredientType ingridientType;
+        [SerializeField] private Sprite sprite;
         [SerializeField] private int price;
 
-        public IngredientType IngredientType { get => ingredientType; }
+        public IngredientType IngredientType { get => ingridientType; }
+        public Sprite Sprite { get => sprite; }
         public int Price { get => price; }
-    }
-
-    [Serializable]
-    public class IngredientSlotPrefab // Para machear el prefab del slot del inventario con cada ingrediente
-    {
-        [SerializeField] private IngredientType ingredientType;
-        [SerializeField] private GameObject prefab;
-
-        public IngredientType IngredientType { get => ingredientType; }
-        public GameObject Prefab { get => prefab; }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class ObjectPooler : MonoBehaviour
 {
@@ -34,6 +35,15 @@ public class ObjectPooler : MonoBehaviour
 
     public void ReturnObjectToPool(MonoBehaviour obj)
     {
+        obj.gameObject.transform.SetParent(transform);
+        obj.gameObject.SetActive(false);
+        pool.Enqueue(obj);
+    }
+
+    public IEnumerator ReturnObjectToPool(MonoBehaviour obj, float maxTime)
+    {
+        yield return new WaitForSeconds(maxTime);
+
         obj.gameObject.transform.SetParent(transform);
         obj.gameObject.SetActive(false);
         pool.Enqueue(obj);

@@ -7,7 +7,6 @@ public class EventSystemTabern : MonoBehaviour
     private EventSystem eventSystem;
 
     //private List<GameObject> buttonsPause = new List<GameObject>();
-    //private List<GameObject> buttonsCooking = new List<GameObject>();
 
 
     void Awake()
@@ -28,7 +27,6 @@ public class EventSystemTabern : MonoBehaviour
         PauseManager.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
         PauseManager.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
 
-        //CookingManagerUI.OnSendButtonsToEventSystem += GetButtonsCookingFromEvent;
         CookingManagerUI.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
         CookingManagerUI.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
 
@@ -42,7 +40,6 @@ public class EventSystemTabern : MonoBehaviour
         PauseManager.OnSetSelectedCurrentGameObject -= SetSelectedCurrentGameObject;
         PauseManager.OnClearSelectedCurrentGameObject -= ClearCurrentSelectedGameObject;
 
-        //CookingManagerUI.OnSendButtonsToEventSystem -= GetButtonsCookingFromEvent;
         CookingManagerUI.OnSetSelectedCurrentGameObject -= SetSelectedCurrentGameObject;
         CookingManagerUI.OnClearSelectedCurrentGameObject -= ClearCurrentSelectedGameObject;
 
@@ -53,11 +50,6 @@ public class EventSystemTabern : MonoBehaviour
     private void GetButtonsPauseFromEvent(List<GameObject> buttonsPause)
     {
         //this.buttonsPause = buttonsPause;
-    }
-
-    private void GetButtonsCookingFromEvent(List<GameObject> buttonsCooking)
-    {
-        //this.buttonsCooking = buttonsCooking;
     }
 
     private void GetComponents()

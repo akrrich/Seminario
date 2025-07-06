@@ -26,10 +26,13 @@ public class PlayerStateCook<T> : State<T>
         PlayerView.OnEnterInCookMode?.Invoke();
         PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
 
+        playerModel.Rb.velocity = Vector3.zero;
+        playerModel.CapsuleCollider.material = null;
+
         playerView.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = cookingPosition.transform.position;
-        playerModel.LookAt(playerModel.Oven.transform.position);
+        playerModel.LookAt(playerModel.CookingDeskUI.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 
@@ -48,5 +51,7 @@ public class PlayerStateCook<T> : State<T>
         PlayerView.OnExitInCookMode?.Invoke();
         playerView.ShowOrHideDish(true);
         playerModel.IsCooking = false;
+
+        playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;
     }
 }

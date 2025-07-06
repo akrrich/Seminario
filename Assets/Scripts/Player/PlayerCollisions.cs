@@ -25,14 +25,14 @@ public class PlayerCollisions
     public void OnCollisionsEnter(Collision collision)
     {
         OnCollisionEnterWithFloor(collision);
-        OnCollisionEnterWithOvenAndLOS(collision);
+        OnCollisionEnterWithCookingDeskUIAndLOS(collision);
         OnCollisionEnterWithTable(collision); 
         OnCollisionEnterWithAdministration(collision);
     }
 
     public void OnCollisionsStay(Collision collision)
     {
-        OnCollisionStayWithOvenAndLOS(collision);
+        OnCollisionStayWithCookingDeskUIAndLOS(collision);
         OnCollisionStayWithAdministrationAndLOS(collision);
         OnCollisionStayWithTable(collision);
     }
@@ -40,7 +40,7 @@ public class PlayerCollisions
     public void OnCollisionsExit(Collision collision)
     {
         OnCollisionExitWithFloor(collision);
-        OnCollisionExitWithOven(collision);
+        OnCollisionExitWithCookingDeskUI(collision);
         OnCollisionExitWithTable(collision);
         OnCollisionExitWithAdministration(collision);
     }
@@ -61,12 +61,12 @@ public class PlayerCollisions
         }
     }
 
-    private void OnCollisionEnterWithOvenAndLOS(Collision collision)
+    private void OnCollisionEnterWithCookingDeskUIAndLOS(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
+        if (collision.gameObject.CompareTag("CookingDeskUI") && playerController.PlayerModel.IsLookingAtCookingDeskUI())
         {
-            playerController.PlayerModel.IsCollidingOven = true;
-            PlayerView.OnCollisionEnterWithOvenForCookModeMessage?.Invoke();
+            playerController.PlayerModel.IsCollidingCookingDeskUI = true;
+            PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage?.Invoke();
         }
     }
 
@@ -130,17 +130,17 @@ public class PlayerCollisions
 
     /* ------------------------------------------COLLISION STAY------------------------------------------- */
 
-    private void OnCollisionStayWithOvenAndLOS(Collision collision)
+    private void OnCollisionStayWithCookingDeskUIAndLOS(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
+        if (collision.gameObject.CompareTag("CookingDeskUI") && playerController.PlayerModel.IsLookingAtCookingDeskUI())
         {
-            playerController.PlayerModel.IsCollidingOven = true;
-            PlayerView.OnCollisionEnterWithOvenForCookModeMessage?.Invoke();
+            playerController.PlayerModel.IsCollidingCookingDeskUI = true;
+            PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage?.Invoke();
         }
 
-        if (collision.gameObject.CompareTag("Oven") && !playerController.PlayerModel.IsLookingAtOven())
+        if (collision.gameObject.CompareTag("CookingDeskUI") && !playerController.PlayerModel.IsLookingAtCookingDeskUI())
         {
-            PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
+            PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage?.Invoke();
         }
     }
 
@@ -248,12 +248,12 @@ public class PlayerCollisions
         }
     }
 
-    private void OnCollisionExitWithOven(Collision collision)
+    private void OnCollisionExitWithCookingDeskUI(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Oven"))
+        if (collision.gameObject.CompareTag("CookingDeskUI"))
         {
-            playerController.PlayerModel.IsCollidingOven = false;
-            PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
+            playerController.PlayerModel.IsCollidingCookingDeskUI = false;
+            PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage?.Invoke();
         }
     }
 

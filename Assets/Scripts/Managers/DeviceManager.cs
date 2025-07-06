@@ -6,17 +6,15 @@ public enum Device
     KeyboardMouse, Joystick
 }
 
-public class DeviceManager : MonoBehaviour
+public class DeviceManager : Singleton<DeviceManager>
 {
     // El script funciona a la perfeccion el cursor, simplemente hay que correrlo en modo build para que se vea plasmado correctamente
 
-    private static DeviceManager instance;
+    [SerializeField] private DeviceManagerData deviceManagerData;
 
     private Device currentDevice;
 
     private bool isUIModeActive = false; // Falso por defecto, se inicializa en ScenesManager y se setea cuando se quiere interactuar en la UI
-
-    public static DeviceManager Instance { get => instance; }
 
     public Device CurrentDevice { get => currentDevice; set => currentDevice = value; }
 
@@ -25,7 +23,7 @@ public class DeviceManager : MonoBehaviour
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
     }
 
     void Update()
@@ -36,39 +34,32 @@ public class DeviceManager : MonoBehaviour
     }
 
 
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
-
     private void EnabledAndDisabledCursor()
     {
         if (currentDevice == Device.Joystick)
         {
-            Cursor.visible = false;    
+            if (!deviceManagerData.UseCursorAllTime)
+            {
+                Cursor.visible = false;
+            }
         }
 
         else if (currentDevice == Device.KeyboardMouse)
         {
             if (isUIModeActive)
             {
-                Cursor.visible = true;
+                if (!deviceManagerData.UseCursorAllTime)
+                {
+                    Cursor.visible = true;
+                }
             }
 
             else
             {
-                Cursor.visible = false;
+                if (!deviceManagerData.UseCursorAllTime)
+                {
+                    Cursor.visible = false;
+                }
             }
         }
     }

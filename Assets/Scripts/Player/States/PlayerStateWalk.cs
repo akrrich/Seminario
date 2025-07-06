@@ -26,7 +26,7 @@ public class PlayerStateWalk<T> : State<T>
         base.Enter();
         //Debug.Log("Walk");
 
-        playerModel.Speed = playerModel.WalkSpeed;
+        playerModel.Speed = playerModel.PlayerTabernData.WalkSpeed;
     }
 
     public override void Execute()
@@ -48,7 +48,7 @@ public class PlayerStateWalk<T> : State<T>
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
+        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingCookingDeskUI && playerModel.IsLookingAtCookingDeskUI())
         {
             Fsm.TransitionTo(inputToCook);
         }

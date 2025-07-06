@@ -37,8 +37,8 @@ public class MessageModeUI : MonoBehaviour
 
     private void SuscribeToPlayerViewEvents()
     {
-        PlayerView.OnCollisionEnterWithOvenForCookModeMessage += onCook;
-        PlayerView.OnCollisionExitWithOvenForCookModeMessage += DisapearMessageText;
+        PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage += onCook;
+        PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage += DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage += onAdministration;
         PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage += DisapearMessageText;
@@ -57,8 +57,8 @@ public class MessageModeUI : MonoBehaviour
 
     private void UnSuscribeToPlayerViewEvents()
     {
-        PlayerView.OnCollisionEnterWithOvenForCookModeMessage -= onCook;
-        PlayerView.OnCollisionExitWithOvenForCookModeMessage -= DisapearMessageText;
+        PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage -= onCook;
+        PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage -= DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage -= onAdministration;
         PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage -= DisapearMessageText;

@@ -27,6 +27,9 @@ public class PlayerStateAdministration<T> : State<T>
         PlayerView.OnEnterInAdministrationMode?.Invoke();
         PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
 
+        playerModel.Rb.velocity = Vector3.zero;
+        playerModel.CapsuleCollider.material = null;
+
         playerView.ShowOrHideDish(false);
         playerModel.IsAdministrating = true;
         playerModel.transform.position = administratingPosition.transform.position;
@@ -51,5 +54,7 @@ public class PlayerStateAdministration<T> : State<T>
         PlayerView.OnExitInAdministrationMode?.Invoke();
         playerView.ShowOrHideDish(true);
         playerModel.IsAdministrating = false;
+
+        playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;
     }
 }

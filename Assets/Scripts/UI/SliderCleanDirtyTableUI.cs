@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 public class SliderCleanDirtyTableUI : MonoBehaviour
 {
+    [SerializeField] private SliderCleanDiirtyTableUIData sliderCleanDiirtyTableUIData;
+
     [SerializeField] private Slider sliderCleanDirtyTable;
 
     private Table currentTable;
 
     private Action onActiveSlider, onDeactivateSlider;
-
-    [SerializeField] private float maxHoldTime;
 
 
     void Awake()
@@ -87,11 +87,11 @@ public class SliderCleanDirtyTableUI : MonoBehaviour
         }
 
         currentTable.CurrentCleanProgress += Time.deltaTime;
-        currentTable.CurrentCleanProgress = Mathf.Min(currentTable.CurrentCleanProgress, maxHoldTime);
+        currentTable.CurrentCleanProgress = Mathf.Min(currentTable.CurrentCleanProgress, sliderCleanDiirtyTableUIData.MaxHoldTime);
 
         UpdateSliderValueFromCurrentTable(currentTable);
 
-        if (currentTable.CurrentCleanProgress >= maxHoldTime)
+        if (currentTable.CurrentCleanProgress >= sliderCleanDiirtyTableUIData.MaxHoldTime)
         {
             currentTable.CurrentCleanProgress = 0;
             sliderCleanDirtyTable.value = sliderCleanDirtyTable.minValue;
@@ -118,7 +118,7 @@ public class SliderCleanDirtyTableUI : MonoBehaviour
 
     private void UpdateSliderValueFromCurrentTable(Table table)
     {
-        sliderCleanDirtyTable.value = table.CurrentCleanProgress / maxHoldTime;
+        sliderCleanDirtyTable.value = table.CurrentCleanProgress / sliderCleanDiirtyTableUIData.MaxHoldTime;
     }
 
     private void DecreaseAllSliderValuesExceptCurrentTable()
