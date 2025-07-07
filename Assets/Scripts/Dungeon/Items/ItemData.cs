@@ -2,7 +2,7 @@ using UnityEngine;
 
 public enum ItemType { Currency, Weapon, Armor, Recipe, Misc }
 
-[CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/Item")]
+[CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/Dungeon/Create new Item")]
 public class ItemData : ScriptableObject
 {
     [Header("Info")]
@@ -12,7 +12,5 @@ public class ItemData : ScriptableObject
     public Sprite icon;
 
     [Header("Stats opcionales")]
-    public int damage;        // armas
-    public int defense;       // armaduras
     public int valueInTeeth;  // para monedas o precio de venta
 }

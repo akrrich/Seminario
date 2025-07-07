@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class IngredientInventoryManagerUI : MonoBehaviour
 {
     private PlayerModel playerModel;
+    private PlayerDungeonModel dungeonModel;
 
     [SerializeField] private List<IngredientSlotPrefab> startSlotPrefabs;
     [SerializeField] private RawImage inventoryPanel;
@@ -21,7 +23,7 @@ public class IngredientInventoryManagerUI : MonoBehaviour
     void Awake()
     {
         SuscribeToPlayerViewEvent();
-        SuscribeToPlayerModelEvent();
+        SuscribeToModelEvents();
         GetComponents();
         InitializeSlots();
     }
@@ -34,7 +36,7 @@ public class IngredientInventoryManagerUI : MonoBehaviour
     void OnDestroy()
     {
         UnsuscribeToPlayerViewEvent();
-        UnsuscribeToPlayerModelEvent();
+        UnsuscribeToModelEvents();
     }
 
 
@@ -48,14 +50,16 @@ public class IngredientInventoryManagerUI : MonoBehaviour
         PlayerView.OnDeactivateInventoryFoodUI -= HideInventory;
     }
 
-    private void SuscribeToPlayerModelEvent()
+    private void SuscribeToModelEvents()
     {
         PlayerModel.OnPlayerInitialized += GetPlayerModelReferenceFromEvent;
+        PlayerDungeonModel.onPlayerInitialized += GetPlayerDungeonModelReferenceFromEvent; 
     }  
 
-    private void UnsuscribeToPlayerModelEvent()
+    private void UnsuscribeToModelEvents()
     {
         PlayerModel.OnPlayerInitialized -= GetPlayerModelReferenceFromEvent;
+        PlayerDungeonModel.onPlayerInitialized -= GetPlayerDungeonModelReferenceFromEvent;
     }
 
     private void GetComponents()
@@ -120,16 +124,44 @@ public class IngredientInventoryManagerUI : MonoBehaviour
         }
     }
 
+    private void GetPlayerDungeonModelReferenceFromEvent(PlayerDungeonModel dungeonModel)
+    {
+        if(this.dungeonModel == null)
+        {
+            this.dungeonModel = dungeonModel;
+        }
+    }
+
     private void EnabledOrDisabledInventoryPanel()
     {
-        if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating && !PauseManager.Instance.IsGamePaused)
+        var currentScene = SceneManager.GetActiveScene();
+
+        if (!PauseManager.Instance.IsGamePaused)
         {
-            if (PlayerInputs.Instance.Inventory())
+
+            if (currentScene.name == "Tabern")
             {
-                (isInventoryOpenUI ? (Action)HideInventory : ShowInventory)();
+                if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating)
+                {
+                    if (PlayerInputs.Instance.Inventory())
+                    {
+                        (isInventoryOpenUI ? (Action)HideInventory : ShowInventory)();
+                    }
+                }
+            }
+            if (currentScene.name == "Dungeon")
+            {
+                if (dungeonModel != null)
+                {
+                    if (PlayerInputs.Instance.Inventory())
+                    {
+                        (isInventoryOpenUI ? (Action)HideInventory : ShowInventory)();
+                    }
+                }
             }
         }
     }
+    
 }
 
 [Serializable]

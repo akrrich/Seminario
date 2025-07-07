@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,33 +6,41 @@ using UnityEngine;
 public class PlayerDungeonView : MonoBehaviour
 {
     private Animator animator;
+    private PlayerDungeonModel model;
 
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+        model = GetComponent<PlayerDungeonModel>();
     }
 
-    public void PlayWalkAnimation(bool walking)
+    private void OnEnable()
     {
-        animator?.SetBool("IsWalking", walking);
+        model.OnHealthChanged += HandleHealthChanged;
+        model.OnPlayerDied += HandleDeath;
     }
 
-    public void PlayAttackAnimation()
+    private void OnDisable()
     {
-        animator?.SetTrigger("Attack");
+        model.OnHealthChanged -= HandleHealthChanged;
+        model.OnPlayerDied -= HandleDeath;
     }
 
-    public void PlayDashAnimation()
+    private void HandleHealthChanged(float current, float max)
     {
-        animator?.SetTrigger("Dash");
+        // Acá disparamos el evento global para el HUD
+        PlayerDungeonHUD.OnHealthChanged?.Invoke(current, max);
     }
 
-    public void PlayDeathAnimation()
+    private void HandleDeath()
     {
-        animator?.SetTrigger("Die");
+        animator.SetTrigger("Die");
+        PlayerDungeonHUD.OnPlayerDeath?.Invoke();
     }
-    public void OnAttackFrame()
-    {
-        GetComponent<AttackHitbox>()?.TriggerHit();
-    }
+
+    // Animaciones
+    public void PlayWalkAnimation(bool walking) => animator?.SetBool("IsWalking", walking);
+    public void PlayAttackAnimation() => animator?.SetTrigger("Attack");
+    public void PlayDashAnimation() => animator?.SetTrigger("Dash");
+    public void OnAttackFrame() => GetComponent<AttackHitbox>()?.TriggerHit();
 }

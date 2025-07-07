@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DropTable", menuName = "ScriptableObjects/Drop Table")]
+[CreateAssetMenu(fileName = "DropTable", menuName = "ScriptableObjects/Dungeon/New Monster Drop Table")]
 public class DropTable : ScriptableObject
 {
     public List<DropEntry> entries = new();

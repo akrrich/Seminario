@@ -17,18 +17,6 @@ public class ItemPickup : MonoBehaviour, IInteractable
                 Debug.Log($"+{itemData.valueInTeeth} dientes");
                 break;
 
-            // ————————————————— Weapon
-            case ItemType.Weapon:
-                // TODO: implementa PlayerEquipment más adelante
-                Debug.Log($"Arma obtenida: {itemData.itemName} (daño {itemData.damage})");
-                break;
-
-            // ————————————————— Armor
-            case ItemType.Armor:
-                // TODO: PlayerEquipment.ObtainArmor()
-                Debug.Log($"Armadura obtenida: {itemData.itemName} (defensa {itemData.defense})");
-                break;
-
             // ————————————————— Recipe
             case ItemType.Recipe:
                 // TODO: RecipeBook.Instance.Unlock(itemData);

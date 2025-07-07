@@ -90,11 +90,14 @@ public class DashHandler : MonoBehaviour
     private void StartDash()
     {
         // Dirección basada en input actual
-        Vector2 input = PlayerInputs.Instance.GetMoveAxis();
-        Vector3 inputDir = (orientation.forward * input.y + orientation.right * input.x).normalized;
-        dashDirection = inputDir.sqrMagnitude > 0.01f ? inputDir : orientation.forward;
+        if(PlayerInputs.Instance != null)
+        {
+         Vector2 input = PlayerInputs.Instance.GetMoveAxis();
+         Vector3 inputDir = (orientation.forward * input.y + orientation.right * input.x).normalized;
+         dashDirection = inputDir.sqrMagnitude > 0.01f ? inputDir : orientation.forward;
 
-        StartCoroutine(DashRoutine());
+         StartCoroutine(DashRoutine());
+        }
     }
     private IEnumerator DashRoutine()
     {
@@ -118,33 +121,36 @@ public class DashHandler : MonoBehaviour
     }
     private void HandleRunDashInput()
     {
-        var key = PlayerInputs.Instance.KeyboardInputs.Run;
-        var joy = PlayerInputs.Instance.JoystickInputs.Run;
-
-        runButtonDown = Input.GetKeyDown(key) || Input.GetKeyDown(joy);
-        runButtonHeld = Input.GetKey(key) || Input.GetKey(joy);
-        runButtonUp = Input.GetKeyUp(key) || Input.GetKeyUp(joy);
-       
-        if (runButtonDown)
+        if (PlayerInputs.Instance != null)
         {
-            runKeyDown = true;
-            runKeyDownTime = Time.time;
-            runHeldFlag = false;
-        }
+            var key = PlayerInputs.Instance.KeyboardInputs.Run;
+            var joy = PlayerInputs.Instance.JoystickInputs.Run;
 
-        if (runKeyDown && !runHeldFlag && runButtonHeld &&
-            Time.time - runKeyDownTime >= dashTapThreshold)
-        {
-            runHeldFlag = true;
-        }
+            runButtonDown = Input.GetKeyDown(key) || Input.GetKeyDown(joy);
+            runButtonHeld = Input.GetKey(key) || Input.GetKey(joy);
+            runButtonUp = Input.GetKeyUp(key) || Input.GetKeyUp(joy);
 
-        if (runButtonUp && runKeyDown)
-        {
-            if (!runHeldFlag && Time.time - runKeyDownTime < dashTapThreshold)
-                dashThisFrame = true;
+            if (runButtonDown)
+            {
+                runKeyDown = true;
+                runKeyDownTime = Time.time;
+                runHeldFlag = false;
+            }
 
-            runKeyDown = false;
-            runHeldFlag = false;
+            if (runKeyDown && !runHeldFlag && runButtonHeld &&
+                Time.time - runKeyDownTime >= dashTapThreshold)
+            {
+                runHeldFlag = true;
+            }
+
+            if (runButtonUp && runKeyDown)
+            {
+                if (!runHeldFlag && Time.time - runKeyDownTime < dashTapThreshold)
+                    dashThisFrame = true;
+
+                runKeyDown = false;
+                runHeldFlag = false;
+            }
         }
     }
     

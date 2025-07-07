@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class IngredientPickup : MonoBehaviour,IInteractable
@@ -10,8 +9,7 @@ public class IngredientPickup : MonoBehaviour,IInteractable
 
     public void Interact()
     {
-        IngredientInventoryManager.Instance
-            .IncreaseIngredientStock(ingredient, amount);
+        IngredientInventoryManager.Instance.IncreaseIngredientStock(ingredient, amount);
 
         Debug.Log($"+{amount} {ingredient}");
         if (destroyOnPickup) Destroy(gameObject);

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerDungeonModel : MonoBehaviour, IDamageable
@@ -72,6 +73,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     // -------- Combate --------
     public int CurrentWeaponDamage { get => currentWeaponDamage; set => currentWeaponDamage = value; }
     public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
+
+    //------Provisorio, para el alpha------
+    public event Action<float, float> OnHealthChanged;
+    public event Action OnPlayerDied;
+    public static Action<PlayerDungeonModel> onPlayerInitialized;
     #endregion
 
     #region Unity Callbacks
@@ -84,9 +90,17 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
         rb.freezeRotation = true;
         currentHP = maxHP;
+        OnHealthChanged?.Invoke(currentHP, maxHP);
+        StartCoroutine(InvokeEventInitializationPlayer());
     }
 
-    private void FixedUpdate() => MovePlayer();
+    private void FixedUpdate()
+    {
+        if (PlayerInputs.Instance != null)
+        {
+            MovePlayer();
+        }
+    }
 
     private void Update()
     {
@@ -101,11 +115,14 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     {
         if (invulnerable) return;
 
-        currentHP -= amount;
-        if (currentHP <= 0)
+        currentHP = Mathf.Clamp(currentHP - amount, 0, maxHP);
+        OnHealthChanged?.Invoke(currentHP, maxHP); 
+
+        if (currentHP <= 0 && !isDead)
         {
             currentHP = 0;
             isDead = true;
+            OnPlayerDied?.Invoke(); 
             HandleDeath();
         }
     }
@@ -119,8 +136,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     #region Inputs & Movimiento
     private void HandleInputs()
     {
-        if (PlayerInputs.Instance.Jump()) Jump();
-        if (PlayerInputs.Instance.Attack()) combatHandler.TryAttack();
+        if(PlayerInputs.Instance != null)
+        {
+         if (PlayerInputs.Instance.Jump()) Jump();
+         if (PlayerInputs.Instance.Attack()) combatHandler.TryAttack();
+        }
     }
 
     private void MovePlayer()
@@ -175,7 +195,12 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     #endregion
+    private IEnumerator InvokeEventInitializationPlayer()
+    {
+        yield return new WaitForSeconds(1);
 
+        onPlayerInitialized?.Invoke(this);
+    }
     #region Death & Respawn
     private void HandleDeath()
     {

@@ -19,7 +19,7 @@ public class InteractionHandler : MonoBehaviour
     {
         Detect();
 
-        if (PlayerInputs.Instance.Interact() && current != null)
+        if (PlayerInputs.Instance != null && PlayerInputs.Instance.Interact() && current != null)
             current.Interact();
     }
 
