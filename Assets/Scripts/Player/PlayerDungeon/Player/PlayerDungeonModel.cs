@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerDungeonModel : MonoBehaviour, IDamageable
@@ -212,15 +213,13 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     private IEnumerator DeathSequence()
     {
-        // TODO: UIManager.Instance.ShowDeathScreen();
-        yield return new WaitForSeconds(2f);
-
+        string[] additiveScenes = { "MainMenuUI" };
+        yield return StartCoroutine(ScenesManager.Instance.LoadScene("MainMenu", additiveScenes));
         // Reset stats
         currentHP = maxHP;
         isDead = false;
         SetInvulnerable(false);
         CanMove = true;
-
         // TODO:
         // DungeonManager.Instance.ReturnToLobby();
         // DungeonManager.Instance.ResetDungeon();
