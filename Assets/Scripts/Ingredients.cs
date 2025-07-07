@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum IngredientType  // FrutosCarmesi, HojaDelAlba, HongosNocturnos, NavoEspectral, AguaDeRioSagrado, CarneDeBestia, SangreHumana, LenguaDeLobo, PolvoDeHueso, AceiteDeRata, CorazonHumano, LagrimasHumanas, UnasDeClerigo
 {     
-    CrimsonFruits, DawnLeaf, MoonLightMushrooms, SpectralTurnip, SacredRiverWater, BeastMeet, HumanBlood, WolfTongue, BoneDust, RatOil, HumanHeart, HumanTears, ClericNails, 
+    CrimsonFruits, DawnLeaf, MoonLightMushrooms, SpectralTurnip, SacredRiverWater, BeastMeat, HumanBlood, WolfTongue, BoneDust, RatOil, HumanHeart, HumanTears, ClericNails, 
 }
 
 public class Ingredients

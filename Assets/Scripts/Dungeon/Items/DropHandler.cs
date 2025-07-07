@@ -1,7 +1,6 @@
-using System;
+
 using UnityEngine;
 
-[RequireComponent(typeof(DropTable))]
 public class DropHandler : MonoBehaviour
 {
     [SerializeField] private DropTable table;
@@ -9,7 +8,11 @@ public class DropHandler : MonoBehaviour
     [SerializeField] private Transform spawnPoint;   // dónde cae el loot
 
 
-    private void Awake() => table = GetComponent<DropTable>();
+    private void Awake()
+    {
+        if (spawnPoint == null)
+            spawnPoint = transform;
+    }
     public void Init(DropTable t, LootPrefabDatabase db, Transform point)
     {
         table = t;
@@ -18,11 +21,17 @@ public class DropHandler : MonoBehaviour
     }
     public void DropLoot()
     {
-        foreach (var entry in table.Roll())  
+        if (table == null || lootDB == null)
+        {
+            Debug.LogWarning($"DropHandler en {name}: Falta asignar DropTable o LootDB.");
+            return;
+        }
+
+        foreach (var entry in table.Roll())
             Spawn(entry);
     }
 
-    public void Spawn(DropEntry e)
+    private void Spawn(DropEntry e)
     {
         GameObject prefab = lootDB.GetPrefab(e.lootName);
         if (prefab == null)
@@ -33,16 +42,18 @@ public class DropHandler : MonoBehaviour
 
         GameObject go = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
 
-        // — si es ingrediente, inyectamos tipo + cantidad —
+        // Inyección de datos si es ingrediente
         if (go.TryGetComponent(out IngredientPickup ing))
         {
             if (System.Enum.TryParse(e.lootName, out IngredientType type))
+            {
                 ing.GetType().GetField("ingredient", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                             ?.SetValue(ing, type);
+                    ?.SetValue(ing, type);
+            }
 
             int qty = UnityEngine.Random.Range(e.minAmount, e.maxAmount + 1);
             ing.GetType().GetField("amount", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                         ?.SetValue(ing, qty);
+                ?.SetValue(ing, qty);
         }
     }
 }

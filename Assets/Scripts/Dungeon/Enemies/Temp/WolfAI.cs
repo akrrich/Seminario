@@ -10,15 +10,12 @@ public class WolfAI : EnemyBase
     [Space(2)]
     [Header("Audio")]
     [SerializeField] private AudioClip atkClip;
-    private Transform player;
     private float attackCooldownTimer = 0f;
     private bool isAttacking;
 
     protected override void Awake()
     {
         base.Awake();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        agent.speed = enemyData.Speed;
     }
 
     private void Update()
@@ -27,19 +24,18 @@ public class WolfAI : EnemyBase
 
         attackCooldownTimer += Time.deltaTime;
 
-        // Movimiento directo hacia el jugador
+        PerceptionUpdate(); 
+
+        // Siempre persigue al jugador
         agent.isStopped = false;
         agent.SetDestination(player.position);
 
         float dist = Vector3.Distance(transform.position, player.position);
 
-        if (dist <= attackRange)
+        if (dist <= attackRange && attackCooldownTimer >= enemyData.AttackCooldown && CanSeePlayer)
         {
             agent.isStopped = true;
-            if (attackCooldownTimer >= enemyData.AttackCooldown)
-            {
-                StartCoroutine(JumpAndBite());
-            }
+            StartCoroutine(JumpAndBite());
         }
     }
 
@@ -64,4 +60,15 @@ public class WolfAI : EnemyBase
         attackCooldownTimer = 0f;
         isAttacking = false;
     }
+    #region Gizmos (opcional)
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        if (enemyData == null) return;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, enemyData.DistanceToPlayer);
+        LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
+    }
+#endif
+    #endregion
 }

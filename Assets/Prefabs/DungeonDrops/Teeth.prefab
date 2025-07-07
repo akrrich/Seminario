@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 1527059465943773584}
   - component: {fileID: 7890458307418230478}
   - component: {fileID: 7800188800207904516}
-  - component: {fileID: 1217707561925280191}
+  - component: {fileID: -3240050898543320959}
+  - component: {fileID: -7288183208084117572}
   m_Layer: 10
-  m_Name: Berry
+  m_Name: Teeth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.52, y: -0.61, z: 0}
-  m_LocalScale: {x: 0.228, y: 0.228, z: 0.228}
+  m_LocalScale: {x: 0.125, y: 0.125, z: 0.125}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -65,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4d002eb7d2dc4e84398139cc7da1e4f4, type: 2}
+  - {fileID: 2100000, guid: a7d4feda8a9e36948bd1edad3e8b173e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,7 +111,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &1217707561925280191
+--- !u!114 &-3240050898543320959
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,9 +120,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2946134255287635992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fce2ece30778e4b4eac2229ec371de2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 62001b66d20b69c4092a0347174c6248, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredient: 10
-  amount: 1
+  itemData: {fileID: 11400000, guid: 8bd25d5b2893e2f4ab6a0b674ef48505, type: 2}
   destroyOnPickup: 1
+--- !u!114 &-7288183208084117572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946134255287635992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15900bf17ff5de846834582dd7fc451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 0
+  bobSpeed: 1
+  bobHeight: 0.5

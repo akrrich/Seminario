@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d92e67bf1800bf44ae902212b0f8704, type: 3}
-  m_Name: Rat Data
+  m_Script: {fileID: 11500000, guid: 6cbc7b2b53d73b244a764813a112429d, type: 3}
+  m_Name: Teeth
   m_EditorClassIdentifier: 
-  HP: 30
-  Damage: 5
-  Speed: 6
-  AttackCooldown: 1.5
-  DistanceToPlayer: 1.5
+  itemName: Teeth
+  description: The currency in the game
+  type: 0
+  storeImage: {fileID: 0}
+  prefab: {fileID: 2946134255287635992, guid: 885d70c3aecba0d42adde3394a06ad43, type: 3}
+  valueInTeeth: 10

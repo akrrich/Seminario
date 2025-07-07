@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8730754726923347600}
   - component: {fileID: 4988113681355954702}
   - component: {fileID: 4295171960821597537}
-  - component: {fileID: 3637820840730042924}
+  - component: {fileID: 7664568616185071513}
   - component: {fileID: 4568663966282595179}
   - component: {fileID: 4314403063251974319}
   - component: {fileID: 3792482944065585976}
@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.2188, y: -0.8019, z: -11.0653}
-  m_LocalScale: {x: 1.3360887, y: 1.564991, z: 1.3042797}
+  m_LocalScale: {x: 1.6547458, y: 1.9534218, z: 1.3042797}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -46,7 +46,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6976176869298022470}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &4295171960821597537
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -91,8 +91,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3637820840730042924
-MeshCollider:
+--- !u!65 &7664568616185071513
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,10 +109,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.99999994, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4568663966282595179
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -175,6 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: cc3224036d7e8314898cdf42f303addc, type: 2}
+  currentHP: 0
   id: wolf
   attackRange: 5
   leapDelay: 0.5

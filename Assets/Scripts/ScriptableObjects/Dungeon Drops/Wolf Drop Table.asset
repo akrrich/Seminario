@@ -10,6 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 274d08194b1cebc4bb7a45e592f54662, type: 3}
-  m_Name: DropTable
+  m_Name: Wolf Drop Table
   m_EditorClassIdentifier: 
-  entries: []
+  entries:
+  - lootName: BeastMeat
+    minAmount: 1
+    maxAmount: 2
+    probability: 0.6
+  - lootName: Teeth
+    minAmount: 15
+    maxAmount: 15
+    probability: 0.1

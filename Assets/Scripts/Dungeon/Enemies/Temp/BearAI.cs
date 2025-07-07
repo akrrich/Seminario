@@ -9,15 +9,12 @@ public class BearAI : EnemyBase
     [Space(2)]
     [Header("Audio")]
     [SerializeField] private AudioClip atkClip;
-    private Transform player;
     private float attackCooldownTimer = 0f;
     private bool isAttacking;
 
     protected override void Awake()
     {
         base.Awake();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        agent.speed = enemyData.Speed;
     }
 
     private void Update()
@@ -26,7 +23,15 @@ public class BearAI : EnemyBase
 
         attackCooldownTimer += Time.deltaTime;
 
-        // Movimiento lineal hacia el jugador
+        PerceptionUpdate(); 
+
+        if (!CanSeePlayer)
+        {
+            agent.isStopped = true; 
+            return;
+        }
+
+        // Movimiento hacia el jugador
         agent.isStopped = false;
         agent.SetDestination(player.position);
 
@@ -57,4 +62,15 @@ public class BearAI : EnemyBase
         attackCooldownTimer = 0f;
         isAttacking = false;
     }
+    #region Gizmos (opcional)
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        if (enemyData == null) return;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, enemyData.DistanceToPlayer);
+        LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
+    }
+#endif
+    #endregion
 }

@@ -9,56 +9,23 @@ using System.Collections;
 [RequireComponent(typeof(NavMeshAgent))]
 public class RatAI : EnemyBase
 {
-    
     [Header("Movimiento errático")]
     [SerializeField] private float circleRadius = 2f;  // radio del órbita
     [SerializeField] private float directionChangeInterval = 0.4f;
-    [Space(2)]
-    [Header("LoS")]
-    [SerializeField] private float visionRange = 8f;
-    [SerializeField] private float visionAngle = 100f;
-    [SerializeField] private LayerMask obstacleMask;
-    [SerializeField] private float chaseSpeedMultiplier = 1.5f;
-    [SerializeField] private float loseSightDelay = 1.5f; // segundos antes de volver al movimiento errático
     [Space(2)]
     [Header("Audio")]
     [SerializeField] private AudioClip atkClip;
 
     // --- Internos ---
-    private Transform player;
-    private IDamageable playerDamageable;
+  
     private Vector3 currentOffset;
     private float dirTimer;
 
     private float attackCooldownTimer;
     private bool isAttacking;
-
-    //----Vision----
-    private float loseSightTimer = 0f;
-    private bool canSeePlayer = false;
-
     #region Unity
     private void Start()
     {
-        // === Validaciones ===
-        if (enemyData == null)
-        {
-            Debug.LogError($"[{name}] Falta asignar EnemyData.");
-            enabled = false;
-            return;
-        }
-
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj == null)
-        {
-            Debug.LogWarning("No se encontró ningún GameObject con tag 'Player'.");
-            enabled = false;
-            return;
-        }
-        
-        player = playerObj.transform;
-        playerDamageable = playerObj.GetComponent<IDamageable>();
-
         // --- Configurar NavMeshAgent según datos ---
         agent = GetComponent<NavMeshAgent>();
         agent.speed = enemyData.Speed;
@@ -66,6 +33,7 @@ public class RatAI : EnemyBase
         agent.angularSpeed = 720f;
         agent.stoppingDistance = enemyData.DistanceToPlayer; // 3 m
         agent.autoBraking = false;
+        agent.isStopped = true;
 
         dirTimer = directionChangeInterval;
     }
@@ -79,39 +47,14 @@ public class RatAI : EnemyBase
         PerceptionUpdate();
 
         if (canSeePlayer)
+        {
             ChasePlayer();
+        }
         else
+        {
             ErraticMove();
-    }
-    #endregion
-    #region Percepción
-
-    private void PerceptionUpdate()
-    {
-        bool seesPlayer = LineOfSight.LOS(transform, player, visionRange, visionAngle, obstacleMask);
-
-        if (seesPlayer)
-        {
-            loseSightTimer = 0f;
-            if (!canSeePlayer)
-            {
-                canSeePlayer = true;
-                agent.speed = enemyData.Speed * chaseSpeedMultiplier;
-            }
         }
-        else
-        {
-            if (canSeePlayer)
-            {
-                loseSightTimer += Time.deltaTime;
-                if (loseSightTimer >= loseSightDelay)
-                {
-                    canSeePlayer = false;
-                    agent.speed = enemyData.Speed;
-                    loseSightTimer = 0f;
-                }
-            }
-        }
+
     }
 
     #endregion
@@ -134,23 +77,34 @@ public class RatAI : EnemyBase
 
     private void ErraticMove()
     {
+        agent.speed = enemyData.Speed * 1.2f; 
+
         dirTimer -= Time.deltaTime;
         if (dirTimer <= 0f)
         {
             Vector2 rnd = Random.insideUnitCircle.normalized * circleRadius;
             currentOffset = new Vector3(rnd.x, 0f, rnd.y);
+
+            Vector3 targetPos = player.position + currentOffset;
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(targetPos, out hit, 1.0f, NavMesh.AllAreas))
+            {
+                agent.SetDestination(hit.position);
+            }
+            else
+            {
+                agent.SetDestination(player.position); // fallback
+            }
+
             dirTimer = directionChangeInterval;
         }
 
-        Vector3 targetPos = player.position + currentOffset;
-        float dist = Vector3.Distance(transform.position, player.position);
+        agent.isStopped = false;
 
-        if (dist > enemyData.DistanceToPlayer)
-        {
-            agent.isStopped = false;
-            agent.SetDestination(targetPos);
-        }
-        else
+        // Si está lo suficientemente cerca, intenta atacar
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist <= enemyData.DistanceToPlayer)
         {
             agent.isStopped = true;
             TryAttack();
@@ -187,6 +141,7 @@ public class RatAI : EnemyBase
         if (enemyData == null) return;
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, enemyData.DistanceToPlayer);
+        LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
     }
 #endif
     #endregion

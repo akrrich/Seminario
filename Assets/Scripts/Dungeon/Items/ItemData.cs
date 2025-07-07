@@ -9,8 +9,9 @@ public class ItemData : ScriptableObject
     public string itemName;
     [TextArea] public string description;
     public ItemType type;
-    public Sprite icon;
-
+    public Sprite storeImage;
+    [Header("3D Model")]
+    public GameObject prefab; 
     [Header("Stats opcionales")]
-    public int valueInTeeth;  // para monedas o precio de venta
+    public int valueInTeeth; 
 }

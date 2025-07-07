@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: Loot Prefab Database
   m_EditorClassIdentifier: 
   lootEntries:
-  - lootName: CarneBestia
-    prefab: {fileID: 0}
+  - lootName: BeastMeat
+    prefab: {fileID: 2946134255287635992, guid: 337a4733367188b4985bda13e259b5bf, type: 3}
+  - lootName: Teeth
+    prefab: {fileID: 2946134255287635992, guid: 885d70c3aecba0d42adde3394a06ad43, type: 3}
+  - lootName: BoneDust
+    prefab: {fileID: 2946134255287635992, guid: ed976157dee4c4e4b92b1ccef10cb113, type: 3}
