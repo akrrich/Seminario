@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: c088cc5c821dcdd4093f047a9180b8d3, type: 2}
+  id: bear
   attackRange: 4
   attackArea: 5
   atkClip: {fileID: 0}

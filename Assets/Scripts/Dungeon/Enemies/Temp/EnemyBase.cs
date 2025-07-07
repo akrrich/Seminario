@@ -20,7 +20,11 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     protected int currentHP;
     protected bool isDead = false;
     protected AudioSource audioSource;
-    
+
+    [Header("Spawner ID")]
+    [SerializeField] private string id;
+    public string Id => id;
+
     protected virtual void Awake()
     {
         if (enemyData == null)

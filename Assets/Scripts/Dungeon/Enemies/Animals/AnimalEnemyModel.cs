@@ -6,7 +6,7 @@ public class AnimalEnemyModel : BaseEnemyModel
 {
     [Header("Animal Behavior Settings")]
     [SerializeField] private float idleRoamRadius = 5f;
-    [SerializeField] private float idleRoamInterval = 2f;
+    //[SerializeField] private float idleRoamInterval = 2f;
 
     private float roamTimer;
 

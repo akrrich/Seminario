@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 67b3ab554f5f75c4cb1402a0e7827f3d, type: 2}
+  id: rat
   circleRadius: 2
   directionChangeInterval: 0.4
   visionRange: 8
@@ -186,7 +187,6 @@ MonoBehaviour:
   chaseSpeedMultiplier: 1.5
   loseSightDelay: 1.5
   atkClip: {fileID: 0}
-  audioSource: {fileID: 0}
 --- !u!114 &7176120685118009747
 MonoBehaviour:
   m_ObjectHideFlags: 0

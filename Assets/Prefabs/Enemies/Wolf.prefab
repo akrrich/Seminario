@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: cc3224036d7e8314898cdf42f303addc, type: 2}
+  id: wolf
   attackRange: 5
   leapDelay: 0.5
   atkClip: {fileID: 0}
