@@ -1,19 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Barrel : MonoBehaviour,IInteractable
+[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(DropHandler))]
+public class Barrel : MonoBehaviour, IDamageable
 {
-    private int hitPoints = 1;
+    [Header("Properties")]
+    [SerializeField] private int hitPoints = 1;
 
-    public void Interact()
+    [Header("Loot System")]
+    [SerializeField] private DropTable dropTable;
+    [SerializeField] private LootPrefabDatabase lootDB;
+    [SerializeField] private Transform lootSpawnPoint;
+
+    private DropHandler dropHandler;
+
+    public void TakeDamage(int value)
     {
-        TakeHit();
+        TakeHit(value);
     }
 
-    public void TakeHit()
+    public void TakeHit(int value)
     {
-        hitPoints--;
+        hitPoints -= value;
         if (hitPoints <= 0)
         {
             BreakBarrel();
@@ -22,11 +30,8 @@ public class Barrel : MonoBehaviour,IInteractable
 
     private void BreakBarrel()
     {
-        float roll = Random.value;
-
-        if (roll < 0.5f) Debug.Log("Ingrediente común");
-        else if (roll < 0.7f) Debug.Log("Ingrediente raro");
-        else Debug.Log("Nada");
+        // Generamos el loot usando el DropHandler
+        dropHandler.DropLoot();
 
         Destroy(gameObject);
     }

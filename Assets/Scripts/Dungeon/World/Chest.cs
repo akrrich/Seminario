@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -12,6 +12,7 @@ public class Chest : MonoBehaviour, IInteractable
     [SerializeField] private GameObject fxOpen;
     [SerializeField] private Animator animator;     // opcional
     [SerializeField] private bool destroyAfterOpen = false;
+    [SerializeField] private float waitTimeBeforeDestroy = 2f; // Tiempo antes de destruir el cofre
 
     private bool opened;
     private Collider col;
@@ -21,32 +22,33 @@ public class Chest : MonoBehaviour, IInteractable
     {
         col = GetComponent<Collider>();
         dropHandler = GetComponent<DropHandler>();
-
+        animator = GetComponentInChildren<Animator>();
         dropHandler.Init(table, lootDB, spawnPoint);
     }
 
-    // ————————————————————————— IInteractable
     public void Interact()
     {
         if (opened) return;
-        OpenChest();
+        StartCoroutine(OpenChest());
     }
 
-    // ————————————————————————— Interno
-    private void OpenChest()
+    private IEnumerator OpenChest()
     {
         opened = true;
-        col.enabled = false;                     // ya no colisiona / interactúa
+        col.enabled = false;
 
-        // 1. Reproducir fx o animación
-        if (fxOpen) Instantiate(fxOpen, transform.position, Quaternion.identity);
-        if (animator) animator.SetTrigger("Open");
+        if (animator) animator.SetBool("Open", true);
+        
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
-        // 2. Generar loot
+        if (fxOpen) fxOpen.GetComponent<ParticleSystem>().Play();
+
         dropHandler.DropLoot();
 
-        // 3. Opcional: destruir cofre tras X segundos
+        if (animator) animator.SetBool("Open", false);
+
         if (destroyAfterOpen)
-            Destroy(gameObject, 2f);
+            yield return new WaitForSeconds(waitTimeBeforeDestroy);
+
     }
 }

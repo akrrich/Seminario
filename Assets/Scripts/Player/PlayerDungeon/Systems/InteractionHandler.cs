@@ -20,7 +20,9 @@ public class InteractionHandler : MonoBehaviour
         Detect();
 
         if (PlayerInputs.Instance != null && PlayerInputs.Instance.Interact() && current != null)
+        {
             current.Interact();
+        }
     }
 
     private void Detect()
@@ -32,10 +34,10 @@ public class InteractionHandler : MonoBehaviour
         if (Physics.SphereCast(rayOrigin.position, radius, rayOrigin.forward,
                                out RaycastHit hit, range, interactableLayer))
         {
-            Debug.Log("Tire esfera");
+            
             if (hit.collider.TryGetComponent(out IInteractable interactable))
             {
-                Debug.Log("Le di a un interactable");
+                
                 current = interactable;
             }
         }

@@ -26,9 +26,15 @@ public class DropHandler : MonoBehaviour
             Debug.LogWarning($"DropHandler en {name}: Falta asignar DropTable o LootDB.");
             return;
         }
-
-        foreach (var entry in table.Roll())
+        DropEntry entry = table.Roll();
+        if (entry != null)
+        {
             Spawn(entry);
+        }
+        else
+        {
+            Debug.LogWarning($"No se obtuvo loot de la tabla.");
+        }
     }
 
     private void Spawn(DropEntry e)
