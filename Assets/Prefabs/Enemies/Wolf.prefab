@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3792482944065585976}
   - component: {fileID: 3201692909716459358}
   - component: {fileID: 4176910456750729425}
+  - component: {fileID: 6180328065555053521}
   m_Layer: 0
   m_Name: Wolf
   m_TagString: Untagged
@@ -174,11 +175,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: cc3224036d7e8314898cdf42f303addc, type: 2}
+  visionRange: 8
+  visionAngle: 100
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
+  chaseSpeedMultiplier: 1.5
+  loseSightDelay: 1.5
   currentHP: 0
   id: wolf
   attackRange: 5
   leapDelay: 0.5
-  atkClip: {fileID: 0}
+  atkClip: {fileID: 8300000, guid: 48ec81b1648b3f64cb9202117e7a14f7, type: 3}
 --- !u!114 &3201692909716459358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,3 +299,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6180328065555053521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6976176869298022470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c6d13687bb7e714c85ee70255d2d8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  table: {fileID: 11400000, guid: 6e14029e35f0ac94490195f4e664b2dd, type: 2}
+  lootDB: {fileID: 11400000, guid: dec7d8b66e1a9cd46a53f7940c0f0234, type: 2}
+  spawnPoint: {fileID: 8730754726923347600}

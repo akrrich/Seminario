@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7247932962954224438}
   - component: {fileID: 3715494083525994123}
   - component: {fileID: 8348584217585554152}
+  - component: {fileID: 5405073036196945834}
   m_Layer: 0
   m_Name: Bear
   m_TagString: Untagged
@@ -176,10 +177,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: c088cc5c821dcdd4093f047a9180b8d3, type: 2}
+  visionRange: 8
+  visionAngle: 100
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
+  chaseSpeedMultiplier: 1.5
+  loseSightDelay: 1.5
+  currentHP: 0
   id: bear
   attackRange: 4
   attackArea: 5
-  atkClip: {fileID: 0}
+  atkClip: {fileID: 8300000, guid: 88a1ab75dbea89648adac35abce147cc, type: 3}
 --- !u!114 &3715494083525994123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,3 +301,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5405073036196945834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8454660039181778633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c6d13687bb7e714c85ee70255d2d8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  table: {fileID: 11400000, guid: f9aaa3c0bf70aba4b938d1dad6853575, type: 2}
+  lootDB: {fileID: 11400000, guid: dec7d8b66e1a9cd46a53f7940c0f0234, type: 2}
+  spawnPoint: {fileID: 5460027309474599330}

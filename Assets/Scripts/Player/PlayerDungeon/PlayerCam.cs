@@ -1,36 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
-
     public Transform orientation;
 
     float _xRotation;
     float _yRotation;
 
-    private void Start()
-    {
-        //Cursor.lockState = CursorLockMode.Locked;
-       // Cursor.visible = false; 
-    }
-
     private void Update()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
+        CameraRotation();
+    }
+    private void CameraRotation()
+    {
+        float x, y;
+        if (DeviceManager.Instance == null) return;
+        if (DeviceManager.Instance.CurrentDevice == Device.Joystick)
+        {
+            x = PlayerInputs.Instance.JoystickRotation().x * Time.deltaTime;
+            y = PlayerInputs.Instance.JoystickRotation().y * Time.deltaTime;
+        }
+        else
+        {
+            x = PlayerInputs.Instance.MouseRotation().x * Time.deltaTime;
+            y = PlayerInputs.Instance.MouseRotation().y * Time.deltaTime;
 
-        _yRotation += mouseX;
-        _xRotation -= mouseY;
+        }
+        _yRotation += x;
+        _xRotation -= y;
         _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
 
-        // Cámara rota con X e Y (para mirar)
         transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0f);
 
-        // Orientation solo rota en Y (para movimiento)
         if (orientation != null)
             orientation.rotation = Quaternion.Euler(0f, _yRotation, 0f);
     }

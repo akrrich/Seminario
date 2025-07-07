@@ -16,8 +16,8 @@ MonoBehaviour:
   - lootName: BeastMeat
     minAmount: 1
     maxAmount: 1
-    probability: 0.25
+    probability: 0.079
   - lootName: Teeth
     minAmount: 1
     maxAmount: 10
-    probability: 0.2
+    probability: 0.914

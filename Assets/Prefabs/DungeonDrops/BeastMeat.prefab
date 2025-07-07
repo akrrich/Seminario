@@ -140,4 +140,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 0
   bobSpeed: 1
-  bobHeight: 0.5
+  bobHeight: 0.05
