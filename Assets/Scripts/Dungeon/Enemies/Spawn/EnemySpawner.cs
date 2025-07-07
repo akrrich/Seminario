@@ -9,15 +9,18 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("Configuración de Spawns")]
     [SerializeField] private EnemySpawnTable enemySpawnTable;
+    [SerializeField] private int layer; //capa de la dungeon
+    [SerializeField] private StatScaler statScaler; 
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
             string selectedId = GetEnemyIdFromTable();
-            if (!string.IsNullOrEmpty(selectedId))
+            EnemyBase enemy = enemyFactory.Create(selectedId, spawnPosition.transform.position, spawnPosition.transform.rotation);
+            if (enemy != null && statScaler != null)
             {
-                enemyFactory.Create(selectedId, spawnPosition.transform.position, spawnPosition.transform.rotation);
+                statScaler.ApplyScaling(enemy, layer);
             }
             else
             {

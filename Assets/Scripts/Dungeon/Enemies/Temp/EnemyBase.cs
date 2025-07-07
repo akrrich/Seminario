@@ -17,7 +17,7 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     protected NavMeshAgent agent;
 
     [Header("Health (runtime)")]
-    protected int currentHP;
+    public int currentHP;
     protected bool isDead = false;
     protected AudioSource audioSource;
 
@@ -55,4 +55,17 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
         // Puedes poner animación o efectos aquí
         Destroy(gameObject, 1.5f);
     }
+
+    public void SetScaledStats(float hpMul, float dmgMul, float speedMul)
+    {
+        enemyData = Instantiate(enemyData); // Clona los datos base
+
+        enemyData.HP = Mathf.RoundToInt(enemyData.HP * (1 + hpMul));
+        enemyData.Damage = Mathf.RoundToInt(enemyData.Damage * (1 + dmgMul));
+        enemyData.Speed *= Mathf.RoundToInt(1 + speedMul);
+
+        currentHP = enemyData.HP;
+        agent.speed = enemyData.Speed;
+    }
+
 }
