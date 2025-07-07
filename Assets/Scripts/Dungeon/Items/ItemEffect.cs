@@ -11,11 +11,6 @@ public class ItemEffect : MonoBehaviour
     private Vector3 startPosition;
     private float bobTime = 0f;
 
-    void Start()
-    {
-        startPosition = transform.position + new Vector3(startPosition.x, startPosition.y + 0.8f, startPosition.z);
-    }
-
     void FixedUpdate()
     {
         // Rotar el item
