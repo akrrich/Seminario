@@ -56,10 +56,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         fsm.OnExecute();
-        GrabOrHandOverFood();
-        TakeClientOrder();
-        ThrowFoodToTrash();
-        ShowOrHideDish();
+        CheckInputs();
 
         // Provisorio
         playerCollisions.UpdateColls();
@@ -129,72 +126,74 @@ public class PlayerController : MonoBehaviour
         fsm.SetInit(psIdle);
     }
 
-    private void GrabOrHandOverFood()
+
+    private void CheckInputs()
     {
-        if (PlayerInputs.Instance != null)
+        if (PlayerInputs.Instance != null && PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
         {
-            if (PlayerInputs.Instance.GrabFood())
-            {
-                Food currentFood = playerModel.IsLookingAtFood();
-
-                if (currentFood != null)
-                {
-                    playerView.ShowOrHideDish(true);
-                    onGrabFood?.Invoke(currentFood);
-                } 
-            }
-
-            if (PlayerInputs.Instance.HandOverFood())
-            {
-                onHandOverFood?.Invoke();
-            }
+            GrabOrHandOverFood();
+            TakeClientOrder();
+            ThrowFoodToTrash();
+            ShowOrHideDish();
         }
+    }
+
+    private void GrabOrHandOverFood()
+    {   
+        if (PlayerInputs.Instance.GrabFood())
+        {
+            Food currentFood = playerModel.IsLookingAtFood();
+
+            if (currentFood != null)
+            {
+                playerView.ShowOrHideDish(true);
+                onGrabFood?.Invoke(currentFood);
+            } 
+        }
+
+        if (PlayerInputs.Instance.HandOverFood())
+        {
+            onHandOverFood?.Invoke();
+        }   
     }
 
     private void TakeClientOrder()
     {
-        if (PlayerInputs.Instance != null)
+        if (PlayerInputs.Instance.TakeClientOrder())
         {
-            if (PlayerInputs.Instance.TakeClientOrder())
-            {
-                onTakeOrder?.Invoke();
-            }
-        }
+            onTakeOrder?.Invoke();
+        }   
     }
 
     private void ThrowFoodToTrash()
     {
-        if (PlayerInputs.Instance != null)
+        if (PlayerInputs.Instance.ThrowFoodToTrash() && playerModel.IsCollidingTrash && playerModel.IsLookingAtTrash(this))
         {
-            if (PlayerInputs.Instance.ThrowFoodToTrash() && playerModel.IsCollidingTrash && playerModel.IsLookingAtTrash(this))
-            {
-                onThrowFoodToTrash?.Invoke();
-            }
-        }
+            onThrowFoodToTrash?.Invoke();
+        }   
     }
 
     private void ShowOrHideDish()
     {
-        if (PlayerInputs.Instance != null)
+        if (playerModel.IsCooking || playerModel.IsAdministrating) return;
+
+        if (PlayerInputs.Instance.ShowOrHideDish())
         {
-            if (PlayerInputs.Instance.ShowOrHideDish())
+            foreach (Transform child in playerView.Dish.transform)
             {
-                foreach (Transform child in playerView.Dish.transform)
-                {
-                    // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS), es decir si tienen hijos termina el metodo
-                    if (child.childCount > 0) return;
-                }
-
-                if (playerView.Dish.activeSelf)
-                {
-                    playerView.ShowOrHideDish(false);
-                }
-
-                else
-                {
-                    playerView.ShowOrHideDish(true);
-                }
+                // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS), es decir si tienen hijos termina el metodo
+                if (child.childCount > 0) return;
             }
-        }
+
+            if (playerView.Dish.activeSelf)
+            {
+                playerView.ShowOrHideDish(false);
+            }
+
+            else
+            {
+                playerView.ShowOrHideDish(true);
+            }
+        }   
     }
 }

@@ -6,6 +6,8 @@ public class PlayerStateAdministration<T> : State<T>
     private PlayerView playerView;
     private Transform administratingPosition;
 
+    private bool lastDishState;
+
     private T inputToIdle;
 
 
@@ -30,6 +32,8 @@ public class PlayerStateAdministration<T> : State<T>
         playerModel.Rb.velocity = Vector3.zero;
         playerModel.CapsuleCollider.material = null;
 
+        lastDishState = playerView.Dish.gameObject.activeSelf;
+
         playerView.ShowOrHideDish(false);
         playerModel.IsAdministrating = true;
         playerModel.transform.position = administratingPosition.transform.position;
@@ -52,27 +56,9 @@ public class PlayerStateAdministration<T> : State<T>
         base.Exit();
 
         PlayerView.OnExitInAdministrationMode?.Invoke();
-
+        playerView.ShowOrHideDish(lastDishState);
         playerModel.IsAdministrating = false;
 
         playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;
-
-        foreach (Transform child in playerView.Dish.transform)
-        {
-            // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS)
-            if (child.childCount > 0)
-            {
-                playerView.ShowOrHideDish(true);
-                return;
-            }
-
-            else
-            {
-                /// Agregar aca una verificacion del estado anterior de la bandeja, es decir como era el estado de la bandeja antes de entrar al estado, para que cuando sale del estado aparezca o no
-
-                playerView.ShowOrHideDish(false);
-                return;
-            }
-        }
     }
 }

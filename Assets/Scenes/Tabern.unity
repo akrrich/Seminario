@@ -410,7 +410,8 @@ Transform:
   m_LocalPosition: {x: -1192.37, y: 2.584, z: -14.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2085069115}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &80327657
@@ -3328,6 +3329,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6c5ca998c52da454e9a7e694c81beeb4, type: 3}
   - foodType: 2
     sprite: {fileID: 21300000, guid: c6e7a45efb35fa442a3e5901df6df32b, type: 3}
+  - foodType: 3
+    sprite: {fileID: 21300000, guid: 77218c3b666b14642ab187e324dc71ed, type: 3}
+  - foodType: 4
+    sprite: {fileID: 21300000, guid: a111fca629391b942b7be1d9bdefd1cd, type: 3}
   InstantiateClients: 1
   InstantiateTheSameClient: 0
 --- !u!1 &773677852
@@ -8457,11 +8462,11 @@ Transform:
   m_GameObject: {fileID: 2085069114}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1144.913, y: 1.943, z: 16.81}
+  m_LocalPosition: {x: 47.45703, y: -0.64100015, z: 31.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 66947656}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2088648132
 GameObject:
@@ -8931,7 +8936,6 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 1706764451}
   - {fileID: 66947656}
-  - {fileID: 2085069115}
   - {fileID: 1397832126}
   - {fileID: 1728884347}
   - {fileID: 773677853}
