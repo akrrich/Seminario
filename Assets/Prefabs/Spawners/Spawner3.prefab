@@ -51,10 +51,14 @@ MonoBehaviour:
   enemySpawnTable:
     spawnDataList:
     - enemyId: rat
-      spawnChance: 50
+      spawnChance: 15
     - enemyId: wolf
-      spawnChance: 30
+      spawnChance: 15
     - enemyId: bear
+      spawnChance: 30
+    - enemyId: hunter
+      spawnChance: 20
+    - enemyId: clerigo
       spawnChance: 20
   layer: 5
   statScaler: {fileID: 6781351402847274416}
