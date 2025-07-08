@@ -173,7 +173,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         }
 
         float targetDrag = IsGrounded ? groundDrag : 0f;
-        rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.deltaTime * 10f);
+        rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);
     }
 
     private void SpeedControl()

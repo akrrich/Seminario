@@ -65240,7 +65240,6 @@ GameObject:
   - component: {fileID: 1356226563}
   - component: {fileID: 1358263734}
   - component: {fileID: 1358263736}
-  - component: {fileID: 1358263735}
   m_Layer: 0
   m_Name: SM_Env_Bone_Rigcage_01 (1)
   m_TagString: Untagged
@@ -65328,27 +65327,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.3385973, y: 1.9494504, z: 14.810437}
   m_Center: {x: 0.3097523, y: 4.214687, z: 0.05600565}
---- !u!65 &1358263735
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1357908331}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.7049426, y: 5.9806857, z: 6.571485}
-  m_Center: {x: -3.932542, y: 2.4637911, z: -0.032599453}
 --- !u!65 &1358263736
 BoxCollider:
   m_ObjectHideFlags: 0

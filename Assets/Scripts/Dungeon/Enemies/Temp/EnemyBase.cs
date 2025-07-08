@@ -115,7 +115,11 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     public virtual void TakeDamage(int amount)
     {
         if (isDead) return;
+
         currentHP -= amount;
+
+        Debug.Log($"[TakeDamage] {gameObject.name} recibió {amount} de daño. Vida restante: {currentHP}");
+
         damageFlash?.TriggerFlash();
 
         if (currentHP <= 0) Die();

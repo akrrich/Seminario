@@ -34,8 +34,7 @@ public class WolfAI : EnemyBase
 
         if (dist <= attackRange && attackCooldownTimer >= enemyData.AttackCooldown && CanSeePlayer)
         {
-            agent.isStopped = true;
-            StartCoroutine(JumpAndBite());
+           StartCoroutine(JumpAndBite());
         }
     }
 
