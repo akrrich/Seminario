@@ -24,7 +24,6 @@ public class PlayerCollisions
 
     public void OnCollisionsEnter(Collision collision)
     {
-        OnCollisionEnterWithFloor(collision);
         OnCollisionEnterWithCookingDeskUIAndLOS(collision);
         OnCollisionEnterWithTrashAndLOS(collision);
         OnCollisionEnterWithAdministration(collision);
@@ -41,7 +40,6 @@ public class PlayerCollisions
 
     public void OnCollisionsExit(Collision collision)
     {
-        OnCollisionExitWithFloor(collision);
         OnCollisionExitWithCookingDeskUI(collision);
         OnCollisionExitWithTrash(collision);
         OnCollisionExitWithAdministration(collision);
@@ -55,14 +53,6 @@ public class PlayerCollisions
 
 
     /* ----------------------------------------COLLISION ENTER-------------------------------------------- */
-
-    private void OnCollisionEnterWithFloor(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Floor"))
-        {
-            playerController.PlayerModel.IsGrounded = true;
-        }
-    }
 
     private void OnCollisionEnterWithCookingDeskUIAndLOS(Collision collision)
     {
@@ -265,15 +255,6 @@ public class PlayerCollisions
     }
 
     /* -------------------------------------------COLLISION EXIT----------------------------------------- */
-
-    private void OnCollisionExitWithFloor(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Floor"))
-        {
-            playerController.PlayerModel.IsGrounded = false;
-        }
-    }
-
     private void OnCollisionExitWithCookingDeskUI(Collision collision)
     {
         if (collision.gameObject.CompareTag("CookingDeskUI"))
