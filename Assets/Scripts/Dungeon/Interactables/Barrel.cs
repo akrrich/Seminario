@@ -13,9 +13,14 @@ public class Barrel : MonoBehaviour, IDamageable
     [SerializeField] private Transform lootSpawnPoint;
 
     private DropHandler dropHandler;
-
+    private void Awake()
+    {
+        dropHandler = GetComponent<DropHandler>();
+        dropHandler.Init(dropTable, lootDB, lootSpawnPoint != null ? lootSpawnPoint : transform);
+    }
     public void TakeDamage(int value)
     {
+        Debug.Log("Hice daño");
         TakeHit(value);
     }
 
@@ -30,9 +35,8 @@ public class Barrel : MonoBehaviour, IDamageable
 
     private void BreakBarrel()
     {
-        // Generamos el loot usando el DropHandler
+        Debug.Log("Barrel is breaking!");
         dropHandler.DropLoot();
-
         Destroy(gameObject);
     }
 }
