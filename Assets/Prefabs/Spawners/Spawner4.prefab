@@ -48,20 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyFactory: {fileID: 5653556251869384128}
   spawnPosition: {fileID: 5255721267045534704}
-  enemySpawnTable:
-    spawnDataList:
-    - enemyId: rat
-      spawnChance: 5
-    - enemyId: wolf
-      spawnChance: 5
-    - enemyId: bear
-      spawnChance: 15
-    - enemyId: hunter
-      spawnChance: 30
-    - enemyId: clerigo
-      spawnChance: 30
-    - enemyId: paladin
-      spawnChance: 15
+  enemySpawnTable: {fileID: 11400000, guid: e3b402dd9107f35488126e50f21147a9, type: 2}
   layer: 7
   statScaler: {fileID: 6781351402847274416}
 --- !u!114 &6781351402847274416
@@ -125,7 +112,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11b910d6b5509bd458c67195d605e5ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemies:
-  - {fileID: 7297627141673116640, guid: bc693e6355413c340828973b2af72ed0, type: 3}
-  - {fileID: 3792482944065585976, guid: 48484421a9435604c9805c30a90289a3, type: 3}
-  - {fileID: 7247932962954224438, guid: 74fb03bdaf2a08645829303757536213, type: 3}
+  spawnerData: {fileID: 11400000, guid: 2e6334a5b7389474fb02f4cdb5e86217, type: 2}
