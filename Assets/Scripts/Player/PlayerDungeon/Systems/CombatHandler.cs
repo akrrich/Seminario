@@ -11,7 +11,6 @@ public class CombatHandler : MonoBehaviour
 
     private float lastAttackTime = -999f;
 
-
     private void Awake()
     {
         GetComponents();
