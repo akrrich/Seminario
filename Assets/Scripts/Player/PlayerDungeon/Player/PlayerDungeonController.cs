@@ -37,8 +37,7 @@ public class PlayerDungeonController : MonoBehaviour
     private void InitializeFSM()
     {
         fsm = new FSM<PlayerPhase>();
-        PlayerStateDungeonIdle<PlayerPhase> psIdle = new PlayerStateDungeonIdle<PlayerPhase>(); 
-   
+        PlayerStateDungeonIdle<PlayerPhase> psIdle = new PlayerStateDungeonIdle<PlayerPhase>();    
     }
 
  
