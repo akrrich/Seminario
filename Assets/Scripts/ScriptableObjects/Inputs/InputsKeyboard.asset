@@ -26,5 +26,5 @@ MonoBehaviour:
   jump: 32
   inventory: 9
   pause: 27
-  sensitivityX: 400
-  sensitivityY: 400
+  sensitivityX: 200
+  sensitivityY: 200

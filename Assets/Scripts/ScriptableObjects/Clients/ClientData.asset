@@ -15,5 +15,5 @@ MonoBehaviour:
   speed: 3
   maxTimeWaitingForChair: 45
   maxTimeWaitingToBeAttended: 45
-  maxTimeWaitingFood: 30
-  maxTimeEating: 90
+  maxTimeWaitingFood: 90
+  maxTimeEating: 15
