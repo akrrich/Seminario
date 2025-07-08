@@ -2666,7 +2666,7 @@ GameObject:
   - component: {fileID: 60015798}
   - component: {fileID: 58968558}
   - component: {fileID: 1174954119}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (98)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6250,7 +6250,7 @@ GameObject:
   - component: {fileID: 132196697}
   - component: {fileID: 133243905}
   - component: {fileID: 240729203}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6462,7 +6462,7 @@ GameObject:
   - component: {fileID: 132106464}
   - component: {fileID: 131057080}
   - component: {fileID: 2004807568}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (88)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7353,7 +7353,7 @@ GameObject:
   - component: {fileID: 152126034}
   - component: {fileID: 151080714}
   - component: {fileID: 590213216}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (167)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7387,7 +7387,7 @@ GameObject:
   - component: {fileID: 151044385}
   - component: {fileID: 152067981}
   - component: {fileID: 154442656}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Fence_Goblin_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8826,7 +8826,7 @@ GameObject:
   - component: {fileID: 195826903}
   - component: {fileID: 196876687}
   - component: {fileID: 487159755}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (37)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10312,7 +10312,7 @@ GameObject:
   - component: {fileID: 211637813}
   - component: {fileID: 210590573}
   - component: {fileID: 1166040385}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (160)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10801,7 +10801,7 @@ GameObject:
   - component: {fileID: 219615454}
   - component: {fileID: 218570118}
   - component: {fileID: 1084977717}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13279,7 +13279,7 @@ GameObject:
   - component: {fileID: 239750002}
   - component: {fileID: 240797226}
   - component: {fileID: 894493696}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13784,7 +13784,7 @@ GameObject:
   - component: {fileID: 247598262}
   - component: {fileID: 248644078}
   - component: {fileID: 1611116851}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15933,7 +15933,7 @@ GameObject:
   - component: {fileID: 308424485}
   - component: {fileID: 309469821}
   - component: {fileID: 1232036293}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (58)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17457,7 +17457,7 @@ GameObject:
   - component: {fileID: 334444496}
   - component: {fileID: 335493768}
   - component: {fileID: 118052805}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (89)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17919,7 +17919,7 @@ GameObject:
   - component: {fileID: 336966076}
   - component: {fileID: 335743952}
   - component: {fileID: 337995307}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Pillar_Broken_Pile_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18955,7 +18955,7 @@ GameObject:
   m_Component:
   - component: {fileID: 363997218}
   - component: {fileID: 363997219}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19574,7 +19574,7 @@ GameObject:
   - component: {fileID: 374924931}
   - component: {fileID: 373848111}
   - component: {fileID: 376224830}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Fence_Goblin_02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22452,7 +22452,7 @@ GameObject:
   - component: {fileID: 443050930}
   - component: {fileID: 444098282}
   - component: {fileID: 1354477099}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22626,7 +22626,7 @@ GameObject:
   - component: {fileID: 450207267}
   - component: {fileID: 449155963}
   - component: {fileID: 131501284}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (38)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24107,7 +24107,7 @@ GameObject:
   - component: {fileID: 476021130}
   - component: {fileID: 474975442}
   - component: {fileID: 2124760743}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24762,7 +24762,7 @@ GameObject:
   - component: {fileID: 485275223}
   - component: {fileID: 486325007}
   - component: {fileID: 484417513}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (169)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26813,7 +26813,7 @@ GameObject:
   - component: {fileID: 515498551}
   - component: {fileID: 514453359}
   - component: {fileID: 512412553}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (172)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26862,7 +26862,7 @@ GameObject:
   - component: {fileID: 514795714}
   - component: {fileID: 515843482}
   - component: {fileID: 611013210}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (40)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27595,7 +27595,7 @@ GameObject:
   - component: {fileID: 521483577}
   - component: {fileID: 520435809}
   - component: {fileID: 522591371}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (118)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27713,7 +27713,7 @@ GameObject:
   - component: {fileID: 520556788}
   - component: {fileID: 521608620}
   - component: {fileID: 73684505}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (64)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27979,7 +27979,7 @@ GameObject:
   - component: {fileID: 525482501}
   - component: {fileID: 524433245}
   - component: {fileID: 732593556}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (110)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28480,7 +28480,7 @@ GameObject:
   - component: {fileID: 537605793}
   - component: {fileID: 538655737}
   - component: {fileID: 208067031}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29535,7 +29535,7 @@ GameObject:
   - component: {fileID: 562326454}
   - component: {fileID: 563373806}
   - component: {fileID: 362190933}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (49)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30039,7 +30039,7 @@ GameObject:
   - component: {fileID: 572487002}
   - component: {fileID: 571439106}
   - component: {fileID: 1490514848}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30079,7 +30079,7 @@ GameObject:
   - component: {fileID: 577836977}
   - component: {fileID: 576789225}
   - component: {fileID: 601713033}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30400,7 +30400,7 @@ GameObject:
   - component: {fileID: 585132088}
   - component: {fileID: 586179936}
   - component: {fileID: 155957149}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31149,7 +31149,7 @@ GameObject:
   - component: {fileID: 593741372}
   - component: {fileID: 594791268}
   - component: {fileID: 1933578423}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (36)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31951,7 +31951,7 @@ GameObject:
   - component: {fileID: 616533994}
   - component: {fileID: 615482034}
   - component: {fileID: 2062901990}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (161)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33593,7 +33593,7 @@ GameObject:
   - component: {fileID: 638680185}
   - component: {fileID: 637628705}
   - component: {fileID: 1531419872}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (78)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35167,7 +35167,7 @@ GameObject:
   - component: {fileID: 704354439}
   - component: {fileID: 703305183}
   - component: {fileID: 361103947}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (69)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36035,7 +36035,7 @@ GameObject:
   - component: {fileID: 733971537}
   - component: {fileID: 732924169}
   - component: {fileID: 1663207381}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (74)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36634,7 +36634,7 @@ GameObject:
   - component: {fileID: 739739896}
   - component: {fileID: 738690464}
   - component: {fileID: 1683601289}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (166)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36674,7 +36674,7 @@ GameObject:
   - component: {fileID: 744595250}
   - component: {fileID: 745640554}
   - component: {fileID: 743618180}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (51)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37401,7 +37401,7 @@ GameObject:
   - component: {fileID: 760473072}
   - component: {fileID: 759425192}
   - component: {fileID: 1205533337}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41396,7 +41396,7 @@ GameObject:
   - component: {fileID: 844038986}
   - component: {fileID: 845090322}
   - component: {fileID: 846998268}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (168)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42405,7 +42405,7 @@ GameObject:
   - component: {fileID: 871954489}
   - component: {fileID: 870905185}
   - component: {fileID: 1246189908}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (108)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44517,7 +44517,7 @@ GameObject:
   - component: {fileID: 912005755}
   - component: {fileID: 910956323}
   - component: {fileID: 1917881031}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44596,7 +44596,7 @@ GameObject:
   - component: {fileID: 916567077}
   - component: {fileID: 917617021}
   - component: {fileID: 1180429949}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45776,7 +45776,7 @@ GameObject:
   - component: {fileID: 945761803}
   - component: {fileID: 944710483}
   - component: {fileID: 857454875}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46362,7 +46362,7 @@ GameObject:
   - component: {fileID: 956987160}
   - component: {fileID: 958036544}
   - component: {fileID: 976163175}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47458,7 +47458,7 @@ GameObject:
   - component: {fileID: 982751654}
   - component: {fileID: 981691744}
   - component: {fileID: 984031145}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_RockPile_Square_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47696,7 +47696,7 @@ GameObject:
   - component: {fileID: 990884836}
   - component: {fileID: 991503794}
   - component: {fileID: 994002821}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Rune_Pillar_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49732,7 +49732,7 @@ GameObject:
   - component: {fileID: 1033463807}
   - component: {fileID: 1032415911}
   - component: {fileID: 1927402479}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49825,7 +49825,7 @@ GameObject:
   - component: {fileID: 1032741449}
   - component: {fileID: 1033793297}
   - component: {fileID: 389665117}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (99)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53003,7 +53003,7 @@ GameObject:
   - component: {fileID: 1101369024}
   - component: {fileID: 1102414744}
   - component: {fileID: 1100392306}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (50)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54086,7 +54086,7 @@ GameObject:
   - component: {fileID: 1125323920}
   - component: {fileID: 1124276680}
   - component: {fileID: 813232865}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (109)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54120,7 +54120,7 @@ GameObject:
   - component: {fileID: 1125856180}
   - component: {fileID: 1124810476}
   - component: {fileID: 343863033}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63462,7 +63462,7 @@ GameObject:
   - component: {fileID: 1322477750}
   - component: {fileID: 1321455280}
   - component: {fileID: 1323806951}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Fence_Goblin_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64606,7 +64606,7 @@ GameObject:
   - component: {fileID: 1347091379}
   - component: {fileID: 1348246081}
   - component: {fileID: 1350481568}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Mushroom_Giant_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65661,7 +65661,7 @@ GameObject:
   - component: {fileID: 1365906942}
   - component: {fileID: 1366956198}
   - component: {fileID: 1999016087}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66066,7 +66066,7 @@ GameObject:
   - component: {fileID: 1381519493}
   - component: {fileID: 1380474333}
   - component: {fileID: 1491893206}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (59)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66389,7 +66389,7 @@ GameObject:
   - component: {fileID: 1384537776}
   - component: {fileID: 1385583592}
   - component: {fileID: 479859987}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66465,7 +66465,7 @@ GameObject:
   - component: {fileID: 1385139805}
   - component: {fileID: 1386185477}
   - component: {fileID: 1388095471}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (170)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66528,7 +66528,7 @@ GameObject:
   - component: {fileID: 1391648150}
   - component: {fileID: 1390596302}
   - component: {fileID: 164512840}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (44)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -67272,7 +67272,7 @@ GameObject:
   - component: {fileID: 1410456054}
   - component: {fileID: 1409406126}
   - component: {fileID: 1183346509}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (79)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72325,7 +72325,7 @@ GameObject:
   - component: {fileID: 1523301166}
   - component: {fileID: 1524348534}
   - component: {fileID: 2066858035}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72783,7 +72783,7 @@ GameObject:
   - component: {fileID: 1533881105}
   - component: {fileID: 1534928457}
   - component: {fileID: 1423611219}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (111)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73184,7 +73184,7 @@ GameObject:
   - component: {fileID: 1539594177}
   - component: {fileID: 1540643481}
   - component: {fileID: 2127178008}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74193,7 +74193,7 @@ GameObject:
   - component: {fileID: 1564513962}
   - component: {fileID: 1565563890}
   - component: {fileID: 1735479728}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74613,7 +74613,7 @@ GameObject:
   - component: {fileID: 1568786744}
   - component: {fileID: 1569834080}
   - component: {fileID: 1508980284}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (94)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74880,7 +74880,7 @@ GameObject:
   - component: {fileID: 1580711640}
   - component: {fileID: 1579620574}
   - component: {fileID: 1580711641}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Fence_Goblin_01 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76135,7 +76135,7 @@ Transform:
   m_GameObject: {fileID: 1593314582}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1192.642, y: 1.065, z: -5.07}
+  m_LocalPosition: {x: -1192.642, y: 0.067, z: -1.572}
   m_LocalScale: {x: 0.56, y: 0.56, z: 0.56}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -76274,7 +76274,7 @@ GameObject:
   - component: {fileID: 1595309399}
   - component: {fileID: 1594257423}
   - component: {fileID: 1275879692}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76727,7 +76727,7 @@ GameObject:
   - component: {fileID: 1610586218}
   - component: {fileID: 1609536818}
   - component: {fileID: 892065470}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (48)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77092,7 +77092,7 @@ GameObject:
   - component: {fileID: 1625379635}
   - component: {fileID: 1626431083}
   - component: {fileID: 1915465383}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (54)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77340,7 +77340,7 @@ GameObject:
   - component: {fileID: 1629673848}
   - component: {fileID: 1630721056}
   - component: {fileID: 85171156}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77957,7 +77957,7 @@ GameObject:
   - component: {fileID: 1640645777}
   - component: {fileID: 1641876189}
   - component: {fileID: 1644044140}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Bone_Rigcage_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78438,7 +78438,7 @@ GameObject:
   - component: {fileID: 1650925318}
   - component: {fileID: 1651970654}
   - component: {fileID: 274816913}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (39)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79058,7 +79058,7 @@ Transform:
   m_GameObject: {fileID: 1659545949}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.05, y: 0.58, z: 0.12}
+  m_LocalPosition: {x: 0.05, y: 0.87, z: -0.131}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -79076,7 +79076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c312950cfad644aa68b41ee3d49a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offSetY: 1
+  offSetY: 0.5
 --- !u!81 &1659545952
 AudioListener:
   m_ObjectHideFlags: 0
@@ -79362,7 +79362,7 @@ GameObject:
   - component: {fileID: 1661660915}
   - component: {fileID: 1662706603}
   - component: {fileID: 37447520}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (104)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82041,7 +82041,7 @@ GameObject:
   - component: {fileID: 1726025025}
   - component: {fileID: 1727070233}
   - component: {fileID: 1725048051}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (173)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82626,7 +82626,7 @@ GameObject:
   - component: {fileID: 1740159456}
   - component: {fileID: 1739109560}
   - component: {fileID: 201644180}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82834,7 +82834,7 @@ GameObject:
   - component: {fileID: 1743680815}
   - component: {fileID: 1744730231}
   - component: {fileID: 541585010}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (68)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83134,7 +83134,7 @@ GameObject:
   - component: {fileID: 1746498019}
   - component: {fileID: 1745452219}
   - component: {fileID: 1562291088}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (42)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84395,7 +84395,7 @@ GameObject:
   - component: {fileID: 1773905499}
   - component: {fileID: 1772858115}
   - component: {fileID: 1770557421}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (119)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85741,7 +85741,7 @@ GameObject:
   - component: {fileID: 1809952968}
   - component: {fileID: 1811004816}
   - component: {fileID: 1115064815}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86210,7 +86210,7 @@ GameObject:
   - component: {fileID: 1812050722}
   - component: {fileID: 1813102202}
   - component: {fileID: 1711874573}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88931,7 +88931,7 @@ GameObject:
   - component: {fileID: 1885259974}
   - component: {fileID: 1884210590}
   - component: {fileID: 1855604398}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (35)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89241,7 +89241,7 @@ GameObject:
   - component: {fileID: 1898675764}
   - component: {fileID: 1899721580}
   - component: {fileID: 1496215604}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (43)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97173,7 +97173,7 @@ GameObject:
   - component: {fileID: 1969653908}
   - component: {fileID: 1970701772}
   - component: {fileID: 1152460315}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98246,7 +98246,7 @@ GameObject:
   - component: {fileID: 1991635322}
   - component: {fileID: 1990589474}
   - component: {fileID: 1416164593}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98681,7 +98681,7 @@ GameObject:
   - component: {fileID: 1996374122}
   - component: {fileID: 1995041760}
   - component: {fileID: 1996374123}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_RockPile_Square_06
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98960,7 +98960,7 @@ GameObject:
   - component: {fileID: 2003061790}
   - component: {fileID: 2004107590}
   - component: {fileID: 2002216368}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (171)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101602,7 +101602,7 @@ GameObject:
   - component: {fileID: 2057203261}
   - component: {fileID: 2056151909}
   - component: {fileID: 1268103047}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102152,7 +102152,7 @@ GameObject:
   - component: {fileID: 2072039942}
   - component: {fileID: 2073441392}
   - component: {fileID: 2075418115}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Bone_Spine_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102589,7 +102589,7 @@ GameObject:
   - component: {fileID: 2088059070}
   - component: {fileID: 2087013862}
   - component: {fileID: 1165679591}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103256,7 +103256,7 @@ GameObject:
   - component: {fileID: 2089482940}
   - component: {fileID: 2090530788}
   - component: {fileID: 986196684}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (84)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103339,7 +103339,7 @@ GameObject:
   - component: {fileID: 2095924338}
   - component: {fileID: 2096974122}
   - component: {fileID: 1007969601}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104169,7 +104169,7 @@ GameObject:
   - component: {fileID: 2108011293}
   - component: {fileID: 2109062725}
   - component: {fileID: 1102822314}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SM_Env_Tiles_02 (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105518,7 +105518,7 @@ GameObject:
   - component: {fileID: 2127235054}
   - component: {fileID: 2128240586}
   - component: {fileID: 2130680537}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SM_Env_Pillar_Broken_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106552,12 +106552,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2567458388193939693, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.71719
+      objectReference: {fileID: 0}
+    - target: {fileID: 2567458388193939693, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.71719
+      objectReference: {fileID: 0}
+    - target: {fileID: 2567458388193939693, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.71719
+      objectReference: {fileID: 0}
+    - target: {fileID: 2567458388193939693, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1194.879
       objectReference: {fileID: 0}
     - target: {fileID: 2567458388193939693, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.96000004
+      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 2567458388193939693, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
       propertyPath: m_LocalPosition.z

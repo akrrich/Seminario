@@ -46,7 +46,7 @@ public class PlayerModel : MonoBehaviour
     public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
     public float Speed { get => speed; set => speed = value; }
-    public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
+    public bool IsGrounded => Physics.Raycast(transform.position, Vector3.down, playerTabernData.DistanceToGround, playerTabernData.GroundLayer);
     public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCollidingTrash { get => isCollidingTrash; set => isCollidingTrash = value; }

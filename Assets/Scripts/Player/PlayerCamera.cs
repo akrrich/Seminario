@@ -30,7 +30,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void InitializeCameraPosition()
     {
-        cameraOffset = new Vector3(0f, offSetY, 0.3f);
+        cameraOffset = new Vector3(0f, offSetY, -0.1f);
         transform.position = playerModel.transform.position + cameraOffset;
     }
 
