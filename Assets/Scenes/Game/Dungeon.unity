@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 23904216}
   - component: {fileID: 23904215}
   - component: {fileID: 23904214}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: SM_Env_Tiles_Texture_01 (53)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2667,7 +2667,7 @@ GameObject:
   m_Component:
   - component: {fileID: 362166751}
   - component: {fileID: 362166752}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: NavMesh Modifier Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2702,8 +2702,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SerializedVersion: 0
-  m_Size: {x: 20.71895, y: 8.844759, z: 20.441391}
-  m_Center: {x: 5.76192, y: 3.9223795, z: -5.6440735}
+  m_Size: {x: 20.71895, y: 17.450802, z: 26.679268}
+  m_Center: {x: 5.76192, y: 6.1940594, z: -3.418375}
   m_Area: 1
   m_AffectedAgents: ffffffff
 --- !u!1001 &363200380
@@ -4210,7 +4210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &636680728
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5402,10 +5402,10 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  m_UseGeometry: 0
+    m_Bits: 18432
+  m_UseGeometry: 1
   m_DefaultArea: 0
-  m_GenerateLinks: 0
+  m_GenerateLinks: 1
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
   m_OverrideTileSize: 0
@@ -5413,7 +5413,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: d86c667e0eda5574989ef1b5d9ac4e32, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: f4db5d61599c0a04fb652208c8e5eb1f, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &873410830
 Transform:
