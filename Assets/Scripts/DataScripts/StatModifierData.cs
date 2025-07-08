@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class StatModifier
+[CreateAssetMenu(fileName = "StatModifierData", menuName = "ScriptableObjects/Dungeon/Create New EnemyStatModifierData")]
+
+public class StatModifierData : ScriptableObject
 {
     public int layer; // Número de capa
     [Header("Multipliers")]

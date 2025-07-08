@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5230142200929748044}
   - component: {fileID: 6781351402847274416}
   m_Layer: 0
-  m_Name: Spawner4
+  m_Name: Spawner5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,8 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyFactory: {fileID: 5653556251869384128}
   spawnPosition: {fileID: 5255721267045534704}
-  enemySpawnTable: {fileID: 11400000, guid: e3b402dd9107f35488126e50f21147a9, type: 2}
-  layer: 7
+  enemySpawnTable: {fileID: 11400000, guid: bfc84266fce59134e952f64739860a71, type: 2}
+  layer: 5
   statScaler: {fileID: 6781351402847274416}
 --- !u!114 &6781351402847274416
 MonoBehaviour:
@@ -64,10 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifiers:
-  - layer: 7
-    hpMultiplier: 0.2
-    damageMultiplier: 0.2
-    speedMultiplier: 0.2
+  - {fileID: 11400000, guid: 7d516e84cff372946890b651aa1483d3, type: 2}
 --- !u!1 &5255721267045534704
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,4 +109,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11b910d6b5509bd458c67195d605e5ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnerData: {fileID: 11400000, guid: 2e6334a5b7389474fb02f4cdb5e86217, type: 2}
+  spawnerData: {fileID: 11400000, guid: 2dfe58e42a257a9459680ac47a07e65a, type: 2}

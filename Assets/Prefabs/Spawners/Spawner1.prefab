@@ -64,10 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifiers:
-  - layer: 1
-    hpMultiplier: 0
-    damageMultiplier: 0
-    speedMultiplier: 0
+  - {fileID: 11400000, guid: f5a40600728f80d42b1a10ad58bb3c50, type: 2}
 --- !u!1 &5255721267045534704
 GameObject:
   m_ObjectHideFlags: 0
