@@ -57,7 +57,7 @@ public class TablesManager : Singleton<TablesManager>
         foreach (GameObject obj in tableObjects)
         {
             Table table = obj.GetComponentInParent<Table>();
-            if (table != null)
+            if (table != null && table.gameObject.activeSelf) // Provisorio el activeself
             {
                 tables.Add(table);
             }
