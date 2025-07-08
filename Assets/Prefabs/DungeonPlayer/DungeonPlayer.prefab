@@ -160,8 +160,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 100
   speed: 0
-  walkSpeed: 5
-  runSpeed: 8
+  walkSpeed: 4.5
+  runSpeed: 7
   acceleration: 20
   deceleration: 10
   airMultiplier: 5

@@ -16,4 +16,4 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 8b04f198cfd6e884e888cbdb87706353, type: 3}
   prefabSlotInventoryUI: {fileID: 3963461615016472483, guid: aa27fc8e0f2e75a48b98368c46680535, type: 3}
   price: 15
-  initializeStock: 10
+  initializeStock: 0
