@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rangeVision: 4
   angleVision: 120
-  walkSpeed: 300
-  runSpeed: 500
+  walkSpeed: 450
+  runSpeed: 700
   distanceToGrabFood: 5
   jumpForce: 5
   distanceToGround: 1.05

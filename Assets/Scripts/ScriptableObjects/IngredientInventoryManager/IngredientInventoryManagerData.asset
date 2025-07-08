@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a262229a0836e4c809c11665a56acf, type: 3}
   m_Name: IngredientInventoryManagerData
   m_EditorClassIdentifier: 
-  initializeStockForAllIngredients: 0
-  ingredientsUseOwnStock: 1
+  initializeStockForAllIngredients: 5
+  ingredientsUseOwnStock: 0
