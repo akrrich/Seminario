@@ -49,7 +49,7 @@ public class ClientController : MonoBehaviour
     private void InitializeFSM()
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel, clientView);
-        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTablePosition.ChairPosition);
+        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTable.ChairPosition);
         csLeave = new ClientStateLeave<ClientStates>(this, clientModel, clientView, clientModel.ClientManager.OutsidePosition);
         csEating = new ClientStateEating<ClientStates>(clientModel, clientView, csLeave);
         ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave, csEating);
@@ -120,7 +120,7 @@ public class ClientController : MonoBehaviour
 
     private bool QuestionCanGoToChair()
     {
-        if (clientModel.CurrentTablePosition != null)
+        if (clientModel.CurrentTable != null)
         {
             // si no esta colisionando con el trigger de la silla
             if (!onCollisionEnterWithTriggerChair)
@@ -141,7 +141,7 @@ public class ClientController : MonoBehaviour
             return true;
         }
 
-        if (clientModel.CurrentTablePosition != null)
+        if (clientModel.CurrentTable != null)
         {
             return true;
         }

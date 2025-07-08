@@ -39,6 +39,7 @@ public class Food : MonoBehaviour
     private bool isInstantiateFirstTime = true;
     private bool isInPlayerDishPosition = false;
 
+    public FoodType FoodType { get => foodType; }
     public CookingStates CurrentCookingState { get => currentCookingState; }
 
 

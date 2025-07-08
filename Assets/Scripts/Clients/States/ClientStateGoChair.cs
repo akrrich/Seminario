@@ -44,9 +44,9 @@ public class ClientStateGoChair<T> : State<T>
 
     private void CheckDistanceFromTransformToCurrentChair()
     {
-        if (Vector3.Distance(clientModel.transform.position, clientModel.CurrentTablePosition.ChairPosition.position) <= distanceToChair)
+        if (Vector3.Distance(clientModel.transform.position, clientModel.CurrentTable.ChairPosition.position) <= distanceToChair)
         {
-            clientModel.CurrentTablePosition.SetNavMeshObstacles(false);
+            clientModel.CurrentTable.SetNavMeshObstacles(false);
         }
     }
 }

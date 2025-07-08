@@ -32,9 +32,9 @@ public class ClientStateWaitingForChair<T> : State<T>
     {
         base.Execute();
 
-        if (clientModel.CurrentTablePosition == null)
+        if (clientModel.CurrentTable == null)
         {
-            clientModel.CurrentTablePosition = TablesManager.Instance.GetRandomAvailableTableForClient();
+            clientModel.CurrentTable = TablesManager.Instance.GetRandomAvailableTableForClient();
         }
 
         waitingForChairTime += Time.deltaTime;

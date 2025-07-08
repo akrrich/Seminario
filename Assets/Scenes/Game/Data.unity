@@ -841,88 +841,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a1a5d700ef71241a1dc7ca6459ade4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodRecipes:
-  - foodType: 0
-    ingridients:
-    - ingredientType: 0
-      amount: 2
-    - ingredientType: 1
-      amount: 1
-    - ingredientType: 2
-      amount: 1
-  - foodType: 1
-    ingridients:
-    - ingredientType: 3
-      amount: 2
-    - ingredientType: 1
-      amount: 1
-    - ingredientType: 2
-      amount: 2
-  - foodType: 2
-    ingridients:
-    - ingredientType: 4
-      amount: 2
-    - ingredientType: 5
-      amount: 2
-    - ingredientType: 2
-      amount: 2
-  - foodType: 3
-    ingridients:
-    - ingredientType: 3
-      amount: 2
-    - ingredientType: 7
-      amount: 1
-    - ingredientType: 6
-      amount: 1
-  - foodType: 4
-    ingridients:
-    - ingredientType: 9
-      amount: 2
-    - ingredientType: 8
-      amount: 1
-    - ingredientType: 6
-      amount: 1
-  ingredientData:
-  - ingridientType: 0
-    sprite: {fileID: 21300000, guid: 31fb8d5613126114db5fa596579adde7, type: 3}
-    price: 15
-  - ingridientType: 1
-    sprite: {fileID: 21300000, guid: 696d8e0e73ea8c346be4a0c2b1810d2a, type: 3}
-    price: 15
-  - ingridientType: 2
-    sprite: {fileID: 21300000, guid: f5669736a5a1f3941b78357e14daadd3, type: 3}
-    price: 15
-  - ingridientType: 3
-    sprite: {fileID: 21300000, guid: 1b403b7827fa5064897afc099fa66490, type: 3}
-    price: 15
-  - ingridientType: 4
-    sprite: {fileID: 21300000, guid: 420bfe9ea5448904f9dd283f3ea209cf, type: 3}
-    price: 15
-  - ingridientType: 5
-    sprite: {fileID: 21300000, guid: 4c9f7a6f0a0d9a54e8e7b1817faa33ef, type: 3}
-    price: 15
-  - ingridientType: 6
-    sprite: {fileID: 21300000, guid: 6f2e8ebbb26127244ab6a6388bc9f79b, type: 3}
-    price: 15
-  - ingridientType: 7
-    sprite: {fileID: 21300000, guid: 37d159fad35c16f46bf0a5239a51cbe1, type: 3}
-    price: 15
-  - ingridientType: 8
-    sprite: {fileID: 21300000, guid: 9e3b310b031a1a44ba7fab457f2ee882, type: 3}
-    price: 15
-  - ingridientType: 9
-    sprite: {fileID: 21300000, guid: 8b04f198cfd6e884e888cbdb87706353, type: 3}
-    price: 15
-  - ingridientType: 10
-    sprite: {fileID: 21300000, guid: a5fd3a083a75c4342a7fae2d8b72bb2f, type: 3}
-    price: 15
-  - ingridientType: 11
-    sprite: {fileID: 21300000, guid: 0c6bfaba4b81bbc45a8e73572cec80ba, type: 3}
-    price: 15
-  - ingridientType: 12
-    sprite: {fileID: 21300000, guid: d9a1db4a3ba474741bd44ccef353c319, type: 3}
-    price: 15
-  initializeStockIngredients: 100
+  ingredientInventoryManagerData: {fileID: 11400000, guid: 233d1704525eaf5409589994a3715707, type: 2}
+  foodRecipesData:
+  - {fileID: 11400000, guid: 618812309e201cf4289bb0864741d975, type: 2}
+  - {fileID: 11400000, guid: 021c03ae0b065d24e8b469dfc6d945b2, type: 2}
+  - {fileID: 11400000, guid: 6cf2de86a47e1c6479fd512660d258f8, type: 2}
+  - {fileID: 11400000, guid: ccb9c51c39edac94890d9cfdd7258b9a, type: 2}
+  - {fileID: 11400000, guid: 85a2cead291eeca44af7681ba7d7ca89, type: 2}
+  ingredientsData:
+  - {fileID: 11400000, guid: a2f119abfe343a44496ef65cb2958ec6, type: 2}
+  - {fileID: 11400000, guid: 7a5c2518a64512c4894f0cd0cef17f5e, type: 2}
+  - {fileID: 11400000, guid: 6488db83959f8de488612b4868138323, type: 2}
+  - {fileID: 11400000, guid: f2a0fa2b3ae1d8546ab0e74dc4d8e55c, type: 2}
+  - {fileID: 11400000, guid: b127b6c1f76279344a26f04e73564b66, type: 2}
+  - {fileID: 11400000, guid: 6968ff68a343d8f489a9b798c94730af, type: 2}
+  - {fileID: 11400000, guid: 640594fd932590643b3e836859dce485, type: 2}
+  - {fileID: 11400000, guid: 8f3053a16132d40478fc8394fe1397fb, type: 2}
+  - {fileID: 11400000, guid: 1c739012b4ddf5440a0093c9967560fa, type: 2}
+  - {fileID: 11400000, guid: da77eceb056f0b147a8a398d5a91d4a1, type: 2}
+  - {fileID: 11400000, guid: bb26f90c70ef9b042ac737b40456912e, type: 2}
+  - {fileID: 11400000, guid: 1bd5d747635a15b43a17746d34784bb4, type: 2}
+  - {fileID: 11400000, guid: e6e7d546bd069ce41b3d4cea7dcd6516, type: 2}
 --- !u!4 &1302569140
 Transform:
   m_ObjectHideFlags: 0

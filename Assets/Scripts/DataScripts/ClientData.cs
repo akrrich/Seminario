@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ClientData", menuName = "ScriptableObjects/Create New ClientData")]
+[CreateAssetMenu(fileName = "ClientData", menuName = "ScriptableObjects/Tabern/Create New ClientData")]
 public class ClientData : ScriptableObject
 {
     [SerializeField] private float speed;

@@ -23,11 +23,15 @@ public class ClientView : MonoBehaviour
 
     private Dictionary<string, SpriteRenderer> spriteTypeDict = new();
 
+    private FoodType currentSelectedFood;
+
     private bool canTakeOrder = false; // Se pone en true cuando nos acercamos a la mesa y no pidio nada todavia
 
     public Animator Anim { get => anim; }
 
     public List<string> OrderFoodNames { get => orderFoodNames; }
+
+    public FoodType CurrentSelectedFood { get => currentSelectedFood; }
 
     public bool CanTakeOrder { get => canTakeOrder; set => canTakeOrder = value; }
 
@@ -109,6 +113,7 @@ public class ClientView : MonoBehaviour
 
             int randomIndex = Random.Range(0, favoritesFoodTypes.Count);
             FoodType selectedFood = favoritesFoodTypes[randomIndex];
+            currentSelectedFood = selectedFood;
 
             Sprite sprite = clientManager.GetSpriteForRandomFood(selectedFood);
 
