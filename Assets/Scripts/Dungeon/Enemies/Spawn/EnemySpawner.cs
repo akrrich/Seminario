@@ -7,12 +7,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] EnemyFactory enemyFactory;
     [SerializeField] private GameObject spawnPosition;
 
-    [Header("Configuración de Spawns")]
+    [Header("Spawns Data and % ")]
     [SerializeField] private EnemySpawnTableData enemySpawnTable;
     [SerializeField] private int layer; //capa de la dungeon
     [SerializeField] private StatScaler statScaler;
 
-    [Header("Configuración de Activación")]
+    [Header("Spawn Variables")]
     [SerializeField] private SpawnerConfigData spawnerConfigData;
 
     private int spawnedEnemies = 0;
