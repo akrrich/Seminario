@@ -29,5 +29,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Data.unity
     guid: e361195241d9e3642bf380f4197a63a0
+  - enabled: 1
+    path: Assets/Scenes/TavernAssets.unity
+    guid: e016518d78ee3b44db06760b0e45b7b5
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

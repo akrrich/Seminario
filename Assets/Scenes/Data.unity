@@ -887,19 +887,19 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 31fb8d5613126114db5fa596579adde7, type: 3}
     price: 15
   - ingridientType: 1
-    sprite: {fileID: 21300000, guid: a3644ce3eb753614bbd249156949d83c, type: 3}
+    sprite: {fileID: 21300000, guid: 696d8e0e73ea8c346be4a0c2b1810d2a, type: 3}
     price: 15
   - ingridientType: 2
     sprite: {fileID: 21300000, guid: f5669736a5a1f3941b78357e14daadd3, type: 3}
     price: 15
   - ingridientType: 3
-    sprite: {fileID: 21300000, guid: 6b372dcf947d25e46b27461c0abdd6c8, type: 3}
+    sprite: {fileID: 21300000, guid: 1b403b7827fa5064897afc099fa66490, type: 3}
     price: 15
   - ingridientType: 4
     sprite: {fileID: 21300000, guid: 420bfe9ea5448904f9dd283f3ea209cf, type: 3}
     price: 15
   - ingridientType: 5
-    sprite: {fileID: 21300000, guid: 747e2046b554fa247bb13cff8feb540a, type: 3}
+    sprite: {fileID: 21300000, guid: 4c9f7a6f0a0d9a54e8e7b1817faa33ef, type: 3}
     price: 15
   - ingridientType: 6
     sprite: {fileID: 21300000, guid: 6f2e8ebbb26127244ab6a6388bc9f79b, type: 3}

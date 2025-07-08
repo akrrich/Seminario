@@ -6,6 +6,8 @@ public class PlayerStateCook<T> : State<T>
     private PlayerView playerView;
     private Transform cookingPosition;
 
+    private bool lastDishState;
+
     private T inputToIdle;
 
 
@@ -29,6 +31,8 @@ public class PlayerStateCook<T> : State<T>
         playerModel.Rb.velocity = Vector3.zero;
         playerModel.CapsuleCollider.material = null;
 
+        lastDishState = playerView.Dish.gameObject.activeSelf;
+
         playerView.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = cookingPosition.transform.position;
@@ -49,7 +53,7 @@ public class PlayerStateCook<T> : State<T>
     public override void Exit()
     {
         PlayerView.OnExitInCookMode?.Invoke();
-        playerView.ShowOrHideDish(true);
+        playerView.ShowOrHideDish(lastDishState);
         playerModel.IsCooking = false;
 
         playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;

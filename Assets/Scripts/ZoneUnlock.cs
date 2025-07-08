@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ZoneUnlock : MonoBehaviour
 {
     [SerializeField] private ZoneUnlockData zoneUnlockData;
-
+    [SerializeField] private List<GameObject> debris;
+    [SerializeField] private List<Table> tablesToActive;
     private bool isUnlocked = false;
 
     public ZoneUnlockData ZoneUnlockData { get => zoneUnlockData; }
@@ -13,6 +15,14 @@ public class ZoneUnlock : MonoBehaviour
 
     public void UnlockZone()
     {
-        gameObject.SetActive(false);
+        foreach (var zone in debris) // Provisorio
+        {
+            zone.gameObject.SetActive(false);
+        }
+
+        foreach (var table in tablesToActive) // Provisorio
+        {
+            table.gameObject.SetActive(true);
+        }
     }
 }

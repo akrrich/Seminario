@@ -8,7 +8,7 @@ public class PlayerCamera : MonoBehaviour
 
     private float rotationX = 0f;
 
-    private float offSetY = 1f; // Posicion de la camara en eje y
+    [SerializeField] private float offSetY; // Posicion de la camara en eje y
 
 
     void Awake()
