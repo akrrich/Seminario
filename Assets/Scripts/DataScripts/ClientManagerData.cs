@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ClientManagerData", menuName = "ScriptableObjects/Create New ClientManagerData")]
+[CreateAssetMenu(fileName = "ClientManagerData", menuName = "ScriptableObjects/Tabern/Create New ClientManagerData")]
 public class ClientManagerData : ScriptableObject
 {
     [SerializeField] private float timeToWaitForSpawnNewClient;

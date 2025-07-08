@@ -10,7 +10,6 @@ public class IngredientInventoryManagerUI : MonoBehaviour
     private PlayerModel playerModel;
     private PlayerDungeonModel dungeonModel;
 
-    [SerializeField] private List<IngredientSlotPrefab> startSlotPrefabs;
     [SerializeField] private RawImage inventoryPanel;
 
     private Transform slotParentObject;
@@ -75,7 +74,7 @@ public class IngredientInventoryManagerUI : MonoBehaviour
 
     private void InitializeSlots()
     {
-        foreach (var slotPrefab in startSlotPrefabs)
+        foreach (var slotPrefab in IngredientInventoryManager.Instance.IngredientsData)
         {
             IngredientType type = slotPrefab.IngredientType;
             if (!IngredientInventoryManager.Instance.GetAllIngredients().Contains(type))
@@ -84,7 +83,7 @@ public class IngredientInventoryManagerUI : MonoBehaviour
             int index = slotPositions.Count > ingredientSlots.Count ? ingredientSlots.Count : -1;
             if (index == -1) break;
 
-            GameObject slotInstance = Instantiate(slotPrefab.PrefabSlotUI, slotPositions[index].position, Quaternion.identity, slotParentObject);
+            GameObject slotInstance = Instantiate(slotPrefab.PrefabSlotInventoryUI, slotPositions[index].position, Quaternion.identity, slotParentObject);
             slotInstance.SetActive(false);
 
             TextMeshProUGUI stockText = slotInstance.GetComponentInChildren<TextMeshProUGUI>();
@@ -162,14 +161,4 @@ public class IngredientInventoryManagerUI : MonoBehaviour
         }
     }
     
-}
-
-[Serializable]
-public class IngredientSlotPrefab // Para machear el prefab del slot del inventario con cada ingrediente
-{
-    [SerializeField] private IngredientType ingredientType;
-    [SerializeField] private GameObject prefabSlotUI;
-
-    public IngredientType IngredientType { get => ingredientType; }
-    public GameObject PrefabSlotUI { get => prefabSlotUI; }
 }

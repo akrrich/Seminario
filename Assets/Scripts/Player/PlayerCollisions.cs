@@ -333,8 +333,8 @@ public class PlayerCollisions
     {
         if (collider.gameObject.CompareTag("PortalDungeon"))
         {
+            collider.gameObject.SetActive(false); // Se desactiva el trigger porque sino ejecuta la corrutina varias veces
             string[] additiveScenes = { "DungeonUI", "CompartidoUI" };
-            // Se usa el playerController porque hereda de Monobehaviour para llamar a la corrutina
             playerController.StartCoroutine(ScenesManager.Instance.LoadScene("Dungeon", additiveScenes));
         }
     }

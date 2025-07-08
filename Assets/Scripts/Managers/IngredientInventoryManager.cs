@@ -6,15 +6,17 @@ using UnityEngine;
 public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 {
     private List<IngredientType> availableIngredients;
-    [SerializeField] private List<Ingredients.FoodRecipe> foodRecipes;
-    [SerializeField] private List<Ingredients.IngredientData> ingredientData;
-    [SerializeField] private int initializeStockIngredients;
+    [SerializeField] private IngredientInventoryManagerData ingredientInventoryManagerData;
+    [SerializeField] private List<FoodRecipeData> foodRecipesData;
+    [SerializeField] private List<IngredientData> ingredientsData;
 
     private Dictionary<IngredientType, int> ingredientInventory = new();
-    private Dictionary<FoodType, Ingredients.FoodRecipe> recipeDict = new();
-    private Dictionary<IngredientType, Ingredients.IngredientData> ingredientDataDict = new();
+    private Dictionary<FoodType, FoodRecipeData> recipeDict = new();
+    private Dictionary<IngredientType, IngredientData> ingredientDataDict = new();
     
-    public Dictionary<IngredientType, Ingredients.IngredientData> IngredientDataDict { get =>  ingredientDataDict; }
+    public List<IngredientData> IngredientsData { get => ingredientsData; }
+
+    public Dictionary<IngredientType, IngredientData> IngredientDataDict { get =>  ingredientDataDict; }
 
 
     void Awake()
@@ -72,7 +74,7 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
         return ingredientInventory.TryGetValue(ingredient, out var stock) ? stock : 0;
     }
 
-    public Ingredients.FoodRecipe GetRecipe(FoodType foodType)
+    public FoodRecipeData GetRecipe(FoodType foodType)
     {
         return recipeDict.TryGetValue(foodType, out var recipe) ? recipe : null;
     }
@@ -82,17 +84,32 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 
     private void InitializeInventory()
     {
-        availableIngredients = Enum.GetValues(typeof(IngredientType)).Cast<IngredientType>().ToList();
-
-        foreach (IngredientType ingredient in availableIngredients)
+        if (ingredientInventoryManagerData.IngredientsUseOwnStock)
         {
-            ingredientInventory[ingredient] = initializeStockIngredients;
+            foreach (var ingredientData in ingredientsData)
+            {
+                var type = ingredientData.IngredientType;
+                var stock = ingredientData.InitializeStock;
+                ingredientInventory[type] = stock;
+            }
+
+            return;
+        }
+
+        else
+        {
+            availableIngredients = Enum.GetValues(typeof(IngredientType)).Cast<IngredientType>().ToList();
+
+            foreach (IngredientType ingredient in availableIngredients)
+            {
+                ingredientInventory[ingredient] = ingredientInventoryManagerData.InitializeStockForAllIngredients;
+            }
         }
     }
 
     private void InitializeIngredientData()
     {
-        foreach (var data in ingredientData)
+        foreach (var data in ingredientsData)
         {
             if (!ingredientDataDict.ContainsKey(data.IngredientType))
             {
@@ -103,6 +120,6 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 
     private void InitializeRecipes()
     {
-        recipeDict = foodRecipes.ToDictionary(r => r.FoodType, r => r);
+        recipeDict = foodRecipesData.ToDictionary(r => r.FoodType, r => r);
     }
 }

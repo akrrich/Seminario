@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "FoodData", menuName = "ScriptableObjects/Create New FoodData")]
+[CreateAssetMenu(fileName = "FoodData", menuName = "ScriptableObjects/Tabern/Create New FoodData")]
 public class FoodData : ScriptableObject
 {
     [SerializeField] private float timeToBeenCooked;

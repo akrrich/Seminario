@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlayerTabernData", menuName = "ScriptableObjects/Create New PlayerTabernData")]
+[CreateAssetMenu(fileName = "PlayerTabernData", menuName = "ScriptableObjects/Tabern/Create New PlayerTabernData")]
 public class PlayerTabernData : ScriptableObject
 {
     [Header("LineOfSight:")]

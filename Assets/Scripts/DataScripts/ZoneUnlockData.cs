@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ZoneUnlockData", menuName = "ScriptableObjects/Create New ZoneUnlockData")]
+[CreateAssetMenu(fileName = "ZoneUnlockData", menuName = "ScriptableObjects/Tabern/Create New ZoneUnlockData")]
 public class ZoneUnlockData : ScriptableObject
 {
     [SerializeField] private Sprite imageZoneUnlock;

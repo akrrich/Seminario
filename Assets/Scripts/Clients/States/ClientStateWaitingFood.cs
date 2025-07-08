@@ -31,10 +31,10 @@ public class ClientStateWaitingFood<T> : State<T>
         Debug.Log("WaitingFood");
 
         clientModel.StopVelocity();
-        clientModel.LookAt(clientModel.CurrentTablePosition.DishPosition.position, clientView.Anim.transform);
+        clientModel.LookAt(clientModel.CurrentTable.DishPosition.position, clientView.Anim.transform);
         clientView.ExecuteAnimParameterName("Sit");
         clientView.StartCoroutine(DuringSitAnimationAfterExitTime());
-        clientModel.transform.SetParent(clientModel.CurrentTablePosition.ChairPosition);
+        clientModel.transform.SetParent(clientModel.CurrentTable.ChairPosition);
     }
 
     public override void Execute()
@@ -119,7 +119,7 @@ public class ClientStateWaitingFood<T> : State<T>
             expectedDishNames.Add(food + "(Clone)");
         }
 
-        foreach (Transform dishSpot in clientModel.CurrentTablePosition.DishPositions)
+        foreach (Transform dishSpot in clientModel.CurrentTable.DishPositions)
         {
             if (dishSpot.childCount > 0)
             {

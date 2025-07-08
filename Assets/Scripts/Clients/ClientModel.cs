@@ -24,7 +24,7 @@ public class ClientModel : MonoBehaviour
     private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
     private CapsuleCollider capsuleCollider;
-    private Table currentTablePosition;
+    private Table currentTable;
 
     private Vector3 currentDirection;
 
@@ -37,7 +37,7 @@ public class ClientModel : MonoBehaviour
     public ClientManager ClientManager { get => clientManager; }
 
     public NavMeshAgent NavMeshAgent { get => navMeshAgent; }
-    public Table CurrentTablePosition { get => currentTablePosition; set => currentTablePosition = value; }
+    public Table CurrentTable { get => currentTable; set => currentTable = value; }
 
     public ClientType ClientType { get => clientType; }
 
@@ -96,12 +96,12 @@ public class ClientModel : MonoBehaviour
     /// </summary>
     public void ReturnFoodFromTableToPool()
     {
-        foreach (Food food in currentTablePosition.CurrentFoods)
+        foreach (Food food in currentTable.CurrentFoods)
         {
             food.ReturnObjetToPool();
         }
 
-        currentTablePosition.CurrentFoods.Clear();
+        currentTable.CurrentFoods.Clear();
 
         /*if (dishesMatch)
         {
@@ -136,7 +136,7 @@ public class ClientModel : MonoBehaviour
 
     public void InitializeTablePosition()
     {
-        currentTablePosition = TablesManager.Instance.GetRandomAvailableTableForClient();
+        currentTable = TablesManager.Instance.GetRandomAvailableTableForClient();
     }
 
     private void InitializeClientForPool()
