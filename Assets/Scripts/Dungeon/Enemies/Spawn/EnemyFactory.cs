@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyFactory : MonoBehaviour
 {
-    [SerializeField] private EnemyBase[] enemies;
+    [SerializeField] private SpawnerData spawnerData;
     Dictionary<string, EnemyBase> enemiesDictionary;
 
     private void Awake()
     {
         enemiesDictionary = new Dictionary<string, EnemyBase>();
         
-        foreach (EnemyBase enemy in enemies)
+        foreach (EnemyBase enemy in spawnerData.enemies)
         {
             enemiesDictionary.Add(enemy.Id, enemy);
         }

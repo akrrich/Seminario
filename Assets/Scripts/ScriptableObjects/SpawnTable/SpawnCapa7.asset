@@ -9,7 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b20c1d4e4324ddd44bb82da0a025d384, type: 3}
-  m_Name: DeviceManagerData
+  m_Script: {fileID: 11500000, guid: 8083edde5dd957248bf5ac8838b4dcdd, type: 3}
+  m_Name: SpawnCapa7
   m_EditorClassIdentifier: 
-  useCursorAllTime: 1
+  spawnDataList:
+  - enemyId: rat
+    spawnChance: 50
+  - enemyId: bear
+    spawnChance: 20
+  - enemyId: wolf
+    spawnChance: 30
