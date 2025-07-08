@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerTabernData
   m_EditorClassIdentifier: 
   rangeVision: 4
-  angleVision: 180
+  angleVision: 120
   walkSpeed: 300
   runSpeed: 500
   jumpForce: 5

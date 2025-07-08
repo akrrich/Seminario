@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b1fc0502e6527448f31ab5e888df20, type: 3}
   m_Name: ZoneUnlockData
   m_EditorClassIdentifier: 
-  imageZoneUnlock: {fileID: 21300000, guid: e3ab8164cd8ffe344a201a690ccc5b6b, type: 3}
+  imageZoneUnlock: {fileID: 21300000, guid: d91df12984d78e3418b36829ca4d8c8e, type: 3}
   cost: 200
