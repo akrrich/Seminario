@@ -5,6 +5,7 @@ public class ZoneUnlock : MonoBehaviour
 {
     [SerializeField] private ZoneUnlockData zoneUnlockData;
     [SerializeField] private List<GameObject> debris; // Provisorio
+
     [SerializeField] private List<Table> tablesToActive; // Provisorio
     private bool isUnlocked = false;
 

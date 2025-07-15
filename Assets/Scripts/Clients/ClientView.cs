@@ -79,7 +79,6 @@ public class ClientView : MonoBehaviour
     public void SetSpriteTypeName(string spriteTypeNameGameObjectInHierarchy)
     {
         DisableAllSpriteTypes();
-
         if (spriteTypeDict.TryGetValue(spriteTypeNameGameObjectInHierarchy, out var spriteRenderer))
         {
             spriteRenderer.gameObject.SetActive(true);

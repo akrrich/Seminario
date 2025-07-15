@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b20c1d4e4324ddd44bb82da0a025d384, type: 3}
   m_Name: DeviceManagerData
   m_EditorClassIdentifier: 
-  useCursorAllTime: 1
+  useCursorAllTime: 0

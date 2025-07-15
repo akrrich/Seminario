@@ -14,7 +14,7 @@ public enum ClientType
 public class ClientModel : MonoBehaviour
 {
     /// <summary>
-    /// Analizar el tema del Capusle collider, ya que se desincroniza del Animation gameObject
+    /// El bug del Animation gameObject que se separa del padre esta solucionado, ya que vuelve a su posicion cuando entra en idle
     /// </summary>
     /// 
     [SerializeField] private ClientData clientData;
@@ -84,16 +84,13 @@ public class ClientModel : MonoBehaviour
         navMeshAgent.velocity = Vector3.zero;
     }
 
-    /// Metodo para futuro setea del npc correctamente
+    /// Metodo para futuro setea del npc correctamente la posicion de la animacion en la silla
     public void SetRbAndCollider(bool rb, bool collider)
     {
         this.rb.isKinematic = rb;
         capsuleCollider.enabled = collider;
     }
 
-    /// <summary>
-    /// Por ahora por como esta hecho siempre va a dar plata y nunca va a restar
-    /// </summary>
     public void ReturnFoodFromTableToPool()
     {
         foreach (Food food in currentTable.CurrentFoods)
@@ -102,16 +99,6 @@ public class ClientModel : MonoBehaviour
         }
 
         currentTable.CurrentFoods.Clear();
-
-        /*if (dishesMatch)
-        {
-            MoneyManager.Instance.AddMoney(500);
-        }
-
-        else
-        {
-            MoneyManager.Instance.SubMoney(250);
-        }*/
     }
 
 

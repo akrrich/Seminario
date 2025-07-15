@@ -24,9 +24,11 @@ public class PlayerModel : MonoBehaviour
 
     private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
 
-    private float speed;
+    [SerializeField] private LayerMask groundLayer;
 
-    private bool isGrounded = true;
+    private float speed;
+    private float distanceToGround = 1.05f;
+
     private bool isCollidingCookingDeskUI = false;
     private bool isCollidingAdministration = false;
     private bool isCollidingTrash = false;
@@ -46,7 +48,7 @@ public class PlayerModel : MonoBehaviour
     public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
     public float Speed { get => speed; set => speed = value; }
-    public bool IsGrounded => Physics.Raycast(transform.position, Vector3.down, playerTabernData.DistanceToGround, playerTabernData.GroundLayer);
+    public bool IsGrounded { get => Physics.Raycast(transform.position, Vector3.down, distanceToGround, groundLayer); }
     public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCollidingTrash { get => isCollidingTrash; set => isCollidingTrash = value; }

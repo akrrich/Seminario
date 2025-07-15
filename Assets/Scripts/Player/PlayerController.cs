@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     private PlayerView playerView;
     private PlayerCollisions playerCollisions;
 
-    private FSM<PlayerStates> fsm = new FSM<PlayerStates>();
+    private FSM<PlayerStates> fsm;
 
     private static event Action<Food> onGrabFood;
     private static event Action onHandOverFood;
@@ -92,6 +92,8 @@ public class PlayerController : MonoBehaviour
 
     private void InitializeFSM() 
     {
+        fsm = new FSM<PlayerStates>();
+
         PlayerStateIdle<PlayerStates> psIdle = new PlayerStateIdle<PlayerStates>(PlayerStates.Walk, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
         PlayerStateWalk<PlayerStates> psWalk = new PlayerStateWalk<PlayerStates> (PlayerStates.Idle, PlayerStates.Run, PlayerStates.Jump, PlayerStates.Cook, PlayerStates.Admin, playerModel);
         PlayerStateJump<PlayerStates> psJump = new PlayerStateJump<PlayerStates>(PlayerStates.Idle, playerModel);
