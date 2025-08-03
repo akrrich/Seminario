@@ -16,9 +16,6 @@ MonoBehaviour:
   angleVision: 120
   walkSpeed: 300
   runSpeed: 500
+  groundDrag: 5
   distanceToGrabFood: 5
   jumpForce: 5
-  distanceToGround: 1.05
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 2049
