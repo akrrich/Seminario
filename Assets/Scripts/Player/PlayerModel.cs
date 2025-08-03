@@ -28,7 +28,7 @@ public class PlayerModel : MonoBehaviour
 
     private float speed;
     private float distanceToGround = 1.05f;
-
+   
     private bool isCollidingCookingDeskUI = false;
     private bool isCollidingAdministration = false;
     private bool isCollidingTrash = false;
@@ -48,7 +48,14 @@ public class PlayerModel : MonoBehaviour
     public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
     public float Speed { get => speed; set => speed = value; }
-    public bool IsGrounded { get => Physics.Raycast(transform.position, Vector3.down, distanceToGround, groundLayer); }
+    public float TargetDrag { get; set; }
+    public bool IsGrounded
+    {
+        get
+        {
+            return Physics.SphereCast(transform.position, 0.3f, Vector3.down, out _, distanceToGround, groundLayer);
+        }
+    }
     public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCollidingTrash { get => isCollidingTrash; set => isCollidingTrash = value; }
@@ -168,6 +175,14 @@ public class PlayerModel : MonoBehaviour
             Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
 
             rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+
+            if (IsGrounded)
+            {
+                rb.AddForce(Vector3.down * 10f, ForceMode.Force);
+            }
+
+            float targetDrag = IsGrounded ? playerTabernData.GroundDrag : 0.15f;
+            rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);
         }
     }
 

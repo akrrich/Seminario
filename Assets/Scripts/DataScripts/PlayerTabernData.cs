@@ -10,6 +10,7 @@ public class PlayerTabernData : ScriptableObject
     [Header("Variables:")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
+    [SerializeField] private float groundDrag;
     [SerializeField] private float distanceToGrabFood;
     [SerializeField] private float jumpForce;
 
@@ -18,6 +19,8 @@ public class PlayerTabernData : ScriptableObject
 
     public float WalkSpeed { get => walkSpeed; }
     public float RunSpeed { get => runSpeed; }
+    public float GroundDrag { get => groundDrag; }
+  
     public float JumpForce { get => jumpForce; }
     public float DistanceToGrabFood { get => distanceToGrabFood; }
 }
