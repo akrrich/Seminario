@@ -42,11 +42,6 @@ public class ClientView : MonoBehaviour
         SuscribeToPlayerControllerEvent();
     }
 
-    void Update()
-    {
-        RotateOrderUIToLookAtPlayer();
-    }
-
     void OnDestroy()
     {
         UnsuscribeToPlayerControllerEvent();
@@ -131,6 +126,18 @@ public class ClientView : MonoBehaviour
         }
     }
 
+    public void RotateOrderUIToLookAtPlayer()
+    {
+        Vector3 playerDirection = (playerController.transform.position - order.position).normalized;
+        Vector3 lookDirection = new Vector3(playerDirection.x, 0, playerDirection.z);
+
+        if (lookDirection != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(lookDirection);
+            order.rotation = rotation;
+        }
+    }
+
 
     private void GetComponents()
     {
@@ -155,18 +162,6 @@ public class ClientView : MonoBehaviour
 
         float scaleFactor = maxDimension / Mathf.Max(spriteSize.x, spriteSize.y);
         spritesTypeList[0].transform.localScale = Vector3.one * scaleFactor;
-    }
-
-    private void RotateOrderUIToLookAtPlayer()
-    {
-        Vector3 playerDirection = (playerController.transform.position - order.position).normalized;
-        Vector3 lookDirection = new Vector3(playerDirection.x, 0, playerDirection.z);
-
-        if (lookDirection != Vector3.zero)
-        {
-            Quaternion rotation = Quaternion.LookRotation(lookDirection);
-            order.rotation = rotation;
-        }
     }
 
     private void RestartAnimationsValues()

@@ -40,12 +40,19 @@ public class PauseManager : MonoBehaviour
     void Awake()
     {
         CreateSingleton();
+        SuscribeToUpdateManagerEvent();
         InvokeEventToSendButtonsReferences();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdatePauseManager()
     {
         EnabledOrDisabledPausePanel();
+    }
+
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvent();
     }
 
 
@@ -111,6 +118,16 @@ public class PauseManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdatePauseManager;
+    }
+
+    private void UnsuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdatePauseManager;
     }
 
     private void InvokeEventToSendButtonsReferences()

@@ -33,6 +33,11 @@ public class MoneyManager : Singleton<MoneyManager>
     public void SubMoney(float amount)
     {
         currentMoney -= amount;
+        if (currentMoney < 0)
+        {
+            currentMoney = 0;
+        }
+
         UpdateMoneyText();
         ShowFloatingMoneyText(amount, false);
     }

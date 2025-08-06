@@ -28,6 +28,7 @@ public class ClientManager : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvent();
         InitializeClientPoolDictionary();
         InitializeFoodSpriteDictionary();
 
@@ -38,7 +39,8 @@ public class ClientManager : MonoBehaviour
         }
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateClientManager()
     {
         // Provisorio
         if (InstantiateTheSameClient)
@@ -50,6 +52,11 @@ public class ClientManager : MonoBehaviour
         {
             GetClientRandomFromPool();
         }
+    }
+
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvent();
     }
 
 
@@ -75,6 +82,16 @@ public class ClientManager : MonoBehaviour
         }
     }
 
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdateClientManager;
+    }
+
+    private void UnsuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdateClientManager;
+    }
 
     private IEnumerator InitializeRandomClient()
     {

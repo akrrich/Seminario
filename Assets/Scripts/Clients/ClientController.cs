@@ -21,6 +21,16 @@ public class ClientController : MonoBehaviour
         GetComponents();
     }
 
+    void OnEnable()
+    {
+        SuscribeToUpdateManagerEvents();
+    }
+
+    void OnDisable()
+    {
+        UnsuscribeToUpdateManagerEvents();
+    }
+
     void Start()
     {
         // Obligatorio inicializar la maquina de estados despues del awake, ya que depende del awake del Model
@@ -28,10 +38,23 @@ public class ClientController : MonoBehaviour
         InitializeTree();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateClientController()
     {
         fsm.OnExecute();
-        root.Execute();
+        root?.Execute();
+        clientView.RotateOrderUIToLookAtPlayer();
+    }
+
+    // Simulacion de FixedUpdate
+    void FixedUpdateClientController()
+    {
+        clientModel.Movement();
+    }
+
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvents();
     }
 
     void OnTriggerEnter(Collider collider)
@@ -39,6 +62,18 @@ public class ClientController : MonoBehaviour
         OnTriggerEnterWithChair(collider);
     }
 
+
+    private void SuscribeToUpdateManagerEvents()
+    {
+        UpdateManager.OnUpdate += UpdateClientController;
+        UpdateManager.OnFixedUpdate += FixedUpdateClientController;
+    }
+
+    private void UnsuscribeToUpdateManagerEvents()
+    {
+        UpdateManager.OnUpdate -= UpdateClientController;
+        UpdateManager.OnFixedUpdate -= FixedUpdateClientController;
+    }
 
     private void GetComponents()
     {

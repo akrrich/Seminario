@@ -53,11 +53,14 @@ public class ClientModel : MonoBehaviour
         InitializeClientForPool();
     }
 
-    void FixedUpdate()
-    {
-        Movement();
-    }
 
+    public void Movement()
+    {
+        if (!rb.isKinematic)
+        {
+            rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
+        }
+    }
 
     public void MoveToTarget(Vector3 target)
     {
@@ -136,13 +139,5 @@ public class ClientModel : MonoBehaviour
         }
 
         isInstantiateFirstTime = false;
-    }
-
-    private void Movement()
-    {
-        if (!rb.isKinematic)
-        {
-            rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
-        }
     }
 }

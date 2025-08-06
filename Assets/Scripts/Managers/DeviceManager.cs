@@ -10,6 +10,10 @@ public class DeviceManager : Singleton<DeviceManager>
 {
     // El script funciona a la perfeccion el cursor, simplemente hay que correrlo en modo build para que se vea plasmado correctamente
 
+    /// <summary>
+    /// Analizar como funcionan los metodos dentro del Update si se implementa un UpdateManager por el tema del cursor en la pantalla de carga
+    /// </summary>
+
     [SerializeField] private DeviceManagerData deviceManagerData;
 
     private Device currentDevice;

@@ -15,23 +15,36 @@ public class SliderCleanDirtyTableUI : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvent();
         SuscribeToLamdaEvents();
         SuscribeToPlayerViewEvents();
         SuscribeToPlayerControllerEvents();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateSliderCleanDirtyTableUI()
     {
         DecreaseAllSliderValuesExceptCurrentTable();
     }
 
     void OnDestroy()
     {
+        UnsuscribeToUpdateManagerEvent();
         UnsuscribeToLamdaEvents();
         UnuscribeToPlayerViewEvents();
         UnsuscribeToPlayerControllerEvents();
     }
 
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdateSliderCleanDirtyTableUI;
+    }
+
+    private void UnsuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdateSliderCleanDirtyTableUI;
+    }
 
     private void SuscribeToLamdaEvents()
     {

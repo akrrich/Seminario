@@ -21,13 +21,15 @@ public class IngredientInventoryManagerUI : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvent();
         SuscribeToPlayerViewEvent();
         SuscribeToModelEvents();
         GetComponents();
         InitializeSlots();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateIngredientInventoryManagerUI()
     {
         EnabledOrDisabledInventoryPanel();
     }
@@ -35,9 +37,20 @@ public class IngredientInventoryManagerUI : MonoBehaviour
     void OnDestroy()
     {
         UnsuscribeToPlayerViewEvent();
+        UnsuscribeToPlayerViewEvent();
         UnsuscribeToModelEvents();
     }
 
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdateIngredientInventoryManagerUI;
+    }
+
+    private void UnscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdateIngredientInventoryManagerUI;
+    }
 
     private void SuscribeToPlayerViewEvent()
     {

@@ -13,15 +13,32 @@ public class PlayerCamera : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvent();
         GetComponents();
         InitializeCameraPosition();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdatePlayerCamera()
     {
         UpdateCameraFollow();
     }
 
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvent();
+    }
+
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdatePlayerCamera;
+    }
+
+    private void UnsuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdatePlayerCamera;
+    }
 
     private void GetComponents()
     {

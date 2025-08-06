@@ -49,13 +49,15 @@ public class AdministratingManagerUI : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvent();
         InitializeLambdaEvents();
         SuscribeToPlayerViewEvents();
         SuscribeToPauseManagerRestoreSelectedGameObjectEvent();
         GetComponents();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateAdministratingManagerUI()
     {
         CheckLastSelectedButtonIfAdminPanelIsOpen();
         CheckJoystickInputsToInteractWithPanels();
@@ -63,6 +65,7 @@ public class AdministratingManagerUI : MonoBehaviour
 
     void OnDestroy()
     {
+        UnsuscribeToUpdateManagerEvent();
         UnsuscribeToPlayerViewEvents();
         UnscribeToPauseManagerRestoreSelectedGameObjectEvent();
     }
@@ -174,6 +177,16 @@ public class AdministratingManagerUI : MonoBehaviour
         }
     }
 
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdateAdministratingManagerUI;
+    }
+
+    private void UnsuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdateAdministratingManagerUI;
+    }
 
     private void InitializeLambdaEvents()
     {

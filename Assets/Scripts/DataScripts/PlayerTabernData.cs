@@ -11,8 +11,8 @@ public class PlayerTabernData : ScriptableObject
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float groundDrag;
-    [SerializeField] private float distanceToGrabFood;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float distanceToGrabFood;
 
     public float RangeVision { get => rangeVision; }
     public float AngleVision { get => angleVision; }

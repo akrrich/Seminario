@@ -39,19 +39,22 @@ public class CookingManagerUI : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvent();
         InitializeLambdaEvents();
         SuscribeToPlayerViewEvents();
         SuscribeToPauseManagerRestoreSelectedGameObjectEvent();
         GetComponents();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateCookingManagerUI()
     {
-        CheckLastSelectedButtonIfAdminPanelIsOpen();
+        CheckLastSelectedButtonIfCookingPanelIsOpen();
     }
 
     void OnDestroy()
     {
+        UnscribeToUpdateManagerEvent();
         UnSuscribeToPlayerViewEvents();
         UnscribeToPauseManagerRestoreSelectedGameObjectEvent();
     }
@@ -114,6 +117,16 @@ public class CookingManagerUI : MonoBehaviour
         onButtonGetFood?.Invoke(foodName);
     }
 
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdateCookingManagerUI;
+    }
+
+    private void UnscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdateCookingManagerUI;
+    }
 
     private void InitializeLambdaEvents()
     {
@@ -180,7 +193,7 @@ public class CookingManagerUI : MonoBehaviour
         }
     }
 
-    private void CheckLastSelectedButtonIfAdminPanelIsOpen()
+    private void CheckLastSelectedButtonIfCookingPanelIsOpen()
     {
         if (EventSystem.current != null && PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused && rootGameObject.activeSelf)
         {

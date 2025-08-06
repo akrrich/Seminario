@@ -4,10 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class ScenesManager : Singleton<ScenesManager>
 {
-    /// <summary>
-    /// Con un update manager se soluciona que se pueda seguir interactuando mientras esta en pantalla de carga, por ejemplo para que no pueda poner pausa
-    /// </summary>
-
     /// <sumary>
     /// Agregar metodo futuro para cerrar el juego con pantalla de carga y guardar los datos en ese tiempo
     /// </sumary>
@@ -17,13 +13,11 @@ public class ScenesManager : Singleton<ScenesManager>
     [SerializeField] private GameObject loadingScenePanel;
     [SerializeField] private GameObject exitGamePanel;
 
-#pragma warning disable 0414
-    /// <summary>
-    /// Esto sirve para el UpdateManager, pero por ahora no srive de NADA
-    /// </summary>
     private bool isInLoadingScenePanel = false; 
     private bool isInExitGamePanel = false;
-#pragma warning restore 0414
+
+    public bool IsInLoadingScenePanel { get => isInLoadingScenePanel; }
+    public bool IsInExitGamePanel { get => isInExitGamePanel; }
 
 
     void Awake()

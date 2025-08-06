@@ -49,17 +49,30 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvents();
         GetComponentsAndInitializeReferences();
         InitializeFSM();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdatePlayerController()
     {
         fsm.OnExecute();
         CheckInputs();
 
         // Provisorio
         playerCollisions.UpdateColls();
+    }
+
+    // Simulacion de FixedUpdate
+    void FixedUpdatePlayerController()
+    {
+        playerModel.Movement();
+    }
+
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvents();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -82,6 +95,18 @@ public class PlayerController : MonoBehaviour
         playerCollisions.OnTriggerEnter(collider);
     }
 
+
+    private void SuscribeToUpdateManagerEvents()
+    {
+        UpdateManager.OnUpdate += UpdatePlayerController;
+        UpdateManager.OnFixedUpdate += FixedUpdatePlayerController;
+    }
+
+    private void UnsuscribeToUpdateManagerEvents()
+    {
+        UpdateManager.OnUpdate -= UpdatePlayerController;
+        UpdateManager.OnFixedUpdate -= FixedUpdatePlayerController;
+    }
 
     private void GetComponentsAndInitializeReferences()
     {

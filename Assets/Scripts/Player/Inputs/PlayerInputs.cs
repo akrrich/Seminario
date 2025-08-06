@@ -9,6 +9,9 @@ public class PlayerInputs : Singleton<PlayerInputs>
     private PlayerInputActions inputActions; // Representa la clase creada por default del nuevo Inputsystem
     private Vector2 joystick = Vector2.zero;
 
+    [SerializeField] private bool testJoystickButtonsInDebugger;
+
+
     public InputsData KeyboardInputs { get => keyboardInputs; }
     public InputsData JoystickInputs { get => joystickInputs; }
 
@@ -16,19 +19,30 @@ public class PlayerInputs : Singleton<PlayerInputs>
     void Awake()
     {
         CreateSingleton(true);
+        SuscribeToUpdateManagerEvent();
         InitializePlayerInputActions();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdatePlayerInputs()
     {
-        // Test JoystickButtons
-        /*for (int i = 0; i < 20; i++) 
+        if (testJoystickButtonsInDebugger)
         {
-            if (Input.GetKeyDown(KeyCode.JoystickButton0 + i))
+            for (int i = 0; i < 20; i++)
             {
-                Debug.Log("Joystick button " + i + " presionado");
+                if (Input.GetKeyDown(KeyCode.JoystickButton0 + i))
+                {
+                    Debug.Log("Joystick button " + i + " presionado");
+                }
             }
-        }*/
+        }
+    }
+
+
+    // No es necesario desuscribirse porque es singleton
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdatePlayerInputs;
     }
 
 

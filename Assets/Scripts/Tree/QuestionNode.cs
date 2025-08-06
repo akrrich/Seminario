@@ -21,11 +21,18 @@ public class QuestionNode : ITreeNode
         {
             if (question())
             {
-                tNode.Execute();
+                if (tNode != null)
+                {
+                    tNode.Execute();
+                }
             }
+
             else
             {
-                fNode.Execute();
+                if (fNode != null)
+                {
+                    fNode.Execute();
+                }
             }
         }
     }

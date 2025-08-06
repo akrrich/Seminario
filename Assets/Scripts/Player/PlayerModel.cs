@@ -48,14 +48,8 @@ public class PlayerModel : MonoBehaviour
     public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
 
     public float Speed { get => speed; set => speed = value; }
-    public float TargetDrag { get; set; }
-    public bool IsGrounded
-    {
-        get
-        {
-            return Physics.SphereCast(transform.position, 0.3f, Vector3.down, out _, distanceToGround, groundLayer);
-        }
-    }
+
+    public bool IsGrounded { get =>  Physics.SphereCast(transform.position, 0.3f, Vector3.down, out _, distanceToGround, groundLayer); }
     public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCollidingTrash { get => isCollidingTrash; set => isCollidingTrash = value; }
@@ -72,16 +66,34 @@ public class PlayerModel : MonoBehaviour
         StartCoroutine(InvokeEventInitializationPlayer());
     }
 
-    void FixedUpdate()
-    {
-        Movement();
-    }
-
     void OnDrawGizmosSelected()
     {
         LineOfSight.DrawLOSOnGizmos(transform, playerTabernData.AngleVision, playerTabernData.RangeVision);
     }
 
+
+    public void Movement()
+    {
+        if (PlayerInputs.Instance != null && !isCooking && !isAdministrating)
+        {
+            Vector3 cameraForward = playerCamera.transform.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
+
+            Vector3 right = playerCamera.transform.right;
+            Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
+
+            rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+
+            if (IsGrounded)
+            {
+                rb.AddForce(Vector3.down * 10f, ForceMode.Force);
+            }
+
+            float targetDrag = IsGrounded ? playerTabernData.GroundDrag : 0.15f;
+            rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);
+        }
+    }
 
     /// <summary>
     /// Solucionar los LineOfSight de que mirando hacia un poco fuera del rango funcionan
@@ -161,29 +173,6 @@ public class PlayerModel : MonoBehaviour
     private void Initialize()
     {
         physicMaterial = capsuleCollider.material;
-    }
-
-    private void Movement()
-    {
-        if (PlayerInputs.Instance != null && !isCooking && !isAdministrating)
-        {
-            Vector3 cameraForward = playerCamera.transform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
-
-            Vector3 right = playerCamera.transform.right;
-            Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
-
-            rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
-
-            if (IsGrounded)
-            {
-                rb.AddForce(Vector3.down * 10f, ForceMode.Force);
-            }
-
-            float targetDrag = IsGrounded ? playerTabernData.GroundDrag : 0.15f;
-            rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);
-        }
     }
 
     private IEnumerator InvokeEventInitializationPlayer()
