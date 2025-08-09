@@ -1,11 +1,12 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+
 public class BearAI : EnemyBase
 {
     [Header("Oso")]
     [SerializeField] private float attackRange = 4f; // Distancia para atacar
-    [SerializeField] private float attackArea = 5f;  // ¡rea del ataque frontal
+    [SerializeField] private float attackArea = 5f;  // √Årea del ataque frontal
     [Space(2)]
     [Header("Audio")]
     [SerializeField] private AudioClip atkClip;
@@ -21,13 +22,21 @@ public class BearAI : EnemyBase
     {
         if (isDead || isAttacking) return;
 
+        // ‚¨áÔ∏è Bloque nuevo: pausa la IA durante el knockback
+        var kb = GetComponent<EnemyKnockback>();
+        if (kb != null && kb.IsActive)
+        {
+            agent.isStopped = true;
+            return;
+        }
+
         attackCooldownTimer += Time.deltaTime;
 
-        PerceptionUpdate(); 
+        PerceptionUpdate();
 
         if (!CanSeePlayer)
         {
-            agent.isStopped = true; 
+            agent.isStopped = true;
             return;
         }
 
@@ -47,22 +56,21 @@ public class BearAI : EnemyBase
     private IEnumerator BearClawAttack()
     {
         isAttacking = true;
-        // AnimaciÛn de ataque
-        yield return new WaitForSeconds(0.4f); // simula animaciÛn
+        yield return new WaitForSeconds(0.4f); // simula animaci√≥n
         audioSource.PlayOneShot(atkClip);
-        // Ataque en ·rea grande frente a Èl
+
+        // Ataque en √°rea grande frente a √©l
         Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * 2f, attackArea);
         foreach (var hit in hits)
         {
             if (hit.CompareTag("Player"))
-            {
                 hit.GetComponent<IDamageable>()?.TakeDamage(enemyData.Damage);
-            }
         }
+
         attackCooldownTimer = 0f;
         isAttacking = false;
     }
-    #region Gizmos (opcional)
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -72,5 +80,4 @@ public class BearAI : EnemyBase
         LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
     }
 #endif
-    #endregion
 }

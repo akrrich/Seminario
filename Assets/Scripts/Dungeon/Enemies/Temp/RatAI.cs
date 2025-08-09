@@ -1,37 +1,30 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-/// <summary>
-/// LÛgica de movimiento y ataque de la Rata.
-/// Se apoya en un NavMeshAgent para navegar.
-/// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
 public class RatAI : EnemyBase
 {
-    [Header("Movimiento err·tico")]
-    [SerializeField] private float circleRadius = 2f;  // radio del Ûrbita
+    [Header("Movimiento err√°tico")]
+    [SerializeField] private float circleRadius = 2f;
     [SerializeField] private float directionChangeInterval = 0.4f;
     [Space(2)]
     [Header("Audio")]
     [SerializeField] private AudioClip atkClip;
 
-    // --- Internos ---
-  
     private Vector3 currentOffset;
     private float dirTimer;
 
     private float attackCooldownTimer;
     private bool isAttacking;
-    #region Unity
+
     private void Start()
     {
-        // --- Configurar NavMeshAgent seg˙n datos ---
         agent = GetComponent<NavMeshAgent>();
         agent.speed = enemyData.Speed;
         agent.acceleration = 30f;
         agent.angularSpeed = 720f;
-        agent.stoppingDistance = enemyData.DistanceToPlayer; // 3 m
+        agent.stoppingDistance = enemyData.DistanceToPlayer;
         agent.autoBraking = false;
         agent.isStopped = true;
 
@@ -42,24 +35,23 @@ public class RatAI : EnemyBase
     {
         if (player == null || isAttacking) return;
 
+        // ‚¨áÔ∏è Bloque nuevo: pausa durante el knockback
+        var kb = GetComponent<EnemyKnockback>();
+        if (kb != null && kb.IsActive)
+        {
+            agent.isStopped = true;
+            return;
+        }
+
         attackCooldownTimer += Time.deltaTime;
 
         PerceptionUpdate();
 
         if (canSeePlayer)
-        {
             ChasePlayer();
-        }
         else
-        {
             ErraticMove();
-        }
-
     }
-
-    #endregion
-
-    #region Movimiento
 
     private void ChasePlayer()
     {
@@ -77,7 +69,7 @@ public class RatAI : EnemyBase
 
     private void ErraticMove()
     {
-        agent.speed = enemyData.Speed * 1.2f; 
+        agent.speed = enemyData.Speed * 1.2f;
 
         dirTimer -= Time.deltaTime;
         if (dirTimer <= 0f)
@@ -89,20 +81,15 @@ public class RatAI : EnemyBase
 
             NavMeshHit hit;
             if (NavMesh.SamplePosition(targetPos, out hit, 1.0f, NavMesh.AllAreas))
-            {
                 agent.SetDestination(hit.position);
-            }
             else
-            {
-                agent.SetDestination(player.position); // fallback
-            }
+                agent.SetDestination(player.position);
 
             dirTimer = directionChangeInterval;
         }
 
         agent.isStopped = false;
 
-        // Si est· lo suficientemente cerca, intenta atacar
         float dist = Vector3.Distance(transform.position, player.position);
         if (dist <= enemyData.DistanceToPlayer)
         {
@@ -111,30 +98,24 @@ public class RatAI : EnemyBase
         }
     }
 
-    #endregion
-    #region Ataque
     private void TryAttack()
     {
         if (attackCooldownTimer < enemyData.AttackCooldown) return;
 
         playerDamageable?.TakeDamage(enemyData.Damage);
-
-        Debug.Log($"[{name}] Mordisco al jugador ({enemyData.Damage} de daÒo).");
         audioSource.PlayOneShot(atkClip);
+
         attackCooldownTimer = 0f;
         StartCoroutine(AttackDelay());
     }
 
-    // Breve ìpauseî para simular la animaciÛn de mordida
     private IEnumerator AttackDelay()
     {
         isAttacking = true;
-        yield return new WaitForSeconds(0.3f);  // ìventanaî de animaciÛn
+        yield return new WaitForSeconds(0.3f);
         isAttacking = false;
     }
-    #endregion
 
-    #region Gizmos (opcional)
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -144,5 +125,4 @@ public class RatAI : EnemyBase
         LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
     }
 #endif
-    #endregion
 }
