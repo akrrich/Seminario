@@ -28,6 +28,7 @@ public class DeviceManager : Singleton<DeviceManager>
     void Awake()
     {
         CreateSingleton(true);
+          
     }
 
     void Update()
@@ -44,24 +45,25 @@ public class DeviceManager : Singleton<DeviceManager>
         {
             if (!deviceManagerData.UseCursorAllTime)
             {
+                Cursor.lockState = CursorLockMode.Locked; 
                 Cursor.visible = false;
             }
         }
-
         else if (currentDevice == Device.KeyboardMouse)
         {
             if (isUIModeActive)
             {
                 if (!deviceManagerData.UseCursorAllTime)
                 {
-                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;               
                 }
             }
-
             else
             {
                 if (!deviceManagerData.UseCursorAllTime)
                 {
+                    Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
             }

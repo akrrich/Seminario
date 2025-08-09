@@ -187,7 +187,7 @@ MonoBehaviour:
   id: rat
   circleRadius: 2
   directionChangeInterval: 0.4
-  atkClip: {fileID: 0}
+  atkClip: {fileID: 8300000, guid: 84e4f9b179b52c84b982b891220940d7, type: 3}
 --- !u!114 &7176120685118009747
 MonoBehaviour:
   m_ObjectHideFlags: 0
