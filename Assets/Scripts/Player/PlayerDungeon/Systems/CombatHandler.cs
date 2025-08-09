@@ -13,8 +13,7 @@ public class CombatHandler : MonoBehaviour
 
     private void Awake()
     {
-        GetComponents();
-      
+        GetComponents();      
     }
 
     public void TryAttack()
