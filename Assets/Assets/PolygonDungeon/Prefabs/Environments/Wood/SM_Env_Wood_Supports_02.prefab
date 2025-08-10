@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 482344}
   - component: {fileID: 3360766}
   - component: {fileID: 2328318}
+  - component: {fileID: 896798045682261185}
+  - component: {fileID: 8846141715921875740}
   m_Layer: 0
   m_Name: SM_Env_Wood_Supports_02
   m_TagString: Untagged
@@ -85,3 +87,45 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &896798045682261185
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146950}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.524269, y: 0.68273824, z: 0.45190418}
+  m_Center: {x: -0.043900605, y: 5.332949, z: -2.1572316}
+--- !u!65 &8846141715921875740
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146950}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.4364495, y: 0.6748068, z: 0.40297136}
+  m_Center: {x: 0.0000011114198, y: 5.323569, z: 2.1686294}
