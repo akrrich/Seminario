@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PauseManager : MonoBehaviour
+public class PauseManager : Singleton<PauseManager>
 {
-    private static PauseManager instance;
-
     [SerializeField] private AudioSource buttonClick;
     [SerializeField] private AudioSource buttonSelected;
 
@@ -25,8 +23,6 @@ public class PauseManager : MonoBehaviour
 
     private bool isGamePaused = false;
 
-    public static PauseManager Instance { get => instance; }
-
     public static Action<List<GameObject>> OnSendButtonsToEventSystem { get => onSendButtonsToEventSystem; set => onSendButtonsToEventSystem = value; }
 
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
@@ -39,7 +35,7 @@ public class PauseManager : MonoBehaviour
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(false);
         SuscribeToUpdateManagerEvent();
         InvokeEventToSendButtonsReferences();
     }
@@ -105,20 +101,6 @@ public class PauseManager : MonoBehaviour
         HideSettings();
     }
 
-
-    // Es si o si, sin DontDestroyOnLoad, ya que en algunas escenas no nos sirve y puede diferir entre la dungeon y la taberna
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-    }
 
     private void SuscribeToUpdateManagerEvent()
     {

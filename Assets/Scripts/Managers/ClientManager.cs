@@ -19,8 +19,11 @@ public class ClientManager : MonoBehaviour
 
     private float spawnTime = 0f;
 
-    [SerializeField] private bool InstantiateClients;
-    [SerializeField] private bool InstantiateTheSameClient;
+    // Provisorio
+    private bool isTabernOpen = false;
+
+    [SerializeField] private bool instantiateClients;
+    [SerializeField] private bool instantiateTheSameClient;
 
     public Transform SpawnPosition { get => spawnPosition; }
     public Transform OutsidePosition { get => outsidePosition; }
@@ -29,34 +32,21 @@ public class ClientManager : MonoBehaviour
     void Awake()
     {
         SuscribeToUpdateManagerEvent();
+        SuscribeToOpenTabernButtonEvent();
         InitializeClientPoolDictionary();
         InitializeFoodSpriteDictionary();
-
-        // Provisorio
-        if (InstantiateClients && !InstantiateTheSameClient)
-        {
-            StartCoroutine(InitializeRandomClient());
-        }
     }
 
     // Simulacion de Update
     void UpdateClientManager()
     {
-        // Provisorio
-        if (InstantiateTheSameClient)
-        {
-            GetTheSameClientFromPool();
-        }
-
-        else if (InstantiateClients)
-        {
-            GetClientRandomFromPool();
-        }
+        SpawnClients();
     }
 
     void OnDestroy()
     {
         UnsuscribeToUpdateManagerEvent();
+        UnsuscribeToOpenTabernButtonEvent();
     }
 
 
@@ -93,13 +83,50 @@ public class ClientManager : MonoBehaviour
         UpdateManager.OnUpdate -= UpdateClientManager;
     }
 
-    private IEnumerator InitializeRandomClient()
+    private void SuscribeToOpenTabernButtonEvent()
+    {
+        //+= SetIsTabernOpen;
+    }
+
+    private void UnsuscribeToOpenTabernButtonEvent()
+    {
+        //-= SetIsTabernOpen;
+    }
+
+    /*private IEnumerator InitializeRandomClient()
     {
         yield return new WaitUntil(() => clientPools.All(p => p != null && p.Prefab != null));
 
         int randomIndex = UnityEngine.Random.Range(0, clientPools.Count);
         string prefabName = clientPools[randomIndex].Prefab.name;
         clientAbstractFactory.CreateObject(prefabName);
+    }*/
+
+    private void SpawnClients()
+    {
+        // Provisorio
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            isTabernOpen = true;
+        }
+
+        if (isTabernOpen)
+        {
+            if (instantiateTheSameClient)
+            {
+                GetTheSameClientFromPool();
+            }
+
+            else if (instantiateClients)
+            {
+                GetClientRandomFromPool();
+            }
+        }
+    }
+
+    private void SetIsTabernOpen()
+    {
+        isTabernOpen = true;
     }
 
     private void GetClientRandomFromPool()

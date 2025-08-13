@@ -12,15 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095b00a556a04fa4eb756d06d3566dac, type: 3}
   m_Name: InputsKeyboard
   m_EditorClassIdentifier: 
-  grabFood: 101
-  handOverFood: 101
-  cook: 101
-  takeClientOrder: 101
-  cleanDirtyTable: 101
-  administration: 101
-  throwFoodToTrash: 101
   showOrHideDish: 113
   dash: 0
+  attack: 323
   interact: 101
   run: 304
   jump: 32

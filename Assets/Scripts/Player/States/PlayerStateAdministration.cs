@@ -45,7 +45,7 @@ public class PlayerStateAdministration<T> : State<T>
     {
         base.Execute();
 
-        if (PlayerInputs.Instance.Administration())
+        if (PlayerInputs.Instance.Interact())
         {
             Fsm.TransitionTo(inputToIdle);
         }

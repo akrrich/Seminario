@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
 
     private FSM<PlayerStates> fsm;
 
-    private static event Action<Food> onGrabFood;
     private static event Action onHandOverFood;
     private static event Action onTakeOrder;
     private static event Action onThrowFoodToTrash;
@@ -29,7 +28,6 @@ public class PlayerController : MonoBehaviour
     public PlayerModel PlayerModel { get => playerModel; }
     public PlayerView PlayerView { get => playerView; }
 
-    public static Action<Food> OnGrabFood { get => onGrabFood; set => onGrabFood = value; }
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
     public static Action OnThrowFoodToTrash { get => onThrowFoodToTrash; set => onThrowFoodToTrash = value; }
@@ -59,9 +57,6 @@ public class PlayerController : MonoBehaviour
     {
         fsm.OnExecute();
         CheckInputs();
-
-        // Provisorio
-        playerCollisions.UpdateColls();
     }
 
     // Simulacion de FixedUpdate
@@ -158,46 +153,8 @@ public class PlayerController : MonoBehaviour
     {
         if (PlayerInputs.Instance != null && PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
         {
-            GrabOrHandOverFood();
-            TakeClientOrder();
-            ThrowFoodToTrash();
             ShowOrHideDish();
         }
-    }
-
-    private void GrabOrHandOverFood()
-    {   
-        if (PlayerInputs.Instance.GrabFood())
-        {
-            Food currentFood = playerModel.IsLookingAtFood();
-
-            if (currentFood != null)
-            {
-                playerView.ShowOrHideDish(true);
-                onGrabFood?.Invoke(currentFood);
-            } 
-        }
-
-        if (PlayerInputs.Instance.HandOverFood())
-        {
-            onHandOverFood?.Invoke();
-        }   
-    }
-
-    private void TakeClientOrder()
-    {
-        if (PlayerInputs.Instance.TakeClientOrder())
-        {
-            onTakeOrder?.Invoke();
-        }   
-    }
-
-    private void ThrowFoodToTrash()
-    {
-        if (PlayerInputs.Instance.ThrowFoodToTrash() && playerModel.IsCollidingTrash && playerModel.IsLookingAtTrash(this))
-        {
-            onThrowFoodToTrash?.Invoke();
-        }   
     }
 
     private void ShowOrHideDish()
