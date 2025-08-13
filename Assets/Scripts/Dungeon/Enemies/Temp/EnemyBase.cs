@@ -23,16 +23,19 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     [SerializeField] protected float visionAngle = 100f;
     [SerializeField] protected LayerMask obstacleMask;
     [SerializeField] protected float chaseSpeedMultiplier = 1.5f;
-    [SerializeField] protected float loseSightDelay = 1.5f; // segundos antes de volver al movimiento errático
-    
+    [SerializeField] protected float loseSightDelay = 1.5f;
+
     protected Transform player;
     protected bool canSeePlayer = false;
     protected float loseSightTimer = 0f;
-    
+
     [Header("Health (runtime)")]
     public int currentHP;
     protected bool isDead = false;
     protected AudioSource audioSource;
+
+    [Header("Room Tracking")]
+    public RoomData roomData;
 
     [Header("Spawner ID")]
     [SerializeField] private string id;
@@ -73,8 +76,14 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     {
         isDead = true;
         agent.isStopped = true;
-        // Puedes poner animación o efectos aquí
+
         dropHandler?.DropLoot();
+
+        if (roomData != null)
+        {
+            roomData.NotifyEnemyDied(this.gameObject);
+        }
+
         Destroy(gameObject, 1.5f);
     }
 
@@ -132,7 +141,7 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
         currentHP = enemyData.HP;
         agent.speed = enemyData.Speed;
     }
-    #region Gizmos
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -142,5 +151,4 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
         LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
     }
 #endif
-    #endregion
 }
