@@ -51,4 +51,14 @@ public class Chest : MonoBehaviour, IInteractable
             yield return new WaitForSeconds(waitTimeBeforeDestroy);
 
     }
+
+    public void ShowOutline()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void HideOutline()
+    {
+        throw new System.NotImplementedException();
+    }
 }

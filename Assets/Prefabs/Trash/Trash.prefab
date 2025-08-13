@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 8325370358100094573}
   - component: {fileID: 3598235921020451883}
   - component: {fileID: 4353636841167164521}
-  m_Layer: 0
+  - component: {fileID: 8373231119157440982}
+  - component: {fileID: 1813591264370932969}
+  m_Layer: 10
   m_Name: Trash
   m_TagString: Trash
   m_Icon: {fileID: 0}
@@ -107,3 +109,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.100769, y: 1.100768, z: 1.100769}
   m_Center: {x: 0, y: 0.550384, z: 0}
+--- !u!114 &8373231119157440982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8425412932031635384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d769855986e1a354f97b5229174704cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1813591264370932969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8425412932031635384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 1, b: 0.015686275, a: 1}
+  outlineWidth: 0
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

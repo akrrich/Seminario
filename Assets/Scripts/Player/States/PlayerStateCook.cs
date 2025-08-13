@@ -4,6 +4,8 @@ public class PlayerStateCook<T> : State<T>
 {
     private PlayerModel playerModel;
     private PlayerView playerView;
+
+    private GameObject cookingDeskUI;
     private Transform cookingPosition;
 
     private bool lastDishState;
@@ -18,6 +20,7 @@ public class PlayerStateCook<T> : State<T>
         this.playerView = playerView;
 
         cookingPosition = GameObject.Find("CookingPosition").transform;
+        cookingDeskUI = GameObject.FindGameObjectWithTag("CookingDeskUI");
     }
 
     public override void Enter()
@@ -36,7 +39,7 @@ public class PlayerStateCook<T> : State<T>
         playerView.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = cookingPosition.transform.position;
-        playerModel.LookAt(playerModel.CookingDeskUI.transform.position);
+        playerModel.LookAt(cookingDeskUI.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 
@@ -44,7 +47,7 @@ public class PlayerStateCook<T> : State<T>
     {
         base.Execute();
 
-        if (PlayerInputs.Instance.Cook())
+        if (PlayerInputs.Instance.Interact())
         {
             Fsm.TransitionTo(inputToIdle);
         }

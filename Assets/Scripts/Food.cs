@@ -13,19 +13,19 @@ public enum CookingStates
     Burned
 }
 
-public class Food : MonoBehaviour
+public class Food : MonoBehaviour, IInteractable
 {
     // No usar el metodo OnDisabled de Unity
 
     [SerializeField] private FoodData foodData;
 
+    private Outline outline;
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
     private Rigidbody rb;
     private BoxCollider boxCollider;
     private MeshRenderer meshRenderer;
-    private GameObject foodTriggerGameObject;
     private Color originalColor;
 
     private Transform stovePosition;
@@ -38,6 +38,7 @@ public class Food : MonoBehaviour
 
     private bool isInstantiateFirstTime = true;
     private bool isInPlayerDishPosition = false;
+    private bool isServedInTable = false;
 
     public FoodType FoodType { get => foodType; }
     public CookingStates CurrentCookingState { get => currentCookingState; }
@@ -67,10 +68,41 @@ public class Food : MonoBehaviour
         RestartValues();
     }
 
+    /// <summary>
+    /// Agregar que si el plato estaba desactivado cuando agarro la comida que se active
+    /// </summary>
+    public void Interact()
+    {
+        if (gameObject.activeSelf && !isServedInTable && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
+        {
+            isInPlayerDishPosition = true;
+            isServedInTable = true;
+
+            cookingManager.ReleaseStovePosition(stovePosition);
+            playerDishPosition = cookingManager.MoveFoodToDish(this);
+
+            StartCoroutine(DisablePhysics());
+        }
+    }
+
+    public void ShowOutline()
+    {
+        if (!isServedInTable)
+        {
+            outline.OutlineWidth = 5f;
+            InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
+        }
+    }
+
+    public void HideOutline()
+    {
+        outline.OutlineWidth = 0f;
+        InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
+    }
+
 
     private void SuscribeToPlayerControllerEvents()
     {
-        PlayerController.OnGrabFood += Grab;
         PlayerController.OnHandOverFood += HandOver;
         PlayerController.OnThrowFoodToTrash += ThrowFoodToTrash;
 
@@ -80,7 +112,6 @@ public class Food : MonoBehaviour
 
     private void UnsuscribeToPlayerControllerEvents()
     {
-        PlayerController.OnGrabFood -= Grab;
         PlayerController.OnHandOverFood -= HandOver;
         PlayerController.OnThrowFoodToTrash -= ThrowFoodToTrash;
 
@@ -90,11 +121,11 @@ public class Food : MonoBehaviour
 
     private void GetComponents()
     {
+        outline = GetComponent<Outline>();
         cookingManager = FindFirstObjectByType<CookingManager>();
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         meshRenderer = GetComponent<MeshRenderer>();
-        foodTriggerGameObject = transform.Find("FoodTrigger").gameObject;
     }
 
     private void Initialize()
@@ -144,8 +175,6 @@ public class Food : MonoBehaviour
 
     private void RestartValues()
     {
-        foodTriggerGameObject.tag = "FoodTrigger";
-        foodTriggerGameObject.layer = LayerMask.NameToLayer("FoodTrigger");
         meshRenderer.material.color = originalColor;
 
         stovePosition = null;
@@ -158,6 +187,7 @@ public class Food : MonoBehaviour
 
         cookTimeCounter = 0f;
         isInPlayerDishPosition = false;
+        isServedInTable = false;
     }
 
     private void SaveTable(Table table)
@@ -191,25 +221,6 @@ public class Food : MonoBehaviour
         {
             Debug.Log("Quemado");
             currentCookingState = CookingStates.Burned;
-        }
-    }
-
-    private void Grab(Food currentFood)
-    {
-        if (currentFood == this)
-        {
-            // Es importante que este activo para que no haya errores cuando se invoca el evento      // Si hay posiciones disponibles en la bandeja
-            if (gameObject.activeSelf && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
-            {
-                isInPlayerDishPosition = true;
-                foodTriggerGameObject.tag = "Untagged";
-                foodTriggerGameObject.layer = LayerMask.NameToLayer("Default");
-
-                cookingManager.ReleaseStovePosition(stovePosition);
-                playerDishPosition = cookingManager.MoveFoodToDish(this);
-
-                StartCoroutine(DisablePhysics());
-            }
         }
     }
 

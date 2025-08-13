@@ -8,14 +8,6 @@ public class PlayerCollisions
     private ClientView auxiliarClientView;
 
 
-    // Test
-    public void UpdateColls()
-    {
-        //Debug.Log("AuxiliarTable: " + auxiliarTable);
-        //Debug.Log("AuxiliarClient: " + auxiliarClientView);
-    }
-
-
     public PlayerCollisions(PlayerController playerController)
     {
         this.playerController = playerController;
@@ -24,26 +16,20 @@ public class PlayerCollisions
 
     public void OnCollisionsEnter(Collision collision)
     {
-        OnCollisionEnterWithCookingDeskUIAndLOS(collision);
-        OnCollisionEnterWithTrashAndLOS(collision);
         OnCollisionEnterWithAdministration(collision);
-        OnCollisionEnterWithTable(collision); 
+        //OnCollisionEnterWithTable(collision); 
     }
 
     public void OnCollisionsStay(Collision collision)
     {
-        OnCollisionStayWithCookingDeskUIAndLOS(collision);
-        OnCollisionStayWithTrashAndLOS(collision);
         OnCollisionStayWithAdministrationAndLOS(collision);
-        OnCollisionStayWithTable(collision);
+        //OnCollisionStayWithTable(collision);
     }
 
     public void OnCollisionsExit(Collision collision)
     {
-        OnCollisionExitWithCookingDeskUI(collision);
-        OnCollisionExitWithTrash(collision);
         OnCollisionExitWithAdministration(collision);
-        OnCollisionExitWithTable(collision);
+        //OnCollisionExitWithTable(collision);
     }
 
     public void OnTriggerEnter(Collider collider)
@@ -53,24 +39,6 @@ public class PlayerCollisions
 
 
     /* ----------------------------------------COLLISION ENTER-------------------------------------------- */
-
-    private void OnCollisionEnterWithCookingDeskUIAndLOS(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("CookingDeskUI") && playerController.PlayerModel.IsLookingAtCookingDeskUI())
-        {
-            playerController.PlayerModel.IsCollidingCookingDeskUI = true;
-            PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage?.Invoke();
-        }
-    }
-
-    private void OnCollisionEnterWithTrashAndLOS(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Trash") && playerController.PlayerModel.IsLookingAtTrash(playerController))
-        {
-            playerController.PlayerModel.IsCollidingTrash = true;
-            PlayerView.OnCollisionEnterWithTrashForTrashModeMessage?.Invoke();   
-        }
-    }
 
     private void OnCollisionEnterWithAdministration(Collision collision)
     {
@@ -93,72 +61,11 @@ public class PlayerCollisions
                 PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage?.Invoke();
                 return;
             }
-
-            /*if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
-            {
-                // Tomar Pedido
-                ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
-
-                if (table.IsOccupied && clientView.ReturnSpriteWaitingToBeAttendedIsActive())
-                {
-                    clientView.CanTakeOrder = true;
-                    PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(table);
-                    PlayerView.OnCollisionEnterWithTableForTakeOrderMessage?.Invoke();
-                    return;
-                }
-
-                // Entregar Pedido
-                bool hasChildren = false;
-                foreach (Transform child in playerController.PlayerView.Dish.transform)
-                {
-                    if (child.childCount > 0)
-                    {
-                        hasChildren = true;
-                        break;
-                    }
-                }
-
-                if (hasChildren)
-                {
-                    if (table.IsOccupied && clientView.ReturnSpriteFoodIsActive())
-                    {
-                        PlayerController.OnTableCollisionEnterForHandOverFood?.Invoke(table);
-                        PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
-                    }  
-                }
-            }*/
         }
     }
 
     /* ------------------------------------------COLLISION STAY------------------------------------------- */
 
-    private void OnCollisionStayWithCookingDeskUIAndLOS(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("CookingDeskUI") && playerController.PlayerModel.IsLookingAtCookingDeskUI())
-        {
-            playerController.PlayerModel.IsCollidingCookingDeskUI = true;
-            PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage?.Invoke();
-        }
-
-        if (collision.gameObject.CompareTag("CookingDeskUI") && !playerController.PlayerModel.IsLookingAtCookingDeskUI())
-        {
-            PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage?.Invoke();
-        }
-    }
-
-    private void OnCollisionStayWithTrashAndLOS(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Trash") && playerController.PlayerModel.IsLookingAtTrash(playerController))
-        {
-            playerController.PlayerModel.IsCollidingTrash = true;
-            PlayerView.OnCollisionEnterWithTrashForTrashModeMessage?.Invoke();
-        }
-
-        if (collision.gameObject.CompareTag("Trash") && !playerController.PlayerModel.IsLookingAtTrash(playerController))
-        {
-            PlayerView.OnCollisionExitWithTrashForTrashModeMessage?.Invoke();
-        }
-    }
 
     private void OnCollisionStayWithAdministrationAndLOS(Collision collision)
     {
@@ -182,6 +89,9 @@ public class PlayerCollisions
 
             if (table.IsDirty)
             {
+                PlayerView.OnActivateSliderCleanDirtyTable?.Invoke();
+                PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage?.Invoke();
+
                 if (PlayerInputs.Instance.CleanDirtyTable())
                 {
                     PlayerController.OnCleanDirtyTableIncreaseSlider?.Invoke(table);
@@ -256,24 +166,6 @@ public class PlayerCollisions
 
     /* -------------------------------------------COLLISION EXIT----------------------------------------- */
     
-    private void OnCollisionExitWithCookingDeskUI(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("CookingDeskUI"))
-        {
-            playerController.PlayerModel.IsCollidingCookingDeskUI = false;
-            PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage?.Invoke();
-        }
-    }
-
-    private void OnCollisionExitWithTrash(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Trash"))
-        {
-            playerController.PlayerModel.IsCollidingTrash = false;
-            PlayerView.OnCollisionExitWithTrashForTrashModeMessage?.Invoke();
-        }
-    }
-
     private void OnCollisionExitWithAdministration(Collision collision)
     {
         if (collision.gameObject.CompareTag("Administration"))

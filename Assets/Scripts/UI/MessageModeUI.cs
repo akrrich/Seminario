@@ -101,42 +101,42 @@ public class MessageModeUI : MonoBehaviour
     private KeyCode GetCookKey()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Cook
-            : PlayerInputs.Instance.KeyboardInputs.Cook;
+            ? PlayerInputs.Instance.JoystickInputs.Interact
+            : PlayerInputs.Instance.KeyboardInputs.Interact;
     }
 
     private KeyCode GetAdministrationKey()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Administration
-            : PlayerInputs.Instance.KeyboardInputs.Administration;
+            ? PlayerInputs.Instance.JoystickInputs.Interact
+            : PlayerInputs.Instance.KeyboardInputs.Interact;
     }
 
     private KeyCode GetHandOverKey()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.HandOverFood
-            : PlayerInputs.Instance.KeyboardInputs.HandOverFood;
+            ? PlayerInputs.Instance.JoystickInputs.Interact
+            : PlayerInputs.Instance.KeyboardInputs.Interact;
     }
 
     private KeyCode GetTakeOrderKey()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.TakeClientOrder
-            : PlayerInputs.Instance.KeyboardInputs.TakeClientOrder;
+            ? PlayerInputs.Instance.JoystickInputs.Interact
+            : PlayerInputs.Instance.KeyboardInputs.Interact;
     }
 
     private KeyCode GetCleanDirtyTableKey()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.CleanDirtyTable
-            : PlayerInputs.Instance.KeyboardInputs.CleanDirtyTable;
+            ? PlayerInputs.Instance.JoystickInputs.Interact
+            : PlayerInputs.Instance.KeyboardInputs.Interact;
     }
 
     private KeyCode GetThrowFoodToTrashKey()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.ThrowFoodToTrash
-            : PlayerInputs.Instance.KeyboardInputs.ThrowFoodToTrash;
+            ? PlayerInputs.Instance.JoystickInputs.Interact
+            : PlayerInputs.Instance.KeyboardInputs.Interact;
     }
 }

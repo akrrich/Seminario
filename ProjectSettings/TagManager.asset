@@ -10,7 +10,6 @@ TagManager:
   - Chair
   - PortalDungeon
   - CookingDeskUI
-  - FoodTrigger
   - Trash
   - PortalToTabern
   layers:

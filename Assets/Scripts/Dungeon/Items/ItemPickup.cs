@@ -7,6 +7,11 @@ public class ItemPickup : MonoBehaviour, IInteractable
     [SerializeField] private ItemData itemData;
     [SerializeField] private bool destroyOnPickup = true;
 
+    public void HideOutline()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public void Interact()          // tu interfaz es void Interact()
     {
         switch (itemData.type)
@@ -30,5 +35,10 @@ public class ItemPickup : MonoBehaviour, IInteractable
         }
 
         if (destroyOnPickup) Destroy(gameObject);
+    }
+
+    public void ShowOutline()
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -54,7 +54,11 @@ public class DeviceManager : Singleton<DeviceManager>
             {
                 if (!deviceManagerData.UseCursorAllTime)
                 {
-                    Cursor.visible = true;
+                    if (!Cursor.visible)
+                    {
+                        Cursor.visible = true;
+                        InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(false);
+                    }
                 }
             }
 
@@ -62,7 +66,11 @@ public class DeviceManager : Singleton<DeviceManager>
             {
                 if (!deviceManagerData.UseCursorAllTime)
                 {
-                    Cursor.visible = false;
+                    if (Cursor.visible)
+                    {
+                        Cursor.visible = false;
+                        InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(true);
+                    }
                 }
             }
         }
