@@ -45,6 +45,7 @@ public class DeviceManager : Singleton<DeviceManager>
             if (!deviceManagerData.UseCursorAllTime)
             {
                 Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
 
@@ -57,6 +58,7 @@ public class DeviceManager : Singleton<DeviceManager>
                     if (!Cursor.visible)
                     {
                         Cursor.visible = true;
+                        Cursor.lockState = CursorLockMode.None;
                         InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(false);
                     }
                 }
@@ -69,6 +71,7 @@ public class DeviceManager : Singleton<DeviceManager>
                     if (Cursor.visible)
                     {
                         Cursor.visible = false;
+                        Cursor.lockState = CursorLockMode.Locked;
                         InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(true);
                     }
                 }
