@@ -22,18 +22,18 @@ public class MessageModeUI : MonoBehaviour
 
     void OnDestroy()
     {
-        UnSuscribeToPlayerViewEvents();
+        UnsuscribeToPlayerViewEvents();
     }
 
 
     private void InitializeLamdaEventMessages()
     {
-        onCook += () => ShowEnterMessageText("Presione", GetCookKey(), "para entrar a cocinar");
-        onAdministration += () => ShowEnterMessageText("Presione", GetAdministrationKey(), "para entrar en administracion");
-        onHandOver += () => ShowEnterMessageText("Presione", GetHandOverKey(), "para entregar el plato");
-        onTakeOrder += () => ShowEnterMessageText("Presione", GetTakeOrderKey(), "para tomar el pedido");
-        onCleanDirtyTable += () => ShowEnterMessageText("Mantener", GetCleanDirtyTableKey(), "para limpiar la mesa");
-        onThrowFoodToTrash += () => ShowEnterMessageText("Presione", GetThrowFoodToTrashKey(), "para tirar la comida a la basura");
+        onCook += () => ShowEnterMessageText("Presione", "para entrar a cocinar");
+        onAdministration += () => ShowEnterMessageText("Presione", "para entrar en administracion");
+        onHandOver += () => ShowEnterMessageText("Presione", "para entregar el plato");
+        onTakeOrder += () => ShowEnterMessageText("Presione", "para tomar el pedido");
+        onCleanDirtyTable += () => ShowEnterMessageText("Mantener", "para limpiar la mesa");
+        onThrowFoodToTrash += () => ShowEnterMessageText("Presione", "para tirar la comida a la basura");
     }
 
     private void SuscribeToPlayerViewEvents()
@@ -59,7 +59,7 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionExitWithTrashForTrashModeMessage += DisapearMessageText;
     }
 
-    private void UnSuscribeToPlayerViewEvents()
+    private void UnsuscribeToPlayerViewEvents()
     {
         PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage -= onCook;
         PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage -= DisapearMessageText;
@@ -87,9 +87,9 @@ public class MessageModeUI : MonoBehaviour
         messageDesplayText.alignment = TextAlignmentOptions.Center;
     }
 
-    private void ShowEnterMessageText(string actionText, KeyCode inputKey, string finalMessage)
+    private void ShowEnterMessageText(string actionText, string finalMessage)
     {
-        string keyText = $"<color=yellow> {inputKey} </color>";
+        string keyText = $"<color=yellow> {GetInteractInput()} </color>";
         messageDesplayText.text = $"{actionText} {keyText} {finalMessage}";
     }
 
@@ -98,42 +98,7 @@ public class MessageModeUI : MonoBehaviour
         messageDesplayText.text = "";
     }
 
-    private KeyCode GetCookKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Interact
-            : PlayerInputs.Instance.KeyboardInputs.Interact;
-    }
-
-    private KeyCode GetAdministrationKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Interact
-            : PlayerInputs.Instance.KeyboardInputs.Interact;
-    }
-
-    private KeyCode GetHandOverKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Interact
-            : PlayerInputs.Instance.KeyboardInputs.Interact;
-    }
-
-    private KeyCode GetTakeOrderKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Interact
-            : PlayerInputs.Instance.KeyboardInputs.Interact;
-    }
-
-    private KeyCode GetCleanDirtyTableKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Interact
-            : PlayerInputs.Instance.KeyboardInputs.Interact;
-    }
-
-    private KeyCode GetThrowFoodToTrashKey()
+    private KeyCode GetInteractInput()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
             ? PlayerInputs.Instance.JoystickInputs.Interact
