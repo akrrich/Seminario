@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 928760461818943219}
   - component: {fileID: 401546194902698572}
   - component: {fileID: 2707193042321966065}
+  - component: {fileID: 6545978004326890987}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
@@ -137,7 +138,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1668090225508558710}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.5912543, z: -0, w: 0.8064853}
+  m_LocalRotation: {x: 0, y: 0.5912533, z: 0, w: 0.80648595}
   m_LocalPosition: {x: -3.0105758, y: -0.85999984, z: 0.13502052}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -232,9 +233,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c6d13687bb7e714c85ee70255d2d8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  table: {fileID: 0}
-  lootDB: {fileID: 0}
-  spawnPoint: {fileID: 0}
+  table: {fileID: 11400000, guid: 593ca2009df1a604fbf9b1ff64bca9a7, type: 2}
+  lootDB: {fileID: 11400000, guid: dec7d8b66e1a9cd46a53f7940c0f0234, type: 2}
+  spawnPoint: {fileID: 2851994795772086849}
 --- !u!114 &2707193042321966065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,6 +255,24 @@ MonoBehaviour:
   animator: {fileID: 873843224485730443}
   destroyAfterOpen: 0
   waitTimeBeforeDestroy: 2
+--- !u!114 &6545978004326890987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668090225508558710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 1, b: 0.8559098, a: 1}
+  outlineWidth: 2.5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &2921260011291357130
 GameObject:
   m_ObjectHideFlags: 0

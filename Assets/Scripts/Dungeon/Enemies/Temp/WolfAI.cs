@@ -1,11 +1,11 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
 public class WolfAI : EnemyBase
 {
     [Header("Lobo")]
-    [SerializeField] private float attackRange = 5f; // ·rea de impacto del salto
+    [SerializeField] private float attackRange = 5f; // √°rea de impacto del salto
     [SerializeField] private float leapDelay = 0.5f; // Pausa antes de saltar
     [Space(2)]
     [Header("Audio")]
@@ -22,9 +22,17 @@ public class WolfAI : EnemyBase
     {
         if (isDead || isAttacking) return;
 
+        // ‚¨áÔ∏è Bloque nuevo: no dar √≥rdenes al agent mientras dura el knockback
+        var kb = GetComponent<EnemyKnockback>();
+        if (kb != null && kb.IsActive)
+        {
+            agent.isStopped = true;
+            return;
+        }
+
         attackCooldownTimer += Time.deltaTime;
 
-        PerceptionUpdate(); 
+        PerceptionUpdate();
 
         // Siempre persigue al jugador
         agent.isStopped = false;
@@ -42,25 +50,21 @@ public class WolfAI : EnemyBase
     private IEnumerator JumpAndBite()
     {
         isAttacking = true;
-        // AquÌ puedes poner animaciÛn de agacharse
         yield return new WaitForSeconds(leapDelay);
         audioSource.PlayOneShot(atkClip);
-        // Ataque en ·rea pequeÒa
-        Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Player"));
 
+        Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Player"));
         foreach (var hit in hits)
         {
             var damageable = hit.GetComponent<IDamageable>();
             if (damageable != null)
-            {
                 damageable.TakeDamage(enemyData.Damage);
-            }
         }
 
         attackCooldownTimer = 0f;
         isAttacking = false;
     }
-    #region Gizmos (opcional)
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
@@ -70,5 +74,4 @@ public class WolfAI : EnemyBase
         LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
     }
 #endif
-    #endregion
 }

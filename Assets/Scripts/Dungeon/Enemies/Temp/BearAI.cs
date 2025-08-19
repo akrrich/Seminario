@@ -1,14 +1,16 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+
 public class BearAI : EnemyBase
 {
     [Header("Oso")]
-    [SerializeField] private float attackRange = 4f; // Distancia para atacar
-    [SerializeField] private float attackArea = 5f;  // Área del ataque frontal
-    [Space(2)]
+    [SerializeField] private float attackRange = 4f;
+    [SerializeField] private float attackArea = 5f;
+
     [Header("Audio")]
     [SerializeField] private AudioClip atkClip;
+
     private float attackCooldownTimer = 0f;
     private bool isAttacking;
 
@@ -21,37 +23,93 @@ public class BearAI : EnemyBase
     {
         if (isDead || isAttacking) return;
 
-        attackCooldownTimer += Time.deltaTime;
-
-        PerceptionUpdate(); 
-
-        if (!CanSeePlayer)
+        if (IsInKnockback())
         {
-            agent.isStopped = true; 
+            agent.isStopped = true;
             return;
         }
 
-        // Movimiento hacia el jugador
-        agent.isStopped = false;
-        agent.SetDestination(player.position);
+        HandlePerception();
+        HandleMovementAndAttack();
+    }
 
-        float dist = Vector3.Distance(transform.position, player.position);
+    #region Behavior Methods
 
-        if (dist <= attackRange && attackCooldownTimer >= enemyData.AttackCooldown)
+    private bool IsInKnockback()
+    {
+        var kb = GetComponent<EnemyKnockback>();
+        return kb != null && kb.IsActive;
+    }
+
+    private void HandlePerception()
+    {
+        attackCooldownTimer += Time.deltaTime;
+        PerceptionUpdate();
+    }
+
+    private void HandleMovementAndAttack()
+    {
+        if (!CanSeePlayer)
         {
-            agent.isStopped = true;
-            StartCoroutine(BearClawAttack());
+            StopAgent();
+            return;
+        }
+
+        MoveTowardsPlayer();
+
+        if (IsInAttackRange() && attackCooldownTimer >= enemyData.AttackCooldown)
+        {
+            StopAgent();
+            StartCoroutine(CO_BearClawAttack());
         }
     }
 
-    private IEnumerator BearClawAttack()
+    private bool IsInAttackRange()
+    {
+        return Vector3.Distance(transform.position, player.position) <= attackRange;
+    }
+
+    private void MoveTowardsPlayer()
+    {
+        agent.isStopped = false;
+        agent.SetDestination(player.position);
+    }
+
+    private void StopAgent()
+    {
+        agent.isStopped = true;
+    }
+
+    #endregion
+
+    #region Attack Coroutine
+
+    private IEnumerator CO_BearClawAttack()
     {
         isAttacking = true;
-        // Animación de ataque
-        yield return new WaitForSeconds(0.4f); // simula animación
-        audioSource.PlayOneShot(atkClip);
-        // Ataque en área grande frente a él
-        Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward * 2f, attackArea);
+
+        yield return new WaitForSeconds(0.4f); // SimulaciÃ³n de animaciÃ³n de ataque
+
+        PlayAttackSound();
+        PerformAreaAttack();
+
+        attackCooldownTimer = 0f;
+        isAttacking = false;
+    }
+
+    private void PlayAttackSound()
+    {
+        if (atkClip != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(atkClip);
+        }
+    }
+
+    private void PerformAreaAttack()
+    {
+        Vector3 attackCenter = transform.position + transform.forward * 2f;
+        Collider[] hits = Physics.OverlapSphere(attackCenter, attackArea);
+
         foreach (var hit in hits)
         {
             if (hit.CompareTag("Player"))
@@ -59,18 +117,17 @@ public class BearAI : EnemyBase
                 hit.GetComponent<IDamageable>()?.TakeDamage(enemyData.Damage);
             }
         }
-        attackCooldownTimer = 0f;
-        isAttacking = false;
     }
-    #region Gizmos (opcional)
+
+    #endregion
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         if (enemyData == null) return;
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, enemyData.DistanceToPlayer);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 2f, attackArea);
         LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
     }
 #endif
-    #endregion
 }

@@ -7,38 +7,50 @@ public class ItemPickup : MonoBehaviour, IInteractable
     [SerializeField] private ItemData itemData;
     [SerializeField] private bool destroyOnPickup = true;
 
-    public void HideOutline()
+    private Outline outline;
+
+    private void Awake()
     {
-        throw new System.NotImplementedException();
+        outline = GetComponent<Outline>();
     }
 
-    public void Interact()          // tu interfaz es void Interact()
+    public void Interact()
     {
         switch (itemData.type)
         {
-            // ————————————————— Currency (dientes)
             case ItemType.Currency:
                 MoneyManager.Instance.AddMoney(itemData.valueInTeeth);
                 Debug.Log($"+{itemData.valueInTeeth} dientes");
                 break;
 
-            // ————————————————— Recipe
             case ItemType.Recipe:
-                // TODO: RecipeBook.Instance.Unlock(itemData);
                 Debug.Log($"Receta desbloqueada: {itemData.itemName}");
                 break;
 
-            // ————————————————— Otros
             case ItemType.Misc:
                 Debug.Log($"Objeto misceláneo obtenido: {itemData.itemName}");
                 break;
         }
 
-        if (destroyOnPickup) Destroy(gameObject);
+        if (destroyOnPickup)
+            Destroy(gameObject);
     }
 
     public void ShowOutline()
     {
-        throw new System.NotImplementedException();
+        if (outline != null)
+        {
+            outline.OutlineWidth = 5f;
+            InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
+        }
+    }
+
+    public void HideOutline()
+    {
+        if (outline != null)
+        {
+            outline.OutlineWidth = 0f;
+            InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
+        }
     }
 }

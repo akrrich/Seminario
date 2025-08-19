@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ClientData
   m_EditorClassIdentifier: 
   speed: 3
-  maxTimeWaitingForChair: 7
-  maxTimeWaitingToBeAttended: 10
-  maxTimeWaitingFood: 15
+  maxTimeWaitingForChair: 15
+  maxTimeWaitingToBeAttended: 35
+  maxTimeWaitingFood: 45
   maxTimeEating: 5

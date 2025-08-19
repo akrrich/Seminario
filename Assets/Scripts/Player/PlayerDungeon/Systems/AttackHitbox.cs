@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class AttackHitbox : MonoBehaviour
@@ -15,7 +14,13 @@ public class AttackHitbox : MonoBehaviour
 
     [Header("Pivot")]
     [Tooltip("Transform desde el que se calcula el offset (usa Orientation)")]
-    [SerializeField] private Transform pivot;   
+    [SerializeField] private Transform pivot;
+
+    [Header("Knockback")]
+    [SerializeField] private bool applyKnockback = true;
+    [SerializeField] private float knockbackDistance = 1.0f;
+    [SerializeField] private float knockbackDuration = 0.12f;
+    [SerializeField] private float knockbackVerticalLift = 0.10f;
 
     [Header("Debug")]
     [SerializeField] private bool showGizmos = true;
@@ -23,8 +28,6 @@ public class AttackHitbox : MonoBehaviour
     private void Awake()
     {
         model = GetComponent<PlayerDungeonModel>();
-
-        // Si olvidamos asignarlo, usa el propio transform (compatible con escenas viejas)
         if (pivot == null)
             pivot = transform.Find("Orientation") ?? transform;
     }
@@ -36,18 +39,29 @@ public class AttackHitbox : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(worldCenter, radius, targetLayer);
 
         foreach (var hit in hits)
+        {
             if (hit.TryGetComponent<IDamageable>(out var target))
+            {
                 target.TakeDamage(model.CurrentWeaponDamage);
+            }
+
+            // Aplicar knockback si el objetivo lo soporta
+            if (applyKnockback && hit.TryGetComponent<EnemyKnockback>(out var kb))
+            {
+                Vector3 dir = hit.transform.position - worldCenter;
+                dir.y = 0f; // el lift lo maneja el propio componente
+                if (dir.sqrMagnitude < 0.0001f) dir = pivot.forward; // fallback
+                kb.ApplyKnockback(dir.normalized, knockbackDistance, knockbackDuration, knockbackVerticalLift);
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()
     {
         if (!showGizmos) return;
-
         Transform p = pivot != null ? pivot : transform;
         Vector3 center = p.TransformPoint(localOffset);
-
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(center, radius);   // esfera en lugar de disco
+        Gizmos.DrawWireSphere(center, radius);
     }
 }

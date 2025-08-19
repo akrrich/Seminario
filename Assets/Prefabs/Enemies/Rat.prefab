@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7176120685118009747}
   - component: {fileID: 7802449608495120121}
   - component: {fileID: 7028901244938031619}
+  - component: {fileID: 4204138856425193248}
   m_Layer: 9
   m_Name: Rat
   m_TagString: Untagged
@@ -186,7 +187,7 @@ MonoBehaviour:
   id: rat
   circleRadius: 2
   directionChangeInterval: 0.4
-  atkClip: {fileID: 0}
+  atkClip: {fileID: 8300000, guid: 84e4f9b179b52c84b982b891220940d7, type: 3}
 --- !u!114 &7176120685118009747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,3 +315,39 @@ MonoBehaviour:
   table: {fileID: 11400000, guid: b4b52bef8a2c20748ae21835d99a5aa0, type: 2}
   lootDB: {fileID: 11400000, guid: dec7d8b66e1a9cd46a53f7940c0f0234, type: 2}
   spawnPoint: {fileID: 1149854613710125804}
+--- !u!114 &4204138856425193248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7724425054083080287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e3337f64010d84a865697aa1a0e0e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ease:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
