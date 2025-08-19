@@ -25,6 +25,7 @@ public class CombatHandler : MonoBehaviour
         view?.PlayAttackAnimation();
         weaponController?.PerformAttack();
         PerformHit();
+        CombatFeedbackManager.Instance.ShakeCamera(0.1f, 0.15f, 3f);
     }
     public void PerformHit()
     {

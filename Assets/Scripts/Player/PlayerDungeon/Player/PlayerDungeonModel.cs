@@ -116,7 +116,9 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         if (invulnerable) return;
 
         currentHP = Mathf.Clamp(currentHP - amount, 0, maxHP);
-        OnHealthChanged?.Invoke(currentHP, maxHP); 
+        CombatFeedbackManager.Instance.PlayRandomDamageSound(transform.position);
+        OnHealthChanged?.Invoke(currentHP, maxHP);
+        CombatFeedbackManager.Instance.ShakeCamera(0.15f, 0.25f, 5f);
 
         if (currentHP <= 0 && !isDead)
         {
@@ -212,16 +214,22 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     private IEnumerator DeathSequence()
     {
-        string[] additiveScenes = { "MainMenuUI" };
-        yield return StartCoroutine(ScenesManager.Instance.LoadScene("MainMenu", additiveScenes));
-        // Reset stats
-        currentHP = maxHP;
-        isDead = false;
-        SetInvulnerable(false);
-        CanMove = true;
-        // TODO:
-        // DungeonManager.Instance.ReturnToLobby();
-        // DungeonManager.Instance.ResetDungeon();
+        {        
+            yield return new WaitForSeconds(1f); // espera 1 segundo 
+
+            // tp al spawn point
+            DungeonManager.Instance.OnPlayerDeath();
+
+            // Restaurar estado del jugador
+            currentHP = maxHP;
+            isDead = false;
+            SetInvulnerable(false);
+            CanMove = true;
+
+            OnHealthChanged?.Invoke(currentHP, maxHP); // actualiza el HUD
+
+            Debug.Log("Jugador respawneado en la dungeon");
+        }
     }
     #endregion
 
