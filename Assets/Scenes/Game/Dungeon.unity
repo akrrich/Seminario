@@ -4907,6 +4907,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitSound: {fileID: 0}
+  damageSounds:
+  - {fileID: 8300000, guid: c099742a72e90e24083737d3d9130e47, type: 3}
+  - {fileID: 8300000, guid: 7b225c86c62c4c344a7d81f3c2dc86bc, type: 3}
+  - {fileID: 8300000, guid: 876f6431179fbb8438f04e235a6bdaaa, type: 3}
+  - {fileID: 8300000, guid: 2a767ae04263b134b930642d3c9f1257, type: 3}
   hitVFX: {fileID: 0}
 --- !u!1 &769800434
 GameObject:
