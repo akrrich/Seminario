@@ -5,7 +5,6 @@ using UnityEngine;
 public class CombatFeedbackManager : MonoBehaviour
 {
     //Only for the playerfeedback getting damage and doing the damage, vfx and sfx.
-    [SerializeField] private AudioClip hitSound;
     [SerializeField] private List<AudioClip> damageSounds;
     [SerializeField] private GameObject hitVFX;
     private CameraShake cameraShake;
@@ -28,11 +27,6 @@ public class CombatFeedbackManager : MonoBehaviour
         cameraShake = Camera.main.GetComponent<CameraShake>();
     }
 
-    public void PlayHitEffect(Vector3 position)
-    {
-        Instantiate(hitVFX, position, Quaternion.identity);
-        AudioSource.PlayClipAtPoint(hitSound, position);
-    }
     public void PlayRandomDamageSound(Vector3 position)
     {
         if (damageSounds == null || damageSounds.Count == 0) return;

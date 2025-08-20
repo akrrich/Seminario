@@ -185,7 +185,10 @@ MonoBehaviour:
     m_Bits: 64
   chaseSpeedMultiplier: 1.5
   loseSightDelay: 1.5
+  bloodDecalPrefab: {fileID: 8146034578120852093, guid: f234383ce6dd0a54ab672b55e67deb00, type: 3}
+  decalYOffset: 0.01
   currentHP: 0
+  roomData: {fileID: 0}
   id: bear
   attackRange: 4
   attackArea: 5
@@ -353,3 +356,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  weightMultiplier: 1

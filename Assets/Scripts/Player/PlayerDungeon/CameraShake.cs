@@ -6,6 +6,9 @@ public class CameraShake : MonoBehaviour
 {
     private Vector3 originalPos;
     [SerializeField] private Camera cam;
+    [SerializeField] private float duration;
+    [SerializeField] private float magnitude;
+    [SerializeField] private float zoomAmount;
 
     private void Awake()
     {
@@ -13,7 +16,7 @@ public class CameraShake : MonoBehaviour
         cam = GetComponent<Camera>();
     }
 
-    public void Shake(float duration = 0.1f, float magnitude = 0.2f, float zoomAmount = 5f)
+    public void Shake(float duration, float magnitude, float zoomAmount)
     {
         StopAllCoroutines();
         StartCoroutine(ShakeRoutine(duration, magnitude, zoomAmount));

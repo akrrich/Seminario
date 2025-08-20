@@ -10,6 +10,8 @@ public class BaseEnemyModel : MonoBehaviour, IDamageable
     [SerializeField] private bool isElite = false;
     [SerializeField] private int currentLayer = 1;
 
+
+
     protected NavMeshAgent agent;
     protected PlayerMovement playerRef;
     protected int currentHP;
