@@ -47,7 +47,7 @@ public class PlayerStateCook<T> : State<T>
     {
         base.Execute();
 
-        if (PlayerInputs.Instance.Interact())
+        if (PlayerInputs.Instance.InteractPress())
         {
             Fsm.TransitionTo(inputToIdle);
         }

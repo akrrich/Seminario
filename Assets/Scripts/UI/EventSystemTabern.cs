@@ -1,12 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 public class EventSystemTabern : MonoBehaviour
 {
     private EventSystem eventSystem;
-
-    //private List<GameObject> buttonsPause = new List<GameObject>();
 
 
     void Awake()
@@ -23,7 +20,6 @@ public class EventSystemTabern : MonoBehaviour
 
     private void SuscribeToUIEvents()
     {
-        //PauseManager.OnSendButtonsToEventSystem += GetButtonsPauseFromEvent;
         PauseManager.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
         PauseManager.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
 
@@ -32,11 +28,13 @@ public class EventSystemTabern : MonoBehaviour
 
         AdministratingManagerUI.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
         AdministratingManagerUI.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
+
+        OpenTabernUI.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
+        OpenTabernUI.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
     }
 
     private void UnsuscribeToUIEvents()
     {
-        //PauseManager.OnSendButtonsToEventSystem -= GetButtonsPauseFromEvent;
         PauseManager.OnSetSelectedCurrentGameObject -= SetSelectedCurrentGameObject;
         PauseManager.OnClearSelectedCurrentGameObject -= ClearCurrentSelectedGameObject;
 
@@ -45,11 +43,9 @@ public class EventSystemTabern : MonoBehaviour
 
         AdministratingManagerUI.OnSetSelectedCurrentGameObject -= SetSelectedCurrentGameObject;
         AdministratingManagerUI.OnClearSelectedCurrentGameObject -= ClearCurrentSelectedGameObject;
-    }
 
-    private void GetButtonsPauseFromEvent(List<GameObject> buttonsPause)
-    {
-        //this.buttonsPause = buttonsPause;
+        OpenTabernUI.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
+        OpenTabernUI.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
     }
 
     private void GetComponents()

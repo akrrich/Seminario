@@ -32,6 +32,22 @@ public class Table : MonoBehaviour, IInteractable
 
     public List<Food> CurrentFoods { get => currentFoods; set => currentFoods = value; }
 
+    public InteractionMode InteractionMode 
+    {
+        get
+        {
+            if (isDirty)
+            {
+                return InteractionMode.Hold;
+            }
+
+            else
+            {
+                return InteractionMode.Press;
+            }
+        }
+    }
+
     public float CurrentCleanProgress { get => currentCleanProgress; set => currentCleanProgress = value; }
     
     public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
@@ -90,21 +106,21 @@ public class Table : MonoBehaviour, IInteractable
     /// Resolver el problema del HoldOn, tambien genera problema al completar la barra, que no desaparece la barra del slider hasta que se de un click mas
     /// </summary>
 
-    public void Interact()
+    public void Interact(bool isPressed)
     {
         if (isDirty)
         {
-            if (PlayerInputs.Instance.CleanDirtyTable())
+            if (isPressed)
             {
                 PlayerController.OnCleanDirtyTableIncreaseSlider?.Invoke(this);
-                return;
             }
 
             else
             {
                 PlayerController.OnCleanDirtyTableDecreaseSlider?.Invoke(this);
-                return;
             }
+
+            return;
         }
 
         if (auxiliarClientView != null && auxiliarClientView.CanTakeOrder)

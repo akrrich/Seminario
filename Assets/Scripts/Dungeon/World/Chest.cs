@@ -19,6 +19,8 @@ public class Chest : MonoBehaviour, IInteractable
     private DropHandler dropHandler;
     private Outline outline;
 
+    public InteractionMode InteractionMode => throw new System.NotImplementedException();
+
     private void Awake()
     {
         col = GetComponent<Collider>();
@@ -32,7 +34,7 @@ public class Chest : MonoBehaviour, IInteractable
             outline.OutlineWidth = 0f; // Forzamos a que arranque apagado
         }
     }
-    public void Interact()
+    public void Interact(bool isPressed)
     {
         if (opened) return;
         StartCoroutine(CO_OpenChest());

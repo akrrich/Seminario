@@ -69,9 +69,29 @@ public class InteractionManager : Singleton<InteractionManager>
         if (InteractionManagerUI.Instance == null) return;
         if (!InteractionManagerUI.Instance.CenterPointUI.gameObject.activeSelf) return;
 
-        if (currentTarget != null && !PauseManager.Instance.IsGamePaused && PlayerInputs.Instance.Interact())
+        if (currentTarget != null && !PauseManager.Instance.IsGamePaused)
         {
-            currentTarget.Interact();
+            switch (currentTarget.InteractionMode)
+            {
+                case InteractionMode.Press:
+                    if (PlayerInputs.Instance.InteractPress())
+                    {
+                        currentTarget.Interact(true);
+                    }
+                    break;
+
+                case InteractionMode.Hold:
+                    if (PlayerInputs.Instance.InteractHold())
+                    {
+                        currentTarget.Interact(true);
+                    }
+
+                    else
+                    {
+                        currentTarget.Interact(false);
+                    }
+                    break;
+            }
         }
     }
 }

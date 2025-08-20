@@ -63,7 +63,6 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     /* -------------------------------------------TABERN----------------------------------------- */
 
-    public bool CleanDirtyTable() => Input.GetKey(keyboardInputs.Interact) || Input.GetKey(joystickInputs.Interact);
     public bool ShowOrHideDish() => Input.GetKeyDown(keyboardInputs.ShowOrHideDish) || Input.GetKeyDown(joystickInputs.ShowOrHideDish);
     public bool R1() => Input.GetKeyDown(KeyCode.Joystick1Button5);
     public bool L1() => Input.GetKeyDown(KeyCode.Joystick1Button4);
@@ -78,7 +77,8 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     public bool Run() => Input.GetKeyDown(keyboardInputs.Run) || Input.GetKeyDown(joystickInputs.Run);
     public bool StopRun() => Input.GetKeyDown(keyboardInputs.Run) || Input.GetKeyDown(joystickInputs.Run);
-    public bool Interact() => Input.GetKeyDown(keyboardInputs.Interact) || Input.GetKeyDown(joystickInputs.Interact);
+    public bool InteractPress() => Input.GetKeyDown(keyboardInputs.Interact) || Input.GetKeyDown(joystickInputs.Interact);
+    public bool InteractHold() => Input.GetKey(keyboardInputs.Interact) || Input.GetKey(joystickInputs.Interact);
     public bool Jump() => Input.GetKeyDown(keyboardInputs.Jump) || Input.GetKeyDown(joystickInputs.Jump);
     public bool Inventory() => Input.GetKeyDown(keyboardInputs.Inventory) || Input.GetKeyDown(joystickInputs.Inventory);
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);

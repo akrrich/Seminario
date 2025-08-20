@@ -14,16 +14,12 @@ public class PauseManager : Singleton<PauseManager>
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private List<GameObject> buttonsPause;
 
-    private static event Action<List<GameObject>> onSendButtonsToEventSystem;
-
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
 
     private static event Action onRestoreSelectedGameObject; // Este evento es generico y sirve para todos los paneles de UI que esten abiertos cuando se pausa el juego
 
     private bool isGamePaused = false;
-
-    public static Action<List<GameObject>> OnSendButtonsToEventSystem { get => onSendButtonsToEventSystem; set => onSendButtonsToEventSystem = value; }
 
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
     public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
@@ -37,7 +33,6 @@ public class PauseManager : Singleton<PauseManager>
     {
         CreateSingleton(false);
         SuscribeToUpdateManagerEvent();
-        InvokeEventToSendButtonsReferences();
     }
 
     // Simulacion de Update
@@ -110,11 +105,6 @@ public class PauseManager : Singleton<PauseManager>
     private void UnsuscribeToUpdateManagerEvent()
     {
         UpdateManager.OnUpdate -= UpdatePauseManager;
-    }
-
-    private void InvokeEventToSendButtonsReferences()
-    {
-        onSendButtonsToEventSystem?.Invoke(buttonsPause);
     }
 
     private void ShowPause()

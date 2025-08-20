@@ -92,7 +92,7 @@ public class PlayerCollisions
                 PlayerView.OnActivateSliderCleanDirtyTable?.Invoke();
                 PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage?.Invoke();
 
-                if (PlayerInputs.Instance.CleanDirtyTable())
+                if (PlayerInputs.Instance.InteractHold())
                 {
                     PlayerController.OnCleanDirtyTableIncreaseSlider?.Invoke(table);
                     return;

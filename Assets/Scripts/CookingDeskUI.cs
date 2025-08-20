@@ -5,6 +5,8 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
     private PlayerController playerController;
     private Outline outline;
 
+    public InteractionMode InteractionMode { get => InteractionMode.Press; }
+
 
     void Awake()
     {
@@ -12,7 +14,7 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
     }
 
 
-    public void Interact()
+    public void Interact(bool isPressed)
     {
         // NADA, lo maneja la maquina de estados
     }

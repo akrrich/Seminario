@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-public class InteractionHandler : MonoBehaviour
+/*public class InteractionHandler : MonoBehaviour
 {
     [Header("Interaction variables")]
     [SerializeField] private float range = 5f;
@@ -19,7 +19,7 @@ public class InteractionHandler : MonoBehaviour
     {
         Detect();
 
-        if (PlayerInputs.Instance != null && PlayerInputs.Instance.Interact() && current != null)
+        if (PlayerInputs.Instance != null && PlayerInputs.Instance.InteractPress() && current != null)
         {
             current.Interact();
         }
@@ -57,4 +57,4 @@ public class InteractionHandler : MonoBehaviour
             }
         }
     }
-}
+}*/

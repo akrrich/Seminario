@@ -1,18 +1,20 @@
 
 using UnityEngine;
 
-public class IngredientPickup : MonoBehaviour,IInteractable
+public class IngredientPickup : MonoBehaviour, IInteractable
 {
     [SerializeField] private IngredientType ingredient;
     [SerializeField] private int amount = 1;
     [SerializeField] private bool destroyOnPickup = true;
+
+    public InteractionMode InteractionMode => throw new System.NotImplementedException();
 
     public void HideOutline()
     {
         throw new System.NotImplementedException();
     }
 
-    public void Interact()
+    public void Interact(bool isPressed)
     {
         IngredientInventoryManager.Instance.IncreaseIngredientStock(ingredient, amount);
 

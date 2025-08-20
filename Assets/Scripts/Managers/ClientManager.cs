@@ -19,7 +19,6 @@ public class ClientManager : MonoBehaviour
 
     private float spawnTime = 0f;
 
-    // Provisorio
     private bool isTabernOpen = false;
 
     [SerializeField] private bool instantiateClients;
@@ -85,12 +84,12 @@ public class ClientManager : MonoBehaviour
 
     private void SuscribeToOpenTabernButtonEvent()
     {
-        //+= SetIsTabernOpen;
+        OpenTabernUI.OnOpenTabern += SetIsTabernOpen;
     }
 
     private void UnsuscribeToOpenTabernButtonEvent()
     {
-        //-= SetIsTabernOpen;
+        OpenTabernUI.OnOpenTabern -= SetIsTabernOpen;
     }
 
     /*private IEnumerator InitializeRandomClient()
@@ -104,12 +103,6 @@ public class ClientManager : MonoBehaviour
 
     private void SpawnClients()
     {
-        // Provisorio
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            isTabernOpen = true;
-        }
-
         if (isTabernOpen)
         {
             if (instantiateTheSameClient)

@@ -1,7 +1,14 @@
+public enum InteractionMode
+{
+    Press,
+    Hold     
+}
+
 public interface IInteractable 
 {
-    /// <summary>Invocado cuando el jugador presiona la tecla de interacción</summary>
-    void Interact();
+    InteractionMode InteractionMode { get; }
+
+    void Interact(bool isPressed); 
 
     void ShowOutline();
 

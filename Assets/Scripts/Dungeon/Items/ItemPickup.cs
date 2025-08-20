@@ -9,12 +9,14 @@ public class ItemPickup : MonoBehaviour, IInteractable
 
     private Outline outline;
 
+    public InteractionMode InteractionMode => throw new System.NotImplementedException();
+
     private void Awake()
     {
         outline = GetComponent<Outline>();
     }
 
-    public void Interact()
+    public void Interact(bool isPressed)
     {
         switch (itemData.type)
         {

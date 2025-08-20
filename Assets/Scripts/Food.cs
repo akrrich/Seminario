@@ -40,6 +40,8 @@ public class Food : MonoBehaviour, IInteractable
     private bool isInPlayerDishPosition = false;
     private bool isServedInTable = false;
 
+    public InteractionMode InteractionMode { get => InteractionMode.Press; }
+
     public FoodType FoodType { get => foodType; }
     public CookingStates CurrentCookingState { get => currentCookingState; }
 
@@ -71,7 +73,7 @@ public class Food : MonoBehaviour, IInteractable
     /// <summary>
     /// Agregar que si el plato estaba desactivado cuando agarro la comida que se active
     /// </summary>
-    public void Interact()
+    public void Interact(bool isPressed)
     {
         if (gameObject.activeSelf && !isServedInTable && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
         {
