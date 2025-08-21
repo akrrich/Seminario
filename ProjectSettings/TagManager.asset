@@ -4,11 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Floor
   - Oven
   - Table
   - Administration
   - Chair
+  - PortalDungeon
+  - CookingDeskUI
+  - Trash
+  - PortalToTabern
   layers:
   - Default
   - TransparentFX
@@ -17,14 +20,14 @@ TagManager:
   - Water
   - UI
   - Obstacles
-  - 
+  - Player
   - Clients
-  - 
-  - 
+  - Enemy
+  - Interactable
   - whatIsGround
-  - 
-  - 
-  - 
+  - FoodTrigger
+  - Weapon
+  - Navmesh Surface
   - 
   - 
   - 

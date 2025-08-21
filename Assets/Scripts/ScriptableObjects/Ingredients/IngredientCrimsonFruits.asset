@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7543af78bcca49644b72455fb2546010, type: 3}
+  m_Name: IngredientCrimsonFruits
+  m_EditorClassIdentifier: 
+  ingridientType: 0
+  sprite: {fileID: 21300000, guid: 31fb8d5613126114db5fa596579adde7, type: 3}
+  prefabSlotInventoryUI: {fileID: 3963461615016472483, guid: d1f73df77e8d4ce4ca95184296b04f37, type: 3}
+  price: 15
+  initializeStock: 10

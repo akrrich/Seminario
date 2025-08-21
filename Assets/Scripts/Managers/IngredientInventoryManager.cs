@@ -3,34 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class IngredientInventoryManager : MonoBehaviour
+public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 {
-    private static IngredientInventoryManager instance;
-
     private List<IngredientType> availableIngredients;
-    [SerializeField] private List<Ingredients.FoodRecipe> foodRecipes;
-    [SerializeField] private List<Ingredients.IngredientData> ingredientData;
-    [SerializeField] private int initializeStockIngredients;
+    [SerializeField] private IngredientInventoryManagerData ingredientInventoryManagerData;
+    [SerializeField] private List<FoodRecipeData> foodRecipesData;
+    [SerializeField] private List<IngredientData> ingredientsData;
 
     private Dictionary<IngredientType, int> ingredientInventory = new();
-    private Dictionary<FoodType, Ingredients.FoodRecipe> recipeDict = new();
-    private Dictionary<IngredientType, Ingredients.IngredientData> ingredientDataDict = new();
+    private Dictionary<FoodType, FoodRecipeData> recipeDict = new();
+    private Dictionary<IngredientType, IngredientData> ingredientDataDict = new();
     
-    public static IngredientInventoryManager Instance { get => instance; }
+    public List<IngredientData> IngredientsData { get => ingredientsData; }
+
+    public Dictionary<IngredientType, IngredientData> IngredientDataDict { get =>  ingredientDataDict; }
 
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
         InitializeInventory();
         InitializeIngredientData();
         InitializeRecipes();
     }
 
 
+    public void IncreaseIngredientStock(IngredientType ingredient, int amount)
+    {
+        if (!ingredientInventory.ContainsKey(ingredient))
+            ingredientInventory[ingredient] = 0;
+
+        ingredientInventory[ingredient] += amount;
+
+    }
+
     public void IncreaseIngredientStock(IngredientType ingredient)
     {
-        ingredientInventory[ingredient]++;
+        IncreaseIngredientStock(ingredient, 1);
     }
 
     public bool TryCraftFood(FoodType foodType)
@@ -65,38 +74,42 @@ public class IngredientInventoryManager : MonoBehaviour
         return ingredientInventory.TryGetValue(ingredient, out var stock) ? stock : 0;
     }
 
+    public FoodRecipeData GetRecipe(FoodType foodType)
+    {
+        return recipeDict.TryGetValue(foodType, out var recipe) ? recipe : null;
+    }
+
     public List<IngredientType> GetAllIngredients() => new List<IngredientType>(ingredientInventory.Keys);
 
 
-    private void CreateSingleton()
+    private void InitializeInventory()
     {
-        if (instance == null)
+        if (ingredientInventoryManagerData.IngredientsUseOwnStock)
         {
-            instance = this;
-        }
+            foreach (var ingredientData in ingredientsData)
+            {
+                var type = ingredientData.IngredientType;
+                var stock = ingredientData.InitializeStock;
+                ingredientInventory[type] = stock;
+            }
 
-        else if (instance != this)
-        {
-            Destroy(gameObject);
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void InitializeInventory()
-    {
-        availableIngredients = Enum.GetValues(typeof(IngredientType)).Cast<IngredientType>().ToList();
-
-        foreach (IngredientType ingredient in availableIngredients)
+        else
         {
-            ingredientInventory[ingredient] = initializeStockIngredients;
+            availableIngredients = Enum.GetValues(typeof(IngredientType)).Cast<IngredientType>().ToList();
+
+            foreach (IngredientType ingredient in availableIngredients)
+            {
+                ingredientInventory[ingredient] = ingredientInventoryManagerData.InitializeStockForAllIngredients;
+            }
         }
     }
 
     private void InitializeIngredientData()
     {
-        foreach (var data in ingredientData)
+        foreach (var data in ingredientsData)
         {
             if (!ingredientDataDict.ContainsKey(data.IngredientType))
             {
@@ -107,6 +120,6 @@ public class IngredientInventoryManager : MonoBehaviour
 
     private void InitializeRecipes()
     {
-        recipeDict = foodRecipes.ToDictionary(r => r.FoodType, r => r);
+        recipeDict = foodRecipesData.ToDictionary(r => r.FoodType, r => r);
     }
 }

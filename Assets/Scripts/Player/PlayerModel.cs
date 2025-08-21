@@ -1,6 +1,4 @@
 using UnityEngine;
-using System;
-using System.Collections;
 
 public enum PlayerStates
 {
@@ -9,45 +7,39 @@ public enum PlayerStates
 
 public class PlayerModel : MonoBehaviour
 {
+    [SerializeField] private PlayerTabernData playerTabernData;
+
     private PlayerCamera playerCamera;
 
     private Rigidbody rb;
-    private GameObject oven;
+    private CapsuleCollider capsuleCollider;
+    private PhysicMaterial physicMaterial;
+
     private GameObject administration;
 
-    private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
-
-    [Header("LineOfSight")]
-    [SerializeField] private float rangeVision;
-    [SerializeField] private float angleVision;
-
-    [Header("Variables")]
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float runSpeed;
-    [SerializeField] private float jumpForce;
+    [SerializeField] private LayerMask groundLayer;
 
     private float speed;
-
-    private bool isGrounded = true;
-    private bool isCollidingOven = false;
+    private float distanceToGround = 1.05f;
+   
+    private bool isCollidingCookingDeskUI = false;
     private bool isCollidingAdministration = false;
     private bool isCooking = false;
     private bool isAdministrating = false;
 
+    public PlayerTabernData PlayerTabernData { get => playerTabernData; }
+
     public PlayerCamera PlayerCamera { get => playerCamera; set => playerCamera = value; }
 
     public Rigidbody Rb { get => rb; }
-    public GameObject Oven { get => oven; }
+    public CapsuleCollider CapsuleCollider { get => capsuleCollider; set => capsuleCollider = value; }
+    public PhysicMaterial PhysicsMaterial { get => physicMaterial; }
     public GameObject Administration { get => administration; }
 
-    public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
-
-    public float WalkSpeed { get => walkSpeed; }
-    public float RunSpeed { get => runSpeed; } 
     public float Speed { get => speed; set => speed = value; }
-    public float JumpForce { get => jumpForce; }
-    public bool IsGrounded { get => isGrounded; set => isGrounded = value; }
-    public bool IsCollidingOven { get => isCollidingOven; set => isCollidingOven = value; }
+
+    public bool IsGrounded { get =>  Physics.SphereCast(transform.position, 0.3f, Vector3.down, out _, distanceToGround, groundLayer); }
+    public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
     public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCooking { get => isCooking; set => isCooking = value; }
     public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
@@ -56,34 +48,44 @@ public class PlayerModel : MonoBehaviour
     void Awake()
     {
         GetComponents();
-
-        // Provisorio
-        StartCoroutine(InvokeEventInitializationPlayer());
-    }
-
-
-    void FixedUpdate()
-    {
-        Movement();
+        Initialize();
     }
 
     void OnDrawGizmosSelected()
     {
-        LineOfSight.DrawLOSOnGizmos(transform, angleVision, rangeVision);
+        LineOfSight.DrawLOSOnGizmos(transform, playerTabernData.AngleVision, playerTabernData.RangeVision);
     }
 
 
-    /// <summary>
-    /// Solucionar los LineOfSight de que mirando hacia un poco fuera del rango funcionan
-    /// </summary>
-    public bool IsLookingAtOven()
+    public void Movement()
     {
-        return LineOfSight.LOS(playerCamera.transform, oven.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
+        if (BookManagerUI.Instance == null) return;
+        if (BookManagerUI.Instance.IsBookOpen) return;
+        if (PlayerInputs.Instance == null) return;
+        if (isCooking || isAdministrating) return;
+
+        Vector3 cameraForward = playerCamera.transform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+
+        Vector3 right = playerCamera.transform.right;
+        Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
+
+        rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+
+        if (IsGrounded)
+        {
+            rb.AddForce(Vector3.down * 10f, ForceMode.Force);
+        }
+
+        float targetDrag = IsGrounded ? playerTabernData.GroundDrag : 0.15f;
+        rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);        
     }
+
 
     public bool IsLookingAtAdministration()
     {
-        return LineOfSight.LOS(playerCamera.transform, administration.transform, rangeVision, angleVision, LayerMask.GetMask("Obstacles"));
+        return LineOfSight.LOS(playerCamera.transform, administration.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
     }
 
     public void LookAt(Vector3 target)
@@ -103,29 +105,13 @@ public class PlayerModel : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<PlayerCamera>();
         rb = GetComponent<Rigidbody>();
-        oven = GameObject.FindGameObjectWithTag("Oven");
+        capsuleCollider = GetComponent<CapsuleCollider>();
+
         administration = GameObject.FindGameObjectWithTag("Administration");
     }
 
-    private void Movement()
+    private void Initialize()
     {
-        if (PlayerInputs.Instance != null && !isCooking && !isAdministrating)
-        {
-            Vector3 cameraForward = playerCamera.transform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
-
-            Vector3 right = playerCamera.transform.right;
-            Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
-
-            rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
-        }
-    }
-
-    private IEnumerator InvokeEventInitializationPlayer()
-    {
-        yield return new WaitForSeconds(1);
-
-        onPlayerInitialized?.Invoke(this);
+        physicMaterial = capsuleCollider.material;
     }
 }

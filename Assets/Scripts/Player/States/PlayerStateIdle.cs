@@ -39,12 +39,12 @@ public class PlayerStateIdle<T> : State<T>
             Fsm.TransitionTo(inputToJump);
         }
 
-        if (PlayerInputs.Instance.Cook() && playerModel.IsCollidingOven && playerModel.IsLookingAtOven())
+        if (PlayerInputs.Instance.InteractPress() && playerModel.IsCollidingCookingDeskUI)
         {
             Fsm.TransitionTo(inputToCook);
         }
 
-        if (PlayerInputs.Instance.Administration() && playerModel.IsCollidingAdministration && playerModel.IsLookingAtAdministration())
+        if (PlayerInputs.Instance.InteractPress() && playerModel.IsCollidingAdministration && playerModel.IsLookingAtAdministration())
         {
             Fsm.TransitionTo(inputToAdmin);
         }

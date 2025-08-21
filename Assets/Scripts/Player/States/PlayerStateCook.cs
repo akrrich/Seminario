@@ -4,7 +4,11 @@ public class PlayerStateCook<T> : State<T>
 {
     private PlayerModel playerModel;
     private PlayerView playerView;
+
+    private GameObject cookingDeskUI;
     private Transform cookingPosition;
+
+    private bool lastDishState;
 
     private T inputToIdle;
 
@@ -16,20 +20,26 @@ public class PlayerStateCook<T> : State<T>
         this.playerView = playerView;
 
         cookingPosition = GameObject.Find("CookingPosition").transform;
+        cookingDeskUI = GameObject.FindGameObjectWithTag("CookingDeskUI");
     }
 
     public override void Enter()
     {
         base.Enter();
-        //Debug.Log("Cook");
+        Debug.Log("Cook");
 
         PlayerView.OnEnterInCookMode?.Invoke();
         PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
 
+        playerModel.Rb.velocity = Vector3.zero;
+        playerModel.CapsuleCollider.material = null;
+
+        lastDishState = playerView.Dish.gameObject.activeSelf;
+
         playerView.ShowOrHideDish(false);
         playerModel.IsCooking = true;
         playerModel.transform.position = cookingPosition.transform.position;
-        playerModel.LookAt(playerModel.Oven.transform.position);
+        playerModel.LookAt(cookingDeskUI.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 
@@ -37,7 +47,7 @@ public class PlayerStateCook<T> : State<T>
     {
         base.Execute();
 
-        if (PlayerInputs.Instance.Cook())
+        if (PlayerInputs.Instance.InteractPress())
         {
             Fsm.TransitionTo(inputToIdle);
         }
@@ -46,7 +56,9 @@ public class PlayerStateCook<T> : State<T>
     public override void Exit()
     {
         PlayerView.OnExitInCookMode?.Invoke();
-        playerView.ShowOrHideDish(true);
+        playerView.ShowOrHideDish(lastDishState);
         playerModel.IsCooking = false;
+
+        playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;
     }
 }

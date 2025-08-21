@@ -23,11 +23,15 @@ public class ClientView : MonoBehaviour
 
     private Dictionary<string, SpriteRenderer> spriteTypeDict = new();
 
+    private FoodType currentSelectedFood;
+
     private bool canTakeOrder = false; // Se pone en true cuando nos acercamos a la mesa y no pidio nada todavia
 
     public Animator Anim { get => anim; }
 
     public List<string> OrderFoodNames { get => orderFoodNames; }
+
+    public FoodType CurrentSelectedFood { get => currentSelectedFood; }
 
     public bool CanTakeOrder { get => canTakeOrder; set => canTakeOrder = value; }
 
@@ -36,11 +40,6 @@ public class ClientView : MonoBehaviour
     {
         GetComponents();
         SuscribeToPlayerControllerEvent();
-    }
-
-    void Update()
-    {
-        RotateOrderUIToLookAtPlayer();
     }
 
     void OnDestroy()
@@ -75,7 +74,6 @@ public class ClientView : MonoBehaviour
     public void SetSpriteTypeName(string spriteTypeNameGameObjectInHierarchy)
     {
         DisableAllSpriteTypes();
-
         if (spriteTypeDict.TryGetValue(spriteTypeNameGameObjectInHierarchy, out var spriteRenderer))
         {
             spriteRenderer.gameObject.SetActive(true);
@@ -109,6 +107,7 @@ public class ClientView : MonoBehaviour
 
             int randomIndex = Random.Range(0, favoritesFoodTypes.Count);
             FoodType selectedFood = favoritesFoodTypes[randomIndex];
+            currentSelectedFood = selectedFood;
 
             Sprite sprite = clientManager.GetSpriteForRandomFood(selectedFood);
 
@@ -124,6 +123,18 @@ public class ClientView : MonoBehaviour
                 canTakeOrder = false;
                 ClearTable();
             }
+        }
+    }
+
+    public void RotateOrderUIToLookAtPlayer()
+    {
+        Vector3 playerDirection = (playerController.transform.position - order.position).normalized;
+        Vector3 lookDirection = new Vector3(playerDirection.x, 0, playerDirection.z);
+
+        if (lookDirection != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(lookDirection);
+            order.rotation = rotation;
         }
     }
 
@@ -144,28 +155,13 @@ public class ClientView : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Corregir la escala de los sprites en todos los indices
-    /// </summary>
     private void AutoAdjustSpriteScale(Sprite sprite)
     {
-        float maxDimension = 0.5f; 
+        float maxDimension = 0.75f; 
         Vector2 spriteSize = sprite.bounds.size;
 
         float scaleFactor = maxDimension / Mathf.Max(spriteSize.x, spriteSize.y);
         spritesTypeList[0].transform.localScale = Vector3.one * scaleFactor;
-    }
-
-    private void RotateOrderUIToLookAtPlayer()
-    {
-        Vector3 playerDirection = (playerController.transform.position - order.position).normalized;
-        Vector3 lookDirection = new Vector3(playerDirection.x, 0, playerDirection.z);
-
-        if (lookDirection != Vector3.zero)
-        {
-            Quaternion rotation = Quaternion.LookRotation(lookDirection);
-            order.rotation = rotation;
-        }
     }
 
     private void RestartAnimationsValues()

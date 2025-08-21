@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7543af78bcca49644b72455fb2546010, type: 3}
+  m_Name: IngredientSacredRiverWater
+  m_EditorClassIdentifier: 
+  ingridientType: 4
+  sprite: {fileID: 21300000, guid: 420bfe9ea5448904f9dd283f3ea209cf, type: 3}
+  prefabSlotInventoryUI: {fileID: 3963461615016472483, guid: 44d21b05f7bd7584c8accf8181c3fa85, type: 3}
+  price: 15
+  initializeStock: 10

@@ -30,7 +30,7 @@ public class ClientStateLeave<T> : State<T>
         Debug.Log("Leave");
 
         // Quiere decir que entro al estado leave porque todas las mesas estaban ocupadas
-        if (clientModel.CurrentTablePosition == null)
+        if (clientModel.CurrentTable == null)
         {
             clientView.ExecuteAnimParameterName("Walk");
             clientModel.MoveToTarget(newTransform.position);
@@ -44,6 +44,8 @@ public class ClientStateLeave<T> : State<T>
             clientView.Anim.transform.position += Vector3.up * 0.35f;
             clientView.StartCoroutine(WalkAnimationAfterExitTime());
         }
+
+        CheckIfFoodIsCorrect(); // Metodo Provisorio
 
         clientModel.StartCoroutine(FreeCurrentTableAfterSeconds());
     }
@@ -78,14 +80,52 @@ public class ClientStateLeave<T> : State<T>
         /// Ajustar tiempo segun sea necesario
         yield return new WaitForSeconds(2f);
 
-        clientController.OnCollisionEnterWithTrigger = false;
+        clientController.OnCollisionEnterWithTriggerChair = false;
     }
 
     private IEnumerator FreeCurrentTableAfterSeconds()
     {
         yield return new WaitForSeconds(waitingTimeToFreeTable);
 
-        clientModel.CurrentTablePosition.SetNavMeshObstacles(true);
-        clientModel.CurrentTablePosition = TablesManager.Instance.FreeTable(clientModel.CurrentTablePosition);
+        clientModel.CurrentTable.SetNavMeshObstacles(true);
+        clientModel.CurrentTable = TablesManager.Instance.FreeTable(clientModel.CurrentTable);
+    }
+
+    private void CheckIfFoodIsCorrect()
+    {
+        if (clientModel.CurrentTable != null)
+        {
+            if (clientModel.CurrentTable.CurrentFoods != null && clientModel.CurrentTable.CurrentFoods.Count > 0)
+            {
+                if (clientModel.CurrentTable.CurrentFoods[0] != null && clientModel.CurrentTable.CurrentFoods[0].FoodType == clientView.CurrentSelectedFood)
+                {
+                    clientModel.ReturnFoodFromTableToPool();
+                    clientModel.CurrentTable.SetDirty(true);
+                    clientView.SetSpriteTypeName("SpriteHappy");
+                    MoneyManager.Instance.AddMoney(100);
+                }
+
+                else
+                {
+                    clientModel.ReturnFoodFromTableToPool();
+                    clientModel.CurrentTable.SetDirty(true);
+                    clientView.SetSpriteTypeName("SpriteHungry");
+                    MoneyManager.Instance.SubMoney(100);
+                }
+            }
+
+            else
+            {
+                clientView.SetSpriteTypeName("SpriteHungry");
+                MoneyManager.Instance.SubMoney(100);
+            }
+        }
+
+        // Si la mesa es null ejecuta este bloque, quiere decir que todas las mesas estaban ocupadas
+        else
+        {
+            clientView.SetSpriteTypeName("SpriteHungry");
+            MoneyManager.Instance.SubMoney(100);
+        }
     }
 }

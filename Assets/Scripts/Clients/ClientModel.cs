@@ -14,7 +14,7 @@ public enum ClientType
 public class ClientModel : MonoBehaviour
 {
     /// <summary>
-    /// Analizar el tema del Capusle collider, ya que se desincroniza del Animation gameObject
+    /// El bug del Animation gameObject que se separa del padre esta solucionado, ya que vuelve a su posicion cuando entra en idle
     /// </summary>
     /// 
     [SerializeField] private ClientData clientData;
@@ -24,7 +24,7 @@ public class ClientModel : MonoBehaviour
     private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
     private CapsuleCollider capsuleCollider;
-    private Table currentTablePosition;
+    private Table currentTable;
 
     private Vector3 currentDirection;
 
@@ -37,7 +37,7 @@ public class ClientModel : MonoBehaviour
     public ClientManager ClientManager { get => clientManager; }
 
     public NavMeshAgent NavMeshAgent { get => navMeshAgent; }
-    public Table CurrentTablePosition { get => currentTablePosition; set => currentTablePosition = value; }
+    public Table CurrentTable { get => currentTable; set => currentTable = value; }
 
     public ClientType ClientType { get => clientType; }
 
@@ -53,19 +53,19 @@ public class ClientModel : MonoBehaviour
         InitializeClientForPool();
     }
 
-    void FixedUpdate()
-    {
-        Movement();
-    }
 
+    public void Movement()
+    {
+        if (!rb.isKinematic)
+        {
+            rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
+        }
+    }
 
     public void MoveToTarget(Vector3 target)
     {
         navMeshAgent.isStopped = false;
         navMeshAgent.SetDestination(target);
-
-        //Vector3 newDirection = (target - transform.position).normalized;
-        //currentDirection = newDirection;
     }
 
     public void LookAt(Vector3 target, Transform anim)
@@ -83,36 +83,25 @@ public class ClientModel : MonoBehaviour
 
     public void StopVelocity()
     {
-        //currentDirection = Vector3.zero;
         navMeshAgent.isStopped = true;
         navMeshAgent.velocity = Vector3.zero;
     }
 
-    /// Metodo para futuro setea del npc correctamente
+    /// Metodo para futuro setea del npc correctamente la posicion de la animacion en la silla
     public void SetRbAndCollider(bool rb, bool collider)
     {
         this.rb.isKinematic = rb;
         capsuleCollider.enabled = collider;
     }
 
-    public void ReturnFoodFromTableToPool(bool dishesMatch)
+    public void ReturnFoodFromTableToPool()
     {
-        foreach (Food food in currentTablePosition.CurrentFoods)
+        foreach (Food food in currentTable.CurrentFoods)
         {
             food.ReturnObjetToPool();
         }
 
-        currentTablePosition.CurrentFoods.Clear();
-
-        if (dishesMatch)
-        {
-            MoneyManager.Instance.AddMoney(500);
-        }
-
-        else
-        {
-            MoneyManager.Instance.SubMoney(250);
-        }
+        currentTable.CurrentFoods.Clear();
     }
 
 
@@ -137,7 +126,7 @@ public class ClientModel : MonoBehaviour
 
     public void InitializeTablePosition()
     {
-        currentTablePosition = TablesManager.Instance.GetRandomAvailableTableForClient();
+        currentTable = TablesManager.Instance.GetRandomAvailableTableForClient();
     }
 
     private void InitializeClientForPool()
@@ -150,13 +139,5 @@ public class ClientModel : MonoBehaviour
         }
 
         isInstantiateFirstTime = false;
-    }
-
-    private void Movement()
-    {
-        if (!rb.isKinematic)
-        {
-            rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
-        }
     }
 }

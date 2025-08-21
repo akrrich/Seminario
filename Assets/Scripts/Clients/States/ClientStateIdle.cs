@@ -21,6 +21,7 @@ public class ClientStateIdle<T> : State<T>
         clientModel.StopVelocity();
         clientModel.ClientManager.ReturnObjectToPool(clientModel.ClientType, clientModel);
         clientView.DisableAllSpriteTypes();
+        clientView.Anim.transform.position = clientModel.transform.position;
     }
 
     public override void Execute()

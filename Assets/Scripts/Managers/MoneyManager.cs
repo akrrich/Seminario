@@ -1,56 +1,47 @@
 using TMPro;
 using UnityEngine;
 
-public class MoneyManager : MonoBehaviour
+public class MoneyManager : Singleton<MoneyManager>
 {
-    private static MoneyManager instance;
+    [SerializeField] private MoneyManagerData moneyManagerData;
+
+    [SerializeField] private ObjectPooler floatingMoneyTextPool;
+    [SerializeField] private FloatingMoneyText floatingMoneyText;
 
     private TextMeshProUGUI moneyText;
 
-    [SerializeField] private float initializeCurrentMoneyValue;
     private float currentMoney;
-
-    public static MoneyManager Instance { get => instance; }
 
     public float CurrentMoney { get => currentMoney; }
 
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
         InitializeCurrentMoney();
         SuscribeToMoneyTextEvent();
     }
 
 
-    public void AddMoney(float money)
+    public void AddMoney(float amount)
     {
-        currentMoney += money;
+        currentMoney += amount;
         UpdateMoneyText();
+        ShowFloatingMoneyText(amount, true);
     }
 
-    public void SubMoney(float money)
+    public void SubMoney(float amount)
     {
-        currentMoney -= money;
-        UpdateMoneyText();
-    }
-
-
-    private void CreateSingleton()
-    {
-        if (instance == null)
+        currentMoney -= amount;
+        if (currentMoney < 0)
         {
-            instance = this;
+            currentMoney = 0;
         }
 
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
+        UpdateMoneyText();
+        ShowFloatingMoneyText(amount, false);
     }
+
 
     // No es necesario desuscribirse porque es singleton
     private void SuscribeToMoneyTextEvent()
@@ -67,11 +58,42 @@ public class MoneyManager : MonoBehaviour
 
     private void InitializeCurrentMoney()
     {
-        currentMoney = initializeCurrentMoneyValue;
+        currentMoney = moneyManagerData.InitializeCurrentMoneyValue;
     }
 
     private void UpdateMoneyText()
     {
         moneyText.text = currentMoney.ToString();
+    }
+
+    private void ShowFloatingMoneyText(float amount, bool positive)
+    {
+        /*FloatingMoneyText obj = floatingMoneyTextPool.GetObjectFromPool<FloatingMoneyText>();
+
+        if (positive)
+        {
+            obj.TextAmount.text = "+" + amount.ToString();
+        }
+
+        else
+        {
+            obj.TextAmount.text = "-" + amount.ToString();
+        }
+
+        StartCoroutine(floatingMoneyTextPool.ReturnObjectToPool(obj, obj.MaxTimeToReturnObjectToPool));*/
+
+        FloatingMoneyText go = Instantiate(floatingMoneyText, moneyText.transform.position, Quaternion.identity);
+
+        if (positive)
+        {
+            go.TextAmount.text = "+" + amount.ToString();
+        }
+
+        else
+        {
+            go.TextAmount.text = "-" + amount.ToString();
+        }
+
+        Destroy(go.gameObject, go.MaxTimeToReturnObjectToPool);
     }
 }

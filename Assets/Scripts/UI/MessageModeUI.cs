@@ -6,7 +6,7 @@ public class MessageModeUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI messageDesplayText;
 
-    private event Action onCook, onAdministration, onHandOver, onTakeOrder, onCleanDirtyTable;
+    private event Action onCook, onAdministration, onHandOver, onTakeOrder, onCleanDirtyTable, onThrowFoodToTrash;
 
 
     void Awake()
@@ -22,23 +22,24 @@ public class MessageModeUI : MonoBehaviour
 
     void OnDestroy()
     {
-        UnSuscribeToPlayerViewEvents();
+        UnsuscribeToPlayerViewEvents();
     }
 
 
     private void InitializeLamdaEventMessages()
     {
-        onCook += () => ShowEnterMessageText("para entrar a cocinar", GetCookKey());
-        onAdministration += () => ShowEnterMessageText("para entrar en administracion", GetAdministrationKey());
-        onHandOver += () => ShowEnterMessageText("para entregar el plato", GetHandOverKey());
-        onTakeOrder += () => ShowEnterMessageText("para tomar el pedido", GetTakeOrderKey());
-        onCleanDirtyTable += () => ShowEnterMessageText("para limpiar la mesa", GetCleanDirtyTableKey());
+        onCook += () => ShowEnterMessageText("Presione", "para entrar a cocinar");
+        onAdministration += () => ShowEnterMessageText("Presione", "para entrar en administracion");
+        onHandOver += () => ShowEnterMessageText("Presione", "para entregar el plato");
+        onTakeOrder += () => ShowEnterMessageText("Presione", "para tomar el pedido");
+        onCleanDirtyTable += () => ShowEnterMessageText("Mantener", "para limpiar la mesa");
+        onThrowFoodToTrash += () => ShowEnterMessageText("Presione", "para tirar la comida a la basura");
     }
 
     private void SuscribeToPlayerViewEvents()
     {
-        PlayerView.OnCollisionEnterWithOvenForCookModeMessage += onCook;
-        PlayerView.OnCollisionExitWithOvenForCookModeMessage += DisapearMessageText;
+        PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage += onCook;
+        PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage += DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage += onAdministration;
         PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage += DisapearMessageText;
@@ -53,12 +54,15 @@ public class MessageModeUI : MonoBehaviour
 
         PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage += onCleanDirtyTable;
         PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage += DisapearMessageText;
+
+        PlayerView.OnCollisionEnterWithTrashForTrashModeMessage += onThrowFoodToTrash;
+        PlayerView.OnCollisionExitWithTrashForTrashModeMessage += DisapearMessageText;
     }
 
-    private void UnSuscribeToPlayerViewEvents()
+    private void UnsuscribeToPlayerViewEvents()
     {
-        PlayerView.OnCollisionEnterWithOvenForCookModeMessage -= onCook;
-        PlayerView.OnCollisionExitWithOvenForCookModeMessage -= DisapearMessageText;
+        PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage -= onCook;
+        PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage -= DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage -= onAdministration;
         PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage -= DisapearMessageText;
@@ -71,9 +75,11 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionExitWithTableForTakeOrderMessage -= DisapearMessageText;
         PlayerView.OnTakeOrderCompletedForHandOverMessage -= DisapearMessageText;
 
-        /// Falta agregar cuando termina
         PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage -= onCleanDirtyTable;
         PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage -= DisapearMessageText;
+
+        PlayerView.OnCollisionEnterWithTrashForTrashModeMessage -= onThrowFoodToTrash;
+        PlayerView.OnCollisionExitWithTrashForTrashModeMessage -= DisapearMessageText;
     }
 
     private void InitializeReferencs()
@@ -81,10 +87,10 @@ public class MessageModeUI : MonoBehaviour
         messageDesplayText.alignment = TextAlignmentOptions.Center;
     }
 
-    private void ShowEnterMessageText(string finalMessage, KeyCode inputKey)
+    private void ShowEnterMessageText(string actionText, string finalMessage)
     {
-        string keyText = $"<color=yellow> {inputKey} </color>";
-        messageDesplayText.text = "Presione" + keyText + finalMessage;
+        string keyText = $"<color=yellow> {GetInteractInput()} </color>";
+        messageDesplayText.text = $"{actionText} {keyText} {finalMessage}";
     }
 
     private void DisapearMessageText()
@@ -92,38 +98,10 @@ public class MessageModeUI : MonoBehaviour
         messageDesplayText.text = "";
     }
 
-    private KeyCode GetCookKey()
+    private KeyCode GetInteractInput()
     {
         return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Cook
-            : PlayerInputs.Instance.KeyboardInputs.Cook;
-    }
-
-    private KeyCode GetAdministrationKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.Administration
-            : PlayerInputs.Instance.KeyboardInputs.Administration;
-    }
-
-    private KeyCode GetHandOverKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.HandOverFood
-            : PlayerInputs.Instance.KeyboardInputs.HandOverFood;
-    }
-
-    private KeyCode GetTakeOrderKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.TakeClientOrder
-            : PlayerInputs.Instance.KeyboardInputs.TakeClientOrder;
-    }
-
-    private KeyCode GetCleanDirtyTableKey()
-    {
-        return DeviceManager.Instance.CurrentDevice == Device.Joystick
-            ? PlayerInputs.Instance.JoystickInputs.CleanDirtyTable
-            : PlayerInputs.Instance.KeyboardInputs.CleanDirtyTable;
+            ? PlayerInputs.Instance.JoystickInputs.Interact
+            : PlayerInputs.Instance.KeyboardInputs.Interact;
     }
 }

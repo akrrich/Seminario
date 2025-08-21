@@ -6,17 +6,15 @@ public enum Device
     KeyboardMouse, Joystick
 }
 
-public class DeviceManager : MonoBehaviour
+public class DeviceManager : Singleton<DeviceManager>
 {
     // El script funciona a la perfeccion el cursor, simplemente hay que correrlo en modo build para que se vea plasmado correctamente
 
-    private static DeviceManager instance;
+    [SerializeField] private DeviceManagerData deviceManagerData;
 
     private Device currentDevice;
 
     private bool isUIModeActive = false; // Falso por defecto, se inicializa en ScenesManager y se setea cuando se quiere interactuar en la UI
-
-    public static DeviceManager Instance { get => instance; }
 
     public Device CurrentDevice { get => currentDevice; set => currentDevice = value; }
 
@@ -25,10 +23,12 @@ public class DeviceManager : MonoBehaviour
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(true);
+        SuscribeToUpdateManagerEvent();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateDeviceManager()
     {
         IsJoystickUsed();
         IsMouseAndKeyboardUsed();
@@ -36,39 +36,41 @@ public class DeviceManager : MonoBehaviour
     }
 
 
-    private void CreateSingleton()
+    private void SuscribeToUpdateManagerEvent()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        DontDestroyOnLoad(gameObject);
+        UpdateManager.OnUpdateAllTime += UpdateDeviceManager;
     }
 
     private void EnabledAndDisabledCursor()
     {
+        if (deviceManagerData.UseCursorAllTime) return;
+
         if (currentDevice == Device.Joystick)
         {
-            Cursor.visible = false;    
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;   
         }
 
         else if (currentDevice == Device.KeyboardMouse)
         {
             if (isUIModeActive)
             {
-                Cursor.visible = true;
+                if (!Cursor.visible)
+                {
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(false);
+                }   
             }
 
             else
             {
-                Cursor.visible = false;
+                if (Cursor.visible)
+                {
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(true);
+                }   
             }
         }
     }
@@ -78,6 +80,12 @@ public class DeviceManager : MonoBehaviour
     /// </summary>
     private void IsJoystickUsed()
     {
+        /// Agregar este bloque de codigo en un futuro para el tema de la UI interactuable con joystick del libro
+        /*if (Mathf.Abs(Input.GetAxis("RightStickHorizontal")) > 0.1f)
+        {
+            Debug.Log("Interactuo");
+        }*/
+
         for (int i = 0; i < 20; i++)
         {
             if (Input.GetKey((KeyCode)((int)KeyCode.JoystickButton0 + i)))
@@ -99,7 +107,7 @@ public class DeviceManager : MonoBehaviour
             }
         }
 
-        if (Mathf.Abs(Input.GetAxis("Joystick Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Joystick Vertical")) > 0.1f)
+        if (Mathf.Abs(Input.GetAxis("LeftStickHorizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("LeftStickVertical")) > 0.1f)
         {
             currentDevice = Device.Joystick;
             return;

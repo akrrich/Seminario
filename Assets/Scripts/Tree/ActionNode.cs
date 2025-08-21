@@ -15,7 +15,10 @@ public class ActionNode : ITreeNode
     {
         if (PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
         {
-            action();
+            if (action != null)
+            {
+                action();
+            }
         }
     }
 }

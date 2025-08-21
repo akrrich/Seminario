@@ -1,20 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TablesManager : MonoBehaviour
+public class TablesManager : Singleton<TablesManager>
 {
-    private static TablesManager instance;
-
     private List<Table> tables = new List<Table>();
-
-    public static TablesManager Instance { get => instance; }
 
     public List<Table> Tables { get => tables; }
 
 
     void Awake()
     {
-        CreateSingleton();
+        CreateSingleton(false);
         InitializeTables();
     }
 
@@ -51,19 +47,6 @@ public class TablesManager : MonoBehaviour
     }
 
 
-    private void CreateSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-
-        else if (instance != this)
-        {
-            Destroy(instance);
-        }
-    }
-
     /// <summary>
     /// Ajustar el metodo segun sea necesario en un futuro para agregar mesas cuando se desbloque zona o como se quiera
     /// </summary>
@@ -74,7 +57,7 @@ public class TablesManager : MonoBehaviour
         foreach (GameObject obj in tableObjects)
         {
             Table table = obj.GetComponentInParent<Table>();
-            if (table != null)
+            if (table != null && table.gameObject.activeSelf) // Provisorio el activeself
             {
                 tables.Add(table);
             }

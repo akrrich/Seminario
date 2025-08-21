@@ -8,13 +8,6 @@ public class PlayerCollisions
     private ClientView auxiliarClientView;
 
 
-    public void UpdateColls()
-    {
-        //Debug.Log("AuxiliarTable: " + auxiliarTable);
-        //Debug.Log("AuxiliarClient: " + auxiliarClientView);
-    }
-
-
     public PlayerCollisions(PlayerController playerController)
     {
         this.playerController = playerController;
@@ -23,44 +16,36 @@ public class PlayerCollisions
 
     public void OnCollisionsEnter(Collision collision)
     {
-        OnCollisionEnterWithFloor(collision);
-        OnCollisionEnterWithOvenAndLOS(collision);
-        OnCollisionEnterWithTable(collision); 
         OnCollisionEnterWithAdministration(collision);
+        //OnCollisionEnterWithTable(collision); 
     }
 
     public void OnCollisionsStay(Collision collision)
     {
-        OnCollisionStayWithOvenAndLOS(collision);
         OnCollisionStayWithAdministrationAndLOS(collision);
-        OnCollisionStayWithTable(collision);
+        //OnCollisionStayWithTable(collision);
     }
 
     public void OnCollisionsExit(Collision collision)
     {
-        OnCollisionExitWithFloor(collision);
-        OnCollisionExitWithOven(collision);
-        OnCollisionExitWithTable(collision);
         OnCollisionExitWithAdministration(collision);
+        //OnCollisionExitWithTable(collision);
+    }
+
+    public void OnTriggerEnter(Collider collider)
+    {
+        OnTriggerEnterWithPortalDungeon(collider);
     }
 
 
-    /* ----------------------------------------ENTER-------------------------------------------------- */
+    /* ----------------------------------------COLLISION ENTER-------------------------------------------- */
 
-    private void OnCollisionEnterWithFloor(Collision collision)
+    private void OnCollisionEnterWithAdministration(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Floor"))
+        if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
         {
-            playerController.PlayerModel.IsGrounded = true;
-        }
-    }
-
-    private void OnCollisionEnterWithOvenAndLOS(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
-        {
-            playerController.PlayerModel.IsCollidingOven = true;
-            PlayerView.OnCollisionEnterWithOvenForCookModeMessage?.Invoke();
+            playerController.PlayerModel.IsCollidingAdministration = true;
+            PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage?.Invoke();
         }
     }
 
@@ -76,67 +61,11 @@ public class PlayerCollisions
                 PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage?.Invoke();
                 return;
             }
-
-            /*if (table.ChairPosition.childCount > 0) // Si tiene a alguien sentado
-            {
-                // Tomar Pedido
-                ClientView clientView = table.gameObject.GetComponentInChildren<ClientView>();
-
-                if (table.IsOccupied && clientView.ReturnSpriteWaitingToBeAttendedIsActive())
-                {
-                    clientView.CanTakeOrder = true;
-                    PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(table);
-                    PlayerView.OnCollisionEnterWithTableForTakeOrderMessage?.Invoke();
-                    return;
-                }
-
-                // Entregar Pedido
-                bool hasChildren = false;
-                foreach (Transform child in playerController.PlayerView.Dish.transform)
-                {
-                    if (child.childCount > 0)
-                    {
-                        hasChildren = true;
-                        break;
-                    }
-                }
-
-                if (hasChildren)
-                {
-                    if (table.IsOccupied && clientView.ReturnSpriteFoodIsActive())
-                    {
-                        PlayerController.OnTableCollisionEnterForHandOverFood?.Invoke(table);
-                        PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
-                    }  
-                }
-            }*/
         }
     }
 
-    private void OnCollisionEnterWithAdministration(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
-        {
-            playerController.PlayerModel.IsCollidingAdministration = true;
-            PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage?.Invoke();
-        }
-    }
+    /* ------------------------------------------COLLISION STAY------------------------------------------- */
 
-    /* ------------------------------------------STAY----------------------------------------------- */
-
-    private void OnCollisionStayWithOvenAndLOS(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Oven") && playerController.PlayerModel.IsLookingAtOven())
-        {
-            playerController.PlayerModel.IsCollidingOven = true;
-            PlayerView.OnCollisionEnterWithOvenForCookModeMessage?.Invoke();
-        }
-
-        if (collision.gameObject.CompareTag("Oven") && !playerController.PlayerModel.IsLookingAtOven())
-        {
-            PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
-        }
-    }
 
     private void OnCollisionStayWithAdministrationAndLOS(Collision collision)
     {
@@ -160,7 +89,10 @@ public class PlayerCollisions
 
             if (table.IsDirty)
             {
-                if (PlayerInputs.Instance.CleanDirtyTable())
+                PlayerView.OnActivateSliderCleanDirtyTable?.Invoke();
+                PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage?.Invoke();
+
+                if (PlayerInputs.Instance.InteractHold())
                 {
                     PlayerController.OnCleanDirtyTableIncreaseSlider?.Invoke(table);
                     return;
@@ -232,22 +164,14 @@ public class PlayerCollisions
         }
     }
 
-    /* -------------------------------------------EXIT--------------------------------------------- */
-
-    private void OnCollisionExitWithFloor(Collision collision)
+    /* -------------------------------------------COLLISION EXIT----------------------------------------- */
+    
+    private void OnCollisionExitWithAdministration(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Floor"))
+        if (collision.gameObject.CompareTag("Administration"))
         {
-            playerController.PlayerModel.IsGrounded = false;
-        }
-    }
-
-    private void OnCollisionExitWithOven(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Oven"))
-        {
-            playerController.PlayerModel.IsCollidingOven = false;
-            PlayerView.OnCollisionExitWithOvenForCookModeMessage?.Invoke();
+            playerController.PlayerModel.IsCollidingAdministration = false;
+            PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage?.Invoke();
         }
     }
 
@@ -277,12 +201,15 @@ public class PlayerCollisions
         }
     }
 
-    private void OnCollisionExitWithAdministration(Collision collision)
+    /* -------------------------------------------TRIGGER ENTER----------------------------------------- */
+
+    private void OnTriggerEnterWithPortalDungeon(Collider collider)
     {
-        if (collision.gameObject.CompareTag("Administration"))
+        if (collider.gameObject.CompareTag("PortalDungeon"))
         {
-            playerController.PlayerModel.IsCollidingAdministration = false;
-            PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage?.Invoke();
+            collider.gameObject.SetActive(false); // Se desactiva el trigger porque sino ejecuta la corrutina varias veces
+            string[] additiveScenes = { "DungeonUI", "CompartidoUI" };
+            playerController.StartCoroutine(ScenesManager.Instance.LoadScene("Dungeon", additiveScenes));
         }
     }
 }

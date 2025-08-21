@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class ClientManager : MonoBehaviour
 {
+    [SerializeField] private ClientManagerData clientManagerData;
+
     [SerializeField] private Transform spawnPosition, outsidePosition;
 
     [SerializeField] private AbstractFactory clientAbstractFactory;
@@ -15,11 +17,12 @@ public class ClientManager : MonoBehaviour
     private Dictionary<ClientType, ObjectPooler> clientPoolDictionary = new();
     private Dictionary<FoodType, Sprite> foodSpriteDict = new();
 
-    [SerializeField] private float timeToWaitForSpawnNewClient;
     private float spawnTime = 0f;
 
-    [SerializeField] private bool InstantiateClients;
-    [SerializeField] private bool InstantiateTheSameClient;
+    private bool isTabernOpen = false;
+
+    [SerializeField] private bool instantiateClients;
+    [SerializeField] private bool instantiateTheSameClient;
 
     public Transform SpawnPosition { get => spawnPosition; }
     public Transform OutsidePosition { get => outsidePosition; }
@@ -27,28 +30,22 @@ public class ClientManager : MonoBehaviour
 
     void Awake()
     {
+        SuscribeToUpdateManagerEvent();
+        SuscribeToOpenTabernButtonEvent();
         InitializeClientPoolDictionary();
         InitializeFoodSpriteDictionary();
-
-        // Provisorio
-        if (InstantiateClients && !InstantiateTheSameClient)
-        {
-            StartCoroutine(InitializeRandomClient());
-        }
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateClientManager()
     {
-        // Provisorio
-        if (InstantiateTheSameClient)
-        {
-            GetTheSameClientFromPool();
-        }
+        SpawnClients();
+    }
 
-        else if (InstantiateClients)
-        {
-            GetClientRandomFromPool();
-        }
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvent();
+        UnsuscribeToOpenTabernButtonEvent();
     }
 
 
@@ -75,20 +72,61 @@ public class ClientManager : MonoBehaviour
     }
 
 
-    private IEnumerator InitializeRandomClient()
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdateClientManager;
+    }
+
+    private void UnsuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdateClientManager;
+    }
+
+    private void SuscribeToOpenTabernButtonEvent()
+    {
+        OpenTabernUI.OnOpenTabern += SetIsTabernOpen;
+    }
+
+    private void UnsuscribeToOpenTabernButtonEvent()
+    {
+        OpenTabernUI.OnOpenTabern -= SetIsTabernOpen;
+    }
+
+    /*private IEnumerator InitializeRandomClient()
     {
         yield return new WaitUntil(() => clientPools.All(p => p != null && p.Prefab != null));
 
         int randomIndex = UnityEngine.Random.Range(0, clientPools.Count);
         string prefabName = clientPools[randomIndex].Prefab.name;
         clientAbstractFactory.CreateObject(prefabName);
+    }*/
+
+    private void SpawnClients()
+    {
+        if (isTabernOpen)
+        {
+            if (instantiateTheSameClient)
+            {
+                GetTheSameClientFromPool();
+            }
+
+            else if (instantiateClients)
+            {
+                GetClientRandomFromPool();
+            }
+        }
+    }
+
+    private void SetIsTabernOpen()
+    {
+        isTabernOpen = true;
     }
 
     private void GetClientRandomFromPool()
     {
         spawnTime += Time.deltaTime;
 
-        if (spawnTime >= timeToWaitForSpawnNewClient)
+        if (spawnTime >= clientManagerData.TimeToWaitForSpawnNewClient)
         {
             int randomIndex = UnityEngine.Random.Range(0, clientPools.Count);
             string prefabName = clientPools[randomIndex].Prefab.name;
@@ -103,7 +141,7 @@ public class ClientManager : MonoBehaviour
     {
         spawnTime += Time.deltaTime;
 
-        if (spawnTime > timeToWaitForSpawnNewClient)
+        if (spawnTime > clientManagerData.TimeToWaitForSpawnNewClient)
         {
             clientAbstractFactory.CreateObject("ClientOgre");
 

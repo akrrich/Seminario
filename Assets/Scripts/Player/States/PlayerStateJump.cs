@@ -17,8 +17,11 @@ public class PlayerStateJump<T> : State<T>
     {
         base.Enter();
         //Debug.Log("Jump");
+        Vector3 velocity = playerModel.Rb.velocity;
+        velocity.y = 0f;
+        playerModel.Rb.velocity = velocity;
 
-        playerModel.Rb.AddForce(Vector3.up * playerModel.JumpForce, ForceMode.Impulse);
+        playerModel.Rb.AddForce(Vector3.up * playerModel.PlayerTabernData.JumpForce, ForceMode.Impulse);
     }
 
     public override void Execute()
