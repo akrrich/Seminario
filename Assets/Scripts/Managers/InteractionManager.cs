@@ -12,6 +12,7 @@ public class InteractionManager : Singleton<InteractionManager>
     {
         CreateSingleton(true);
         SuscribeToUpdateManagerEvent();
+        SuscribeToBookManagerUI();
     }
 
     // Simulacion de Update
@@ -27,10 +28,25 @@ public class InteractionManager : Singleton<InteractionManager>
         UpdateManager.OnUpdate += UpdateInteractionManager;
     }
 
+    private void SuscribeToBookManagerUI()
+    {
+        BookManagerUI.OnHideOutlinesFromInteractableElements += HideAllOutlines;
+    }
+
+    private void HideAllOutlines()
+    {
+        previousTarget?.HideOutline();
+        currentTarget?.HideOutline();
+        previousTarget = null;
+        currentTarget = null;
+    }
+
     private void DetectTarget()
     {
         if (InteractionManagerUI.Instance == null) return;
         if (!InteractionManagerUI.Instance.CenterPointUI.gameObject.activeSelf) return;
+        if (BookManagerUI.Instance == null) return;
+        if (BookManagerUI.Instance.IsBookOpen) return;
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
@@ -68,6 +84,8 @@ public class InteractionManager : Singleton<InteractionManager>
     {
         if (InteractionManagerUI.Instance == null) return;
         if (!InteractionManagerUI.Instance.CenterPointUI.gameObject.activeSelf) return;
+        if (BookManagerUI.Instance == null) return;
+        if (BookManagerUI.Instance.IsBookOpen) return;
 
         if (currentTarget != null && !PauseManager.Instance.IsGamePaused)
         {

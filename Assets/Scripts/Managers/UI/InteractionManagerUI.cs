@@ -8,9 +8,9 @@ public enum InteractionType
 
 public class InteractionManagerUI : Singleton<InteractionManagerUI>
 {
-    [SerializeField] private Image centerPointUI;
+    [SerializeField] private InteractionManagerUIData interactionManagerUIData;
 
-    [SerializeField] private Color interactiveColor;
+    [SerializeField] private Image centerPointUI;
 
     public Image CenterPointUI { get => centerPointUI; }
 
@@ -19,6 +19,7 @@ public class InteractionManagerUI : Singleton<InteractionManagerUI>
     {
         CreateSingleton(false);
     }
+
 
     // En modo BUILD desaparece el punto de forma correcta
     public void ShowOrHideCenterPointUI(bool value)
@@ -34,13 +35,13 @@ public class InteractionManagerUI : Singleton<InteractionManagerUI>
         if (interactionType == InteractionType.Interactive)
         {
             centerPointUI.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
-            centerPointUI.color = interactiveColor;
+            centerPointUI.color = interactionManagerUIData.InteractiveColor;
         }
 
         else if (interactionType == InteractionType.Normal)
         {
             centerPointUI.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            centerPointUI.color = Color.white;
+            centerPointUI.color = interactionManagerUIData.NormalColor;
         }
     }
 }

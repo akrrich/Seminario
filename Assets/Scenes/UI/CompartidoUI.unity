@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 266930367}
   - component: {fileID: 266930366}
   m_Layer: 5
-  m_Name: PanelIAdministration
+  m_Name: PanelAdministration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -563,6 +563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryPanel: {fileID: 1244929025}
+  indexPanel: 2
 --- !u!4 &388383510
 Transform:
   m_ObjectHideFlags: 0
@@ -1510,6 +1511,50 @@ RectTransform:
   m_AnchoredPosition: {x: 101.1, y: 223.35033}
   m_SizeDelta: {x: 96.8313, y: 74.5914}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &723579119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 723579121}
+  - component: {fileID: 723579122}
+  m_Layer: 0
+  m_Name: BookManagerUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &723579121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723579119}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 894.9319, y: 504.3045, z: 1417.0522}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &723579122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723579119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fee93660437734847a7dfc3d5f482271, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &801182481
 GameObject:
   m_ObjectHideFlags: 0
@@ -2108,7 +2153,7 @@ GameObject:
   - component: {fileID: 1074665325}
   - component: {fileID: 1074665324}
   m_Layer: 5
-  m_Name: PanelIReceipesInformation
+  m_Name: PanelReceipesInformation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2795,7 +2840,7 @@ GameObject:
   - component: {fileID: 1289182652}
   - component: {fileID: 1289182651}
   m_Layer: 5
-  m_Name: PanelIInventory
+  m_Name: PanelInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2887,8 +2932,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83b937d289b830946804dbe913401f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionManagerUIData: {fileID: 11400000, guid: 622885a69509f4b4cbc74c94144dbc6f, type: 2}
   centerPointUI: {fileID: 545707340}
-  interactiveColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
 --- !u!4 &1370447057
 Transform:
   m_ObjectHideFlags: 0
@@ -3637,7 +3682,7 @@ GameObject:
   - component: {fileID: 2026431793}
   - component: {fileID: 2026431792}
   m_Layer: 5
-  m_Name: PanelIOpenTabern
+  m_Name: PanelOpenTabern
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3986,3 +4031,4 @@ SceneRoots:
   - {fileID: 369009976}
   - {fileID: 388383510}
   - {fileID: 1370447057}
+  - {fileID: 723579121}

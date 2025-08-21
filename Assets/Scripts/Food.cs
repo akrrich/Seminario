@@ -64,12 +64,6 @@ public class Food : MonoBehaviour, IInteractable
     }
 
 
-    public void ReturnObjetToPool()
-    {
-        cookingManager.ReturnObjectToPool(foodType, this);
-        RestartValues();
-    }
-
     /// <summary>
     /// Agregar que si el plato estaba desactivado cuando agarro la comida que se active
     /// </summary>
@@ -100,6 +94,12 @@ public class Food : MonoBehaviour, IInteractable
     {
         outline.OutlineWidth = 0f;
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
+    }
+
+    public void ReturnObjetToPool()
+    {
+        cookingManager.ReturnObjectToPool(foodType, this);
+        RestartValues();
     }
 
 

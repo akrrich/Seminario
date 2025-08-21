@@ -60,52 +60,6 @@ public class Table : MonoBehaviour, IInteractable
     }
 
 
-    public void SetDirty(bool current)
-    {
-        isDirty = current;
-        dirty.SetActive(current);
-    }
-
-    /// <summary>
-    /// Analizar el metodo por el tema de el NavMesh del NPC
-    /// </summary>
-    public void SetNavMeshObstacles(bool current)
-    {
-        for (int i = 0; i < navMeshObstacle.Length; i++)
-        {
-            // No ejecutar si ya estaba activado y current es true, esto sirve por si se fue de la cola de espera porque no se libero ninguna silla
-            if (navMeshObstacle[i].isActiveAndEnabled && current)
-            {
-                continue;
-            }
-
-            navMeshObstacle[i].enabled = current;
-        }
-    }
-
-
-    private void FindObjectsAndComponents()
-    {
-        playerController = FindFirstObjectByType<PlayerController>();
-        outline = GetComponentInChildren<Outline>();
-
-        chair = transform.Find("Chair").gameObject;
-        dish = transform.Find("Dish").gameObject;
-        dirty = transform.Find("Dirty").gameObject;
-
-        navMeshObstacle = GetComponentsInChildren<NavMeshObstacle>();
-
-        foreach (Transform childs in dish.transform)
-        {
-            dishPositions.Add(childs.GetComponent<Transform>());
-        }
-    }
-
-
-    /// <summary>
-    /// Resolver el problema del HoldOn, tambien genera problema al completar la barra, que no desaparece la barra del slider hasta que se de un click mas
-    /// </summary>
-
     public void Interact(bool isPressed)
     {
         if (isDirty)
@@ -120,6 +74,11 @@ public class Table : MonoBehaviour, IInteractable
                 PlayerController.OnCleanDirtyTableDecreaseSlider?.Invoke(this);
             }
 
+            if (!isDirty)
+            {
+                HideOutline();
+            }
+
             return;
         }
 
@@ -129,7 +88,7 @@ public class Table : MonoBehaviour, IInteractable
             HideOutline();
             return;
         }
-        
+
         PlayerController.OnHandOverFood?.Invoke();
         HideOutline();
         return;
@@ -231,6 +190,47 @@ public class Table : MonoBehaviour, IInteractable
             auxiliarTable = null;
             auxiliarClientView = null;
             return;
+        }
+    }
+
+    public void SetDirty(bool current)
+    {
+        isDirty = current;
+        dirty.SetActive(current);
+    }
+
+    /// <summary>
+    /// Analizar el metodo por el tema de el NavMesh del NPC
+    /// </summary>
+    public void SetNavMeshObstacles(bool current)
+    {
+        for (int i = 0; i < navMeshObstacle.Length; i++)
+        {
+            // No ejecutar si ya estaba activado y current es true, esto sirve por si se fue de la cola de espera porque no se libero ninguna silla
+            if (navMeshObstacle[i].isActiveAndEnabled && current)
+            {
+                continue;
+            }
+
+            navMeshObstacle[i].enabled = current;
+        }
+    }
+
+
+    private void FindObjectsAndComponents()
+    {
+        playerController = FindFirstObjectByType<PlayerController>();
+        outline = GetComponentInChildren<Outline>();
+
+        chair = transform.Find("Chair").gameObject;
+        dish = transform.Find("Dish").gameObject;
+        dirty = transform.Find("Dirty").gameObject;
+
+        navMeshObstacle = GetComponentsInChildren<NavMeshObstacle>();
+
+        foreach (Transform childs in dish.transform)
+        {
+            dishPositions.Add(childs.GetComponent<Transform>());
         }
     }
 }

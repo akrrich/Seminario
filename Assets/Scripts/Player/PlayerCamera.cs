@@ -53,29 +53,32 @@ public class PlayerCamera : MonoBehaviour
 
     private void UpdateCameraFollow()
     {
-        if (PauseManager.Instance != null && !playerModel.IsCooking && !playerModel.IsAdministrating && !PauseManager.Instance.IsGamePaused)
+        if (BookManagerUI.Instance == null) return;
+        if (BookManagerUI.Instance.IsBookOpen) return;
+        if (PauseManager.Instance == null) return;
+        if (PauseManager.Instance.IsGamePaused) return;
+        if (playerModel.IsCooking || playerModel.IsAdministrating) return;
+
+        cameraOffset = new Vector3(0f, offSetY, 0.3f);
+
+        float x, y;
+
+        if (DeviceManager.Instance.CurrentDevice == Device.Joystick)
         {
-            cameraOffset = new Vector3(0f, offSetY, 0.3f);
-
-            float x, y;
-
-            if (DeviceManager.Instance.CurrentDevice == Device.Joystick)
-            {
-                x = PlayerInputs.Instance.JoystickRotation().x * Time.deltaTime;
-                y = PlayerInputs.Instance.JoystickRotation().y * Time.deltaTime;
-            }
-
-            else
-            {
-                x = PlayerInputs.Instance.MouseRotation().x * Time.deltaTime;
-                y = PlayerInputs.Instance.MouseRotation().y * Time.deltaTime;
-            }
-
-            rotationX -= y;
-            rotationX = Mathf.Clamp(rotationX, -80f, 80f);
-
-            transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
-            playerModel.transform.Rotate(Vector3.up * x);
+            x = PlayerInputs.Instance.JoystickRotation().x * Time.deltaTime;
+            y = PlayerInputs.Instance.JoystickRotation().y * Time.deltaTime;
         }
+
+        else
+        {
+            x = PlayerInputs.Instance.MouseRotation().x * Time.deltaTime;
+            y = PlayerInputs.Instance.MouseRotation().y * Time.deltaTime;
+        }
+
+        rotationX -= y;
+        rotationX = Mathf.Clamp(rotationX, -80f, 80f);
+
+        transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+        playerModel.transform.Rotate(Vector3.up * x);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class AdministratingManagerUI : MonoBehaviour
+public class AdministratingManagerUI : MonoBehaviour, IBookableUI
 {
     /// <summary>
     /// Preguntar por el grupo el tema de ajustar que se deseleccione el boton cuando sale el mouse
@@ -38,6 +38,8 @@ public class AdministratingManagerUI : MonoBehaviour
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
 
+    [SerializeField] private int indexPanel;
+
     /// <summary>
     ///  Verificar si el error de que no reproduce el sonido despues de despausar el juego sigue ocurriendo cuando se agregan elementos en el PanelTabern
     /// </summary>
@@ -45,6 +47,8 @@ public class AdministratingManagerUI : MonoBehaviour
 
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
     public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
+
+    public int IndexPanel { get => indexPanel; }
 
 
     void Awake()
@@ -68,6 +72,17 @@ public class AdministratingManagerUI : MonoBehaviour
         UnsuscribeToUpdateManagerEvent();
         UnsuscribeToPlayerViewEvents();
         UnscribeToPauseManagerRestoreSelectedGameObjectEvent();
+    }
+
+
+    public void OpenPanel()
+    {
+        ActiveOrDeactivatePanel(true);
+    }
+
+    public void ClosePanel()
+    {
+        ActiveOrDeactivatePanel(false);
     }
 
 
@@ -254,7 +269,6 @@ public class AdministratingManagerUI : MonoBehaviour
 
             panelIngredients.SetActive(state);
 
-            DeviceManager.Instance.IsUIModeActive = true;
             onSetSelectedCurrentGameObject?.Invoke(buttonsIngredients[0]);
         }
 
@@ -267,7 +281,6 @@ public class AdministratingManagerUI : MonoBehaviour
             panelTabern.SetActive(state);
 
             ignoreFirstButtonSelected = true;
-            DeviceManager.Instance.IsUIModeActive = false;
             onClearSelectedCurrentGameObject?.Invoke();
         }
     }

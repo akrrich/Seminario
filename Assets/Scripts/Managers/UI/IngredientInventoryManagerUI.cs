@@ -1,58 +1,57 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class IngredientInventoryManagerUI : MonoBehaviour
+public class IngredientInventoryManagerUI : MonoBehaviour, IBookableUI
 {
-    private PlayerModel playerModel;
-    private PlayerDungeonModel dungeonModel;
-
     [SerializeField] private RawImage inventoryPanel;
 
     private Transform slotParentObject;
     private List<Transform> slotPositions = new List<Transform>();
     private Dictionary<IngredientType, (GameObject slot, TextMeshProUGUI text)> ingredientSlots = new();
 
-    private bool isInventoryOpenUI = false;
+    [SerializeField] private int indexPanel;
+
+    public int IndexPanel { get => indexPanel; }
 
 
     void Awake()
     {
-        SuscribeToUpdateManagerEvent();
-        SuscribeToPlayerViewEvent();
-        SuscribeToModelEvents();
+        //SuscribeToPlayerViewEvent();
         GetComponents();
         InitializeSlots();
     }
 
-    // Simulacion de Update
-    void UpdateIngredientInventoryManagerUI()
-    {
-        EnabledOrDisabledInventoryPanel();
-    }
-
     void OnDestroy()
     {
-        UnsuscribeToPlayerViewEvent();
-        UnsuscribeToPlayerViewEvent();
-        UnsuscribeToModelEvents();
+        //UnsuscribeToPlayerViewEvent();
     }
 
-
-    private void SuscribeToUpdateManagerEvent()
+    public void OpenPanel()
     {
-        UpdateManager.OnUpdate += UpdateIngredientInventoryManagerUI;
+        inventoryPanel.enabled = true;
+
+        foreach (var kvp in ingredientSlots)
+        {
+            kvp.Value.slot.SetActive(true);
+            int stock = IngredientInventoryManager.Instance.GetStock(kvp.Key);
+            kvp.Value.text.text = stock.ToString();
+        }
     }
 
-    private void UnscribeToUpdateManagerEvent()
+    public void ClosePanel()
     {
-        UpdateManager.OnUpdate -= UpdateIngredientInventoryManagerUI;
+        inventoryPanel.enabled = false;
+
+        foreach (var kvp in ingredientSlots)
+        {
+            kvp.Value.slot.SetActive(false);
+        }
     }
 
-    private void SuscribeToPlayerViewEvent()
+
+    /*private void SuscribeToPlayerViewEvent()
     {
         PlayerView.OnDeactivateInventoryFoodUI += HideInventory;
     }
@@ -60,19 +59,7 @@ public class IngredientInventoryManagerUI : MonoBehaviour
     private void UnsuscribeToPlayerViewEvent()
     {
         PlayerView.OnDeactivateInventoryFoodUI -= HideInventory;
-    }
-
-    private void SuscribeToModelEvents()
-    {
-        PlayerModel.OnPlayerInitialized += GetPlayerModelReferenceFromEvent;
-        PlayerDungeonModel.onPlayerInitialized += GetPlayerDungeonModelReferenceFromEvent; 
-    }  
-
-    private void UnsuscribeToModelEvents()
-    {
-        PlayerModel.OnPlayerInitialized -= GetPlayerModelReferenceFromEvent;
-        PlayerDungeonModel.onPlayerInitialized -= GetPlayerDungeonModelReferenceFromEvent;
-    }
+    }*/
 
     private void GetComponents()
     {
@@ -103,75 +90,4 @@ public class IngredientInventoryManagerUI : MonoBehaviour
             ingredientSlots[type] = (slotInstance, stockText);
         }
     }
-
-    private void ShowInventory()
-    {
-        isInventoryOpenUI = true;
-        inventoryPanel.enabled = true;
-
-        foreach (var kvp in ingredientSlots)
-        {
-            kvp.Value.slot.SetActive(true);
-            int stock = IngredientInventoryManager.Instance.GetStock(kvp.Key);
-            kvp.Value.text.text = stock.ToString();
-        }
-    }
-
-    private void HideInventory()
-    {
-        isInventoryOpenUI = false;
-        inventoryPanel.enabled = false;
-
-        foreach (var kvp in ingredientSlots)
-        {
-            kvp.Value.slot.SetActive(false);
-        }
-    }
-
-    private void GetPlayerModelReferenceFromEvent(PlayerModel playerModel)
-    {
-        if (this.playerModel == null)
-        {
-            this.playerModel = playerModel;
-        }
-    }
-
-    private void GetPlayerDungeonModelReferenceFromEvent(PlayerDungeonModel dungeonModel)
-    {
-        if(this.dungeonModel == null)
-        {
-            this.dungeonModel = dungeonModel;
-        }
-    }
-
-    private void EnabledOrDisabledInventoryPanel()
-    {
-        var currentScene = SceneManager.GetActiveScene();
-
-        if (!PauseManager.Instance.IsGamePaused)
-        {
-
-            if (currentScene.name == "Tabern")
-            {
-                if (playerModel != null && !playerModel.IsCooking && !playerModel.IsAdministrating)
-                {
-                    if (PlayerInputs.Instance.Inventory())
-                    {
-                        (isInventoryOpenUI ? (Action)HideInventory : ShowInventory)();
-                    }
-                }
-            }
-            if (currentScene.name == "Dungeon")
-            {
-                if (dungeonModel != null)
-                {
-                    if (PlayerInputs.Instance.Inventory())
-                    {
-                        (isInventoryOpenUI ? (Action)HideInventory : ShowInventory)();
-                    }
-                }
-            }
-        }
-    }
-    
 }

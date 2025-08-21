@@ -13,8 +13,12 @@ public class ScenesManager : Singleton<ScenesManager>
     [SerializeField] private GameObject loadingScenePanel;
     [SerializeField] private GameObject exitGamePanel;
 
+    private Scene currentScene;
+
     private bool isInLoadingScenePanel = false; 
     private bool isInExitGamePanel = false;
+
+    public string CurrentSceneName { get => currentScene.name; }
 
     public bool IsInLoadingScenePanel { get => isInLoadingScenePanel; }
     public bool IsInExitGamePanel { get => isInExitGamePanel; }
@@ -24,7 +28,14 @@ public class ScenesManager : Singleton<ScenesManager>
     {
         CreateSingleton(true);
         DontDestroyOnLoadPanels();
+        SuscribeToUpdateManagerEvent();
         SetInitializedScene();
+    }
+
+    // Simulacion de Update
+    void UpdateScenesManager()
+    {
+        UpdateCurrentSceneName();
     }
 
 
@@ -77,15 +88,6 @@ public class ScenesManager : Singleton<ScenesManager>
     }
 
 
-    // Esto sirve para que una vez cargada la nueva escena, espere 3 segundos para desactivar el panel, para que permita cargar Awake y Start de la nueva escena cargada
-    private IEnumerator DisableLoadingScenePanelAfterSeconds()
-    {
-        yield return new WaitForSeconds(3);
-
-        isInLoadingScenePanel = false;
-        loadingScenePanel.SetActive(false);
-    }
-
     private void DontDestroyOnLoadPanels()
     {
         if (loadingScenePanel != null)
@@ -99,12 +101,26 @@ public class ScenesManager : Singleton<ScenesManager>
         }
     }
 
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdateAllTime += UpdateScenesManager;
+    }
+
+    // Esto sirve para que una vez cargada la nueva escena, espere 3 segundos para desactivar el panel, para que permita cargar Awake y Start de la nueva escena cargada
+    private IEnumerator DisableLoadingScenePanelAfterSeconds()
+    {
+        yield return new WaitForSeconds(3);
+
+        isInLoadingScenePanel = false;
+        loadingScenePanel.SetActive(false);
+    }
+
     // Este metodo solamente funciona para cuando se inicia el programa, es decir solamente una vez en toda la ejecucion
     private void SetInitializedScene()
     {
-        Scene initializedCurrentScene = SceneManager.GetActiveScene();
+        UpdateCurrentSceneName();
 
-        switch (initializedCurrentScene.name)
+        switch (currentScene.name)
         {
             case "MainMenu":
                 DeviceManager.Instance.IsUIModeActive = true;
@@ -129,5 +145,10 @@ public class ScenesManager : Singleton<ScenesManager>
     private AsyncOperation LoadSceneAdditive(string sceneName)
     {
         return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    }
+
+    private void UpdateCurrentSceneName()
+    {
+        currentScene = SceneManager.GetActiveScene();
     }
 }

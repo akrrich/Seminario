@@ -1,7 +1,6 @@
 public enum InteractionMode
 {
-    Press,
-    Hold     
+    Press, Hold     
 }
 
 public interface IInteractable 

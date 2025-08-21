@@ -10804,6 +10804,7 @@ MonoBehaviour:
   panelTabern: {fileID: 874153280}
   buttonClick: {fileID: 1463775459}
   buttonSelected: {fileID: 1463775458}
+  indexPanel: 1
 --- !u!4 &1463775457
 Transform:
   m_ObjectHideFlags: 0
@@ -14003,6 +14004,7 @@ MonoBehaviour:
   panelOpenTabern: {fileID: 1268422296}
   buttonClick: {fileID: 1962221305}
   buttonSelected: {fileID: 1962221306}
+  indexPanel: 0
 --- !u!82 &1962221305
 AudioSource:
   m_ObjectHideFlags: 0

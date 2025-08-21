@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private static event Action onHandOverFood;
     private static event Action onTakeOrder;
     private static event Action onThrowFoodToTrash;
+    private static event Action onOpenOrCloseBook;
 
     // Estos 2 eventos corresponden a entregar el plato una vez tomado el pedido
     private static event Action<Table> onTableCollisionEnterForHandOverFood;
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
     public static Action OnThrowFoodToTrash { get => onThrowFoodToTrash; set => onThrowFoodToTrash = value; }
+    public static Action OnOpenOrCloseBook { get => onOpenOrCloseBook; set => onOpenOrCloseBook = value; }
 
     // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido
     public static Action<Table> OnTableCollisionEnterForHandOverFood { get => onTableCollisionEnterForHandOverFood; set => onTableCollisionEnterForHandOverFood = value; }
@@ -151,14 +153,18 @@ public class PlayerController : MonoBehaviour
 
     private void CheckInputs()
     {
-        if (PlayerInputs.Instance != null && PauseManager.Instance != null && !PauseManager.Instance.IsGamePaused)
-        {
-            ShowOrHideDish();
-        }
+        if (PlayerInputs.Instance == null) return;
+        if (PauseManager.Instance == null) return;
+        if (PauseManager.Instance.IsGamePaused) return;
+
+        ShowOrHideDish();
+        OpenBook();
     }
 
     private void ShowOrHideDish()
     {
+        if (BookManagerUI.Instance == null) return;
+        if (BookManagerUI.Instance.IsBookOpen) return;
         if (playerModel.IsCooking || playerModel.IsAdministrating) return;
 
         if (PlayerInputs.Instance.ShowOrHideDish())
@@ -179,5 +185,15 @@ public class PlayerController : MonoBehaviour
                 playerView.ShowOrHideDish(true);
             }
         }   
+    }
+
+    private void OpenBook()
+    {
+        if (playerModel.IsCooking || playerModel.IsAdministrating) return;
+
+        if (PlayerInputs.Instance.Book())
+        {
+            onOpenOrCloseBook?.Invoke();
+        }
     }
 }

@@ -1,6 +1,4 @@
 using UnityEngine;
-using System;
-using System.Collections;
 
 public enum PlayerStates
 {
@@ -18,8 +16,6 @@ public class PlayerModel : MonoBehaviour
     private PhysicMaterial physicMaterial;
 
     private GameObject administration;
-
-    private static event Action<PlayerModel> onPlayerInitialized; // Evento que se usa para buscar referencias al player desde escenas aditivas
 
     [SerializeField] private LayerMask groundLayer;
 
@@ -40,8 +36,6 @@ public class PlayerModel : MonoBehaviour
     public PhysicMaterial PhysicsMaterial { get => physicMaterial; }
     public GameObject Administration { get => administration; }
 
-    public static Action<PlayerModel> OnPlayerInitialized { get => onPlayerInitialized; set => onPlayerInitialized = value; }
-
     public float Speed { get => speed; set => speed = value; }
 
     public bool IsGrounded { get =>  Physics.SphereCast(transform.position, 0.3f, Vector3.down, out _, distanceToGround, groundLayer); }
@@ -55,9 +49,6 @@ public class PlayerModel : MonoBehaviour
     {
         GetComponents();
         Initialize();
-
-        // Provisorio
-        StartCoroutine(InvokeEventInitializationPlayer());
     }
 
     void OnDrawGizmosSelected()
@@ -68,25 +59,27 @@ public class PlayerModel : MonoBehaviour
 
     public void Movement()
     {
-        if (PlayerInputs.Instance != null && !isCooking && !isAdministrating)
+        if (BookManagerUI.Instance == null) return;
+        if (BookManagerUI.Instance.IsBookOpen) return;
+        if (PlayerInputs.Instance == null) return;
+        if (isCooking || isAdministrating) return;
+
+        Vector3 cameraForward = playerCamera.transform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+
+        Vector3 right = playerCamera.transform.right;
+        Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
+
+        rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+
+        if (IsGrounded)
         {
-            Vector3 cameraForward = playerCamera.transform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
-
-            Vector3 right = playerCamera.transform.right;
-            Vector3 movement = (cameraForward * PlayerInputs.Instance.GetMoveAxis().y + right * PlayerInputs.Instance.GetMoveAxis().x).normalized * speed * Time.fixedDeltaTime;
-
-            rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
-
-            if (IsGrounded)
-            {
-                rb.AddForce(Vector3.down * 10f, ForceMode.Force);
-            }
-
-            float targetDrag = IsGrounded ? playerTabernData.GroundDrag : 0.15f;
-            rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);
+            rb.AddForce(Vector3.down * 10f, ForceMode.Force);
         }
+
+        float targetDrag = IsGrounded ? playerTabernData.GroundDrag : 0.15f;
+        rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);        
     }
 
 
@@ -120,12 +113,5 @@ public class PlayerModel : MonoBehaviour
     private void Initialize()
     {
         physicMaterial = capsuleCollider.material;
-    }
-
-    private IEnumerator InvokeEventInitializationPlayer()
-    {
-        yield return new WaitForSeconds(1);
-
-        onPlayerInitialized?.Invoke(this);
     }
 }

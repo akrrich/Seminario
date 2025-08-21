@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class OpenTabernUI : MonoBehaviour
+public class OpenTabernUI : MonoBehaviour, IBookableUI
 {
     [SerializeField] private GameObject panelOpenTabern;
 
@@ -19,12 +19,16 @@ public class OpenTabernUI : MonoBehaviour
     
     private static event Action onOpenTabern;
 
+    [SerializeField] private int indexPanel;
+
     private bool ignoreFirstButtonSelected = true;
 
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
     public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
 
     public static Action OnOpenTabern { get => onOpenTabern; set => onOpenTabern = value; }
+
+    public int IndexPanel { get => indexPanel; }
 
 
     void Awake()
@@ -37,26 +41,6 @@ public class OpenTabernUI : MonoBehaviour
     // Simulacion de Update
     void UpdateOpenTabernUI()
     {
-        // Test
-        if (Input.GetKeyDown(KeyCode.T) && !panelOpenTabern.gameObject.activeSelf)
-        {
-            DeviceManager.Instance.IsUIModeActive = true;
-
-            onSetSelectedCurrentGameObject?.Invoke(buttonsOpenTabern[0]);
-            panelOpenTabern.SetActive(true);
-            return;
-        }
-
-        else if (Input.GetKeyDown(KeyCode.T) && panelOpenTabern.gameObject.activeSelf)
-        {
-            DeviceManager.Instance.IsUIModeActive = false;
-
-            onClearSelectedCurrentGameObject?.Invoke();
-            panelOpenTabern.SetActive(false);
-            ignoreFirstButtonSelected = true;
-            return;
-        }
-
         CheckLastSelectedButtonIfAdminPanelIsOpen();
     }
 
@@ -66,6 +50,21 @@ public class OpenTabernUI : MonoBehaviour
         UnscribeToPauseManagerRestoreSelectedGameObjectEvent();
     }
 
+
+    public void OpenPanel()
+    {
+        panelOpenTabern.SetActive(true);
+
+        onSetSelectedCurrentGameObject?.Invoke(buttonsOpenTabern[0]);
+    }
+
+    public void ClosePanel()
+    {
+        panelOpenTabern.SetActive(false);
+
+        onClearSelectedCurrentGameObject?.Invoke();
+        ignoreFirstButtonSelected = true;
+    }
 
     // Funcion asignada a botones de la UI
     public void ButtonOpenTabern()
