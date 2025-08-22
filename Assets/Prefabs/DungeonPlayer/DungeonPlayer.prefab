@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6990290591574416511}
   - component: {fileID: 1259227023574265200}
   - component: {fileID: 1315870567522119900}
+  - component: {fileID: 6327012420691497770}
   - component: {fileID: 3910886978196774456}
   - component: {fileID: 6083476399390222158}
   - component: {fileID: 7216575907976385526}
@@ -158,7 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc8bf17a6d59894e80bcf217a5dcb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 100
+  maxStamina: 100
+  staminaRegenRate: 10
+  staminaRegenDelay: 1
   speed: 0
   walkSpeed: 5
   runSpeed: 8
@@ -167,7 +170,6 @@ MonoBehaviour:
   airMultiplier: 5
   groundDrag: 0
   jumpForce: 7
-  dashCooldown: 1.5
   currentWeaponDamage: 5
   attackCooldown: 1
   groundCheckDistance: 1.05
@@ -187,6 +189,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf0b41cb605c8040b9091d220c66cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6327012420691497770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422702052002452655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9042588cd2db354f8bbec978ba88da2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 100
+  healAmount: 10
+  healInterval: 30
 --- !u!114 &3910886978196774456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackHitbox: {fileID: 6083476399390222158}
   weaponController: {fileID: 8620121490210133455}
+  shieldHandler: {fileID: 0}
+  attackStaminaCost: 20
 --- !u!114 &6083476399390222158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,6 +267,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6bba73e5deab6498e63d639939136f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  staminaCost: 25
+  cooldown: 1.5
+  activeTime: 0.6
 --- !u!114 &1479633607086651313
 MonoBehaviour:
   m_ObjectHideFlags: 0

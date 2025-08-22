@@ -6,9 +6,6 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 {
     #region Inspector Fields
     [Header("Stats")]
-    [Header("HP")]
-    [SerializeField] private float maxHP = 100f;
-
     [Header("Stamina")]
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float staminaRegenRate = 10f; // por segundo
@@ -37,7 +34,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     #endregion
 
     #region Private Fields
-    private float currentHP;
+    private PlayerHealth playerHealth;
     private float currentStamina;
 
     private bool isDead = false;
@@ -53,8 +50,6 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     #region Properties
     // -------- Estado general --------
-    public float CurrentHP => currentHP;
-    public bool IsDead => isDead;
     public bool IsInvulnerable => invulnerable;
     public bool CanMove { get; set; } = true;
 
@@ -89,14 +84,16 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        playerHealth = GetComponent<PlayerHealth>();
         combatHandler = GetComponent<CombatHandler>();
         orientation = transform.Find("Orientation");
 
         rb.freezeRotation = true;
-        currentHP = maxHP;
-        currentStamina = maxStamina;
 
-        OnHealthChanged?.Invoke(currentHP, maxHP);
+        playerHealth.OnHealthChanged += (current, max) => OnHealthChanged?.Invoke(current, max);
+        playerHealth.OnPlayerDied += HandleDeath;
+
+        currentStamina = maxStamina;
         OnStaminaChanged?.Invoke(currentStamina, maxStamina);
 
         StartCoroutine(InvokeEventInitializationPlayer());
@@ -124,18 +121,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     // --------- Vida ---------
     public void TakeDamage(int amount)
     {
-        if (invulnerable) return;
-
-        currentHP = Mathf.Clamp(currentHP - amount, 0, maxHP);
-        OnHealthChanged?.Invoke(currentHP, maxHP);
-
-        if (currentHP <= 0 && !isDead)
-        {
-            currentHP = 0;
-            isDead = true;
-            OnPlayerDied?.Invoke();
-            HandleDeath();
-        }
+        playerHealth.TakeDamage(amount);
     }
 
     public void SetInvulnerable(bool value) => invulnerable = value;
@@ -253,27 +239,20 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     {
         CanMove = false;
         rb.velocity = Vector3.zero;
-        SetInvulnerable(true);
+        playerHealth.SetInvulnerable(true);
         StartCoroutine(DeathSequence());
     }
 
     private IEnumerator DeathSequence()
     {
-        string[] additiveScenes = { "MainMenuUI" };
-        yield return StartCoroutine(ScenesManager.Instance.LoadScene("MainMenu", additiveScenes));
-        // Reset stats
-        currentHP = maxHP;
-        currentStamina = maxStamina;
-        isDead = false;
-        SetInvulnerable(false);
+        yield return new WaitForSeconds(1f);
+
+        DungeonManager.Instance.OnPlayerDeath();
+
+        playerHealth.Revive();
         CanMove = true;
 
-        OnHealthChanged?.Invoke(currentHP, maxHP);
-        OnStaminaChanged?.Invoke(currentStamina, maxStamina);
-
-        // TODO:
-        // DungeonManager.Instance.ReturnToLobby();
-        // DungeonManager.Instance.ResetDungeon();
+        Debug.Log("Jugador respawneado en la dungeon");
     }
     #endregion
 
