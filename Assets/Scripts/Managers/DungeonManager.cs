@@ -29,6 +29,18 @@ public class DungeonManager : MonoBehaviour
     private Transform previousRoom;
     private Queue<Transform> recentRooms = new Queue<Transform>();
 
+    public static DungeonManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     /// <summary>
     /// Teletransporta al jugador a una sala o pasillo aleatorio, evitando repeticiones cercanas.
     /// </summary>

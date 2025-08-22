@@ -29,6 +29,10 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     protected bool canSeePlayer = false;
     protected float loseSightTimer = 0f;
 
+    [Header("Decals")]
+    [SerializeField] private GameObject bloodDecalPrefab;
+    [SerializeField] private float decalYOffset = 0.01f; // Para evitar z-fighting
+
     [Header("Health (runtime)")]
     public int currentHP;
     protected bool isDead = false;
@@ -120,12 +124,31 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
             }
         }
     }
+    private void SpawnBloodDecal()
+    {
+        if (bloodDecalPrefab == null) return;
+
+        Vector3 origin = transform.position + Vector3.up * 1f; // Un poco más alto para asegurar que vea hacia abajo
+        Vector3 direction = Vector3.down;
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, 10f, LayerMask.GetMask("whatIsGround")))
+        {
+            Vector3 spawnPosition = hit.point + Vector3.up * decalYOffset; // Justo sobre el piso
+            Quaternion rotation = Quaternion.Euler(90f, Random.Range(0f, 360f), 0f); // Rotación aleatoria en Y
+            Instantiate(bloodDecalPrefab, spawnPosition, rotation);
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el suelo para colocar el decal de sangre.");
+        }
+    }
 
     public virtual void TakeDamage(int amount)
     {
         if (isDead) return;
         currentHP -= amount;
         damageFlash?.TriggerFlash();
+        SpawnBloodDecal();
 
         if (currentHP <= 0) Die();
     }
