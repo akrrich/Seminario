@@ -9,6 +9,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     [Header("HP")]
     [SerializeField] private float maxHP = 100f;
 
+    [Header("Stamina")]
+    [SerializeField] private float maxStamina = 100f;
+    [SerializeField] private float staminaRegenRate = 10f; // por segundo
+    [SerializeField] private float staminaRegenDelay = 1f; // pausa antes de regenerar tras gastar
+
     [Header("Movement")]
     [SerializeField] private float speed;
     [SerializeField] private float walkSpeed = 5f;
@@ -20,9 +25,6 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 7f;
-
-    [Header("Dash")]
-    [SerializeField] private float dashCooldown = 3f;   
 
     [Header("Combat")]
     [SerializeField] private int currentWeaponDamage = 5;
@@ -36,15 +38,16 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     #region Private Fields
     private float currentHP;
-    private float lastDashTime = -Mathf.Infinity;
+    private float currentStamina;
 
     private bool isDead = false;
     private bool invulnerable = false;
+    private bool isRegenerating = true;
+    private float lastStaminaUseTime;
 
     private Vector3 moveDirection;
     private Transform orientation;
     private Rigidbody rb;
-    private DashHandler dashHandler;
     private CombatHandler combatHandler;
     #endregion
 
@@ -54,6 +57,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public bool IsDead => isDead;
     public bool IsInvulnerable => invulnerable;
     public bool CanMove { get; set; } = true;
+
+    // -------- Stamina --------
+    public float CurrentStamina => currentStamina;
+    public float MaxStamina => maxStamina;
+    public bool HasStamina(float amount) => currentStamina >= amount;
 
     // -------- Movimiento --------
     public float Speed { get => speed; set => speed = value; }
@@ -66,16 +74,13 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public bool IsGrounded => Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
     public bool IsFalling => rb.velocity.y < -0.1f && !IsGrounded;
 
-    // -------- Dash --------
-    public bool DashEnabled { get; set; } = true;
-    public bool CanDash => DashEnabled && Time.time >= lastDashTime + dashCooldown;
-
     // -------- Combate --------
     public int CurrentWeaponDamage { get => currentWeaponDamage; set => currentWeaponDamage = value; }
     public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
 
-    //------Provisorio, para el alpha------
+    //------ Eventos ------
     public event Action<float, float> OnHealthChanged;
+    public event Action<float, float> OnStaminaChanged;
     public event Action OnPlayerDied;
     public static Action<PlayerDungeonModel> onPlayerInitialized;
     #endregion
@@ -84,13 +89,16 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        dashHandler = GetComponent<DashHandler>();
         combatHandler = GetComponent<CombatHandler>();
         orientation = transform.Find("Orientation");
 
         rb.freezeRotation = true;
         currentHP = maxHP;
+        currentStamina = maxStamina;
+
         OnHealthChanged?.Invoke(currentHP, maxHP);
+        OnStaminaChanged?.Invoke(currentStamina, maxStamina);
+
         StartCoroutine(InvokeEventInitializationPlayer());
     }
 
@@ -107,39 +115,77 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         HandleInputs();
         SpeedControl();
         rb.drag = IsGrounded ? groundDrag : 0f;
+
+        RegenerateStamina();
     }
     #endregion
 
     #region Public Methods
+    // --------- Vida ---------
     public void TakeDamage(int amount)
     {
         if (invulnerable) return;
 
         currentHP = Mathf.Clamp(currentHP - amount, 0, maxHP);
-        OnHealthChanged?.Invoke(currentHP, maxHP); 
+        OnHealthChanged?.Invoke(currentHP, maxHP);
 
         if (currentHP <= 0 && !isDead)
         {
             currentHP = 0;
             isDead = true;
-            OnPlayerDied?.Invoke(); 
+            OnPlayerDied?.Invoke();
             HandleDeath();
         }
     }
 
     public void SetInvulnerable(bool value) => invulnerable = value;
 
-    /// <summary>Se llama desde DashHandler cuando inicia un dash para arrancar el cooldown.</summary>
-    public void RegisterDash() => lastDashTime = Time.time;
+    // --------- Stamina ---------
+    public void UseStamina(float amount)
+    {
+        if (amount <= 0f) return;
+
+        currentStamina = Mathf.Clamp(currentStamina - amount, 0, maxStamina);
+        OnStaminaChanged?.Invoke(currentStamina, maxStamina);
+
+        lastStaminaUseTime = Time.time;
+    }
+
+    private void RegenerateStamina()
+    {
+        if (currentStamina >= maxStamina) return;
+        if (Time.time < lastStaminaUseTime + staminaRegenDelay) return;
+
+        currentStamina += staminaRegenRate * Time.deltaTime;
+        currentStamina = Mathf.Clamp(currentStamina, 0, maxStamina);
+        OnStaminaChanged?.Invoke(currentStamina, maxStamina);
+    }
     #endregion
 
     #region Inputs & Movimiento
     private void HandleInputs()
     {
-        if(PlayerInputs.Instance != null)
+        if (PlayerInputs.Instance == null) return;
+
+        if (PlayerInputs.Instance.Jump())
+            Jump();
+
+        if (PlayerInputs.Instance.Shield())
         {
-         if (PlayerInputs.Instance.Jump()) Jump();
-         if (PlayerInputs.Instance.Attack()) combatHandler.TryAttack();
+            if (!combatHandler.IsAttacking)
+            {
+                combatHandler.TryUseShield(); 
+            }
+        }
+        else 
+        {
+            if (PlayerInputs.Instance.Attack())
+            {
+                if (!combatHandler.IsShieldActive) 
+                {
+                    combatHandler.TryAttack();
+                }
+            }
         }
     }
 
@@ -195,12 +241,13 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     #endregion
+
     private IEnumerator InvokeEventInitializationPlayer()
     {
         yield return new WaitForSeconds(1);
-
         onPlayerInitialized?.Invoke(this);
     }
+
     #region Death & Respawn
     private void HandleDeath()
     {
@@ -216,9 +263,14 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         yield return StartCoroutine(ScenesManager.Instance.LoadScene("MainMenu", additiveScenes));
         // Reset stats
         currentHP = maxHP;
+        currentStamina = maxStamina;
         isDead = false;
         SetInvulnerable(false);
         CanMove = true;
+
+        OnHealthChanged?.Invoke(currentHP, maxHP);
+        OnStaminaChanged?.Invoke(currentStamina, maxStamina);
+
         // TODO:
         // DungeonManager.Instance.ReturnToLobby();
         // DungeonManager.Instance.ResetDungeon();

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: InputsJoystick
   m_EditorClassIdentifier: 
   showOrHideDish: 333
-  dash: 0
-  attack: 0
+  shield: 332
+  attack: 333
   interact: 330
   run: 337
   jump: 331

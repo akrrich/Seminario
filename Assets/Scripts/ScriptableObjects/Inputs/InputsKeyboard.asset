@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: InputsKeyboard
   m_EditorClassIdentifier: 
   showOrHideDish: 113
-  dash: 0
+  shield: 324
   attack: 323
   interact: 101
   run: 304
