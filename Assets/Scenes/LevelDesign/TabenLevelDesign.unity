@@ -26412,7 +26412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &593297777
 Transform:
   m_ObjectHideFlags: 0
@@ -40832,6 +40832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c312950cfad644aa68b41ee3d49a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offSetY: 0
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72052,11 +72053,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cdc5b4d2744cf749bbf22ed6b7ee15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rangeVision: 2
-  angleVision: 180
-  walkSpeed: 300
-  runSpeed: 500
-  jumpForce: 5
+  playerTabernData: {fileID: 11400000, guid: 544d1c0df7c42c648bb302aaa7fb069b, type: 2}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1001 &1709805896
 PrefabInstance:
   m_ObjectHideFlags: 0
