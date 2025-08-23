@@ -1,37 +1,33 @@
 using UnityEngine;
 public class DoorController : MonoBehaviour
 {
-    public DungeonManager dungeonManager;
-    public RoomType targetType; // Combat o Hallway
-    public bool isLocked { get; private set; } = false;
+    [SerializeField] private Animator doorAnimator;
+    [SerializeField] private Collider doorCollider;
+    [SerializeField] private string openTrigger = "Open";
 
-    [SerializeField] private string playerTag = "Player";
-
-    private void OnTriggerEnter(Collider other)
+    public void Unlock()
     {
-        // Verifica si el que entra es el jugador
-        if (other.CompareTag(playerTag))
-        {
-            if (!isLocked)
-            {
-                dungeonManager.TeleportToRandomRoom(targetType);
-            }
-            else
-            {
-                Debug.Log("La puerta está bloqueada.");
-            }
-        }
+        // Activa la animación de abrir
+        if (doorAnimator != null)
+            doorAnimator.SetTrigger(openTrigger);
+
+        // Desactiva el collider si ya no bloquea físicamente
+        if (doorCollider != null)
+            doorCollider.enabled = false;
+               
+        Debug.Log("[DoorController] Puerta desbloqueada.");
     }
 
     public void Lock()
     {
-        isLocked = true;
-       
+        // Opcional: si en el futuro querés cerrarla dinámicamente
     }
-
-    public void Unlock()
+    public Vector3 GetSpawnPoint() => transform.position;
+    private void OnTriggerEnter(Collider other)
     {
-        isLocked = false;
-        
+        if (other.CompareTag("Player"))
+        {
+            DungeonManager.Instance.MoveToNextRoom();
+        }
     }
 }

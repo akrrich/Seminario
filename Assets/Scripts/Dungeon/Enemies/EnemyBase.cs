@@ -1,7 +1,7 @@
 
+using System;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Audio;
 
 /// <summary>
 /// Componente principal del enemigo. Gestiona HP, muerte
@@ -38,13 +38,15 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     protected bool isDead = false;
     protected AudioSource audioSource;
 
-    [Header("Room Tracking")]
-    public RoomData roomData;
+    //[Header("Room Tracking")]
+    //public RoomData roomData;
 
     [Header("Spawner ID")]
     [SerializeField] private string id;
     public string Id => id;
     public bool CanSeePlayer => canSeePlayer;
+
+    public event Action<EnemyBase> OnDeath;
 
     protected virtual void Awake()
     {
@@ -78,15 +80,15 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     }
     protected virtual void Die()
     {
+        if (isDead) return;
+
         isDead = true;
         agent.isStopped = true;
 
         dropHandler?.DropLoot();
+        SpawnBloodDecal();
 
-        if (roomData != null)
-        {
-            roomData.NotifyEnemyDied(this.gameObject);
-        }
+        OnDeath?.Invoke(this);
 
         Destroy(gameObject, 1.5f);
     }
@@ -134,7 +136,7 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
         if (Physics.Raycast(origin, direction, out RaycastHit hit, 10f, LayerMask.GetMask("whatIsGround")))
         {
             Vector3 spawnPosition = hit.point + Vector3.up * decalYOffset; // Justo sobre el piso
-            Quaternion rotation = Quaternion.Euler(90f, Random.Range(0f, 360f), 0f); // Rotación aleatoria en Y
+            Quaternion rotation = Quaternion.Euler(90f, UnityEngine.Random.Range(0f, 360f), 0f); // Rotación aleatoria en Y
             Instantiate(bloodDecalPrefab, spawnPosition, rotation);
         }
         else

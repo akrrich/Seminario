@@ -2,114 +2,116 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-public enum RoomType { Combat, Hallway }
 public enum RoomSize { Small, Medium, Large }
-public class DungeonManager : MonoBehaviour
+public class DungeonManager : Singleton<DungeonManager>
 {
     [Header("Player Reference")]
     public Transform player;
 
-    [Header("Death Respawn")]
-    [Tooltip("Posición a la que será enviado el jugador al morir")]
-    public Transform deathSpawnPoint;
+    [Header("Room Pools")]
+    [SerializeField] private List<RoomController> smallRooms;
+    [SerializeField] private List<RoomController> mediumRooms;
+    [SerializeField] private List<RoomController> largeRooms;
 
-
-    [Header("Combat Room Pools")]
-    public List<Transform> smallRooms;
-    public List<Transform> mediumRooms;
-    public List<Transform> largeRooms;
-
-    [Header("Hallway Pool")]
-    public List<Transform> hallways;
-
-    [Header("Random Settings")]
+    [Header("Run Settings")]
     [Tooltip("Cuántas salas recientes recordar para evitar repeticiones inmediatas")]
-    public int historyLimit = 3;
+    public int historyLimit = 2;
 
-    private Transform previousRoom;
-    private Queue<Transform> recentRooms = new Queue<Transform>();
+    [Tooltip("Transform de inicio de dungeon")]
+    public Transform startSpawnPoint;
 
-    public static DungeonManager Instance { get; private set; }
+    private List<RoomController> runSequence = new();
+    private int currentRoomIndex = 0;
+    private Queue<RoomController> recentHistory = new();
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        CreateSingleton(false);
+    }
+    private void Start()
+    {
+        GenerateRunSequence();
+        StartRun();
+    }
+    private void GenerateRunSequence()
+    {
+        runSequence.Clear();
+        recentHistory.Clear();
+
+        var roomPlan = new List<(List<RoomController> pool, int amount)>
         {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+            (smallRooms, 8),
+            (mediumRooms, 6),
+            (largeRooms, 4)
+        };
 
-    /// <summary>
-    /// Teletransporta al jugador a una sala o pasillo aleatorio, evitando repeticiones cercanas.
-    /// </summary>
-    public void TeleportToRandomRoom(RoomType type)
-    {
-        List<Transform> pool = type == RoomType.Combat ? GetCombatRoomPool() : hallways;
-        Transform target = GetNonRepeatingRoom(pool);
-
-        if (target == null)
+        foreach (var (pool, amount) in roomPlan)
         {
-            Debug.LogError($"No hay {type} disponibles para teletransporte.");
-            return;
+            for (int i = 0; i < amount; i++)
+            {
+                var candidates = pool.Where(r => !recentHistory.Contains(r)).ToList();
+
+                if (candidates.Count == 0)
+                {
+                    recentHistory.Clear();
+                    candidates = pool;
+                }
+
+                var chosen = candidates[Random.Range(0, candidates.Count)];
+                runSequence.Add(chosen);
+                recentHistory.Enqueue(chosen);
+
+                if (recentHistory.Count > historyLimit)
+                    recentHistory.Dequeue();
+            }
         }
 
-        TeleportPlayer(target.position);
-        previousRoom = target;
+        RouletteSelection.Shuffle(runSequence);
     }
-
-    /// <summary>
-    /// Combina todas las salas de combate disponibles.
-    /// </summary>
-    private List<Transform> GetCombatRoomPool()
+    private void StartRun()
     {
-        var allRooms = new List<Transform>();
-        allRooms.AddRange(smallRooms);
-        allRooms.AddRange(mediumRooms);
-        allRooms.AddRange(largeRooms);
-        return allRooms;
+        currentRoomIndex = 0;
+        MovePlayerToRoom(runSequence[currentRoomIndex]);
     }
 
-    /// <summary>
-    /// Selecciona una sala que no esté en el historial reciente.
-    /// </summary>
-    private Transform GetNonRepeatingRoom(List<Transform> pool)
+
+    private void MovePlayerToRoom(RoomController room)
     {
-        var filtered = pool.Where(r => !recentRooms.Contains(r)).ToList();
+        Debug.Log($"Moviendo al jugador a la sala: {room.name}");
 
-        // Si se agotaron las opciones únicas, permitimos repetir
-        if (filtered.Count == 0)
-            filtered = pool;
-
-        // Usamos tu clase RouletteSelection para elegir al azar
-        Transform chosen = RouletteSelection.Shuffle(filtered).First();
-
-        // Actualizamos historial
-        recentRooms.Enqueue(chosen);
-        if (recentRooms.Count > historyLimit)
-            recentRooms.Dequeue();
-
-        return chosen;
+        player.position = room.EntryDoor.GetSpawnPoint();
+        room.ActivateRoom();
     }
 
-    /// <summary>
-    /// Mueve al jugador a la posición de destino.
-    /// </summary>
     private void TeleportPlayer(Vector3 targetPosition)
     {
+        if (player == null)
+        {
+            Debug.LogError("Player no asignado en DungeonManager.");
+            return;
+        }
+
         player.position = targetPosition;
     }
 
-    public void OnPlayerDeath()
+    public void MoveToNextRoom()
     {
-        if (deathSpawnPoint == null)
+        currentRoomIndex++;
+
+        if (currentRoomIndex >= runSequence.Count)
         {
-            Debug.LogError("No se ha asignado un deathSpawnPoint en DungeonManager");
+            Debug.Log("Dungeon completado.");
             return;
         }
 
-        TeleportPlayer(deathSpawnPoint.position);
-        Debug.Log("Jugador respawneado en deathSpawnPoint");
+        MovePlayerToRoom(runSequence[currentRoomIndex]);
+    }
+    public RoomController GetCurrentRoom() => runSequence[currentRoomIndex];
+
+    public void OnPlayerDeath()
+    {
+        Debug.Log("[DungeonManager] OnPlayerDeath llamado.");
+        TeleportPlayer(startSpawnPoint.position);
+        
     }
 }

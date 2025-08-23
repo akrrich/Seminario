@@ -1,21 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class LootManager : MonoBehaviour
+public class LootManager : Singleton<LootManager>
 {
-    public static LootManager Instance { get; private set; }
-
     [SerializeField] private LootPrefabDatabase lootDatabase;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        CreateSingleton(false);
     }
 
     public void SpawnLoot(string lootName, Vector3 position)

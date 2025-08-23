@@ -1,25 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatFeedbackManager : MonoBehaviour
+public class CombatFeedbackManager : Singleton<CombatFeedbackManager>
 {
-    //Only for the playerfeedback getting damage and doing the damage, vfx and sfx.
     [SerializeField] private List<AudioClip> damageSounds;
     [SerializeField] private GameObject hitVFX;
     private CameraShake cameraShake;
 
-    public static CombatFeedbackManager Instance;
-
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
+        CreateSingleton(false); 
     }
 
     private void Start()
@@ -33,7 +23,6 @@ public class CombatFeedbackManager : MonoBehaviour
 
         int index = Random.Range(0, damageSounds.Count);
         AudioClip selected = damageSounds[index];
-
         AudioSource.PlayClipAtPoint(selected, position);
     }
 

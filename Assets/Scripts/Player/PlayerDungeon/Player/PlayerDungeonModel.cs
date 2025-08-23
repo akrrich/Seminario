@@ -37,9 +37,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     private PlayerHealth playerHealth;
     private float currentStamina;
 
-    private bool isDead = false;
     private bool invulnerable = false;
-    private bool isRegenerating = true;
     private float lastStaminaUseTime;
 
     private Vector3 moveDirection;
@@ -74,9 +72,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
 
     //------ Eventos ------
+    //--UI--
     public event Action<float, float> OnHealthChanged;
     public event Action<float, float> OnStaminaChanged;
-    public event Action OnPlayerDied;
+    
+   
     public static Action<PlayerDungeonModel> onPlayerInitialized;
     #endregion
 
