@@ -1,3 +1,5 @@
+using TMPro;
+
 public enum InteractionMode
 {
     Press, Hold     
@@ -12,4 +14,8 @@ public interface IInteractable
     void ShowOutline();
 
     void HideOutline();
+
+    void ShowMessage(TextMeshProUGUI interactionManagerUIText);
+
+    void HideMessage(TextMeshProUGUI interactionManagerUIText); 
 }

@@ -37,6 +37,17 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
 
+    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
+        interactionManagerUIText.text = $"Press" + keyText + "to start cooking";
+    }
+
+    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        interactionManagerUIText.text = string.Empty;
+    }
+
 
     private void GetComponents()
     {

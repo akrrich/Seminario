@@ -9,6 +9,12 @@ public class IngredientPickup : MonoBehaviour, IInteractable
 
     public InteractionMode InteractionMode => throw new System.NotImplementedException();
 
+
+    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public void HideOutline()
     {
         throw new System.NotImplementedException();
@@ -20,6 +26,11 @@ public class IngredientPickup : MonoBehaviour, IInteractable
 
         Debug.Log($"+{amount} {ingredient}");
         if (destroyOnPickup) Destroy(gameObject);
+    }
+
+    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        throw new System.NotImplementedException();
     }
 
     public void ShowOutline()

@@ -79,4 +79,14 @@ public class Chest : MonoBehaviour, IInteractable
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
         }
     }
+
+    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        throw new System.NotImplementedException();
+    }
 }

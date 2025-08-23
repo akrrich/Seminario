@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +12,10 @@ public class InteractionManagerUI : Singleton<InteractionManagerUI>
     [SerializeField] private InteractionManagerUIData interactionManagerUIData;
 
     [SerializeField] private Image centerPointUI;
+    [SerializeField] private TextMeshProUGUI interactionMessageText;
 
     public Image CenterPointUI { get => centerPointUI; }
+    public TextMeshProUGUI InteractionMessageText { get => interactionMessageText; }
 
 
     void Awake()

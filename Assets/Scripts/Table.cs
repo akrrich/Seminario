@@ -74,23 +74,16 @@ public class Table : MonoBehaviour, IInteractable
                 PlayerController.OnCleanDirtyTableDecreaseSlider?.Invoke(this);
             }
 
-            if (!isDirty)
-            {
-                HideOutline();
-            }
-
             return;
         }
 
         if (auxiliarClientView != null && auxiliarClientView.CanTakeOrder)
         {
             PlayerController.OnTakeOrder?.Invoke();
-            HideOutline();
             return;
         }
 
         PlayerController.OnHandOverFood?.Invoke();
-        HideOutline();
         return;
     }
 
@@ -191,6 +184,51 @@ public class Table : MonoBehaviour, IInteractable
             auxiliarClientView = null;
             return;
         }
+    }
+
+    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
+
+        if (isDirty)
+        {
+            interactionManagerUIText.text = $"Hold" + keyText + "to clean the table";
+            return;
+        }
+
+        // Si hay un cliente sentado
+        if (ChairPosition.childCount > 0 && auxiliarClientView != null)
+        {
+            // Tomar pedido
+            if (isOccupied && auxiliarClientView.ReturnSpriteWaitingToBeAttendedIsActive())
+            {
+                if (auxiliarClientView.CanTakeOrder)
+                {
+                    interactionManagerUIText.text = $"Press" + keyText + "to take order";
+                }
+            }
+
+            // Entregar pedido
+            bool hasChildren = false;
+            foreach (Transform child in playerController.PlayerView.Dish.transform)
+            {
+                if (child.childCount > 0)
+                {
+                    hasChildren = true;
+                    break;
+                }
+            }
+
+            if (hasChildren && isOccupied && auxiliarClientView.ReturnSpriteFoodIsActive())
+            {
+                interactionManagerUIText.text = $"Press" + keyText + "to deliver the order";
+            }
+        }
+    }
+
+    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        interactionManagerUIText.text = string.Empty;
     }
 
     public void SetDirty(bool current)

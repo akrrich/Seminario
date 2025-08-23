@@ -83,6 +83,7 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     /* -------------------------------------------UI----------------------------------------- */
     
+    public KeyCode GetInteractInput() => DeviceManager.Instance.CurrentDevice == Device.Joystick ? instance.JoystickInputs.Interact : instance.KeyboardInputs.Interact;
     public bool R1() => Input.GetKeyDown(KeyCode.Joystick1Button5);
     public bool L1() => Input.GetKeyDown(KeyCode.Joystick1Button4);
     public bool E() => Input.GetKeyDown(KeyCode.E);

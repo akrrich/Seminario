@@ -17,7 +17,6 @@ public class Trash : MonoBehaviour, IInteractable
     public void Interact(bool isPressed)
     {
         PlayerController.OnThrowFoodToTrash?.Invoke();
-        HideOutline();
     }
 
     public void ShowOutline()
@@ -41,6 +40,23 @@ public class Trash : MonoBehaviour, IInteractable
 
         outline.OutlineWidth = 0f;
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
+    }
+
+    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        foreach (Transform child in playerController.PlayerView.Dish.transform)
+        {
+            if (child.childCount > 0)
+            {
+                string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
+                interactionManagerUIText.text = $"Press" + keyText + "to throw food in the trash";
+            }
+        }
+    }
+
+    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        interactionManagerUIText.text = string.Empty;
     }
 
 

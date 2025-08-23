@@ -102,6 +102,20 @@ public class Food : MonoBehaviour, IInteractable
         RestartValues();
     }
 
+    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        if (!isServedInTable)
+        {
+            string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
+            interactionManagerUIText.text = $"Press" + keyText + "to grab food";
+        }
+    }
+
+    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    {
+        interactionManagerUIText.text = string.Empty;
+    }
+
 
     private void SuscribeToPlayerControllerEvents()
     {

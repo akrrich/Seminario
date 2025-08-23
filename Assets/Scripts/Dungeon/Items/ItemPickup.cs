@@ -1,4 +1,4 @@
-
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -54,5 +54,15 @@ public class ItemPickup : MonoBehaviour, IInteractable
             outline.OutlineWidth = 0f;
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
         }
+    }
+
+    public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void HideMessage(TextMeshProUGUI interactionManagerUIText)
+    {
+        throw new System.NotImplementedException();
     }
 }

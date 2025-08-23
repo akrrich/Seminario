@@ -28,23 +28,23 @@ public class MessageModeUI : MonoBehaviour
 
     private void InitializeLamdaEventMessages()
     {
-        onCook += () => ShowEnterMessageText("Presione", "para entrar a cocinar");
+        //onCook += () => ShowEnterMessageText("Presione", "para entrar a cocinar");
         onAdministration += () => ShowEnterMessageText("Presione", "para entrar en administracion");
-        onHandOver += () => ShowEnterMessageText("Presione", "para entregar el plato");
-        onTakeOrder += () => ShowEnterMessageText("Presione", "para tomar el pedido");
-        onCleanDirtyTable += () => ShowEnterMessageText("Mantener", "para limpiar la mesa");
-        onThrowFoodToTrash += () => ShowEnterMessageText("Presione", "para tirar la comida a la basura");
+        //onHandOver += () => ShowEnterMessageText("Presione", "para entregar el plato");
+        //onTakeOrder += () => ShowEnterMessageText("Presione", "para tomar el pedido");
+        //onCleanDirtyTable += () => ShowEnterMessageText("Mantener", "para limpiar la mesa");
+        //onThrowFoodToTrash += () => ShowEnterMessageText("Presione", "para tirar la comida a la basura");
     }
 
     private void SuscribeToPlayerViewEvents()
     {
-        PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage += onCook;
-        PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage += DisapearMessageText;
+        //PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage += onCook;
+        //PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage += DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage += onAdministration;
         PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage += DisapearMessageText;
 
-        PlayerView.OnCollisionEnterWithTableForHandOverMessage += onHandOver;
+        /*PlayerView.OnCollisionEnterWithTableForHandOverMessage += onHandOver;
         PlayerView.OnCollisionExitWithTableForHandOverMessage += DisapearMessageText;
         PlayerView.OnHandOverCompletedForHandOverMessage += DisapearMessageText;
 
@@ -56,18 +56,18 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage += DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithTrashForTrashModeMessage += onThrowFoodToTrash;
-        PlayerView.OnCollisionExitWithTrashForTrashModeMessage += DisapearMessageText;
+        PlayerView.OnCollisionExitWithTrashForTrashModeMessage += DisapearMessageText;*/
     }
 
     private void UnsuscribeToPlayerViewEvents()
     {
-        PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage -= onCook;
-        PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage -= DisapearMessageText;
+        //PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage -= onCook;
+        //PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage -= DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage -= onAdministration;
         PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage -= DisapearMessageText;
 
-        PlayerView.OnCollisionEnterWithTableForHandOverMessage -= onHandOver;
+        /*PlayerView.OnCollisionEnterWithTableForHandOverMessage -= onHandOver;
         PlayerView.OnCollisionExitWithTableForHandOverMessage -= DisapearMessageText;
         PlayerView.OnHandOverCompletedForHandOverMessage -= DisapearMessageText;
 
@@ -79,7 +79,7 @@ public class MessageModeUI : MonoBehaviour
         PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage -= DisapearMessageText;
 
         PlayerView.OnCollisionEnterWithTrashForTrashModeMessage -= onThrowFoodToTrash;
-        PlayerView.OnCollisionExitWithTrashForTrashModeMessage -= DisapearMessageText;
+        PlayerView.OnCollisionExitWithTrashForTrashModeMessage -= DisapearMessageText;*/
     }
 
     private void InitializeReferencs()

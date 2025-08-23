@@ -33,10 +33,15 @@ public class InteractionManager : Singleton<InteractionManager>
         BookManagerUI.OnHideOutlinesFromInteractableElements += HideAllOutlines;
     }
 
+    /// <summary>
+    /// Cambiar los nombres en el metodo y evento
+    /// </summary>
     private void HideAllOutlines()
     {
         previousTarget?.HideOutline();
+        previousTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
         currentTarget?.HideOutline();
+        currentTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
         previousTarget = null;
         currentTarget = null;
     }
@@ -50,6 +55,17 @@ public class InteractionManager : Singleton<InteractionManager>
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
+        // Si no hay target y antes había uno, limpiamos
+        if (previousTarget != null)
+        {
+            previousTarget?.HideOutline();
+            previousTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
+            currentTarget?.HideOutline();
+            currentTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
+            previousTarget = null;
+            currentTarget = null;
+        }
+
         if (Physics.Raycast(ray, out RaycastHit hit, interactionManagerData.InteractionDistance, LayerMask.GetMask("Interactable")))
         {
             IInteractable hitTarget = hit.collider.GetComponent<IInteractable>()?? hit.collider.GetComponentInChildren<IInteractable>()?? hit.collider.GetComponentInParent<IInteractable>();
@@ -59,6 +75,7 @@ public class InteractionManager : Singleton<InteractionManager>
                 if (hitTarget != previousTarget && previousTarget != null)
                 {
                     previousTarget.HideOutline();
+                    previousTarget.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
                 }
 
                 currentTarget = hitTarget;
@@ -66,17 +83,10 @@ public class InteractionManager : Singleton<InteractionManager>
 
                 // Mostrar outline siempre, aunque sea el mismo objeto
                 currentTarget.ShowOutline();
+                currentTarget.ShowMessage(InteractionManagerUI.Instance.InteractionMessageText);
 
                 return;
             }
-        }
-
-        // Si no hay target y antes había uno, limpiamos
-        if (previousTarget != null)
-        {
-            previousTarget.HideOutline();
-            previousTarget = null;
-            currentTarget = null;
         }
     }
 
@@ -95,6 +105,8 @@ public class InteractionManager : Singleton<InteractionManager>
                     if (PlayerInputs.Instance.InteractPress())
                     {
                         currentTarget.Interact(true);
+                        currentTarget.HideOutline();
+                        currentTarget.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
                     }
                     break;
 
