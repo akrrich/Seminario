@@ -26,8 +26,6 @@ public class Trash : MonoBehaviour, IInteractable
             // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS)
             if (child.childCount > 0)
             {
-                PlayerView.OnCollisionEnterWithTrashForTrashModeMessage?.Invoke();
-
                 outline.OutlineWidth = 5f;
                 InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
             }
@@ -36,8 +34,6 @@ public class Trash : MonoBehaviour, IInteractable
 
     public void HideOutline()
     {
-        PlayerView.OnCollisionExitWithTrashForTrashModeMessage?.Invoke();
-
         outline.OutlineWidth = 0f;
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }

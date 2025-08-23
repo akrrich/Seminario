@@ -27,7 +27,6 @@ public class PlayerStateAdministration<T> : State<T>
         //Debug.Log("Cook");
 
         PlayerView.OnEnterInAdministrationMode?.Invoke();
-        PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
 
         playerModel.Rb.velocity = Vector3.zero;
         playerModel.CapsuleCollider.material = null;

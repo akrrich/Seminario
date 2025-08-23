@@ -95,7 +95,6 @@ public class Table : MonoBehaviour, IInteractable
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
             PlayerView.OnActivateSliderCleanDirtyTable?.Invoke();
-            PlayerView.OnCollisionEnterWithTableForCleanDirtyTableMessage?.Invoke();
             return;
         }
 
@@ -118,7 +117,6 @@ public class Table : MonoBehaviour, IInteractable
 
                     auxiliarClientView.CanTakeOrder = true;
                     PlayerController.OnTableCollisionEnterForTakeOrder?.Invoke(this);
-                    PlayerView.OnCollisionEnterWithTableForTakeOrderMessage?.Invoke();
                 }
             }
 
@@ -139,7 +137,6 @@ public class Table : MonoBehaviour, IInteractable
                 InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
                 PlayerController.OnTableCollisionEnterForHandOverFood?.Invoke(this);
-                PlayerView.OnCollisionEnterWithTableForHandOverMessage?.Invoke();
             }
         }
 
@@ -153,9 +150,6 @@ public class Table : MonoBehaviour, IInteractable
 
             PlayerController.OnTableCollisionExitForTakeOrder?.Invoke();
             PlayerController.OnTableCollisionExitForHandOverFood?.Invoke();
-            PlayerView.OnCollisionExitWithTableForTakeOrderMessage?.Invoke();
-            PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
-            PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage?.Invoke();
 
             auxiliarTable = null;
             auxiliarClientView = null;
@@ -168,7 +162,6 @@ public class Table : MonoBehaviour, IInteractable
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
 
         PlayerView.OnDeactivateSliderCleanDirtyTable?.Invoke();
-        PlayerView.OnCollisionExitWithTableForCleanDirtyTableMessage?.Invoke();
 
         if (ChairPosition.childCount > 0) // Si tiene a alguien sentado
         {
@@ -177,8 +170,6 @@ public class Table : MonoBehaviour, IInteractable
 
             PlayerController.OnTableCollisionExitForTakeOrder?.Invoke();
             PlayerController.OnTableCollisionExitForHandOverFood?.Invoke();
-            PlayerView.OnCollisionExitWithTableForTakeOrderMessage?.Invoke();
-            PlayerView.OnCollisionExitWithTableForHandOverMessage?.Invoke();
 
             auxiliarTable = null;
             auxiliarClientView = null;

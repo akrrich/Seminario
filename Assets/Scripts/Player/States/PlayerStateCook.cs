@@ -29,7 +29,6 @@ public class PlayerStateCook<T> : State<T>
         Debug.Log("Cook");
 
         PlayerView.OnEnterInCookMode?.Invoke();
-        PlayerView.OnDeactivateInventoryFoodUI?.Invoke();
 
         playerModel.Rb.velocity = Vector3.zero;
         playerModel.CapsuleCollider.material = null;

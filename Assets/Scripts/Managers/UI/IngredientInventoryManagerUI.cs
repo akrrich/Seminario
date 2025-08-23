@@ -18,15 +18,10 @@ public class IngredientInventoryManagerUI : MonoBehaviour, IBookableUI
 
     void Awake()
     {
-        //SuscribeToPlayerViewEvent();
         GetComponents();
         InitializeSlots();
     }
 
-    void OnDestroy()
-    {
-        //UnsuscribeToPlayerViewEvent();
-    }
 
     public void OpenPanel()
     {
@@ -50,16 +45,6 @@ public class IngredientInventoryManagerUI : MonoBehaviour, IBookableUI
         }
     }
 
-
-    /*private void SuscribeToPlayerViewEvent()
-    {
-        PlayerView.OnDeactivateInventoryFoodUI += HideInventory;
-    }
-
-    private void UnsuscribeToPlayerViewEvent()
-    {
-        PlayerView.OnDeactivateInventoryFoodUI -= HideInventory;
-    }*/
 
     private void GetComponents()
     {

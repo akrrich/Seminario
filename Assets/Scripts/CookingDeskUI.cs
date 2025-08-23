@@ -22,7 +22,6 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
     public void ShowOutline()
     {
         playerController.PlayerModel.IsCollidingCookingDeskUI = true;
-        PlayerView.OnCollisionEnterWithCookingDeskUIForCookModeMessage?.Invoke();
 
         outline.OutlineWidth = 5f;
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
@@ -31,7 +30,6 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
     public void HideOutline()
     {
         playerController.PlayerModel.IsCollidingCookingDeskUI = false;
-        PlayerView.OnCollisionExitWithCookingDeskUIForCookModeMessage?.Invoke();
 
         outline.OutlineWidth = 0f;
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);

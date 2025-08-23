@@ -2,23 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class BookManagerUI : Singleton<BookManagerUI>
 {
     private List<IBookableUI> panelsBookTabern = new List<IBookableUI>();
     private List<IBookableUI> panelsBookDungeon = new List<IBookableUI>();
 
-    private static event Action onHideOutlinesFromInteractableElements;
-
-    private Scene currentScene;
+    private static event Action onHideOutlinesAndTextsFromInteractableElements;
 
     private int indexCurrentPanelOpen = 0;
 
     private bool isBookOpen = false;
     private bool isRightStickUsing = false;
 
-    public static Action OnHideOutlinesFromInteractableElements { get => onHideOutlinesFromInteractableElements; set => onHideOutlinesFromInteractableElements = value; }
+    public static Action OnHideOutlinesAndTextsFromInteractableElements { get => onHideOutlinesAndTextsFromInteractableElements; set => onHideOutlinesAndTextsFromInteractableElements = value; }
 
     public bool IsBookOpen { get => isBookOpen; }
 
@@ -28,7 +25,6 @@ public class BookManagerUI : Singleton<BookManagerUI>
         CreateSingleton(false);
         SuscribeToUpdateManagerEvent();
         SuscribeToPlayerControllerEvent();
-        GetCurrentSceneName();
     }
 
     void Start()
@@ -69,11 +65,6 @@ public class BookManagerUI : Singleton<BookManagerUI>
         PlayerController.OnOpenOrCloseBook -= OpenOrCloseBook;
     }
 
-    private void GetCurrentSceneName()
-    {
-        currentScene = SceneManager.GetActiveScene();
-    }
-
     private void FindPanelsInHierarchy()
     {
         if (ScenesManager.Instance.CurrentSceneName == "Tabern")
@@ -93,7 +84,7 @@ public class BookManagerUI : Singleton<BookManagerUI>
     {
         if (PauseManager.Instance.IsGamePaused) return;
 
-        onHideOutlinesFromInteractableElements?.Invoke();
+        onHideOutlinesAndTextsFromInteractableElements?.Invoke();
 
         if (!isBookOpen)
         {

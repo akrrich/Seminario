@@ -30,13 +30,10 @@ public class InteractionManager : Singleton<InteractionManager>
 
     private void SuscribeToBookManagerUI()
     {
-        BookManagerUI.OnHideOutlinesFromInteractableElements += HideAllOutlines;
+        BookManagerUI.OnHideOutlinesAndTextsFromInteractableElements += HideAllOutlinesAndTexts;
     }
 
-    /// <summary>
-    /// Cambiar los nombres en el metodo y evento
-    /// </summary>
-    private void HideAllOutlines()
+    private void HideAllOutlinesAndTexts()
     {
         previousTarget?.HideOutline();
         previousTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);

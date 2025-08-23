@@ -244,8 +244,6 @@ public class Food : MonoBehaviour, IInteractable
     {
         if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
         {
-            PlayerView.OnHandOverCompletedForHandOverMessage?.Invoke();
-
             cookingManager.ReleaseDishPosition(playerDishPosition);
 
             Transform freeSpot = null;

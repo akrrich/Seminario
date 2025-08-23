@@ -102,7 +102,6 @@ public class ClientView : MonoBehaviour
     {
         if (spritesTypeList[2].gameObject.activeSelf && tablePlayerCollision != null) // Si esta activado el sprite de pedir comida, quiere decir que ya se le puede tomar el pedido
         {
-            PlayerView.OnTakeOrderCompletedForHandOverMessage?.Invoke();
             orderFoodNames.Clear();
 
             int randomIndex = Random.Range(0, favoritesFoodTypes.Count);
