@@ -198,9 +198,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a3dde0cdc4f294c924efdda527878d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonManager: {fileID: 0}
-  targetType: 0
-  playerTag: Player
+  doorAnimator: {fileID: 0}
+  doorCollider: {fileID: 0}
+  openTrigger: Open
 --- !u!1 &8786217896232821660
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.3326, y: 0.3661, z: -16.5669}
-  m_LocalScale: {x: 2.4294, y: 0.88610625, z: 2.6674087}
+  m_LocalScale: {x: 1.7601205, y: 0.6419914, z: 1.9325598}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -185,6 +185,8 @@ MonoBehaviour:
     m_Bits: 64
   chaseSpeedMultiplier: 1.5
   loseSightDelay: 1.5
+  bloodDecalPrefab: {fileID: 8146034578120852093, guid: f234383ce6dd0a54ab672b55e67deb00, type: 3}
+  decalYOffset: 0.01
   currentHP: 0
   id: bear
   attackRange: 4
@@ -353,3 +355,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  weightMultiplier: 1

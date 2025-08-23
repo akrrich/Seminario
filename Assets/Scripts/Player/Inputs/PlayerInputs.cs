@@ -68,7 +68,7 @@ public class PlayerInputs : Singleton<PlayerInputs>
     /* -------------------------------------------DUNGEON----------------------------------------- */
 
     public bool Attack() => Input.GetKeyDown(keyboardInputs.Attack) || Input.GetKeyDown(joystickInputs.Attack); //Click izquierdo
-    public bool Dash() => Input.GetKeyDown(keyboardInputs.Dash) || Input.GetKeyDown(joystickInputs.Dash);
+    public bool Shield() => Input.GetKeyDown(keyboardInputs.Shield) || Input.GetKeyDown(joystickInputs.Shield);
     public bool RunHeld() => Input.GetKey(keyboardInputs.Run) || Input.GetKey(joystickInputs.Run);
 
     /* -------------------------------------------BOTH----------------------------------------- */

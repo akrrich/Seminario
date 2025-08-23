@@ -6,9 +6,19 @@ public class FreeCam : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float rotationSpeed = 3f;
+    public float scrollSensitivity = 10f;
+    public float minSpeed = 1f;
+    public float maxSpeed = 100f;
 
     void Update()
     {
+        // Speed adjustment with mouse scroll wheel
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scroll) > 0.0001f)
+        {
+            moveSpeed = Mathf.Clamp(moveSpeed + scroll * scrollSensitivity, minSpeed, maxSpeed);
+        }
+
         // Camera movement
         float moveForward = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
         float moveSide = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;

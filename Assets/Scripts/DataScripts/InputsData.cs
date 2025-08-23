@@ -7,7 +7,7 @@ public class InputsData : ScriptableObject
     [SerializeField] private KeyCode showOrHideDish;
 
     [Header("Dungeon Inputs:")]
-    [SerializeField] private KeyCode dash;
+    [SerializeField] private KeyCode shield;
     [SerializeField] private KeyCode attack;
 
     [Header("Both Inputs:")]
@@ -21,11 +21,14 @@ public class InputsData : ScriptableObject
     [SerializeField] private float sensitivityX;
     [SerializeField] private float sensitivityY;
 
+    // --- Tabern Inputs ---
     public KeyCode ShowOrHideDish { get => showOrHideDish; }
 
-    public KeyCode Dash => dash;
+    // --- Dungeon Inputs ---
     public KeyCode Attack { get => attack; }
+    public KeyCode Shield { get => shield; }
 
+    //--- General Inputs ---    
     public KeyCode Run { get => run; }
     public KeyCode Jump { get => jump; }
     public KeyCode Interact { get => interact; }

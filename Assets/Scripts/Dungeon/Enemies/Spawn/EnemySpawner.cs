@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] EnemyFactory enemyFactory;
-    [SerializeField] private GameObject spawnPosition;
+    [SerializeField] private Transform spawnPosition;
 
     [Header("Spawns Data and % ")]
     [SerializeField] private EnemySpawnTableData enemySpawnTable;
@@ -16,57 +15,44 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private SpawnerConfigData spawnerConfigData;
 
     private int spawnedEnemies = 0;
-    private float lastSpawnTime = -Mathf.Infinity;
-    private bool isActive = true;
-
-    private void OnTriggerEnter(Collider other)
+    /// <summary>
+    /// Spawnea enemigos de acuerdo a la tabla de probabilidades y la configuración.
+    /// </summary>
+    public List<EnemyBase> SpawnEnemies(int layer)
     {
-        if (!isActive) return;
-        if (!other.CompareTag("Player")) return;
+        List<EnemyBase> result = new();
 
-        if (Time.time - lastSpawnTime >= spawnerConfigData.SpawnCooldown && spawnedEnemies < spawnerConfigData.MaxSpawnedEnemies)
+        int spawnCount = Random.Range(
+            spawnerConfigData.MinEnemiesPerSpawn,
+            spawnerConfigData.MaxEnemiesPerSpawn + 1);
+
+        for (int i = 0; i < spawnCount; i++)
         {
-            SpawnEnemy();
-        }
-        else
-        {
-            Debug.Log("Cooldown activo o se alcanzó el límite de enemigos.");
-        }
-    }
+            string selectedId = GetEnemyIdFromTable();
+            EnemyBase enemy = enemyFactory.Create(
+                selectedId,
+                spawnPosition.position,
+                spawnPosition.rotation);
 
-    private void Update()
-    {
-        // Si el spawner está inactivo, contamos el tiempo para reactivarlo
-        if (!isActive && Time.time - lastSpawnTime >= spawnerConfigData.SpawnerResetTime)
-        {
-            isActive = true;
-            spawnedEnemies = 0;
-            Debug.Log("Spawner reactivado. Enemigos generados reiniciados.");
-        }
-    }
-
-    private void SpawnEnemy()
-    {
-        string selectedId = GetEnemyIdFromTable();
-        EnemyBase enemy = enemyFactory.Create(selectedId, spawnPosition.transform.position, spawnPosition.transform.rotation);
-
-        if (enemy != null && statScaler != null)
-        {
-            statScaler.ApplyScaling(enemy, layer);
-            spawnedEnemies++;
-            lastSpawnTime = Time.time;
-            Debug.Log($"Spawner activo. Enemigos generados: {spawnedEnemies}/{spawnerConfigData.MaxSpawnedEnemies}");
-
-            if (spawnedEnemies >= spawnerConfigData.MaxSpawnedEnemies)
+            if (enemy != null)
             {
-                isActive = false;
-                Debug.Log("Spawner desactivado. Esperando reactivación...");
+                statScaler?.ApplyScaling(enemy, layer);
+                result.Add(enemy);
+                spawnedEnemies++;
+
+                if (spawnedEnemies >= spawnerConfigData.MaxSpawnedEnemies)
+                {
+                    Debug.Log("[EnemySpawner] Alcanzado máximo de enemigos.");
+                    break;
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[EnemySpawner] No se pudo crear enemigo con ID {selectedId}");
             }
         }
-        else
-        {
-            Debug.LogWarning("No se pudo instanciar el enemigo.");
-        }
+
+        return result;
     }
 
     private string GetEnemyIdFromTable()
