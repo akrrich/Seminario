@@ -8,8 +8,6 @@ public class PlayerView : MonoBehaviour
     private static Action onEnterInCookMode; // Entrar en el modo cocinar para mostrar la UI de cocina
     private static Action onExitInCookMode; // Salir del modo cocinar para ocultar la UI de cocina
 
-    private static Action onCollisionEnterWithAdministrationForAdministrationModeMessage; // Mostrar el texto de la UI
-    private static Action onCollisionExitWithAdministrationForAdministrationModeMessage; // Esconder el texto de la UI
     private static Action onEnterInAdministrationMode; // Entrar en el modo administracion para mostrar la UI de administracion
     private static Action onExitInAdministrationMode; // Salir del modo administracion para ocultar la UI de administracion
 
@@ -21,8 +19,6 @@ public class PlayerView : MonoBehaviour
     public static Action OnEnterInCookMode { get => onEnterInCookMode; set => onEnterInCookMode = value; }
     public static Action OnExitInCookMode { get => onExitInCookMode; set => onExitInCookMode = value; }
     
-    public static Action OnCollisionEnterWithAdministrationForAdministrationModeMessage { get => onCollisionEnterWithAdministrationForAdministrationModeMessage; set => onCollisionEnterWithAdministrationForAdministrationModeMessage = value;}
-    public static Action OnCollisionExitWithAdministrationForAdministrationModeMessage { get => onCollisionExitWithAdministrationForAdministrationModeMessage; set => onCollisionExitWithAdministrationForAdministrationModeMessage = value; }
     public static Action OnEnterInAdministrationMode { get => onEnterInAdministrationMode; set => onEnterInAdministrationMode = value;}
     public static Action OnExitInAdministrationMode { get => onExitInAdministrationMode; set => onExitInAdministrationMode = value;}    
 

@@ -13,17 +13,17 @@ public class PlayerCollisions
 
     public void OnCollisionsEnter(Collision collision)
     {
-        OnCollisionEnterWithAdministration(collision);
+
     }
 
     public void OnCollisionsStay(Collision collision)
     {
-        OnCollisionStayWithAdministrationAndLOS(collision);
+
     }
 
     public void OnCollisionsExit(Collision collision)
     {
-        OnCollisionExitWithAdministration(collision);
+
     }
 
     public void OnTriggerEnter(Collider collider)
@@ -34,44 +34,11 @@ public class PlayerCollisions
 
     /* ----------------------------------------COLLISION ENTER-------------------------------------------- */
 
-    private void OnCollisionEnterWithAdministration(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
-        {
-            playerController.PlayerModel.IsCollidingAdministration = true;
-            PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage?.Invoke();
-        }
-    }
+    /* ----------------------------------------COLLISION STAY--------------------------------------------- */
 
-    /* ------------------------------------------COLLISION STAY------------------------------------------- */
+    /* ----------------------------------------COLLISION EXIT--------------------------------------------- */
 
-
-    private void OnCollisionStayWithAdministrationAndLOS(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Administration") && playerController.PlayerModel.IsLookingAtAdministration())
-        {
-            playerController.PlayerModel.IsCollidingAdministration = true;
-            PlayerView.OnCollisionEnterWithAdministrationForAdministrationModeMessage?.Invoke();
-        }
-
-        if (collision.gameObject.CompareTag("Administration") && !playerController.PlayerModel.IsLookingAtAdministration())
-        {
-            PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage?.Invoke();
-        }
-    }
-
-    /* -------------------------------------------COLLISION EXIT----------------------------------------- */
-    
-    private void OnCollisionExitWithAdministration(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Administration"))
-        {
-            playerController.PlayerModel.IsCollidingAdministration = false;
-            PlayerView.OnCollisionExitWithAdministrationForAdministrationModeMessage?.Invoke();
-        }
-    }
-
-    /* -------------------------------------------TRIGGER ENTER----------------------------------------- */
+    /* ----------------------------------------TRIGGER ENTER---------------------------------------------- */
 
     private void OnTriggerEnterWithPortalDungeon(Collider collider)
     {

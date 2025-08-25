@@ -19,8 +19,8 @@ public class PlayerStateCook<T> : State<T>
         this.playerModel = playerModel;
         this.playerView = playerView;
 
-        cookingPosition = GameObject.Find("CookingPosition").transform;
         cookingDeskUI = GameObject.FindGameObjectWithTag("CookingDeskUI");
+        cookingPosition = GameObject.Find("CookingPosition").transform;
     }
 
     public override void Enter()

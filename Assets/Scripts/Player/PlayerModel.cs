@@ -15,8 +15,6 @@ public class PlayerModel : MonoBehaviour
     private CapsuleCollider capsuleCollider;
     private PhysicMaterial physicMaterial;
 
-    private GameObject administration;
-
     [SerializeField] private LayerMask groundLayer;
 
     private float speed;
@@ -34,7 +32,6 @@ public class PlayerModel : MonoBehaviour
     public Rigidbody Rb { get => rb; }
     public CapsuleCollider CapsuleCollider { get => capsuleCollider; set => capsuleCollider = value; }
     public PhysicMaterial PhysicsMaterial { get => physicMaterial; }
-    public GameObject Administration { get => administration; }
 
     public float Speed { get => speed; set => speed = value; }
 
@@ -82,12 +79,6 @@ public class PlayerModel : MonoBehaviour
         rb.drag = Mathf.Lerp(rb.drag, targetDrag, Time.fixedDeltaTime * 10f);        
     }
 
-
-    public bool IsLookingAtAdministration()
-    {
-        return LineOfSight.LOS(playerCamera.transform, administration.transform, playerTabernData.RangeVision, playerTabernData.AngleVision, LayerMask.GetMask("Obstacles"));
-    }
-
     public void LookAt(Vector3 target)
     {
         Vector3 newDirection = (target - transform.position).normalized;
@@ -106,8 +97,6 @@ public class PlayerModel : MonoBehaviour
         playerCamera = GetComponentInChildren<PlayerCamera>();
         rb = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-
-        administration = GameObject.FindGameObjectWithTag("Administration");
     }
 
     private void Initialize()

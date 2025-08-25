@@ -1,6 +1,7 @@
+using TMPro;
 using UnityEngine;
 
-public class CookingDeskUI : MonoBehaviour, IInteractable
+public class Administration : MonoBehaviour, IInteractable
 {
     private PlayerController playerController;
     private Outline outline;
@@ -21,25 +22,25 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
 
     public void ShowOutline()
     {
-        playerController.PlayerModel.IsCollidingCookingDeskUI = true;
+        playerController.PlayerModel.IsCollidingAdministration = true;
         outline.OutlineWidth = 5f;
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
     }
 
     public void HideOutline()
     {
-        playerController.PlayerModel.IsCollidingCookingDeskUI = false;
+        playerController.PlayerModel.IsCollidingAdministration = false;
         outline.OutlineWidth = 0f;
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
 
-    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
     {
         string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
-        interactionManagerUIText.text = $"Press" + keyText + "to start cooking";
+        interactionManagerUIText.text = $"Press" + keyText + "to enter administration";
     }
 
-    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    public void HideMessage(TextMeshProUGUI interactionManagerUIText)
     {
         interactionManagerUIText.text = string.Empty;
     }

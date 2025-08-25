@@ -44,7 +44,7 @@ public class PlayerStateIdle<T> : State<T>
             Fsm.TransitionTo(inputToCook);
         }
 
-        if (PlayerInputs.Instance.InteractPress() && playerModel.IsCollidingAdministration && playerModel.IsLookingAtAdministration())
+        if (PlayerInputs.Instance.InteractPress() && playerModel.IsCollidingAdministration)
         {
             Fsm.TransitionTo(inputToAdmin);
         }

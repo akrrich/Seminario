@@ -4,6 +4,8 @@ public class PlayerStateAdministration<T> : State<T>
 {
     private PlayerModel playerModel;
     private PlayerView playerView;
+
+    private GameObject administration;
     private Transform administratingPosition;
 
     private bool lastDishState;
@@ -17,6 +19,7 @@ public class PlayerStateAdministration<T> : State<T>
         this.playerModel = playerModel;
         this.playerView = playerView;
 
+        administration = GameObject.FindGameObjectWithTag("Administration");
         administratingPosition = GameObject.Find("AdministratingPosition").transform;
     }
 
@@ -36,7 +39,7 @@ public class PlayerStateAdministration<T> : State<T>
         playerView.ShowOrHideDish(false);
         playerModel.IsAdministrating = true;
         playerModel.transform.position = administratingPosition.transform.position;
-        playerModel.LookAt(playerModel.Administration.transform.position);
+        playerModel.LookAt(administration.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
     }
 
