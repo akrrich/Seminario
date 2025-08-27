@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 6083476399390222158}
   - component: {fileID: 7216575907976385526}
   - component: {fileID: 186605720910420545}
-  - component: {fileID: 1479633607086651313}
+  - component: {fileID: 3986302484447476405}
   m_Layer: 7
   m_Name: DungeonPlayer
   m_TagString: Player
@@ -268,9 +268,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   staminaCost: 25
-  cooldown: 1.5
-  activeTime: 0.6
---- !u!114 &1479633607086651313
+  cooldownDuration: 1.5
+  shieldObject: {fileID: 0}
+--- !u!114 &3986302484447476405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -279,11 +279,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 422702052002452655}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aee874894eaf1e48bc6ade97596afcc, type: 3}
+  m_Script: {fileID: 11500000, guid: fb5448d52967d7b408a0ad4539c68a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxStamina: 100
   regenRate: 10
+  regenDelay: 1
 --- !u!1 &449254278659169392
 GameObject:
   m_ObjectHideFlags: 0
