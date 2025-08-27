@@ -28,9 +28,6 @@ public class EventSystemTabern : MonoBehaviour
 
         AdministratingManagerUI.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
         AdministratingManagerUI.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
-
-        OpenTabernUI.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
-        OpenTabernUI.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
     }
 
     private void UnsuscribeToUIEvents()
@@ -43,9 +40,6 @@ public class EventSystemTabern : MonoBehaviour
 
         AdministratingManagerUI.OnSetSelectedCurrentGameObject -= SetSelectedCurrentGameObject;
         AdministratingManagerUI.OnClearSelectedCurrentGameObject -= ClearCurrentSelectedGameObject;
-
-        OpenTabernUI.OnSetSelectedCurrentGameObject += SetSelectedCurrentGameObject;
-        OpenTabernUI.OnClearSelectedCurrentGameObject += ClearCurrentSelectedGameObject;
     }
 
     private void GetComponents()
