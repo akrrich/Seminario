@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 60339471431027565}
   serializedVersion: 2
   m_LocalRotation: {x: -0.50481325, y: -0.5014229, z: -0.49853045, w: 0.4951828}
-  m_LocalPosition: {x: -4.84, y: 2.006, z: 3.64}
+  m_LocalPosition: {x: -1.37, y: 0, z: 1.73}
   m_LocalScale: {x: 2.5728898, y: 2.664537, z: 0.59811544}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -199,8 +199,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAnimator: {fileID: 0}
-  doorCollider: {fileID: 0}
   openTrigger: Open
+  closeTrigger: Close
+  doorCollider: {fileID: 0}
+  openVFX: {fileID: 0}
+  closeVFX: {fileID: 0}
+  connectedRoom: {fileID: 0}
+  isExitDoor: 1
 --- !u!1 &8786217896232821660
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +233,7 @@ Transform:
   m_GameObject: {fileID: 8786217896232821660}
   serializedVersion: 2
   m_LocalRotation: {x: -0.5016817, y: -0.4983127, z: -0.5016817, w: 0.4983127}
-  m_LocalPosition: {x: -3.6556954, y: 1.9500662, z: 1.9312648}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.89963984, y: 0.8994974, z: 0.20030387}
   m_ConstrainProportionsScale: 0
   m_Children: []

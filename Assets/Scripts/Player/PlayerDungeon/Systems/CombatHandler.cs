@@ -4,7 +4,7 @@ public class CombatHandler : MonoBehaviour
 {
     private PlayerDungeonModel model;
     private PlayerDungeonView view;
-    private PlayerStaminaManager stamina;
+    private PlayerStamina stamina;
 
     [SerializeField] private AttackHitbox attackHitbox;
     [SerializeField] private WeaponController weaponController;
@@ -58,7 +58,7 @@ public class CombatHandler : MonoBehaviour
         attackHitbox = GetComponent<AttackHitbox>();
         weaponController = GetComponentInChildren<WeaponController>();
         shieldHandler = GetComponent<ShieldHandler>();
-        stamina = GetComponent<PlayerStaminaManager>();
+        stamina = GetComponent<PlayerStamina>();
     }
 
     public bool IsAttacking => isAttacking;

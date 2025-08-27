@@ -3,20 +3,27 @@ using UnityEngine.UI;
 
 public class PlayerHealthUI : MonoBehaviour
 {
-    [SerializeField] private Image fillImage;
+    [Header("UI References")]
+    [SerializeField] private Image healthFillImage;
 
     private void OnEnable()
     {
-        PlayerDungeonHUD.OnHealthChanged += UpdateBar;
+        // Suscribirse al evento estático del HUD
+        PlayerDungeonHUD.OnHealthChanged += UpdateHealthUI;
     }
 
     private void OnDisable()
     {
-        PlayerDungeonHUD.OnHealthChanged -= UpdateBar;
+        PlayerDungeonHUD.OnHealthChanged -= UpdateHealthUI;
     }
 
-    private void UpdateBar(float current, float max)
+    private void UpdateHealthUI(float currentHP, float maxHP)
     {
-        fillImage.fillAmount = current / max;
+        float healthPercentage = Mathf.Clamp01(currentHP / maxHP);
+
+        if (healthFillImage != null)
+        {
+            healthFillImage.fillAmount = healthPercentage;
+        }
     }
 }

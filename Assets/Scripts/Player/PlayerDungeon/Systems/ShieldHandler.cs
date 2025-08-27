@@ -7,7 +7,7 @@ public class ShieldHandler : MonoBehaviour
     [SerializeField] private float cooldownDuration = 1.5f;
     [SerializeField] private GameObject shieldObject; // Visual del escudo (opcional)
 
-    private PlayerStaminaManager stamina;
+    private PlayerStamina stamina;
     private float lastShieldUseTime = -999f;
     private bool isActive;
 
@@ -15,7 +15,7 @@ public class ShieldHandler : MonoBehaviour
 
     private void Awake()
     {
-        stamina = GetComponent<PlayerStaminaManager>();
+        stamina = GetComponent<PlayerStamina>();
         if (shieldObject != null)
             shieldObject.SetActive(false);
     }

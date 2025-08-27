@@ -32,7 +32,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     #region Private Fields
     private PlayerHealth playerHealth;
-    private PlayerStaminaManager staminaManager;
+    private PlayerStamina playerStamina;
     private Vector3 moveDirection;
     private Transform orientation;
     private Rigidbody rb;
@@ -59,8 +59,8 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
 
     public event Action<float, float> OnHealthChanged;
-    // Puente para HUDs existentes que escuchaban stamina en el Model
     public event Action<float, float> OnStaminaChanged;
+    public event Action OnPlayerDied;
 
     public static Action<PlayerDungeonModel> onPlayerInitialized;
     #endregion
@@ -71,16 +71,16 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         rb = GetComponent<Rigidbody>();
         playerHealth = GetComponent<PlayerHealth>();
         combatHandler = GetComponent<CombatHandler>();
-        staminaManager = GetComponent<PlayerStaminaManager>();
+        playerStamina = GetComponent<PlayerStamina>();
         orientation = transform.Find("Orientation");
         rb.freezeRotation = true;
 
         playerHealth.OnHealthChanged += (current, max) => OnHealthChanged?.Invoke(current, max);
         playerHealth.OnPlayerDied += HandleDeath;
 
-        if (staminaManager != null)
+        if (playerStamina != null)
         {
-            staminaManager.OnStaminaChanged += (current, max) => OnStaminaChanged?.Invoke(current, max);
+            playerStamina.OnStaminaChanged += (current, max) => OnStaminaChanged?.Invoke(current, max);
         }
 
         StartCoroutine(InvokeEventInitializationPlayer());
@@ -111,7 +111,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     public void SetInvulnerable(bool value) => IsInvulnerable = value;
 
-    public PlayerStaminaManager GetStaminaManager() => staminaManager;
+    public PlayerStamina GetStaminaManager() => playerStamina;
     #endregion
 
     #region Inputs & Movimiento
@@ -162,15 +162,15 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
             wasRunning = false;
         }
 
-        if (staminaManager != null)
-            staminaManager.SetRegenSuppressed(runningHeld);
+        if (playerStamina != null)
+            playerStamina.SetRegenSuppressed(runningHeld);
 
         if (!IsGrounded) return;
 
         bool tryingToRun = runningHeld;
-        if (tryingToRun && staminaManager != null && staminaManager.CanUse(staminaRunCostPerSecond * Time.deltaTime))
+        if (tryingToRun && playerStamina != null && playerStamina.CanUse(staminaRunCostPerSecond * Time.deltaTime))
         {
-            staminaManager.Use(staminaRunCostPerSecond * Time.deltaTime);
+            playerStamina.Use(staminaRunCostPerSecond * Time.deltaTime);
         }
 
     }
@@ -180,7 +180,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         Vector2 input = PlayerInputs.Instance.GetMoveAxis();
         Vector3 targetDir = (orientation.forward * input.y + orientation.right * input.x).normalized;
 
-        bool canRun = PlayerInputs.Instance.RunHeld() && staminaManager != null && staminaManager.CanUse(staminaRunCostPerSecond * Time.deltaTime);
+        bool canRun = PlayerInputs.Instance.RunHeld() && playerStamina != null && playerStamina.CanUse(staminaRunCostPerSecond * Time.deltaTime);
         float targetSpeed = canRun ? runSpeed : walkSpeed;
 
         Vector3 targetVelocity = targetDir * targetSpeed;

@@ -21,7 +21,7 @@ public class BearAI : EnemyBase
 
     private void Update()
     {
-        if (isDead || isAttacking) return;
+        if (IsDead || isAttacking) return;
 
         if (IsInKnockback())
         {

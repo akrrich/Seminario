@@ -3,18 +3,20 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] EnemyFactory enemyFactory;
+    [Header("Factory & References")]
+    [SerializeField] private EnemyFactory enemyFactory;
     [SerializeField] private Transform spawnPosition;
+    [SerializeField] private RoomController parentRoom; // Referencia a la sala
 
     [Header("Spawns Data and % ")]
     [SerializeField] private EnemySpawnTableData enemySpawnTable;
-    [SerializeField] private int layer; //capa de la dungeon
     [SerializeField] private StatScaler statScaler;
 
     [Header("Spawn Variables")]
     [SerializeField] private SpawnerConfigData spawnerConfigData;
 
     private int spawnedEnemies = 0;
+
     /// <summary>
     /// Spawnea enemigos de acuerdo a la tabla de probabilidades y la configuración.
     /// </summary>
@@ -39,6 +41,12 @@ public class EnemySpawner : MonoBehaviour
                 statScaler?.ApplyScaling(enemy, layer);
                 result.Add(enemy);
                 spawnedEnemies++;
+
+                // Notificar al RoomController
+                if (parentRoom != null)
+                {
+                    parentRoom.RegisterEnemy(enemy);
+                }
 
                 if (spawnedEnemies >= spawnerConfigData.MaxSpawnedEnemies)
                 {

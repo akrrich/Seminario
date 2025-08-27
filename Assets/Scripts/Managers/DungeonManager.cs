@@ -1,89 +1,171 @@
-
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-public enum RoomSize { Small, Medium, Large }
+
 public class DungeonManager : Singleton<DungeonManager>
 {
     [Header("Player Reference")]
-    public Transform player;
+    [SerializeField] private Transform player;
 
-    [Header("Room Pools")]
-    [SerializeField] private List<RoomController> smallRooms;
-    [SerializeField] private List<RoomController> mediumRooms;
-    [SerializeField] private List<RoomController> largeRooms;
+    [Header("Dungeon Pools")]
+    [SerializeField] private List<Transform> roomPrefabsList;     // 8 disponibles
+    [SerializeField] private List<Transform> hallwayPrefabsList;  // 4 disponibles
+
+    [Header("Dungeon Settings")]
+    [SerializeField] private List<RoomController> rooms;
 
     [Header("Run Settings")]
-    [Tooltip("Cuántas salas recientes recordar para evitar repeticiones inmediatas")]
-    public int historyLimit = 2;
+    [SerializeField] private Transform startSpawnPoint;
+    [SerializeField] private int historyLimit = 2;
+    [SerializeField] private int totalRooms = 18;
 
-    [Tooltip("Transform de inicio de dungeon")]
-    public Transform startSpawnPoint;
-
-    private List<RoomController> runSequence = new();
+    private Dictionary<string, Transform> roomPrefabs = new();
+    private Dictionary<string, Transform> hallwayPrefabs = new();
+    private List<Transform> runSequence = new();
     private int currentRoomIndex = 0;
-    private Queue<RoomController> recentHistory = new();
+
+    private Queue<Transform> recentRooms = new();
+    private Queue<Transform> recentHallways = new();
+
+    private RoomController currentRoom;
+    private int currentLayer = 1;
+    private bool runStarted = false;
+
+
+    /* -------------------- PROPIEDADES PÚBLICAS -------------------- */
+    public Transform Player => player;
+    public Transform StartSpawnPoint => startSpawnPoint;
+    public int CurrentLayer => currentLayer;
+    public bool RunStarted => runStarted;
+
+    /* -------------------- MÉTODOS PÚBLICOS -------------------- */
 
     private void Awake()
     {
         CreateSingleton(false);
+        InitializeDictionaries();
     }
+
     private void Start()
     {
+        Debug.Log("[DungeonManager] Esperando que el player toque la primera puerta...");
+
         GenerateRunSequence();
+
+        if (player != null && startSpawnPoint != null)
+        {
+            player.position = startSpawnPoint.position;
+        }
+    }
+    /// <summary>
+    /// Llamado cuando el player toca la primera puerta para iniciar la run
+    /// </summary>
+    public void StartDungeonRun()
+    {
+        if (runStarted) return;
+
+        runStarted = true;
+        Debug.Log("[DungeonManager] ¡Run iniciada! Player tocó la primera puerta.");
+
         StartRun();
     }
+    public void EnterRoom(RoomController room)
+    {
+        if (room == null) return;
+
+        currentRoom = room;
+        Debug.Log($"[DungeonManager] Entrando a sala {room.Config.roomID} en Layer {CurrentLayer}");
+        room.ActivateRoom(CurrentLayer);
+    }
+
+    public void MoveToNext()
+    {
+        currentRoomIndex++;
+
+        if (currentRoomIndex >= runSequence.Count)
+        {
+            Debug.Log("[DungeonManager] Dungeon completado. Volviendo al Lobby.");
+            TeleportPlayer(startSpawnPoint.position);
+            return;
+        }
+
+        MovePlayerTo(runSequence[currentRoomIndex]);
+    }
+
+    public void OnPlayerDeath()
+    {
+        Debug.Log("[DungeonManager] OnPlayerDeath llamado. Reset de historiales.");
+        TeleportPlayer(startSpawnPoint.position);
+        ClearHistories();
+    }
+
+    /// <summary>
+    /// Para asignar en un botón de UI --> manda al Lobby.
+    /// </summary>
+    public void TeleportToLobby()
+    {
+        Debug.Log("[DungeonManager] Teleport manual al Lobby desde UI.");
+        TeleportPlayer(startSpawnPoint.position);
+        ClearHistories();
+    }
+    public void AdvanceLayer()
+    {
+        currentLayer++;
+        Debug.Log($"[DungeonManager] Avanzando a capa {currentLayer}");
+    }
+    /* -------------------- MÉTODOS PRIVADOS -------------------- */
+
+    private void InitializeDictionaries()
+    {
+        roomPrefabs.Clear();
+        hallwayPrefabs.Clear();
+
+        for (int i = 0; i < roomPrefabsList.Count; i++)
+            roomPrefabs.Add("Room_" + i, roomPrefabsList[i]);
+
+        for (int i = 0; i < hallwayPrefabsList.Count; i++)
+            hallwayPrefabs.Add("Hallway_" + i, hallwayPrefabsList[i]);
+    }
+
     private void GenerateRunSequence()
     {
         runSequence.Clear();
-        recentHistory.Clear();
+        recentRooms.Clear();
+        recentHallways.Clear();
+        currentLayer = 1;
 
-        var roomPlan = new List<(List<RoomController> pool, int amount)>
+        for (int i = 0; i < totalRooms; i++)
         {
-            (smallRooms, 8),
-            (mediumRooms, 6),
-            (largeRooms, 4)
-        };
+            // --- Habitación ---
+            var room = GetRandomFromDict(roomPrefabs, recentRooms);
+            runSequence.Add(room);
+            AddToHistory(recentRooms, room);
 
-        foreach (var (pool, amount) in roomPlan)
-        {
-            for (int i = 0; i < amount; i++)
+            // --- Pasillo ---
+            if (i < totalRooms - 1)
             {
-                var candidates = pool.Where(r => !recentHistory.Contains(r)).ToList();
-
-                if (candidates.Count == 0)
-                {
-                    recentHistory.Clear();
-                    candidates = pool;
-                }
-
-                var chosen = candidates[Random.Range(0, candidates.Count)];
-                runSequence.Add(chosen);
-                recentHistory.Enqueue(chosen);
-
-                if (recentHistory.Count > historyLimit)
-                    recentHistory.Dequeue();
+                var hallway = GetRandomFromDict(hallwayPrefabs, recentHallways);
+                runSequence.Add(hallway);
+                AddToHistory(recentHallways, hallway);
             }
-        }
 
-        RouletteSelection.Shuffle(runSequence);
+            // --- Aumentar capa cada 4 habitaciones ---
+            if ((i + 1) % 4 == 0)
+                currentLayer++;
+        }
     }
+
     private void StartRun()
     {
         currentRoomIndex = 0;
-        MovePlayerToRoom(runSequence[currentRoomIndex]);
+        if (rooms.Count > 0)
+        {
+            MovePlayerTo(rooms[currentRoomIndex].transform);
+            EnterRoom(rooms[currentRoomIndex]);
+        }
     }
 
-
-    private void MovePlayerToRoom(RoomController room)
-    {
-        Debug.Log($"Moviendo al jugador a la sala: {room.name}");
-
-        player.position = room.EntryDoor.GetSpawnPoint();
-        room.ActivateRoom();
-    }
-
-    private void TeleportPlayer(Vector3 targetPosition)
+    private void MovePlayerTo(Transform target)
     {
         if (player == null)
         {
@@ -91,27 +173,46 @@ public class DungeonManager : Singleton<DungeonManager>
             return;
         }
 
+        Debug.Log($"[DungeonManager] Moviendo al jugador a: {target.name}");
+        player.position = target.position;
+    }
+
+    private void TeleportPlayer(Vector3 targetPosition)
+    {
+        if (player == null) return;
         player.position = targetPosition;
     }
 
-    public void MoveToNextRoom()
+    private void ClearHistories()
     {
-        currentRoomIndex++;
+        recentRooms.Clear();
+        recentHallways.Clear();
+        runSequence.Clear();
+        currentRoomIndex = 0;
+        currentLayer = 1;
+    }
 
-        if (currentRoomIndex >= runSequence.Count)
+    private Transform GetRandomFromDict(Dictionary<string, Transform> dict, Queue<Transform> history)
+    {
+        List<Transform> candidates = new List<Transform>(dict.Values);
+        
+        candidates.RemoveAll(r => history.Contains(r));
+
+        if (candidates.Count == 0)
         {
-            Debug.Log("Dungeon completado.");
-            return;
+            history.Clear();
+            candidates = new List<Transform>(dict.Values);
         }
 
-        MovePlayerToRoom(runSequence[currentRoomIndex]);
-    }
-    public RoomController GetCurrentRoom() => runSequence[currentRoomIndex];
+        candidates = RouletteSelection.Shuffle(candidates);
 
-    public void OnPlayerDeath()
+        return candidates[0]; // Tomamos el primero después del shuffle
+    }
+
+    private void AddToHistory(Queue<Transform> history, Transform item)
     {
-        Debug.Log("[DungeonManager] OnPlayerDeath llamado.");
-        TeleportPlayer(startSpawnPoint.position);
-        
+        history.Enqueue(item);
+        if (history.Count > historyLimit)
+            history.Dequeue();
     }
 }

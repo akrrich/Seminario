@@ -5,24 +5,22 @@ public class RoomController : MonoBehaviour
 {
     [Header("Room Info")]
     [SerializeField] private RoomConfig config;
-    [SerializeField] private int layer;
 
     [Header("Spawns")]
     [SerializeField] private EnemySpawner[] enemySpawners;
 
     [Header("Doors")]
     [SerializeField] private DoorController entryDoor;
-    [SerializeField] private DoorController exitDoor;
+    [SerializeField] private DoorController[] exitDoors;
 
-    private readonly List<GameObject> enemies = new();
+    private readonly List<EnemyBase> enemies = new();
 
     public RoomConfig Config => config;
     public DoorController EntryDoor => entryDoor;
-    public DoorController ExitDoor => exitDoor;
-
-    public void ActivateRoom()
+    public DoorController[] ExitDoors => exitDoors;
+    public void ActivateRoom(int currentLayer)
     {
-        Debug.Log($"[RoomController] Activando sala {config.roomID} en capa {layer}");
+        Debug.Log($"[RoomController] Activando sala {config.roomID} en capa {currentLayer}");
 
         enemies.Clear();
 
@@ -30,36 +28,50 @@ public class RoomController : MonoBehaviour
         {
             if (spawner == null) continue;
 
-            var spawned = spawner.SpawnEnemies(layer);
+            var spawned = spawner.SpawnEnemies(currentLayer);
             foreach (var enemy in spawned)
-            {
-                RegisterEnemy(enemy.gameObject);
-            }
+                RegisterEnemy(enemy);
         }
 
-        exitDoor?.Lock();
+        LockAllExitDoors();
     }
-    private void RegisterEnemy(GameObject enemy)
+    public void RegisterEnemy(EnemyBase enemy)
     {
         if (enemies.Contains(enemy)) return;
 
         enemies.Add(enemy);
-
-        var enemyBase = enemy.GetComponent<EnemyBase>();
-        if (enemyBase != null)
-        {
-            enemyBase.OnDeath += HandleEnemyDeath;
-        }
+        enemy.OnDeath += HandleEnemyDeath;
     }
     private void HandleEnemyDeath(EnemyBase enemy)
     {
-        enemies.Remove(enemy.gameObject);
-        Debug.Log($"[{config.roomID}] Enemigo eliminado. Restantes: {enemies.FindAll(e => e != null).Count}");
+        enemies.Remove(enemy);
+        Debug.Log($"[{config.roomID}] Enemigo eliminado. Restantes: {enemies.Count}");
 
-        if (enemies.TrueForAll(e => e == null))
+        if (enemies.Count == 0)
         {
             Debug.Log($"[{config.roomID}] Todos los enemigos fueron derrotados.");
-            exitDoor?.Unlock();
+            UnlockAllExitDoors();
+        }
+    }
+    private void LockAllExitDoors()
+    {
+        if (exitDoors == null) return;
+
+        foreach (var door in exitDoors)
+        {
+            if (door != null)
+                door.Lock();
+        }
+    }
+
+    private void UnlockAllExitDoors()
+    {
+        if (exitDoors == null) return;
+
+        foreach (var door in exitDoors)
+        {
+            if (door != null)
+                door.Unlock();
         }
     }
 }

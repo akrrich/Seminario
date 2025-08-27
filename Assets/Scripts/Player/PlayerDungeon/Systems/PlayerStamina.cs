@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerStaminaManager : MonoBehaviour
+public class PlayerStamina : MonoBehaviour
 {
     [Header("Stamina Settings")]
     [SerializeField] private float maxStamina = 100f;
