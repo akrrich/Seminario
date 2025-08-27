@@ -6238,6 +6238,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DungeonPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 1259227023574265200, guid: 6be7ba1e6d6486f4d94f64b301c89930, type: 3}
+      propertyPath: runSpeed
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 1643119122987109456, guid: 6be7ba1e6d6486f4d94f64b301c89930, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.26
