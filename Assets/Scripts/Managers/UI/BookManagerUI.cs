@@ -1,12 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class BookManagerUI : Singleton<BookManagerUI>
 {
-    private List<IBookableUI> panelsBookTabern = new List<IBookableUI>();
-    private List<IBookableUI> panelsBookDungeon = new List<IBookableUI>();
+    private List<IBookableUI> bookElementsUI = new List<IBookableUI>();
 
     private static event Action onHideOutlinesAndTextsFromInteractableElements;
 
@@ -29,7 +29,7 @@ public class BookManagerUI : Singleton<BookManagerUI>
 
     void Start()
     {
-        FindPanelsInHierarchy();
+        StartCoroutine(FindPanelsInHierarchy());
     }
 
     // Simulacion de Update
@@ -65,19 +65,11 @@ public class BookManagerUI : Singleton<BookManagerUI>
         PlayerController.OnOpenOrCloseBook -= OpenOrCloseBook;
     }
 
-    private void FindPanelsInHierarchy()
+    private IEnumerator FindPanelsInHierarchy()
     {
-        if (ScenesManager.Instance.CurrentSceneName == "Tabern")
-        {
-            panelsBookTabern = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<IBookableUI>().Where(p => ((MonoBehaviour)p).gameObject.scene.isLoaded).OrderBy(p => p.IndexPanel).ToList();
-            return;
-        }
+        yield return new WaitForSecondsRealtime(1);
 
-        else if (ScenesManager.Instance.CurrentSceneName == "Dungeon")
-        {
-            panelsBookDungeon = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<IBookableUI>().Where(p => ((MonoBehaviour)p).gameObject.scene.isLoaded).OrderBy(p => p.IndexPanel).ToList();
-            return;
-        }
+        bookElementsUI = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<IBookableUI>().Where(p => ((MonoBehaviour)p).gameObject.scene.isLoaded).OrderBy(p => p.IndexPanel).ToList();
     }
 
     private void OpenOrCloseBook()
@@ -88,7 +80,7 @@ public class BookManagerUI : Singleton<BookManagerUI>
 
         if (!isBookOpen)
         {
-            DeviceManager.Instance.IsUIModeActive = true;
+            InteractionManagerUI.Instance.ShowOrHideCenterPointUI(false);
             isBookOpen = true;
             EnabledNextPanel(indexCurrentPanelOpen);
             return;
@@ -96,7 +88,7 @@ public class BookManagerUI : Singleton<BookManagerUI>
 
         else if (isBookOpen)
         {
-            DeviceManager.Instance.IsUIModeActive = false;
+            InteractionManagerUI.Instance.ShowOrHideCenterPointUI(true);
             isBookOpen = false;
             DisableCurrentPanel(indexCurrentPanelOpen);
             indexCurrentPanelOpen = 0;
@@ -118,7 +110,7 @@ public class BookManagerUI : Singleton<BookManagerUI>
             DisableCurrentPanel(indexCurrentPanelOpen);
             indexCurrentPanelOpen++;
 
-            if (indexCurrentPanelOpen >= panelsBookTabern.Count)
+            if (indexCurrentPanelOpen >= bookElementsUI.Count)
             {
                 indexCurrentPanelOpen = 0;
             }
@@ -135,7 +127,7 @@ public class BookManagerUI : Singleton<BookManagerUI>
 
             if (indexCurrentPanelOpen < 0)
             {
-                indexCurrentPanelOpen = panelsBookTabern.Count - 1;
+                indexCurrentPanelOpen = bookElementsUI.Count - 1;
             }
 
             EnabledNextPanel(indexCurrentPanelOpen);
@@ -149,31 +141,11 @@ public class BookManagerUI : Singleton<BookManagerUI>
 
     private void DisableCurrentPanel(int currentIndex)
     {
-        if (ScenesManager.Instance.CurrentSceneName == "Tabern")
-        {
-            panelsBookTabern[currentIndex].ClosePanel();
-            return;
-        }
-
-        else if (ScenesManager.Instance.CurrentSceneName == "Dungeon")
-        {
-            panelsBookDungeon[currentIndex].ClosePanel();
-            return;
-        }
+        bookElementsUI[currentIndex].ClosePanel();
     }
 
     private void EnabledNextPanel(int currentIndex)
     {
-        if (ScenesManager.Instance.CurrentSceneName == "Tabern")
-        {
-            panelsBookTabern[currentIndex].OpenPanel();
-            return;
-        }
-
-        else if (ScenesManager.Instance.CurrentSceneName == "Dungeon")
-        {
-            panelsBookDungeon[currentIndex].OpenPanel();
-            return;
-        }
+        bookElementsUI[currentIndex].OpenPanel();
     }
 }

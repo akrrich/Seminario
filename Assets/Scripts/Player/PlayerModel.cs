@@ -48,11 +48,6 @@ public class PlayerModel : MonoBehaviour
         Initialize();
     }
 
-    void OnDrawGizmosSelected()
-    {
-        LineOfSight.DrawLOSOnGizmos(transform, playerTabernData.AngleVision, playerTabernData.RangeVision);
-    }
-
 
     public void Movement()
     {

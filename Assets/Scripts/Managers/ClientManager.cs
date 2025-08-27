@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class ClientManager : MonoBehaviour
@@ -84,18 +82,18 @@ public class ClientManager : MonoBehaviour
 
     private void SuscribeToOpenTabernButtonEvent()
     {
-        OpenTabernUI.OnOpenTabern += SetIsTabernOpen;
+        AdministratingManagerUI.OnStartTabern += SetIsTabernOpen;
     }
 
     private void UnsuscribeToOpenTabernButtonEvent()
     {
-        OpenTabernUI.OnOpenTabern -= SetIsTabernOpen;
+        AdministratingManagerUI.OnStartTabern -= SetIsTabernOpen;
     }
 
-    /*private IEnumerator InitializeRandomClient()
+    /*private System.Collections.IEnumerator InitializeRandomClient()
     {
-        yield return new WaitUntil(() => clientPools.All(p => p != null && p.Prefab != null));
-
+        yield return new WaitUntil(() => System.Linq.Enumerable.All(clientPools, p => p != null && p.Prefab != null));
+        
         int randomIndex = UnityEngine.Random.Range(0, clientPools.Count);
         string prefabName = clientPools[randomIndex].Prefab.name;
         clientAbstractFactory.CreateObject(prefabName);
