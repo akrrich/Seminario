@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 6083476399390222158}
   - component: {fileID: 7216575907976385526}
   - component: {fileID: 186605720910420545}
-  - component: {fileID: 3986302484447476405}
+  - component: {fileID: 420065052561587980}
   m_Layer: 7
   m_Name: DungeonPlayer
   m_TagString: Player
@@ -159,12 +159,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc8bf17a6d59894e80bcf217a5dcb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxStamina: 100
-  staminaRegenRate: 10
-  staminaRegenDelay: 1
+  staminaRunCostPerSecond: 5
   speed: 0
   walkSpeed: 5
-  runSpeed: 8
+  runSpeed: 1000
   acceleration: 20
   deceleration: 10
   airMultiplier: 5
@@ -177,6 +175,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   showGroundGizmo: 1
+  debugLogs: 1
 --- !u!114 &1315870567522119900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +203,7 @@ MonoBehaviour:
   maxHP: 100
   healAmount: 10
   healInterval: 30
+  debugLogs: 1
 --- !u!114 &3910886978196774456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackHitbox: {fileID: 6083476399390222158}
   weaponController: {fileID: 8620121490210133455}
-  shieldHandler: {fileID: 0}
+  shieldHandler: {fileID: 186605720910420545}
   attackStaminaCost: 20
 --- !u!114 &6083476399390222158
 MonoBehaviour:
@@ -269,8 +269,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaCost: 25
   cooldownDuration: 1.5
-  shieldObject: {fileID: 0}
---- !u!114 &3986302484447476405
+  shieldObject: {fileID: 8146353917462150600}
+  isActive: 0
+  holdToBlock: 1
+  debugLogs: 1
+--- !u!114 &420065052561587980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -279,12 +282,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 422702052002452655}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb5448d52967d7b408a0ad4539c68a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: e8944a97ddf1eb04fa22529329538ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxStamina: 100
-  regenRate: 10
-  regenDelay: 1
+  baseForce: 5
+  blockedForce: 2
+  verticalLift: 0.2
 --- !u!1 &449254278659169392
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +427,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3209574813253720826}
+  - {fileID: 6393293356522179803}
   m_Father: {fileID: 7893357068095882199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -42.997}
 --- !u!114 &8620121490210133455
@@ -451,6 +455,7 @@ GameObject:
   - component: {fileID: 7893357068095882199}
   - component: {fileID: 6515142177530854106}
   - component: {fileID: 2875690358900739560}
+  - component: {fileID: 192060867222265429}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -539,6 +544,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 3766527146166358730}
+--- !u!114 &192060867222265429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644272985029411559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e88814e2df2d7014ebe63b535233dd53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 6515142177530854106}
+  duration: 0
+  magnitude: 0
+  zoomAmount: 0
 --- !u!1 &2276623907089301451
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,3 +683,88 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2539812831577575207}
   m_Enabled: 1
+--- !u!1 &8146353917462150600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6393293356522179803}
+  - component: {fileID: 6341839668033524838}
+  - component: {fileID: 5755766938435908347}
+  m_Layer: 0
+  m_Name: SM_Medieval_Shield (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6393293356522179803
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146353917462150600}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.65791035, y: -0.25914088, z: 0.25914085, w: 0.6579103}
+  m_LocalPosition: {x: -0.2917749, y: -1.1506497, z: 1.1664063}
+  m_LocalScale: {x: 186.48178, y: 174.25119, z: 167.06664}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5226388079967726769}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &6341839668033524838
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146353917462150600}
+  m_Mesh: {fileID: 6601489501044601497, guid: 3fe508ddf60c5a74eb308a1a5a1302fb, type: 3}
+--- !u!23 &5755766938435908347
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8146353917462150600}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d2f6b319cdd242b438dfb67e80bfbd4f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
