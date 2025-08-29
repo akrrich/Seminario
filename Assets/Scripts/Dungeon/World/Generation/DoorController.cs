@@ -1,13 +1,11 @@
 using UnityEngine;
-public class DoorController : MonoBehaviour
+using TMPro;
+public class DoorController : MonoBehaviour,IInteractable
 {
     [Header("Animation")]
     [SerializeField] private Animator doorAnimator;
     [SerializeField] private string openTrigger = "Open";
     [SerializeField] private string closeTrigger = "Close";
-
-    [Header("Collision")]
-    [SerializeField] private Collider doorCollider;
 
     [Header("VFX")]
     [SerializeField] private ParticleSystem openVFX;
@@ -18,7 +16,18 @@ public class DoorController : MonoBehaviour
     [SerializeField] private bool isExitDoor = true;
     [SerializeField] private bool isFirstDoor = false;
 
-    private bool isLocked = true;
+    [Header("Outline")]
+    [SerializeField] private Outline doorOutline;
+    [SerializeField] private Color openColor = Color.blue;
+    [SerializeField] private Color closedColor= Color.red;
+
+   [SerializeField] private bool isLocked = true;
+
+    public InteractionMode InteractionMode => InteractionMode.Press;
+    private void Awake()
+    {
+        GetComponents();
+    }
 
     public void Unlock()
     {
@@ -27,16 +36,12 @@ public class DoorController : MonoBehaviour
         isLocked = false;
 
         // Play opening animation
-        if (doorAnimator != null)
-            doorAnimator.SetTrigger(openTrigger);
-
-        // Disable collision
-        if (doorCollider != null)
-            doorCollider.enabled = false;
+        //if (doorAnimator != null)
+        //    doorAnimator.SetTrigger(openTrigger);
 
         // Play VFX
-        if (openVFX != null)
-            openVFX.Play();
+        //if (openVFX != null)
+        //    openVFX.Play();
 
         Debug.Log("[DoorController] Puerta desbloqueada.");
     }
@@ -47,54 +52,88 @@ public class DoorController : MonoBehaviour
 
         isLocked = true;
 
-        // Play closing animation
-        if (doorAnimator != null)
-            doorAnimator.SetTrigger(closeTrigger);
+        //// Play closing animation
+        //if (doorAnimator != null)
+        //    doorAnimator.SetTrigger(closeTrigger);
 
-        // Enable collision
-        if (doorCollider != null)
-            doorCollider.enabled = true;
-
-        // Play VFX
-        if (closeVFX != null)
-            closeVFX.Play();
+        //// Play VFX
+        //if (closeVFX != null)
+        //    closeVFX.Play();
 
         Debug.Log("[DoorController] Puerta bloqueada.");
     }
 
     public Vector3 GetSpawnPoint() => transform.position;
+    public bool IsLocked => isLocked;
 
-    private void OnTriggerEnter(Collider other)
+    public void Interact(bool isPressed)
     {
-        if (!isExitDoor || isLocked) return;
-
-        if (other.CompareTag("Player"))
+        Debug.Log("Interactuando con la puerta");
+        if (isLocked)
         {
-            if (isFirstDoor && !DungeonManager.Instance.RunStarted)
-            {
-                DungeonManager.Instance.StartDungeonRun();
-                return;
-            }
+            Debug.Log("[DoorController] Intento de interactuar, pero está bloqueada.");
+            return;
+        }
 
-            if (connectedRoom != null)
-            {
-                // Enter the connected room
-                DungeonManager.Instance.EnterRoom(connectedRoom);
-            }
-            else
-            {
-                // Move to next room in sequence
-                DungeonManager.Instance.MoveToNext();
-            }
+        if (!isExitDoor) return;
+
+        if (isFirstDoor && !DungeonManager.Instance.RunStarted)
+        {
+            DungeonManager.Instance.StartDungeonRun();
+            return;
+        }
+
+        if (connectedRoom != null)
+        {
+            DungeonManager.Instance.EnterRoom(connectedRoom);
+        }
+        else
+        {
+            DungeonManager.Instance.MoveToNext();
         }
     }
 
-    // Property to check if door is locked
-    public bool IsLocked => isLocked;
-
-    // Método para marcar esta puerta como la primera
-    public void SetAsFirstDoor(bool firstDoor)
+    public void ShowOutline()
     {
-        isFirstDoor = firstDoor;
+        if (doorOutline != null)
+        {
+            Debug.Log("JASNDJASBNDJBSD");
+            doorOutline.OutlineWidth = 2.5f;
+            doorOutline.OutlineColor = isLocked ? closedColor : openColor;
+
+            InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
+        }
+    }
+
+    public void HideOutline()
+    {
+        if (doorOutline != null)
+        {
+            Debug.Log("iasiiisws");
+            doorOutline.OutlineWidth = 0f;
+            InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
+        }
+    }
+
+    public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
+    {
+        if (interactionManagerUIText == null) return;
+
+        string keyText = $"<color=yellow>{PlayerInputs.Instance.GetInteractInput()}</color>";
+
+        interactionManagerUIText.text = isLocked
+            ? "Quedan enemigos por eliminar"
+            : $"Presiona {keyText} para pasar a la siguiente sala";
+    }
+
+    public void HideMessage(TextMeshProUGUI interactionManagerUIText)
+    {
+        if (interactionManagerUIText == null) return;
+        interactionManagerUIText.text = "";
+    }
+    private void GetComponents()
+    {
+        doorOutline = GetComponent<Outline>();
+        doorAnimator = GetComponent<Animator>();
     }
 }

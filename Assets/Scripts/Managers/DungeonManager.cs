@@ -1,4 +1,3 @@
-using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -158,18 +157,55 @@ public class DungeonManager : Singleton<DungeonManager>
     private void StartRun()
     {
         currentRoomIndex = 0;
-        if (rooms.Count > 0)
+        if (runSequence.Count == 0)
         {
-            MovePlayerTo(rooms[currentRoomIndex].transform);
-            EnterRoom(rooms[currentRoomIndex]);
+            Debug.LogError("[DungeonManager] runSequence vacío al iniciar la run.");
+            return;
+        }
+
+        LoadRoomFromRunSequence(currentRoomIndex);
+    }
+    private void LoadRoomFromRunSequence(int index)
+    {
+        if (index >= runSequence.Count)
+        {
+            Debug.LogError("[DungeonManager] Índice fuera de rango en runSequence.");
+            return;
+        }
+
+        Transform roomPrefab = runSequence[index];
+        Transform instance = Instantiate(roomPrefab);
+
+        instance.position = currentRoom != null
+            ? currentRoom.GetSpawnPoint().position
+            : startSpawnPoint.position;
+
+        MovePlayerTo(instance);
+
+        RoomController controller = instance.GetComponent<RoomController>();
+        if (controller != null)
+        {
+            EnterRoom(controller);
+        }
+        else
+        {
+            Debug.LogWarning("[DungeonManager] Sala sin RoomController.");
         }
     }
-
     private void MovePlayerTo(Transform target)
     {
+        currentRoomIndex++;
+
         if (player == null)
         {
             Debug.LogError("Player no asignado en DungeonManager.");
+            return;
+        }
+
+        if (currentRoomIndex >= runSequence.Count)
+        {
+            Debug.Log("[DungeonManager] Dungeon completado. Volviendo al Lobby.");
+            TeleportPlayer(startSpawnPoint.position);
             return;
         }
 

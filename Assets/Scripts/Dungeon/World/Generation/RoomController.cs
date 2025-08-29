@@ -8,16 +8,20 @@ public class RoomController : MonoBehaviour
 
     [Header("Spawns")]
     [SerializeField] private EnemySpawner[] enemySpawners;
+    [SerializeField] private Transform roomSpawnpoint;
 
     [Header("Doors")]
     [SerializeField] private DoorController entryDoor;
     [SerializeField] private DoorController[] exitDoors;
+
 
     private readonly List<EnemyBase> enemies = new();
 
     public RoomConfig Config => config;
     public DoorController EntryDoor => entryDoor;
     public DoorController[] ExitDoors => exitDoors;
+
+    public Transform GetSpawnPoint() => roomSpawnpoint;
     public void ActivateRoom(int currentLayer)
     {
         Debug.Log($"[RoomController] Activando sala {config.roomID} en capa {currentLayer}");
