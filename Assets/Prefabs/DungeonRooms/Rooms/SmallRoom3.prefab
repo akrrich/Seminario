@@ -779,6 +779,7 @@ GameObject:
   - component: {fileID: 161144750175471944}
   - component: {fileID: 161144750174671742}
   - component: {fileID: 161144750173638508}
+  - component: {fileID: 1811116562164649991}
   m_Layer: 0
   m_Name: SM_Prop_Torch_Ornate_Full Variant (1)
   m_TagString: Untagged
@@ -855,6 +856,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1811116562164649991
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161144750175718892}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.22843984, y: 0.8023483, z: 0.20259778}
+  m_Center: {x: 0.0000000018062296, y: -0.042692434, z: -0.0000000019632542}
 --- !u!1 &162562063776329975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1059,7 +1081,7 @@ GameObject:
   - component: {fileID: 190827851546008082}
   - component: {fileID: 190827851547054526}
   - component: {fileID: 435872121392786922}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1547,7 +1569,7 @@ GameObject:
   - component: {fileID: 320568887257466511}
   - component: {fileID: 320568887258516771}
   - component: {fileID: 9035918160338801737}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2208,7 +2230,7 @@ GameObject:
   - component: {fileID: 520568704331558649}
   - component: {fileID: 520568704330507605}
   - component: {fileID: 3516016824637298251}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3039,7 +3061,7 @@ GameObject:
   - component: {fileID: 753840676068453512}
   - component: {fileID: 753840676069500708}
   - component: {fileID: 2940210114275264456}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3823,7 +3845,7 @@ GameObject:
   - component: {fileID: 1048610122974775808}
   - component: {fileID: 1048610122975822252}
   - component: {fileID: 2174834776833097731}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4037,7 +4059,7 @@ GameObject:
   - component: {fileID: 1193211515891751892}
   - component: {fileID: 1193211515892797560}
   - component: {fileID: 8005129805973020644}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4890,7 +4912,7 @@ GameObject:
   - component: {fileID: 1385939801827985679}
   - component: {fileID: 1385939801829032611}
   - component: {fileID: 4057016690767807722}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5765,7 +5787,7 @@ GameObject:
   - component: {fileID: 1527104255639316765}
   - component: {fileID: 1527104255638266545}
   - component: {fileID: 1135626746837023241}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7320,7 +7342,7 @@ GameObject:
   - component: {fileID: 1888858061029637650}
   - component: {fileID: 1888858061030684094}
   - component: {fileID: 2543446377094463318}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8749,7 +8771,7 @@ GameObject:
   - component: {fileID: 2406012155395105525}
   - component: {fileID: 2406012155394058585}
   - component: {fileID: 8419182675572087817}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9133,7 +9155,7 @@ GameObject:
   - component: {fileID: 2546983690718550407}
   - component: {fileID: 2546983690717499947}
   - component: {fileID: 6403489981642837164}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9972,7 +9994,7 @@ GameObject:
   - component: {fileID: 2687007750979223016}
   - component: {fileID: 2687007750978172484}
   - component: {fileID: 5452810318066167643}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10271,7 +10293,7 @@ GameObject:
   - component: {fileID: 2722659775516515609}
   - component: {fileID: 2722659775517562549}
   - component: {fileID: 1351318854854031073}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10567,7 +10589,7 @@ GameObject:
   - component: {fileID: 2884129151624941126}
   - component: {fileID: 2884129151623890410}
   - component: {fileID: 7118077751786517271}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11376,7 +11398,7 @@ GameObject:
   - component: {fileID: 3025353868967391236}
   - component: {fileID: 3025353868968442792}
   - component: {fileID: 5588180654829099001}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12151,7 +12173,7 @@ GameObject:
   - component: {fileID: 3236893376133000090}
   - component: {fileID: 3236893376130159098}
   - component: {fileID: 3236893376131182014}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Wall_End_Coner_Inner_01 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13388,7 +13410,7 @@ GameObject:
   - component: {fileID: 3581227536743594755}
   - component: {fileID: 3581227536740745571}
   - component: {fileID: 3581227536741776679}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Wall_End_Coner_Inner_01 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13751,7 +13773,7 @@ GameObject:
   - component: {fileID: 3690113370265753783}
   - component: {fileID: 3690113370264703771}
   - component: {fileID: 4351751973753723509}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14883,7 +14905,7 @@ GameObject:
   - component: {fileID: 3892478132841687845}
   - component: {fileID: 3892478132842733705}
   - component: {fileID: 8060336807604014513}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15726,7 +15748,7 @@ GameObject:
   - component: {fileID: 4123500251353882003}
   - component: {fileID: 4123500251354928703}
   - component: {fileID: 8277001173439419370}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (36)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21756,7 +21778,7 @@ GameObject:
   - component: {fileID: 4397968528411035808}
   - component: {fileID: 4397968528412082956}
   - component: {fileID: 8123035325200487410}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22782,7 +22804,7 @@ GameObject:
   - component: {fileID: 4668538959986518528}
   - component: {fileID: 4668538959985485882}
   - component: {fileID: 4059716485218827058}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Wood_Bridge_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22996,7 +23018,7 @@ GameObject:
   - component: {fileID: 4731955146161898059}
   - component: {fileID: 4731955146162948583}
   - component: {fileID: 507358501804499382}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23402,7 +23424,7 @@ GameObject:
   - component: {fileID: 4929870597776096177}
   - component: {fileID: 4929870597775044637}
   - component: {fileID: 2158195452254670749}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23508,7 +23530,7 @@ GameObject:
   - component: {fileID: 4950729804792263605}
   - component: {fileID: 4950729804793088469}
   - component: {fileID: 4950729804794115473}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Wall_End_Coner_Inner_01 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23978,7 +24000,7 @@ GameObject:
   - component: {fileID: 5046738224959239597}
   - component: {fileID: 5046738224958193153}
   - component: {fileID: 8469975654278600416}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24255,7 +24277,7 @@ GameObject:
   - component: {fileID: 5186605211184927981}
   - component: {fileID: 5186605211183882049}
   - component: {fileID: 31349539078612860}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25344,7 +25366,7 @@ GameObject:
   - component: {fileID: 5429411406330367499}
   - component: {fileID: 5429411406331413927}
   - component: {fileID: 6530616433412689685}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30949,7 +30971,7 @@ GameObject:
   - component: {fileID: 5607008061032131305}
   - component: {fileID: 5607008061031080261}
   - component: {fileID: 8637016218105911318}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31055,6 +31077,7 @@ GameObject:
   - component: {fileID: 5649275336584379132}
   - component: {fileID: 5649275336580924500}
   - component: {fileID: 5649275336582029752}
+  - component: {fileID: 1505766923853958475}
   m_Layer: 0
   m_Name: SM_Env_Stone_Vessel_01 Variant (1)
   m_TagString: Untagged
@@ -31131,6 +31154,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1505766923853958475
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5649275336584227026}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9127044, y: 1.3471999, z: 1.0542661}
+  m_Center: {x: 0.049938295, y: 0.6736018, z: -0.008603113}
 --- !u!1 &5666295827943069201
 GameObject:
   m_ObjectHideFlags: 0
@@ -31371,7 +31415,7 @@ GameObject:
   - component: {fileID: 5721491630062922638}
   - component: {fileID: 5721491630063968290}
   - component: {fileID: 907387702822289254}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32139,7 +32183,7 @@ GameObject:
   - component: {fileID: 5913435203342193861}
   - component: {fileID: 5913435203343245161}
   - component: {fileID: 6724228773158196952}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37635,7 +37679,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5779734138894944690}
   - component: {fileID: 6463436585552483747}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38412,7 +38456,7 @@ GameObject:
   - component: {fileID: 6115606667647714885}
   - component: {fileID: 6115606667646368805}
   - component: {fileID: 6115606667645337697}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Wall_End_Coner_Inner_01 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38797,7 +38841,7 @@ GameObject:
   - component: {fileID: 6224363049086900862}
   - component: {fileID: 6224363049087947218}
   - component: {fileID: 1544895598312098537}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39409,7 +39453,7 @@ GameObject:
   - component: {fileID: 6434459817235168062}
   - component: {fileID: 6434459817234116754}
   - component: {fileID: 4046166915897456064}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45524,7 +45568,7 @@ GameObject:
   - component: {fileID: 6730917547559743828}
   - component: {fileID: 6730917547558697720}
   - component: {fileID: 7018301337421723266}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45916,7 +45960,7 @@ GameObject:
   - component: {fileID: 6785882454557514634}
   - component: {fileID: 6785882454556463142}
   - component: {fileID: 4007744287151687194}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (35)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46429,7 +46473,7 @@ GameObject:
   - component: {fileID: 6853606775244803882}
   - component: {fileID: 6853606775245849734}
   - component: {fileID: 8341398379222926560}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53259,6 +53303,7 @@ GameObject:
   - component: {fileID: 7629872688477053206}
   - component: {fileID: 7629872688476299198}
   - component: {fileID: 7629872688475241042}
+  - component: {fileID: 912091513558562386}
   m_Layer: 0
   m_Name: SM_Env_Stone_Vessel_01 Variant
   m_TagString: Untagged
@@ -53335,6 +53380,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &912091513558562386
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7629872688477500216}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0494862, y: 1.3471999, z: 0.9923949}
+  m_Center: {x: 0.028120583, y: 0.67359996, z: 0.016732996}
 --- !u!1 &7640130444290300986
 GameObject:
   m_ObjectHideFlags: 0
@@ -53944,6 +54010,7 @@ GameObject:
   - component: {fileID: 7750219259371043906}
   - component: {fileID: 7750219259368171124}
   - component: {fileID: 7750219259369208422}
+  - component: {fileID: 5908364168546296904}
   m_Layer: 0
   m_Name: SM_Prop_Torch_Ornate_Full Variant
   m_TagString: Untagged
@@ -54020,6 +54087,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5908364168546296904
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750219259371321574}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.22843984, y: 0.8023483, z: 0.20259778}
+  m_Center: {x: 0.000001909155, y: -0.04269434, z: 0.00000095171106}
 --- !u!1 &7758873129996012275
 GameObject:
   m_ObjectHideFlags: 0
@@ -54631,7 +54719,7 @@ GameObject:
   - component: {fileID: 7855050803099747699}
   - component: {fileID: 3520324294695193110}
   - component: {fileID: 7727581041215041089}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_Rune_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54946,7 +55034,7 @@ GameObject:
   - component: {fileID: 7915609335326578896}
   - component: {fileID: 7915609335327626108}
   - component: {fileID: 6060598152678119198}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55146,7 +55234,7 @@ GameObject:
   - component: {fileID: 7953847743683559355}
   - component: {fileID: 7953847743684604951}
   - component: {fileID: 1528744698861750560}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (89)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62667,7 +62755,7 @@ GameObject:
   - component: {fileID: 8715257404891827128}
   - component: {fileID: 8715257404892872724}
   - component: {fileID: 3142777363737909164}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63273,7 +63361,7 @@ GameObject:
   - component: {fileID: 8855488552598154379}
   - component: {fileID: 8855488552599201575}
   - component: {fileID: 948490221944324127}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63380,7 +63468,7 @@ GameObject:
   - component: {fileID: 8857481701497365618}
   - component: {fileID: 8857481701498417118}
   - component: {fileID: 5607634478827348292}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_09 (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

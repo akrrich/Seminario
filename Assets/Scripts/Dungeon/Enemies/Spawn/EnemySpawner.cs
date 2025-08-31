@@ -45,7 +45,7 @@ public class EnemySpawner : MonoBehaviour
                 // Notificar al RoomController
                 if (parentRoom != null)
                 {
-                    parentRoom.RegisterEnemy(enemy);
+                    parentRoom.RegisterEnemies(enemy);
                 }
 
                 if (spawnedEnemies >= spawnerConfigData.MaxSpawnedEnemies)

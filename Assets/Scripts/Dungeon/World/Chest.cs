@@ -48,21 +48,17 @@ public class Chest : MonoBehaviour, IInteractable
         dropHandler = GetComponent<DropHandler>();
         outline = GetComponent<Outline>();
 
-        // Buscar animator en hijos si no está asignado
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
 
-        // Inicializar el sistema de drop
         dropHandler.Init(table, lootDB, spawnPoint);
 
-        // Configurar outline
         if (outline != null)
         {
             outline.OutlineWidth = 0f;
             outline.OutlineColor = Color.yellow; 
         }
 
-        // Verificar layer (solo para debug)
         if (layerCheck && gameObject.layer != LayerMask.NameToLayer("Interactable"))
         {
             Debug.LogWarning($"[Chest] {gameObject.name} no está en la layer 'Interactable'. El sistema de detección podría no funcionar correctamente.");
@@ -78,20 +74,18 @@ public class Chest : MonoBehaviour, IInteractable
     private IEnumerator CO_OpenChest()
     {
         opened = true;
-        col.enabled = false; // Desactivar colisionador para evitar múltiples interacciones
+        col.enabled = false;
 
-        // Reproducir efectos y animación
         if (fxOpen != null)
             fxOpen.SetActive(true);
 
         if (animator != null)
             animator.SetBool("Open", true);
 
-        // Esperar a que termine la animación
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
-        // Soltar el loot
-        dropHandler.DropLoot();
+        int currentLayer = DungeonManager.Instance.CurrentLayer;
+        dropHandler.DropLoot(currentLayer);
 
         // Si se destruye después de abrir, esperar y destruir
         if (destroyAfterOpen)

@@ -1,81 +1,181 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class RoomController : MonoBehaviour
 {
-    [Header("Room Info")]
+    [Header("Room Configuration")]
     [SerializeField] private RoomConfig config;
 
-    [Header("Spawns")]
-    [SerializeField] private EnemySpawner[] enemySpawners;
-    [SerializeField] private Transform roomSpawnpoint;
+    [Header("Handlers")]
+    [SerializeField] private EnemyHandler enemyHandler;
+    [SerializeField] private LootHandler lootHandler;
+    [SerializeField] private TrapHandler trapHandler;
 
     [Header("Doors")]
     [SerializeField] private DoorController entryDoor;
     [SerializeField] private DoorController[] exitDoors;
 
+    [Header("Enemy Management")]
+    [SerializeField] private List<EnemyBase> enemiesInRoom = new List<EnemyBase>();
+    [SerializeField] private bool allEnemiesDefeated = false;
 
-    private readonly List<EnemyBase> enemies = new();
+    [Header("References")]
+    [SerializeField] private Transform roomSpawnPoint;
 
+    private bool isActive = false;
+    private int currentLayer;
+
+    // ---------- PROPERTIES ----------
     public RoomConfig Config => config;
-    public DoorController EntryDoor => entryDoor;
-    public DoorController[] ExitDoors => exitDoors;
+    public bool IsActive => isActive;
+    public bool IsCleared => enemyHandler != null && enemyHandler.EnemyCount == 0;
+    public Transform SpawnPoint => roomSpawnPoint;
 
-    public Transform GetSpawnPoint() => roomSpawnpoint;
-    public void ActivateRoom(int currentLayer)
+    public event Action onAllEnemiesDefeated;
+    //--------------- UNITY -------------------
+    private void Awake()
     {
-        Debug.Log($"[RoomController] Activando sala {config.roomID} en capa {currentLayer}");
+        InitializeHandlers();
+    }
+    //------------------ API ------------------
+    private void InitializeHandlers()
+    {
+        if (enemyHandler == null) enemyHandler = GetComponentInChildren<EnemyHandler>();
+        if (lootHandler == null) lootHandler = GetComponentInChildren<LootHandler>();
+        if (trapHandler == null) trapHandler = GetComponentInChildren<TrapHandler>();
 
-        enemies.Clear();
+        enemyHandler?.Initialize();
+    }
 
-        foreach (var spawner in enemySpawners)
+    public void ActivateRoom(int layer)
+    {
+        if (isActive) return;
+
+        currentLayer = layer;
+        isActive = true;
+
+        Debug.Log($"[RoomController] Activating room {config.roomID} on layer {layer}");
+
+        if (enemyHandler != null)
         {
-            if (spawner == null) continue;
-
-            var spawned = spawner.SpawnEnemies(currentLayer);
-            foreach (var enemy in spawned)
-                RegisterEnemy(enemy);
+            enemyHandler.OnAllEnemiesDefeated += HandleRoomCleared;
+            enemyHandler.SpawnEnemies(config, layer);
         }
 
-        LockAllExitDoors();
-    }
-    public void RegisterEnemy(EnemyBase enemy)
-    {
-        if (enemies.Contains(enemy)) return;
+        if (config.allowLoot)
+            lootHandler?.SpawnLoot(config.size, layer);
 
-        enemies.Add(enemy);
-        enemy.OnDeath += HandleEnemyDeath;
+        if (config.allowTraps)
+            trapHandler?.SpawnTraps(config, layer);
+
+        LockExitDoors();
+        entryDoor?.Unlock();
     }
+
+    public void DeactivateRoom()
+    {
+        if (!isActive) return;
+
+        isActive = false;
+
+        if (enemyHandler != null)
+        {
+            enemyHandler.OnAllEnemiesDefeated -= HandleRoomCleared;
+            enemyHandler.Cleanup();
+        }
+
+        lootHandler?.Cleanup();
+        trapHandler?.Cleanup();
+
+        UnlockExitDoors();
+    }
+
+    public void RegisterEnemies(EnemyBase enemy)
+    {
+        if (enemy == null || enemiesInRoom.Contains(enemy)) return;
+
+        enemiesInRoom.Add(enemy);
+
+        enemy.OnDeath += HandleEnemyDeath;
+
+        Debug.Log($"[RoomController] Enemigo registrado: {enemy.name}. Total: {enemiesInRoom.Count}");
+    }
+
     private void HandleEnemyDeath(EnemyBase enemy)
     {
-        enemies.Remove(enemy);
-        Debug.Log($"[{config.roomID}] Enemigo eliminado. Restantes: {enemies.Count}");
+        if (enemy == null) return;
 
-        if (enemies.Count == 0)
+        enemy.OnDeath -= HandleEnemyDeath;
+          
+        if (enemiesInRoom.Contains(enemy))
         {
-            Debug.Log($"[{config.roomID}] Todos los enemigos fueron derrotados.");
-            UnlockAllExitDoors();
+            enemiesInRoom.Remove(enemy);
         }
-    }
-    private void LockAllExitDoors()
-    {
-        if (exitDoors == null) return;
 
-        foreach (var door in exitDoors)
-        {
-            if (door != null)
-                door.Lock();
-        }
+        Debug.Log($"[RoomController] Enemigo derrotado. Restantes: {enemiesInRoom.Count}");
+
+        // Verificar si todos los enemigos fueron derrotados
+        CheckIfRoomCleared();
     }
 
-    private void UnlockAllExitDoors()
+    public void HandleAllEnemiesDefeated()
     {
-        if (exitDoors == null) return;
+        onAllEnemiesDefeated?.Invoke();
+        Debug.Log("[RoomController] ¡Sala limpiada!");
+    }
 
-        foreach (var door in exitDoors)
+    private void CheckIfRoomCleared()
+    {
+        if (enemiesInRoom.Count == 0 && !allEnemiesDefeated)
         {
-            if (door != null)
-                door.Unlock();
+            allEnemiesDefeated = true;
+            HandleAllEnemiesDefeated();
+            Debug.Log("[RoomController] ¡Sala limpiada!");
         }
+    }
+    public bool IsRoomCleared()
+    {
+        return allEnemiesDefeated;
+    }
+    private void OnDestroy()
+    {
+        foreach (var enemy in enemiesInRoom)
+        {
+            if (enemy != null)
+            {
+                enemy.OnDeath -= HandleEnemyDeath;
+            }
+        }
+        enemiesInRoom.Clear();
+    }
+    private void HandleRoomCleared()
+    {
+        Debug.Log($"[RoomController] Room {config.roomID} cleared!");
+        UnlockExitDoors();
+        DungeonManager.Instance?.OnRoomCleared(this);
+    }
+
+    private void ConfigureEntryDoor()
+    {
+        entryDoor?.Unlock();
+    }
+
+    private void LockExitDoors()
+    {
+        foreach (var door in exitDoors)
+            door?.Lock();
+    }
+
+    private void UnlockExitDoors()
+    {
+        foreach (var door in exitDoors)
+            door?.Unlock();
+    }
+
+    public void ResetRoom()
+    {
+        DeactivateRoom();
+        InitializeHandlers();
     }
 }

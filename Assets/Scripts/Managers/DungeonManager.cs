@@ -21,8 +21,8 @@ public class DungeonManager : Singleton<DungeonManager>
     private Dictionary<string, Transform> roomPrefabs = new();
     private Dictionary<string, Transform> hallwayPrefabs = new();
     private List<Transform> runSequence = new();
-    private int currentRoomIndex = 0;
 
+    private int currentRoomIndex = 0;
     private Queue<Transform> recentRooms = new();
     private Queue<Transform> recentHallways = new();
 
@@ -37,7 +37,7 @@ public class DungeonManager : Singleton<DungeonManager>
     public int CurrentLayer => currentLayer;
     public bool RunStarted => runStarted;
 
-    /* -------------------- MÉTODOS PÚBLICOS -------------------- */
+    /* -------------------- UNITY -------------------- */
 
     private void Awake()
     {
@@ -56,6 +56,8 @@ public class DungeonManager : Singleton<DungeonManager>
             player.position = startSpawnPoint.position;
         }
     }
+    /* ------------------ API ---------------------- */
+   
     /// <summary>
     /// Llamado cuando el player toca la primera puerta para iniciar la run
     /// </summary>
@@ -77,6 +79,14 @@ public class DungeonManager : Singleton<DungeonManager>
         room.ActivateRoom(CurrentLayer);
     }
 
+    public void OnRoomCleared(RoomController clearedRoom)
+    {
+        Debug.Log($"[DungeonManager] Room {clearedRoom.Config.roomID} cleared. Moviendo a la siguiente sala...");
+
+        // Avanzar a la siguiente sala automáticamente
+        MoveToNext();
+    }
+
     public void MoveToNext()
     {
         currentRoomIndex++;
@@ -88,7 +98,7 @@ public class DungeonManager : Singleton<DungeonManager>
             return;
         }
 
-        MovePlayerTo(runSequence[currentRoomIndex]);
+        LoadRoomFromRunSequence(currentRoomIndex);
     }
 
     public void OnPlayerDeath()
@@ -97,10 +107,6 @@ public class DungeonManager : Singleton<DungeonManager>
         TeleportPlayer(startSpawnPoint.position);
         ClearHistories();
     }
-
-    /// <summary>
-    /// Para asignar en un botón de UI --> manda al Lobby.
-    /// </summary>
     public void TeleportToLobby()
     {
         Debug.Log("[DungeonManager] Teleport manual al Lobby desde UI.");
@@ -112,6 +118,7 @@ public class DungeonManager : Singleton<DungeonManager>
         currentLayer++;
         Debug.Log($"[DungeonManager] Avanzando a capa {currentLayer}");
     }
+   
     /* -------------------- MÉTODOS PRIVADOS -------------------- */
 
     private void InitializeDictionaries()
@@ -173,46 +180,30 @@ public class DungeonManager : Singleton<DungeonManager>
             return;
         }
 
-        Transform roomPrefab = runSequence[index];
-        Transform instance = Instantiate(roomPrefab);
+        Transform targetSpawn = runSequence[index];
+        MovePlayerTo(targetSpawn);
 
-        instance.position = currentRoom != null
-            ? currentRoom.GetSpawnPoint().position
-            : startSpawnPoint.position;
-
-        MovePlayerTo(instance);
-
-        RoomController controller = instance.GetComponent<RoomController>();
+        RoomController controller = targetSpawn.GetComponentInParent<RoomController>();
         if (controller != null)
         {
             EnterRoom(controller);
         }
         else
         {
-            Debug.LogWarning("[DungeonManager] Sala sin RoomController.");
+            Debug.LogWarning("[DungeonManager] Spawn sin RoomController padre.");
         }
     }
     private void MovePlayerTo(Transform target)
     {
-        currentRoomIndex++;
-
         if (player == null)
         {
             Debug.LogError("Player no asignado en DungeonManager.");
             return;
         }
 
-        if (currentRoomIndex >= runSequence.Count)
-        {
-            Debug.Log("[DungeonManager] Dungeon completado. Volviendo al Lobby.");
-            TeleportPlayer(startSpawnPoint.position);
-            return;
-        }
-
         Debug.Log($"[DungeonManager] Moviendo al jugador a: {target.name}");
         player.position = target.position;
     }
-
     private void TeleportPlayer(Vector3 targetPosition)
     {
         if (player == null) return;

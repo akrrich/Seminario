@@ -82,13 +82,9 @@ public class DoorController : MonoBehaviour,IInteractable
             DungeonManager.Instance.StartDungeonRun();
             return;
         }
-
-        if (connectedRoom != null)
-        {
-            DungeonManager.Instance.EnterRoom(connectedRoom);
-        }
         else
         {
+
             DungeonManager.Instance.MoveToNext();
         }
     }
@@ -97,7 +93,6 @@ public class DoorController : MonoBehaviour,IInteractable
     {
         if (doorOutline != null)
         {
-            Debug.Log("JASNDJASBNDJBSD");
             doorOutline.OutlineWidth = 2.5f;
             doorOutline.OutlineColor = isLocked ? closedColor : openColor;
 
@@ -109,7 +104,6 @@ public class DoorController : MonoBehaviour,IInteractable
     {
         if (doorOutline != null)
         {
-            Debug.Log("iasiiisws");
             doorOutline.OutlineWidth = 0f;
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
         }
