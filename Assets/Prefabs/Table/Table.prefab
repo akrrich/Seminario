@@ -511,7 +511,6 @@ GameObject:
   - component: {fileID: 3587167639941625568}
   - component: {fileID: 1186555563265591051}
   - component: {fileID: 8522404706219797399}
-  - component: {fileID: 1749991912022454602}
   m_Layer: 10
   m_Name: Table
   m_TagString: Table
@@ -624,24 +623,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &1749991912022454602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7638262073088767978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 0, g: 1, b: 0.015367031, a: 1}
-  outlineWidth: 0
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &7941427975212391663
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,7 +671,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5fc38b66adf70642a8b1afb1c85bebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outline: {fileID: 0}
 --- !u!1 &8530571643801783724
 GameObject:
   m_ObjectHideFlags: 0

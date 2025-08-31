@@ -19,7 +19,6 @@ public class Food : MonoBehaviour, IInteractable
 
     [SerializeField] private FoodData foodData;
 
-    private Outline outline;
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
@@ -53,6 +52,11 @@ public class Food : MonoBehaviour, IInteractable
         Initialize();
     }
 
+    void Start()
+    {
+        StartCoroutine(RegisterOutline());
+    }
+
     void OnEnable()
     {
         StartCoroutine(CookGameObject());
@@ -61,16 +65,16 @@ public class Food : MonoBehaviour, IInteractable
     void OnDestroy()
     {
         UnsuscribeToPlayerControllerEvents();
+        OutlineManager.Instance.Unregister(gameObject);
     }
 
 
-    /// <summary>
-    /// Agregar que si el plato estaba desactivado cuando agarro la comida que se active
-    /// </summary>
     public void Interact(bool isPressed)
     {
         if (gameObject.activeSelf && !isServedInTable && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
         {
+            PlayerView.OnEnabledDishForced?.Invoke(true);
+
             isInPlayerDishPosition = true;
             isServedInTable = true;
 
@@ -85,14 +89,14 @@ public class Food : MonoBehaviour, IInteractable
     {
         if (!isServedInTable)
         {
-            outline.OutlineWidth = 5f;
+            OutlineManager.Instance.Show(gameObject);
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
         }
     }
 
     public void HideOutline()
     {
-        outline.OutlineWidth = 0f;
+        OutlineManager.Instance.Hide(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
 
@@ -137,11 +141,17 @@ public class Food : MonoBehaviour, IInteractable
 
     private void GetComponents()
     {
-        outline = GetComponent<Outline>();
         cookingManager = FindFirstObjectByType<CookingManager>();
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         meshRenderer = GetComponent<MeshRenderer>();
+    }
+
+    private IEnumerator RegisterOutline()
+    {
+        yield return new WaitForSecondsRealtime(1);
+
+        OutlineManager.Instance.Register(gameObject);
     }
 
     private void Initialize()

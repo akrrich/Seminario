@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using System.Collections;
 
 public class Table : MonoBehaviour, IInteractable
 {
     private PlayerController playerController;
-    private Outline outline;
 
     private Table auxiliarTable;
     private ClientView auxiliarClientView;
 
+    private GameObject table;
     private GameObject chair;
     private GameObject dish;
     private GameObject dirty;
@@ -59,6 +60,16 @@ public class Table : MonoBehaviour, IInteractable
         FindObjectsAndComponents();
     }
 
+    void Start()
+    {
+        StartCoroutine(RegisterOutline());
+    }
+
+    void OnDestroy()
+    {
+        OutlineManager.Instance.Unregister(table);
+    }
+
 
     public void Interact(bool isPressed)
     {
@@ -91,7 +102,7 @@ public class Table : MonoBehaviour, IInteractable
     {
         if (isDirty)
         {
-            outline.OutlineWidth = 5f;
+            OutlineManager.Instance.Show(table);
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
             PlayerView.OnActivateSliderCleanDirtyTable?.Invoke();
@@ -112,7 +123,7 @@ public class Table : MonoBehaviour, IInteractable
             {
                 if (!auxiliarClientView.CanTakeOrder)
                 {
-                    outline.OutlineWidth = 5f;
+                    OutlineManager.Instance.Show(table);
                     InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
                     auxiliarClientView.CanTakeOrder = true;
@@ -133,7 +144,7 @@ public class Table : MonoBehaviour, IInteractable
 
             if (hasChildren && isOccupied && auxiliarClientView.ReturnSpriteFoodIsActive())
             {
-                outline.OutlineWidth = 5f;
+                OutlineManager.Instance.Show(table);
                 InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
                 PlayerController.OnTableCollisionEnterForHandOverFood?.Invoke(this);
@@ -158,7 +169,7 @@ public class Table : MonoBehaviour, IInteractable
 
     public void HideOutline()
     {
-        outline.OutlineWidth = 0f;
+        OutlineManager.Instance.Hide(table);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
 
         PlayerView.OnDeactivateSliderCleanDirtyTable?.Invoke();
@@ -249,8 +260,8 @@ public class Table : MonoBehaviour, IInteractable
     private void FindObjectsAndComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
-        outline = GetComponentInChildren<Outline>();
 
+        table = transform.Find("Table").gameObject;
         chair = transform.Find("Chair").gameObject;
         dish = transform.Find("Dish").gameObject;
         dirty = transform.Find("Dirty").gameObject;
@@ -261,5 +272,12 @@ public class Table : MonoBehaviour, IInteractable
         {
             dishPositions.Add(childs.GetComponent<Transform>());
         }
+    }
+
+    private IEnumerator RegisterOutline()
+    {
+        yield return new WaitForSecondsRealtime(1);
+
+        OutlineManager.Instance.Register(table);
     }
 }

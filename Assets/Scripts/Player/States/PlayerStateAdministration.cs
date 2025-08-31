@@ -27,7 +27,7 @@ public class PlayerStateAdministration<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-        //Debug.Log("Cook");
+        //Debug.Log("Administration");
 
         PlayerView.OnEnterInAdministrationMode?.Invoke();
 

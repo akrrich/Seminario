@@ -1,10 +1,10 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class Administration : MonoBehaviour, IInteractable
 {
     private PlayerController playerController;
-    private Outline outline;
 
     public InteractionMode InteractionMode { get => InteractionMode.Press; }
 
@@ -12,6 +12,16 @@ public class Administration : MonoBehaviour, IInteractable
     void Awake()
     {
         GetComponents();
+    }
+
+    void Start()
+    {
+        StartCoroutine(RegisterOutline());
+    }
+
+    void OnDestroy()
+    {
+        OutlineManager.Instance.Unregister(gameObject);
     }
 
 
@@ -23,14 +33,14 @@ public class Administration : MonoBehaviour, IInteractable
     public void ShowOutline()
     {
         playerController.PlayerModel.IsCollidingAdministration = true;
-        outline.OutlineWidth = 5f;
+        OutlineManager.Instance.Show(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
     }
 
     public void HideOutline()
     {
         playerController.PlayerModel.IsCollidingAdministration = false;
-        outline.OutlineWidth = 0f;
+        OutlineManager.Instance.Hide(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
 
@@ -49,6 +59,12 @@ public class Administration : MonoBehaviour, IInteractable
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
-        outline = GetComponent<Outline>();
+    }
+
+    private IEnumerator RegisterOutline()
+    {
+        yield return new WaitForSecondsRealtime(1);
+
+        OutlineManager.Instance.Register(gameObject);
     }
 }
