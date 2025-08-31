@@ -1,9 +1,10 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
 
 public class Trash : MonoBehaviour, IInteractable
 {
     private PlayerController playerController;
-    private Outline outline;
 
     public InteractionMode InteractionMode { get => InteractionMode.Press; }
 
@@ -11,6 +12,16 @@ public class Trash : MonoBehaviour, IInteractable
     void Awake()
     {
         GetComponents();
+    }
+
+    void Start()
+    {
+        StartCoroutine(RegisterOutline());
+    }
+
+    void OnDestroy()
+    {
+        OutlineManager.Instance.Unregister(gameObject);
     }
 
 
@@ -26,7 +37,7 @@ public class Trash : MonoBehaviour, IInteractable
             // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS)
             if (child.childCount > 0)
             {
-                outline.OutlineWidth = 5f;
+                OutlineManager.Instance.Show(gameObject);
                 InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
             }
         }
@@ -34,11 +45,11 @@ public class Trash : MonoBehaviour, IInteractable
 
     public void HideOutline()
     {
-        outline.OutlineWidth = 0f;
+        OutlineManager.Instance.Hide(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
 
-    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
     {
         foreach (Transform child in playerController.PlayerView.Dish.transform)
         {
@@ -50,7 +61,7 @@ public class Trash : MonoBehaviour, IInteractable
         }
     }
 
-    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    public void HideMessage(TextMeshProUGUI interactionManagerUIText)
     {
         interactionManagerUIText.text = string.Empty;
     }
@@ -59,6 +70,12 @@ public class Trash : MonoBehaviour, IInteractable
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
-        outline = GetComponent<Outline>();
+    }
+
+    private IEnumerator RegisterOutline()
+    {
+        yield return new WaitForSecondsRealtime(1);
+
+        OutlineManager.Instance.Register(gameObject);
     }
 }

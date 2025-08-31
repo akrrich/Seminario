@@ -13,10 +13,8 @@ public class AdministratingManagerUI : MonoBehaviour
     [SerializeField] private GameObject panelIngredients;
     [SerializeField] private GameObject panelUpgrades; 
 
-    /// <summary>
-    /// Agregar que sonido de cancelacion si no puede comprar el ingrediente o comprar la zona de mejora o abrir la taberna si esta abierta
-    /// </summary>
-    [SerializeField] private AudioSource buttonClick;
+    [SerializeField] private AudioSource buttonClickWell;
+    [SerializeField] private AudioSource buttonClickWrong;
     [SerializeField] private AudioSource buttonSelected;
 
     private List<ZoneUnlock> zoneUnlocks = new List<ZoneUnlock>();
@@ -106,7 +104,7 @@ public class AdministratingManagerUI : MonoBehaviour
     public void ButtonStartTabern()
     {
         onStartTabern?.Invoke();
-        buttonClick.Play();
+        buttonClickWell.Play();
     }
 
     // Funcion asignada a boton UI
@@ -118,9 +116,14 @@ public class AdministratingManagerUI : MonoBehaviour
 
             if (MoneyManager.Instance.CurrentMoney >= price)
             {
-                buttonClick.Play();
+                buttonClickWell.Play();
                 IngredientInventoryManager.Instance.IncreaseIngredientStock(ingredient);
                 MoneyManager.Instance.SubMoney(price);
+            }
+
+            else
+            {
+                buttonClickWrong.Play();
             }
         }
     }
@@ -134,9 +137,14 @@ public class AdministratingManagerUI : MonoBehaviour
 
         if (MoneyManager.Instance.CurrentMoney >= price)
         {
-            buttonClick.Play();
+            buttonClickWell.Play();
             zoneUnlocks[index].UnlockZone();
             MoneyManager.Instance.SubMoney(price);
+        }
+
+        else
+        {
+            buttonClickWrong.Play();
         }
     }
 

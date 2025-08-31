@@ -9,14 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c0be9f5f9f70cb42ae11a0716e38136, type: 3}
-  m_Name: ScenesManagerData
+  m_Script: {fileID: 11500000, guid: 4cc1dc834bd00c042a2dedd6b49742b1, type: 3}
+  m_Name: OutlineManager
   m_EditorClassIdentifier: 
-  panelTips:
-  - Texto 1
-  - Texto 2
-  - Texto 3
-  - Texto 4
-  - Texto 5
-  duringTimeLoadingScenePanel: 3
-  duringTimeExitGamePanel: 3
+  defaultOutlineColor: {r: 0.29267383, g: 1, b: 0, a: 1}
+  activeWidth: 5

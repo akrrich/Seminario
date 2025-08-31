@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ScenesManager : Singleton<ScenesManager>
 {
@@ -12,6 +13,8 @@ public class ScenesManager : Singleton<ScenesManager>
 
     [SerializeField] private GameObject loadingScenePanel;
     [SerializeField] private GameObject exitGamePanel;
+
+    [SerializeField] private TextMeshProUGUI loadingScenePanelText;
 
     private Scene currentScene;
 
@@ -44,6 +47,9 @@ public class ScenesManager : Singleton<ScenesManager>
     {
         loadingScenePanel.SetActive(true);
         isInLoadingScenePanel = true;
+
+        int randomNumber = Random.Range(0, scenesManagerData.PanelTips.Count);
+        loadingScenePanelText.text = scenesManagerData.PanelTips[randomNumber];
 
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         asyncLoad.allowSceneActivation = false;
