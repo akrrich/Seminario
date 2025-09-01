@@ -636,6 +636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38c5fca5000ae7c48922b372bb063155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clientsFoodPreferencesData: {fileID: 11400000, guid: 65f6b76dcd2a74f42881db7390e602a1, type: 2}
   favoritesFoodTypes: 0000000001000000020000000300000004000000
 --- !u!114 &7928818473667244909
 MonoBehaviour:

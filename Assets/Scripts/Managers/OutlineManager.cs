@@ -19,8 +19,8 @@ public class OutlineManager : Singleton<OutlineManager>
         if (!outlines.ContainsKey(obj))
         {
             Outline outline = obj.AddComponent<Outline>();
-            outline.OutlineColor = outlineManagerData.DefaultOutlineColor;
             outline.OutlineWidth = 0;
+            outline.OutlineColor = outlineManagerData.DefaultOutlineColor;
             outlines.Add(obj, outline);
         }
     }

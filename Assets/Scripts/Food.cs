@@ -233,19 +233,16 @@ public class Food : MonoBehaviour, IInteractable
     {
         if (cookTimeCounter < foodData.TimeToBeenCooked)
         {
-            Debug.Log("Crudo");
             currentCookingState = CookingStates.Raw;
         }
 
         else if (cookTimeCounter >= foodData.TimeToBeenCooked && cookTimeCounter <= foodData.TimeToBeenCooked + foodData.TimeToBeenBurned)
         {
-            Debug.Log("Cocinado");
             currentCookingState = CookingStates.Cooked;
         }
 
         else if (cookTimeCounter > foodData.TimeToBeenCooked + foodData.TimeToBeenBurned)
         {
-            Debug.Log("Quemado");
             currentCookingState = CookingStates.Burned;
         }
     }

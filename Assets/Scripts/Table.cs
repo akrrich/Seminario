@@ -276,7 +276,7 @@ public class Table : MonoBehaviour, IInteractable
 
     private IEnumerator RegisterOutline()
     {
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(2);
 
         OutlineManager.Instance.Register(table);
     }

@@ -7,6 +7,8 @@ public class ClientView : MonoBehaviour
     /// Recordatorio: Buscar en la mesa el componente hijo Food y tomar el tiempo que tarda en cocinarse en ese instante de forma local
     /// </summary>
 
+    [SerializeField] private ClientsFoodPreferencesData clientsFoodPreferencesData;
+
     private PlayerController playerController;
     private ClientManager clientManager;
     private Table tablePlayerCollision; 
@@ -18,8 +20,6 @@ public class ClientView : MonoBehaviour
     private List<string> orderFoodNames = new List<string>(); /// <summary>
     /// Modificar esto para que sea unicamente un string solo
     /// </summary>
-
-    [SerializeField] private List<FoodType> favoritesFoodTypes; // Las comidas que puede pedir
 
     private Dictionary<string, SpriteRenderer> spriteTypeDict = new();
 
@@ -104,8 +104,7 @@ public class ClientView : MonoBehaviour
         {
             orderFoodNames.Clear();
 
-            int randomIndex = Random.Range(0, favoritesFoodTypes.Count);
-            FoodType selectedFood = favoritesFoodTypes[randomIndex];
+            FoodType selectedFood = clientsFoodPreferencesData.GetRandomFood();
             currentSelectedFood = selectedFood;
 
             Sprite sprite = clientManager.GetSpriteForRandomFood(selectedFood);
@@ -116,6 +115,7 @@ public class ClientView : MonoBehaviour
                 spritesTypeList[0].gameObject.SetActive(true);
 
                 spritesTypeList[0].sprite = sprite;
+                orderFoodNames.Clear();
                 orderFoodNames.Add(selectedFood.ToString());
                 AutoAdjustSpriteScale(sprite);
 
