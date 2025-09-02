@@ -1,9 +1,10 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
 
 public class CookingDeskUI : MonoBehaviour, IInteractable
 {
     private PlayerController playerController;
-    private Outline outline;
 
     public InteractionMode InteractionMode { get => InteractionMode.Press; }
 
@@ -13,6 +14,15 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
         GetComponents();
     }
 
+    void Start()
+    {
+        StartCoroutine(RegisterOutline());
+    }
+
+    void OnDestroy()
+    {
+        OutlineManager.Instance.Unregister(gameObject);
+    }
 
     public void Interact(bool isPressed)
     {
@@ -22,24 +32,24 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
     public void ShowOutline()
     {
         playerController.PlayerModel.IsCollidingCookingDeskUI = true;
-        outline.OutlineWidth = 5f;
+        OutlineManager.Instance.Show(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
     }
 
     public void HideOutline()
     {
         playerController.PlayerModel.IsCollidingCookingDeskUI = false;
-        outline.OutlineWidth = 0f;
+        OutlineManager.Instance.Hide(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
 
-    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
     {
         string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
         interactionManagerUIText.text = $"Press" + keyText + "to start cooking";
     }
 
-    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    public void HideMessage(TextMeshProUGUI interactionManagerUIText)
     {
         interactionManagerUIText.text = string.Empty;
     }
@@ -48,6 +58,12 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
     private void GetComponents()
     {
         playerController = FindFirstObjectByType<PlayerController>();
-        outline = GetComponent<Outline>();
+    }
+
+    private IEnumerator RegisterOutline()
+    {
+        yield return new WaitForSecondsRealtime(1);
+
+        OutlineManager.Instance.Register(gameObject);
     }
 }

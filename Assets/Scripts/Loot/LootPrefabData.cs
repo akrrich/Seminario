@@ -15,7 +15,7 @@ public class LootPrefabDatabase : ScriptableObject
 
     private Dictionary<string, GameObject> prefabLookup;
 
-    public GameObject GetPrefab(string lootName)
+    public GameObject GetLootPrefab(string lootName)
     {
         if (prefabLookup == null)
         {

@@ -12,15 +12,17 @@ public class InteractionManagerUI : Singleton<InteractionManagerUI>
     [SerializeField] private InteractionManagerUIData interactionManagerUIData;
 
     [SerializeField] private Image centerPointUI;
+    [SerializeField] private GameObject interactionMessage;
     [SerializeField] private TextMeshProUGUI interactionMessageText;
 
     public Image CenterPointUI { get => centerPointUI; }
     public TextMeshProUGUI InteractionMessageText { get => interactionMessageText; }
-
+    public GameObject InteractionMessage { get => interactionMessage; }
 
     void Awake()
     {
         CreateSingleton(false);
+        interactionMessage.gameObject.SetActive(false);
     }
 
 

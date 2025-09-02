@@ -1,4 +1,3 @@
-using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,8 +21,8 @@ public class DungeonManager : Singleton<DungeonManager>
     private Dictionary<string, Transform> roomPrefabs = new();
     private Dictionary<string, Transform> hallwayPrefabs = new();
     private List<Transform> runSequence = new();
-    private int currentRoomIndex = 0;
 
+    private int currentRoomIndex = 0;
     private Queue<Transform> recentRooms = new();
     private Queue<Transform> recentHallways = new();
 
@@ -38,7 +37,7 @@ public class DungeonManager : Singleton<DungeonManager>
     public int CurrentLayer => currentLayer;
     public bool RunStarted => runStarted;
 
-    /* -------------------- MÉTODOS PÚBLICOS -------------------- */
+    /* -------------------- UNITY -------------------- */
 
     private void Awake()
     {
@@ -57,6 +56,8 @@ public class DungeonManager : Singleton<DungeonManager>
             player.position = startSpawnPoint.position;
         }
     }
+    /* ------------------ API ---------------------- */
+   
     /// <summary>
     /// Llamado cuando el player toca la primera puerta para iniciar la run
     /// </summary>
@@ -78,6 +79,14 @@ public class DungeonManager : Singleton<DungeonManager>
         room.ActivateRoom(CurrentLayer);
     }
 
+    public void OnRoomCleared(RoomController clearedRoom)
+    {
+        Debug.Log($"[DungeonManager] Room {clearedRoom.Config.roomID} cleared. Moviendo a la siguiente sala...");
+
+        // Avanzar a la siguiente sala automáticamente
+        MoveToNext();
+    }
+
     public void MoveToNext()
     {
         currentRoomIndex++;
@@ -89,7 +98,7 @@ public class DungeonManager : Singleton<DungeonManager>
             return;
         }
 
-        MovePlayerTo(runSequence[currentRoomIndex]);
+        LoadRoomFromRunSequence(currentRoomIndex);
     }
 
     public void OnPlayerDeath()
@@ -98,10 +107,6 @@ public class DungeonManager : Singleton<DungeonManager>
         TeleportPlayer(startSpawnPoint.position);
         ClearHistories();
     }
-
-    /// <summary>
-    /// Para asignar en un botón de UI --> manda al Lobby.
-    /// </summary>
     public void TeleportToLobby()
     {
         Debug.Log("[DungeonManager] Teleport manual al Lobby desde UI.");
@@ -113,6 +118,7 @@ public class DungeonManager : Singleton<DungeonManager>
         currentLayer++;
         Debug.Log($"[DungeonManager] Avanzando a capa {currentLayer}");
     }
+   
     /* -------------------- MÉTODOS PRIVADOS -------------------- */
 
     private void InitializeDictionaries()
@@ -158,13 +164,35 @@ public class DungeonManager : Singleton<DungeonManager>
     private void StartRun()
     {
         currentRoomIndex = 0;
-        if (rooms.Count > 0)
+        if (runSequence.Count == 0)
         {
-            MovePlayerTo(rooms[currentRoomIndex].transform);
-            EnterRoom(rooms[currentRoomIndex]);
+            Debug.LogError("[DungeonManager] runSequence vacío al iniciar la run.");
+            return;
+        }
+
+        LoadRoomFromRunSequence(currentRoomIndex);
+    }
+    private void LoadRoomFromRunSequence(int index)
+    {
+        if (index >= runSequence.Count)
+        {
+            Debug.LogError("[DungeonManager] Índice fuera de rango en runSequence.");
+            return;
+        }
+
+        Transform targetSpawn = runSequence[index];
+        MovePlayerTo(targetSpawn);
+
+        RoomController controller = targetSpawn.GetComponentInParent<RoomController>();
+        if (controller != null)
+        {
+            EnterRoom(controller);
+        }
+        else
+        {
+            Debug.LogWarning("[DungeonManager] Spawn sin RoomController padre.");
         }
     }
-
     private void MovePlayerTo(Transform target)
     {
         if (player == null)
@@ -176,7 +204,6 @@ public class DungeonManager : Singleton<DungeonManager>
         Debug.Log($"[DungeonManager] Moviendo al jugador a: {target.name}");
         player.position = target.position;
     }
-
     private void TeleportPlayer(Vector3 targetPosition)
     {
         if (player == null) return;
