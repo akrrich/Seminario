@@ -62,28 +62,12 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public event Action<float, float> OnStaminaChanged;
     public event Action OnPlayerDied;
 
-    public static Action<PlayerDungeonModel> onPlayerInitialized;
     #endregion
 
     #region Unity Callbacks
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        playerHealth = GetComponent<PlayerHealth>();
-        combatHandler = GetComponent<CombatHandler>();
-        playerStamina = GetComponent<PlayerStamina>();
-        orientation = transform.Find("Orientation");
-        rb.freezeRotation = true;
-
-        playerHealth.OnHealthChanged += (current, max) => OnHealthChanged?.Invoke(current, max);
-        playerHealth.OnPlayerDied += HandleDeath;
-
-        if (playerStamina != null)
-        {
-            playerStamina.OnStaminaChanged += (current, max) => OnStaminaChanged?.Invoke(current, max);
-        }
-
-        StartCoroutine(InvokeEventInitializationPlayer());
+        GetComponents();
     }
 
     private void FixedUpdate()
@@ -230,12 +214,6 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     }
     #endregion
 
-    private IEnumerator InvokeEventInitializationPlayer()
-    {
-        yield return new WaitForSeconds(1);
-        onPlayerInitialized?.Invoke(this);
-    }
-
     #region Death & Respawn
     private void HandleDeath()
     {
@@ -255,6 +233,24 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         CanMove = true;
 
         Debug.Log("Jugador respawneado en la dungeon");
+    }
+
+    private void GetComponents()
+    {
+        rb = GetComponent<Rigidbody>();
+        playerHealth = GetComponent<PlayerHealth>();
+        combatHandler = GetComponent<CombatHandler>();
+        playerStamina = GetComponent<PlayerStamina>();
+        orientation = transform.Find("Orientation");
+        rb.freezeRotation = true;
+
+        playerHealth.OnHealthChanged += (current, max) => OnHealthChanged?.Invoke(current, max);
+        playerHealth.OnPlayerDied += HandleDeath;
+
+        if (playerStamina != null)
+        {
+            playerStamina.OnStaminaChanged += (current, max) => OnStaminaChanged?.Invoke(current, max);
+        }
     }
     #endregion
 
