@@ -15,7 +15,7 @@ public class Teleport : MonoBehaviour, IInteractable
 
     public InteractionMode InteractionMode => interactionMode;
 
-    private void Start()
+    private void Awake()
     {
         StartCoroutine(RegisterOutline());
     }
@@ -83,11 +83,7 @@ public class Teleport : MonoBehaviour, IInteractable
 
     private IEnumerator RegisterOutline()
     {
-        yield return new WaitForSecondsRealtime(1f);
-
-        if (OutlineManager.Instance != null)
-        {
-            OutlineManager.Instance.Register(gameObject);
-        }
+        yield return new WaitUntil(()=>OutlineManager.Instance != null);
+        OutlineManager.Instance.Register(this.gameObject);  
     }
 }
