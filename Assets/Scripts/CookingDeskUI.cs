@@ -12,10 +12,6 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
     void Awake()
     {
         GetComponents();
-    }
-
-    void Start()
-    {
         StartCoroutine(RegisterOutline());
     }
 
@@ -62,7 +58,7 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
 
     private IEnumerator RegisterOutline()
     {
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitUntil(() => OutlineManager.Instance != null);
 
         OutlineManager.Instance.Register(gameObject);
     }
