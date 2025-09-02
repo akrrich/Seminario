@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 186605720910420545}
   - component: {fileID: 420065052561587980}
   - component: {fileID: 8416608708383242395}
+  - component: {fileID: 7430384004465307063}
   m_Layer: 7
   m_Name: DungeonPlayer
   m_TagString: Player
@@ -271,9 +272,9 @@ MonoBehaviour:
   staminaCost: 25
   cooldownDuration: 1.5
   shieldObject: {fileID: 8146353917462150600}
+  holdToBlock: 0
+  debugLogs: 0
   isActive: 0
-  holdToBlock: 1
-  debugLogs: 1
 --- !u!114 &420065052561587980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,7 +305,28 @@ MonoBehaviour:
   maxStamina: 100
   regenRate: 10
   regenDelay: 1
-  debugLogs: 1
+  debugLogs: 0
+--- !u!114 &7430384004465307063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422702052002452655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1333bb7b3171f74185771bb8b1f482a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shield: {fileID: 186605720910420545}
+  weaponTransform: {fileID: 3209574813253720826}
+  combatLocalPos: {x: 0, y: 0, z: 0}
+  combatLocalEuler: {x: 0, y: 0, z: 0}
+  loweredLocalPos: {x: 0, y: 0, z: 0}
+  loweredLocalEuler: {x: 0, y: 0, z: 0}
+  lerpSpeed: 12
+  useOffsetFallback: 0
+  loweredOffset: {x: 0, y: -2.85, z: -0.1}
 --- !u!1 &449254278659169392
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,12 +354,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449254278659169392}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23031604, y: -0.17084156, z: -0.17352414, w: 0.9421556}
-  m_LocalPosition: {x: 0.344, y: -0.145, z: 0.946}
-  m_LocalScale: {x: 1.41, y: 1.41, z: 1.41}
+  m_LocalRotation: {x: 0.23031604, y: -0.17084154, z: -0.17352414, w: 0.9421556}
+  m_LocalPosition: {x: 0.34400064, y: -0.14499946, z: 0.94599986}
+  m_LocalScale: {x: 1.4099997, y: 1.41, z: 1.4099998}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 5226388079967726769}
+  m_Father: {fileID: 7346115733473577451}
   m_LocalEulerAnglesHint: {x: 22.006, y: -25.685, z: -25.947}
 --- !u!33 &5066236885518719359
 MeshFilter:
@@ -443,8 +465,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3209574813253720826}
-  - {fileID: 6393293356522179803}
+  - {fileID: 3358658896867381641}
+  - {fileID: 7346115733473577451}
+  - {fileID: 6771797060150400561}
   m_Father: {fileID: 7893357068095882199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -42.997}
 --- !u!114 &8620121490210133455
@@ -461,6 +484,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sword: {fileID: 449254278659169392}
   attackCooldown: 1
+--- !u!1 &1183691308403942056
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3358658896867381641}
+  m_Layer: 0
+  m_Name: WeaponAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3358658896867381641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183691308403942056}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5226388079967726769}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1644272985029411559
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +622,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1644272985029411559}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e88814e2df2d7014ebe63b535233dd53, type: 3}
   m_Name: 
@@ -700,6 +754,57 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2539812831577575207}
   m_Enabled: 1
+--- !u!1 &4247977100445712848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6771797060150400561}
+  - component: {fileID: 1769380412219543609}
+  m_Layer: 0
+  m_Name: ShieldAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6771797060150400561
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4247977100445712848}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.36648053, w: 0.9304257}
+  m_LocalPosition: {x: 19.00111, y: 9.827409, z: -1.6212645}
+  m_LocalScale: {x: 1.8648179, y: 1.6706656, z: 1.7425119}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6393293356522179803}
+  m_Father: {fileID: 5226388079967726769}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1769380412219543609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4247977100445712848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 163fb3c8be0f8ef4c8f28f77829a8b80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shield: {fileID: 186605720910420545}
+  target: {fileID: 0}
+  showWhenShieldActive: 1
+  loweredOffsetY: -0.35
+  smoothTime: 0.08
+  snapOnStart: 1
 --- !u!1 &8146353917462150600
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,12 +831,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8146353917462150600}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.65791035, y: -0.25914088, z: 0.25914085, w: 0.6579103}
-  m_LocalPosition: {x: -0.2917749, y: -1.1506497, z: 1.1664063}
-  m_LocalScale: {x: 186.48178, y: 174.25119, z: 167.06664}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -11.581382, y: 3.0693815, z: 1.5997999}
+  m_LocalScale: {x: 100, y: 100, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5226388079967726769}
+  m_Father: {fileID: 6771797060150400561}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6341839668033524838
 MeshFilter:
@@ -785,3 +890,54 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &9143560826356768536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7346115733473577451}
+  - component: {fileID: 1780987590426664420}
+  m_Layer: 0
+  m_Name: WeponAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7346115733473577451
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9143560826356768536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3209574813253720826}
+  m_Father: {fileID: 5226388079967726769}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1780987590426664420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9143560826356768536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 163fb3c8be0f8ef4c8f28f77829a8b80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shield: {fileID: 186605720910420545}
+  target: {fileID: 0}
+  showWhenShieldActive: 0
+  loweredOffsetY: -0.35
+  smoothTime: 0.08
+  snapOnStart: 1
