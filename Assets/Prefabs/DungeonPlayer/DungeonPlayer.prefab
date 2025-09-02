@@ -938,6 +938,6 @@ MonoBehaviour:
   shield: {fileID: 186605720910420545}
   target: {fileID: 0}
   showWhenShieldActive: 0
-  loweredOffsetY: -0.35
+  loweredOffsetY: -2
   smoothTime: 0.08
   snapOnStart: 1
