@@ -97,35 +97,37 @@ public class ClientStateLeave<T> : State<T>
         {
             if (clientModel.CurrentTable.CurrentFoods != null && clientModel.CurrentTable.CurrentFoods.Count > 0)
             {
-                if (clientModel.CurrentTable.CurrentFoods[0] != null && clientModel.CurrentTable.CurrentFoods[0].FoodType == clientView.CurrentSelectedFood)
+                if (clientModel.CurrentTable.CurrentFoods[0].CurrentCookingState != CookingStates.Cooked)
                 {
-                    clientModel.ReturnFoodFromTableToPool();
-                    clientModel.CurrentTable.SetDirty(true);
-                    clientView.SetSpriteTypeName("SpriteHappy");
-                    MoneyManager.Instance.AddMoney(100);
+                    clientView.SetSpriteTypeName("SpriteHungry");
+                    MoneyManager.Instance.AddMoney(GratuityManager.Instance.GratuityManagerData.MinimumPyament);
                 }
 
-                else
+                else if (clientModel.CurrentTable.CurrentFoods[0].FoodType == clientView.CurrentSelectedFood)
                 {
-                    clientModel.ReturnFoodFromTableToPool();
-                    clientModel.CurrentTable.SetDirty(true);
-                    clientView.SetSpriteTypeName("SpriteHungry");
-                    MoneyManager.Instance.SubMoney(100);
+                    clientView.SetSpriteTypeName("SpriteHappy");
+                    int paymentAmout = GratuityManager.Instance.GetPayment(clientModel.ClientType, clientView.CurrentSelectedFood);
+                    MoneyManager.Instance.AddMoney(paymentAmout);
+                    GratuityManager.Instance.TryGiveGratuity(paymentAmout);
                 }
+
+                clientModel.ReturnFoodFromTableToPool();
+                clientModel.CurrentTable.SetDirty(true);
             }
 
+            // Verifica que no le hayan servido ninguna comida en el plato porque no le tomaron el pedido o no llegaron a entregarsela
             else
             {
                 clientView.SetSpriteTypeName("SpriteHungry");
-                MoneyManager.Instance.SubMoney(100);
+                MoneyManager.Instance.SubMoney(GratuityManager.Instance.GratuityManagerData.MissedClientCost);
             }
         }
 
-        // Si la mesa es null ejecuta este bloque, quiere decir que todas las mesas estaban ocupadas
+        // Si la mesa es null ejecuta este bloque, quiere decir que todas las mesas estaban ocupadas y se quedo esperando afuera
         else
         {
             clientView.SetSpriteTypeName("SpriteHungry");
-            MoneyManager.Instance.SubMoney(100);
+            MoneyManager.Instance.SubMoney(GratuityManager.Instance.GratuityManagerData.MissedClientCost);
         }
     }
 }

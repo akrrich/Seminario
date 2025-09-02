@@ -19,8 +19,8 @@ public class ClientManager : MonoBehaviour
 
     private bool isTabernOpen = false;
 
-    [SerializeField] private bool instantiateClients;
-    [SerializeField] private bool instantiateTheSameClient;
+    [SerializeField] private bool spawnDifferentTypeOfClients;
+    [SerializeField] private bool spawnTheSameClient;
 
     public Transform SpawnPosition { get => spawnPosition; }
     public Transform OutsidePosition { get => outsidePosition; }
@@ -103,12 +103,12 @@ public class ClientManager : MonoBehaviour
     {
         if (isTabernOpen)
         {
-            if (instantiateTheSameClient)
+            if (spawnTheSameClient)
             {
                 GetTheSameClientFromPool();
             }
 
-            else if (instantiateClients)
+            else if (spawnDifferentTypeOfClients)
             {
                 GetClientRandomFromPool();
             }
@@ -134,7 +134,6 @@ public class ClientManager : MonoBehaviour
         }
     }
 
-    // Provisorio
     private void GetTheSameClientFromPool()
     {
         spawnTime += Time.deltaTime;

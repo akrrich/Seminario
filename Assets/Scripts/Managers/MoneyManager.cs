@@ -12,6 +12,8 @@ public class MoneyManager : Singleton<MoneyManager>
 
     private float currentMoney;
 
+    public MoneyManagerData MoneyManagerData { get => moneyManagerData; }
+
     public float CurrentMoney { get => currentMoney; }
 
 

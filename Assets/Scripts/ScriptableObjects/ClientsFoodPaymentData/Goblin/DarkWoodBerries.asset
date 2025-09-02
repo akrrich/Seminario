@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f1daae0f385cbb4ba1f947df2e40bce, type: 3}
-  m_Name: MoneyManagerData
+  m_Script: {fileID: 11500000, guid: 2799b34c9e8ea0e42a579aec2baa47ea, type: 3}
+  m_Name: DarkWoodBerries
   m_EditorClassIdentifier: 
-  initializeCurrentMoneyValue: 500
-  missedClientCost: 20
-  minimumPayment: 10
+  clientType: 2
+  foodType: 0
+  paymentAmount: 30
