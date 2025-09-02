@@ -11,9 +11,6 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     [SerializeField] private bool testJoystickButtonsInDebugger;
 
-    public InputsData KeyboardInputs { get => keyboardInputs; }
-    public InputsData JoystickInputs { get => joystickInputs; }
-
 
     void Awake()
     {
@@ -25,23 +22,7 @@ public class PlayerInputs : Singleton<PlayerInputs>
     // Simulacion de Update
     void UpdatePlayerInputs()
     {
-        if (testJoystickButtonsInDebugger)
-        {
-            for (int i = 0; i < 20; i++)
-            {
-                if (Input.GetKeyDown(KeyCode.JoystickButton0 + i))
-                {
-                    Debug.Log("Joystick button " + i + " presionado");
-                }
-            }
-        }
-    }
-
-
-    // No es necesario desuscribirse porque es singleton
-    private void SuscribeToUpdateManagerEvent()
-    {
-        UpdateManager.OnUpdate += UpdatePlayerInputs;
+        TestJoystickButtonsInDebbuger();
     }
 
 
@@ -83,12 +64,18 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     /* -------------------------------------------UI----------------------------------------- */
     
-    public KeyCode GetInteractInput() => DeviceManager.Instance.CurrentDevice == Device.Joystick ? instance.JoystickInputs.Interact : instance.KeyboardInputs.Interact;
+    public KeyCode GetInteractInput() => DeviceManager.Instance.CurrentDevice == Device.Joystick ? instance.joystickInputs.Interact : instance.keyboardInputs.Interact;
     public bool R1() => Input.GetKeyDown(KeyCode.Joystick1Button5);
     public bool L1() => Input.GetKeyDown(KeyCode.Joystick1Button4);
     public bool E() => Input.GetKeyDown(KeyCode.E);
     public bool Q() => Input.GetKeyDown(KeyCode.Q);
 
+
+    // No es necesario desuscribirse porque es singleton
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdatePlayerInputs;
+    }
 
     private void InitializePlayerInputActions()
     {
@@ -112,5 +99,19 @@ public class PlayerInputs : Singleton<PlayerInputs>
         {
             joystick = Vector2.zero;
         };
+    }
+
+    private void TestJoystickButtonsInDebbuger()
+    {
+        if (testJoystickButtonsInDebugger)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                if (Input.GetKeyDown(KeyCode.JoystickButton0 + i))
+                {
+                    Debug.Log("Joystick button " + i + " presionado");
+                }
+            }
+        }
     }
 }

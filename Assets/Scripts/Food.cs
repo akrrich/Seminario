@@ -49,12 +49,8 @@ public class Food : MonoBehaviour, IInteractable
     {
         SuscribeToPlayerControllerEvents();
         GetComponents();
-        Initialize();
-    }
-
-    void Start()
-    {
         StartCoroutine(RegisterOutline());
+        Initialize();
     }
 
     void OnEnable()
@@ -149,7 +145,7 @@ public class Food : MonoBehaviour, IInteractable
 
     private IEnumerator RegisterOutline()
     {
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitUntil(() => OutlineManager.Instance != null);
 
         OutlineManager.Instance.Register(gameObject);
     }

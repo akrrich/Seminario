@@ -58,10 +58,6 @@ public class Table : MonoBehaviour, IInteractable
     void Awake()
     {
         FindObjectsAndComponents();
-    }
-
-    void Start()
-    {
         StartCoroutine(RegisterOutline());
     }
 
@@ -276,7 +272,7 @@ public class Table : MonoBehaviour, IInteractable
 
     private IEnumerator RegisterOutline()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitUntil(() => OutlineManager.Instance != null);
 
         OutlineManager.Instance.Register(table);
     }
