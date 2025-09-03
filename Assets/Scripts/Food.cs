@@ -145,7 +145,7 @@ public class Food : MonoBehaviour, IInteractable
 
     private IEnumerator RegisterOutline()
     {
-        yield return new WaitUntil(() => OutlineManager.Instance != null && CoroutineHelper.Instance != null);
+        yield return new WaitUntil(() => OutlineManager.Instance != null);
 
         OutlineManager.Instance.Register(gameObject);
     }
