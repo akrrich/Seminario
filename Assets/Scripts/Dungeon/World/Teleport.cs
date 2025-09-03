@@ -9,9 +9,7 @@ public class Teleport : MonoBehaviour, IInteractable
     [SerializeField] private string interactionMessage = "Teleport to Lobby";
 
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI interactionUIText;
-
-    private bool isPlayerInRange = false;
+    [SerializeField] private Color interactionColor;
 
     public InteractionMode InteractionMode => interactionMode;
 
@@ -50,7 +48,7 @@ public class Teleport : MonoBehaviour, IInteractable
     {
         if (OutlineManager.Instance != null)
         {
-            OutlineManager.Instance.Show(gameObject);
+            OutlineManager.Instance.ShowWithCustomColor(gameObject,interactionColor);
         }
     }
 

@@ -13,9 +13,15 @@ MonoBehaviour:
   m_Name: Barrel Drop Table
   m_EditorClassIdentifier: 
   drops:
-  - lootName: 
-    minAmount: 0
-    maxAmount: 0
-    probability: 0
-    minLayer: 0
-    maxLayer: 0
+  - lootName: Common Ingredient
+    minAmount: 1
+    maxAmount: 1
+    probability: 0.5
+    minLayer: 1
+    maxLayer: 5
+  - lootName: Rare Ingredient
+    minAmount: 1
+    maxAmount: 1
+    probability: 0.2
+    minLayer: 1
+    maxLayer: 5

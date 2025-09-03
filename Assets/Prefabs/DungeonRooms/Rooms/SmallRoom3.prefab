@@ -10199,7 +10199,7 @@ Transform:
   m_GameObject: {fileID: 2689765881112669830}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.44, y: 2.751, z: 1.76}
+  m_LocalPosition: {x: -2.44, y: 2.751, z: 2.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -54892,8 +54892,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42f5c6f430bacb24d8101d7ee75a28fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointA: {fileID: 0}
-  pointB: {fileID: 0}
+  pointA: {fileID: 943643779470552486}
+  pointB: {fileID: 7234495452150030911}
   speed: 0.5
 --- !u!65 &7727581041215041089
 BoxCollider:

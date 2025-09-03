@@ -145,14 +145,4 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
         }
     }
 
-
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        if (enemyData == null) return;
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, enemyData.DistanceToPlayer);
-        LineOfSight.DrawLOSOnGizmos(transform, visionAngle, visionRange);
-    }
-#endif
 }

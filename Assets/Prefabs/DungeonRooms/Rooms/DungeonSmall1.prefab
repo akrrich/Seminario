@@ -36679,7 +36679,7 @@ Transform:
   m_GameObject: {fileID: 7506002318338211862}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.73, y: 3.94, z: 27.089}
+  m_LocalPosition: {x: 19.59, y: 4.51, z: 27.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -36788,6 +36788,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6079069351531706623}
   - component: {fileID: 5006444599766533303}
+  - component: {fileID: 6743035837445008084}
+  - component: {fileID: 2799706077172398670}
+  - component: {fileID: 13238500874200899}
   m_Layer: 0
   m_Name: DungeonSmall1
   m_TagString: Untagged
@@ -36965,13 +36968,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 32002b2f4f914c9428ed71ea458b6777, type: 2}
-  enemySpawners:
-  - {fileID: 4198666186567656306}
-  - {fileID: 5001179770734523894}
-  roomSpawnpoint: {fileID: 1382094542680629064}
+  enemyHandler: {fileID: 6743035837445008084}
+  lootHandler: {fileID: 2799706077172398670}
+  trapHandler: {fileID: 13238500874200899}
   entryDoor: {fileID: 1007519831668963954}
   exitDoors:
   - {fileID: 4526528324238765933}
+  roomSpawnPoint: {fileID: 0}
+--- !u!114 &6743035837445008084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7697229687722213605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 483c85b90f97f3f41a109abba073601c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySpawners: []
+--- !u!114 &2799706077172398670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7697229687722213605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f4dc595f6bfdc48a48b895bb586564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barrelSpawnPoints: []
+  chestSpawnPoints: []
+  barrelPrefab: {fileID: 3629124328488994423, guid: 0642a16fd501448418a83435db5f95cd, type: 3}
+  chestPrefab: {fileID: 1668090225508558710, guid: 74bc0f805bfe7b04da3ff3111ddfbaea, type: 3}
+  lootMultiplierPerLayer: 0.1
+--- !u!114 &13238500874200899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7697229687722213605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ab5a5290ccf2a4e8e99ed65576a249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trapPrefabs: []
 --- !u!1 &7713475207868721991
 GameObject:
   m_ObjectHideFlags: 0
@@ -54297,17 +54343,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1826156541742950449, guid: 07fe623e72e46644394f6f761f29913c, type: 3}
   m_PrefabInstance: {fileID: 1005129678625878458}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5001179770734523894 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5230142200929748044, guid: 07fe623e72e46644394f6f761f29913c, type: 3}
-  m_PrefabInstance: {fileID: 1005129678625878458}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b3fec6fa4972b14dae6ce5908057c3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &6955579308060227222 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7887455072199509804, guid: 07fe623e72e46644394f6f761f29913c, type: 3}
@@ -54702,17 +54737,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7887455072199509804, guid: 53f82fc37b056a4408fc746ea90a3637, type: 3}
   m_PrefabInstance: {fileID: 8273563563281196862}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4198666186567656306 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5230142200929748044, guid: 53f82fc37b056a4408fc746ea90a3637, type: 3}
-  m_PrefabInstance: {fileID: 8273563563281196862}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b3fec6fa4972b14dae6ce5908057c3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &7747974263237611279 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1826156541742950449, guid: 53f82fc37b056a4408fc746ea90a3637, type: 3}

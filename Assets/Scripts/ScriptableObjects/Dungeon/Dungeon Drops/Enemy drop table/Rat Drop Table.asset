@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 274d08194b1cebc4bb7a45e592f54662, type: 3}
   m_Name: Rat Drop Table
   m_EditorClassIdentifier: 
-  entries:
-  - lootName: BeastMeat
-    minAmount: 1
-    maxAmount: 1
-    probability: 0.079
-  - lootName: Teeth
-    minAmount: 1
+  drops:
+  - lootName: nothing
+    minAmount: 0
+    maxAmount: 0
+    probability: 0
+    minLayer: 0
+    maxLayer: 0
+  - lootName: Tooth
+    minAmount: 10
     maxAmount: 10
-    probability: 0.914
+    probability: 0.2
+    minLayer: 0
+    maxLayer: 0

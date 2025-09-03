@@ -4,63 +4,96 @@ using UnityEngine;
 
 public class EnemyHandler : MonoBehaviour
 {
-    public event Action OnAllEnemiesDefeated;
+    [Header("Configuración")]
+    [SerializeField] private List<EnemySpawner> enemySpawners = new();
 
-    private List<GameObject> activeEnemies = new();
+    private readonly List<EnemyBase> activeEnemies = new();
+
+    // ---------- PROPERTIES ----------
     public int EnemyCount => activeEnemies.Count;
 
-    public void Initialize()
+    // ---------- EVENTS ----------
+    public event Action OnAllEnemiesDefeated;
+
+    // ---------- PUBLIC API ----------
+
+    /// <summary>
+    /// Inicializa el handler y activa un número aleatorio de spawners.
+    /// </summary>
+    public void Initialize(RoomConfig config, int layer)
     {
         Cleanup();
-    }
 
-    public void SpawnEnemies(RoomConfig config, int layer)
-    {
-        int spawnCount = config.GetEnemyCountForLayer(layer);
-        int availableSpawns = Mathf.Min(spawnCount, config.enemySpawnPointCount);
-
-        for (int i = 0; i < availableSpawns; i++)
+        if (enemySpawners.Count == 0)
         {
-            var prefab = config.possibleEnemies[UnityEngine.Random.Range(0, config.possibleEnemies.Length)];
-            var spawnPoint = GetRandomSpawnPoint();
+            Debug.LogWarning($"[EnemyHandler] Sala {name} no tiene spawners configurados.");
+            return;
+        }
 
-            if (prefab != null && spawnPoint != null)
+        // Determinar cuántos spawners se activan
+        int minSpawns = config.baseEnemyCount;
+        int maxSpawns = Mathf.Min(config.enemySpawnPointCount, enemySpawners.Count);
+
+        int spawnCount = UnityEngine.Random.Range(minSpawns, maxSpawns + 1);
+
+        // Elegir aleatoriamente los spawners a activar
+        List<EnemySpawner> shuffled = new List<EnemySpawner>(enemySpawners);
+        shuffled = RouletteSelection.Shuffle(shuffled);
+
+        for (int i = 0; i < spawnCount; i++)
+        {
+            EnemySpawner spawner = shuffled[i];
+            List<EnemyBase> spawned = spawner.SpawnEnemies(layer);
+
+            foreach (var enemy in spawned)
             {
-                GameObject enemy = Instantiate(prefab, spawnPoint.position, Quaternion.identity, transform);
-                var enemyBase = enemy.GetComponent<EnemyBase>();
-                if (enemyBase != null)
-                {
-                    enemyBase.OnDeath += HandleEnemyDeath;
-                }
-                activeEnemies.Add(enemy);
+                RegisterEnemy(enemy);
             }
         }
+
+        Debug.Log($"[EnemyHandler] Spawneados {activeEnemies.Count} enemigos en sala {name}.");
     }
 
-    private Transform GetRandomSpawnPoint()
-    {
-        // Implementá una forma de obtener puntos de spawn reales si querés algo más preciso
-        return transform;
-    }
-
-    private void HandleEnemyDeath(EnemyBase deadEnemy)
-    {
-        deadEnemy.OnDeath -= HandleEnemyDeath;
-        activeEnemies.Remove(deadEnemy.gameObject);
-
-        if (activeEnemies.Count == 0)
-        {
-            OnAllEnemiesDefeated?.Invoke();
-        }
-    }
-
+    /// <summary>
+    /// Limpia enemigos activos y resetea spawners.
+    /// </summary>
     public void Cleanup()
     {
         foreach (var enemy in activeEnemies)
         {
             if (enemy != null)
-                Destroy(enemy);
+            {
+                enemy.OnDeath -= HandleEnemyDeath;
+                Destroy(enemy.gameObject);
+            }
         }
         activeEnemies.Clear();
+
+        foreach (var spawner in enemySpawners)
+            spawner.ResetSpawner();
+    }
+
+    // ---------- PRIVATE METHODS ----------
+
+    private void RegisterEnemy(EnemyBase enemy)
+    {
+        if (enemy == null) return;
+
+        activeEnemies.Add(enemy);
+        enemy.OnDeath += HandleEnemyDeath;
+    }
+
+    private void HandleEnemyDeath(EnemyBase deadEnemy)
+    {
+        deadEnemy.OnDeath -= HandleEnemyDeath;
+        activeEnemies.Remove(deadEnemy);
+
+        Debug.Log($"[EnemyHandler] Enemigo derrotado. Restantes: {activeEnemies.Count}");
+
+        if (activeEnemies.Count == 0)
+        {
+            Debug.Log($"[EnemyHandler] Todos los enemigos derrotados en sala {name}.");
+            OnAllEnemiesDefeated?.Invoke();
+        }
     }
 }

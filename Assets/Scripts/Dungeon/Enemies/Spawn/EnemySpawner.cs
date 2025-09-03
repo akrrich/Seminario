@@ -3,73 +3,52 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("Factory & References")]
     [SerializeField] private EnemyFactory enemyFactory;
-    [SerializeField] private Transform spawnPosition;
-    [SerializeField] private RoomController parentRoom; // Referencia a la sala
-
-    [Header("Spawns Data and % ")]
     [SerializeField] private EnemySpawnTableData enemySpawnTable;
     [SerializeField] private StatScaler statScaler;
 
-    [Header("Spawn Variables")]
-    [SerializeField] private SpawnerConfigData spawnerConfigData;
+    private bool hasSpawned = false;
 
-    private int spawnedEnemies = 0;
-
-    /// <summary>
-    /// Spawnea enemigos de acuerdo a la tabla de probabilidades y la configuración.
-    /// </summary>
     public List<EnemyBase> SpawnEnemies(int layer)
     {
+        if (hasSpawned)
+            return new List<EnemyBase>();
+
         List<EnemyBase> result = new();
 
-        int spawnCount = Random.Range(
-            spawnerConfigData.MinEnemiesPerSpawn,
-            spawnerConfigData.MaxEnemiesPerSpawn + 1);
+        // Acá podés ajustar según config de sala (min/max enemigos por spawner)
+        int spawnCount = Random.Range(1, 3);
 
         for (int i = 0; i < spawnCount; i++)
         {
             string selectedId = GetEnemyIdFromTable();
             EnemyBase enemy = enemyFactory.Create(
                 selectedId,
-                spawnPosition.position,
-                spawnPosition.rotation);
+                transform.position,
+                transform.rotation);
 
             if (enemy != null)
             {
                 statScaler?.ApplyScaling(enemy, layer);
                 result.Add(enemy);
-                spawnedEnemies++;
-
-                // Notificar al RoomController
-                if (parentRoom != null)
-                {
-                    parentRoom.RegisterEnemies(enemy);
-                }
-
-                if (spawnedEnemies >= spawnerConfigData.MaxSpawnedEnemies)
-                {
-                    Debug.Log("[EnemySpawner] Alcanzado máximo de enemigos.");
-                    break;
-                }
-            }
-            else
-            {
-                Debug.LogWarning($"[EnemySpawner] No se pudo crear enemigo con ID {selectedId}");
             }
         }
 
+        hasSpawned = true;
         return result;
+    }
+
+    public void ResetSpawner()
+    {
+        hasSpawned = false;
     }
 
     private string GetEnemyIdFromTable()
     {
         Dictionary<string, float> weightedDict = new();
         foreach (var entry in enemySpawnTable.spawnDataList)
-        {
             weightedDict.Add(entry.enemyId, entry.spawnChance);
-        }
+
         return RouletteSelection.Roulette(weightedDict);
     }
 

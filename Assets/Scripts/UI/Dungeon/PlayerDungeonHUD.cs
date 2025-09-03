@@ -7,4 +7,6 @@ public class PlayerDungeonHUD
     public static Action OnPlayerDeath;
 
     public static Action<float, float> OnStaminaChanged;
+
+    public static Action<int> OnLayerChanged;
 }

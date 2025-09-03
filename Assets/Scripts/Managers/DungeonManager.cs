@@ -117,6 +117,7 @@ public class DungeonManager : Singleton<DungeonManager>
     {
         currentLayer++;
         Debug.Log($"[DungeonManager] Avanzando a capa {currentLayer}");
+        PlayerDungeonHUD.OnLayerChanged?.Invoke(currentLayer);
     }
    
     /* -------------------- MÉTODOS PRIVADOS -------------------- */
@@ -169,7 +170,7 @@ public class DungeonManager : Singleton<DungeonManager>
             Debug.LogError("[DungeonManager] runSequence vacío al iniciar la run.");
             return;
         }
-
+        PlayerDungeonHUD.OnLayerChanged?.Invoke(currentLayer);
         LoadRoomFromRunSequence(currentRoomIndex);
     }
     private void LoadRoomFromRunSequence(int index)
