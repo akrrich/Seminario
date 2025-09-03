@@ -49,7 +49,7 @@ public class Food : MonoBehaviour, IInteractable
     {
         SuscribeToPlayerControllerEvents();
         GetComponents();
-        StartCoroutine(RegisterOutline());
+        CoroutineHelper.Instance.StartHelperCoroutine(RegisterOutline());
         Initialize();
     }
 
@@ -85,7 +85,7 @@ public class Food : MonoBehaviour, IInteractable
     {
         if (!isServedInTable)
         {
-            OutlineManager.Instance.Show(gameObject);
+            OutlineManager.Instance.ShowWithDefaultColor(gameObject);
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
         }
     }
@@ -145,7 +145,7 @@ public class Food : MonoBehaviour, IInteractable
 
     private IEnumerator RegisterOutline()
     {
-        yield return new WaitUntil(() => OutlineManager.Instance != null);
+        yield return new WaitUntil(() => OutlineManager.Instance != null && CoroutineHelper.Instance != null);
 
         OutlineManager.Instance.Register(gameObject);
     }

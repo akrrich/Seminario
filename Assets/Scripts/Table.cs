@@ -98,7 +98,7 @@ public class Table : MonoBehaviour, IInteractable
     {
         if (isDirty)
         {
-            OutlineManager.Instance.Show(table);
+            OutlineManager.Instance.ShowWithDefaultColor(table);
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
             PlayerView.OnActivateSliderCleanDirtyTable?.Invoke();
@@ -119,7 +119,7 @@ public class Table : MonoBehaviour, IInteractable
             {
                 if (!auxiliarClientView.CanTakeOrder)
                 {
-                    OutlineManager.Instance.Show(table);
+                    OutlineManager.Instance.ShowWithDefaultColor(table);
                     InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
                     auxiliarClientView.CanTakeOrder = true;
@@ -140,7 +140,7 @@ public class Table : MonoBehaviour, IInteractable
 
             if (hasChildren && isOccupied && auxiliarClientView.ReturnSpriteFoodIsActive())
             {
-                OutlineManager.Instance.Show(table);
+                OutlineManager.Instance.ShowWithDefaultColor(table);
                 InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
 
                 PlayerController.OnTableCollisionEnterForHandOverFood?.Invoke(this);

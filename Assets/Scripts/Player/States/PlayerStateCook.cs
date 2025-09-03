@@ -36,7 +36,6 @@ public class PlayerStateCook<T> : State<T>
         lastDishState = playerView.Dish.gameObject.activeSelf;
 
         playerView.ShowOrHideDish(false);
-        playerModel.IsCooking = true;
         playerModel.transform.position = cookingPosition.transform.position;
         playerModel.LookAt(cookingDeskUI.transform.position);
         playerModel.PlayerCamera.transform.localEulerAngles = new Vector3(-1, 0, 0);
