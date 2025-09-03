@@ -9739,16 +9739,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 4359163396843218094, guid: beb6cb53225ae2e48b470ed168c2c63c, type: 3}
-  - {fileID: 8249197201356797330, guid: 06b9a4409ba2d304e94e2aa2cfeade63, type: 3}
-  - {fileID: 4359163396843218094, guid: 30ee3905dc7c75045bb5f5004d06da22, type: 3}
   - {fileID: 4359163396843218094, guid: b61dd41d4bead9c4e8aa9d07aabccc83, type: 3}
   - {fileID: 4359163396843218094, guid: 3f18c4566c934294cbed5b5ed1df5d81, type: 3}
+  - {fileID: 4359163396843218094, guid: 30ee3905dc7c75045bb5f5004d06da22, type: 3}
+  - {fileID: 8249197201356797330, guid: 06b9a4409ba2d304e94e2aa2cfeade63, type: 3}
   objectsPools:
-  - {fileID: 1233513842}
-  - {fileID: 208770898}
-  - {fileID: 1081833319}
-  - {fileID: 1418801068}
   - {fileID: 1927740150}
+  - {fileID: 208770898}
+  - {fileID: 1233513842}
+  - {fileID: 1418801068}
+  - {fileID: 1081833319}
 --- !u!65 &207808368
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14774,6 +14774,7 @@ Transform:
   - {fileID: 254027652}
   - {fileID: 1468265566}
   - {fileID: 2048203450}
+  - {fileID: 1423096586}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &267469268
@@ -18482,8 +18483,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1233513841}
-  - {fileID: 208770897}
   - {fileID: 1081833318}
+  - {fileID: 208770897}
   - {fileID: 1418801067}
   - {fileID: 1927740149}
   m_Father: {fileID: 1062425382}
@@ -60291,11 +60292,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foodAbstractFactory: {fileID: 207661227}
   foodPools:
-  - {fileID: 1233513842}
   - {fileID: 208770898}
-  - {fileID: 1081833319}
-  - {fileID: 1418801068}
   - {fileID: 1927740150}
+  - {fileID: 1233513842}
+  - {fileID: 1418801068}
+  - {fileID: 1081833319}
   stovesPositions:
   - {fileID: 4327911069109107144}
   - {fileID: 4327911069109107143}
@@ -67876,6 +67877,50 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1423096585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1423096586}
+  - component: {fileID: 1423096587}
+  m_Layer: 0
+  m_Name: CoroutineHelper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1423096586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423096585}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.524536, y: -2.687906, z: 17.65523}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 267385402}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1423096587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423096585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fa5d8c1ab4e94043b3fc77389fbed69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1423611219
 BoxCollider:
   m_ObjectHideFlags: 0

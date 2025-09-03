@@ -33,10 +33,19 @@ public class OutlineManager : Singleton<OutlineManager>
         }
     }
 
-    public void Show(GameObject obj)
+    public void ShowWithDefaultColor(GameObject obj)
     {
         if (outlines.TryGetValue(obj, out Outline outline))
         {
+            outline.OutlineWidth = outlineManagerData.ActiveWidth;
+        }
+    }
+
+    public void ShowWithCustomColor(GameObject obj, Color color)
+    {
+        if (outlines.TryGetValue(obj, out Outline outline))
+        {
+            outline.OutlineColor = color;
             outline.OutlineWidth = outlineManagerData.ActiveWidth;
         }
     }

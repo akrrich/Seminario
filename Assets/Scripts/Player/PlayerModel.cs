@@ -20,8 +20,6 @@ public class PlayerModel : MonoBehaviour
     private float speed;
     private float distanceToGround = 1.05f;
    
-    private bool isCollidingCookingDeskUI = false;
-    private bool isCollidingAdministration = false;
     private bool isCooking = false;
     private bool isAdministrating = false;
 
@@ -36,8 +34,6 @@ public class PlayerModel : MonoBehaviour
     public float Speed { get => speed; set => speed = value; }
 
     public bool IsGrounded { get =>  Physics.SphereCast(transform.position, 0.3f, Vector3.down, out _, distanceToGround, groundLayer); }
-    public bool IsCollidingCookingDeskUI { get => isCollidingCookingDeskUI; set => isCollidingCookingDeskUI = value; }
-    public bool IsCollidingAdministration { get => isCollidingAdministration; set => isCollidingAdministration = value; }   
     public bool IsCooking { get => isCooking; set => isCooking = value; }
     public bool IsAdministrating { get => isAdministrating; set => isAdministrating = value; }
 

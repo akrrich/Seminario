@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 
 public class ObjectPooler : MonoBehaviour
 {
@@ -40,7 +39,7 @@ public class ObjectPooler : MonoBehaviour
         pool.Enqueue(obj);
     }
 
-    public IEnumerator ReturnObjectToPool(MonoBehaviour obj, float maxTime)
+    public System.Collections.IEnumerator ReturnObjectToPool(MonoBehaviour obj, float maxTime)
     {
         yield return new WaitForSeconds(maxTime);
 

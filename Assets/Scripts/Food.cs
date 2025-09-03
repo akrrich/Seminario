@@ -49,7 +49,7 @@ public class Food : MonoBehaviour, IInteractable
     {
         SuscribeToPlayerControllerEvents();
         GetComponents();
-        StartCoroutine(RegisterOutline());
+        CoroutineHelper.Instance.StartHelperCoroutine(RegisterOutline());
         Initialize();
     }
 
@@ -85,7 +85,7 @@ public class Food : MonoBehaviour, IInteractable
     {
         if (!isServedInTable)
         {
-            OutlineManager.Instance.Show(gameObject);
+            OutlineManager.Instance.ShowWithDefaultColor(gameObject);
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
         }
     }

@@ -22,19 +22,17 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
 
     public void Interact(bool isPressed)
     {
-        // NADA, lo maneja la maquina de estados
+        playerController.PlayerModel.IsCooking = true;
     }
 
     public void ShowOutline()
     {
-        playerController.PlayerModel.IsCollidingCookingDeskUI = true;
-        OutlineManager.Instance.Show(gameObject);
+        OutlineManager.Instance.ShowWithDefaultColor(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
     }
 
     public void HideOutline()
     {
-        playerController.PlayerModel.IsCollidingCookingDeskUI = false;
         OutlineManager.Instance.Hide(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }

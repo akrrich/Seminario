@@ -162,10 +162,11 @@ public class CookingManager : MonoBehaviour
     {
         for (int i = 0; i < foodPools.Count; i++)
         {
-            if (Enum.IsDefined(typeof(FoodType), i)) 
+            GameObject prefab = foodPools[i].Prefab;
+
+            if (Enum.TryParse(prefab.name, out FoodType foodType))
             {
-                FoodType foodType = (FoodType) i;
-                foodPoolDictionary[foodType] = foodPools[i]; 
+                foodPoolDictionary[foodType] = foodPools[i];
             }
         }
     }

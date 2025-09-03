@@ -33,7 +33,7 @@ public class Trash : MonoBehaviour, IInteractable
             // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS)
             if (child.childCount > 0)
             {
-                OutlineManager.Instance.Show(gameObject);
+                OutlineManager.Instance.ShowWithDefaultColor(gameObject);
                 InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
             }
         }

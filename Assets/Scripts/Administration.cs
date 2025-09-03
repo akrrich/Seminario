@@ -23,19 +23,17 @@ public class Administration : MonoBehaviour, IInteractable
 
     public void Interact(bool isPressed)
     {
-        // NADA, lo maneja la maquina de estados
+        playerController.PlayerModel.IsAdministrating = true;
     }
 
     public void ShowOutline()
     {
-        playerController.PlayerModel.IsCollidingAdministration = true;
-        OutlineManager.Instance.Show(gameObject);
+        OutlineManager.Instance.ShowWithDefaultColor(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
     }
 
     public void HideOutline()
     {
-        playerController.PlayerModel.IsCollidingAdministration = false;
         OutlineManager.Instance.Hide(gameObject);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
