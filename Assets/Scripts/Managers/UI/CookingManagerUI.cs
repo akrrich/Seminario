@@ -9,6 +9,7 @@ public class CookingManagerUI : MonoBehaviour
 {
     [SerializeField] private GameObject rootGameObject; // GameObject padre con los botones de hijos
     [SerializeField] private GameObject panelInformation;
+    [SerializeField] private GameObject cookingCamera;
 
     /// <summary>
     /// Agregar ruido de cancelacion si no tiene ingredientes para cocinar una receta
@@ -168,6 +169,7 @@ public class CookingManagerUI : MonoBehaviour
     {
         rootGameObject.SetActive(state);
         panelInformation.SetActive(state);
+        cookingCamera.SetActive(state);
 
         if (state)
         {

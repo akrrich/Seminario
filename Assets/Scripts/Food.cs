@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public enum FoodType // FrutosDelBosqueOscuro, SopaDeLaLunaPlateada, CarneDeBestia, CarneCuradaDelAbismo, SusurroDelElixir
 {
@@ -72,7 +73,6 @@ public class Food : MonoBehaviour, IInteractable
             PlayerView.OnEnabledDishForced?.Invoke(true);
 
             isInPlayerDishPosition = true;
-            isServedInTable = true;
 
             cookingManager.ReleaseStovePosition(stovePosition);
             playerDishPosition = cookingManager.MoveFoodToDish(this);
@@ -83,7 +83,7 @@ public class Food : MonoBehaviour, IInteractable
 
     public void ShowOutline()
     {
-        if (!isServedInTable)
+        if (cookingManager.AvailableDishPositions.Count > 0 && !isServedInTable && !isInPlayerDishPosition)
         {
             OutlineManager.Instance.ShowWithDefaultColor(gameObject);
             InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
@@ -96,30 +96,31 @@ public class Food : MonoBehaviour, IInteractable
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
     }
 
-    public void ReturnObjetToPool()
+    public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
     {
-        cookingManager.ReturnObjectToPool(foodType, this);
-        RestartValues();
-    }
-
-    public void ShowMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
-    {
-        if (!isServedInTable)
+        if (cookingManager.AvailableDishPositions.Count > 0 && !isServedInTable && !isInPlayerDishPosition)
         {
             string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
             interactionManagerUIText.text = $"Press" + keyText + "to grab food";
         }
     }
 
-    public void HideMessage(TMPro.TextMeshProUGUI interactionManagerUIText)
+    public void HideMessage(TextMeshProUGUI interactionManagerUIText)
     {
         interactionManagerUIText.text = string.Empty;
+    }
+
+    public void ReturnObjetToPool()
+    {
+        cookingManager.ReturnObjectToPool(foodType, this);
+        RestartValues();
     }
 
 
     private void SuscribeToPlayerControllerEvents()
     {
         PlayerController.OnHandOverFood += HandOver;
+        PlayerController.OnSupportFood += SupportFood;
         PlayerController.OnThrowFoodToTrash += ThrowFoodToTrash;
 
         PlayerController.OnTableCollisionEnterForHandOverFood += SaveTable;
@@ -129,6 +130,7 @@ public class Food : MonoBehaviour, IInteractable
     private void UnsuscribeToPlayerControllerEvents()
     {
         PlayerController.OnHandOverFood -= HandOver;
+        PlayerController.OnSupportFood -= SupportFood;
         PlayerController.OnThrowFoodToTrash -= ThrowFoodToTrash;
 
         PlayerController.OnTableCollisionEnterForHandOverFood -= SaveTable;
@@ -193,6 +195,13 @@ public class Food : MonoBehaviour, IInteractable
         yield return null; // Esperar un frame
         rb.isKinematic = true;
         boxCollider.enabled = false;
+    }
+
+    private IEnumerator EnabledPhysics()
+    {
+        yield return null; // Esperar un frame
+        rb.isKinematic = false;
+        boxCollider.enabled = true;
     }
 
     private void RestartValues()
@@ -268,12 +277,23 @@ public class Food : MonoBehaviour, IInteractable
                 rb.isKinematic = false;
                 boxCollider.enabled = true;
                 isInPlayerDishPosition = false;
+                isServedInTable = true;
 
                 currentTable.CurrentFoods.Add(this); 
 
                 ClearTable();
             }
         }
+    }
+
+    private void SupportFood(GameObject currentFood)
+    {
+        if (currentFood != null && isInPlayerDishPosition)
+        {
+            cookingManager.ReleaseDishPosition(playerDishPosition);
+            isInPlayerDishPosition = false;
+            StartCoroutine(EnabledPhysics());
+        }  
     }
 
     private void ThrowFoodToTrash()

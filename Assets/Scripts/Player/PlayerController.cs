@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 
     private static event Action onHandOverFood;
     private static event Action onTakeOrder;
+    private static event Action<GameObject> onSupportFood;
     private static event Action onThrowFoodToTrash;
     private static event Action onOpenOrCloseBook;
 
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
+    public static Action<GameObject> OnSupportFood { get => onSupportFood; set => onSupportFood = value; }
     public static Action OnThrowFoodToTrash { get => onThrowFoodToTrash; set => onThrowFoodToTrash = value; }
     public static Action OnOpenOrCloseBook { get => onOpenOrCloseBook; set => onOpenOrCloseBook = value; }
 
