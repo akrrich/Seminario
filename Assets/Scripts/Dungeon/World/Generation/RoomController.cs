@@ -67,7 +67,6 @@ public class RoomController : MonoBehaviour
             trapHandler?.SpawnTraps(config, layer);
 
         LockExitDoors();
-        entryDoor?.Unlock();
     }
     public void DeactivateRoom()
     {
@@ -83,8 +82,6 @@ public class RoomController : MonoBehaviour
 
         lootHandler?.Cleanup();
         trapHandler?.Cleanup();
-
-        UnlockExitDoors();
     }
 
     public void ResetRoom()

@@ -1,99 +1,112 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Tooltip("Controla todas las rondas de enemigos de una sala. Coordina varios EnemySpawner y notifica al RoomController.")]
 public class EnemyHandler : MonoBehaviour
 {
-    [Header("Configuración")]
-    [SerializeField] private List<EnemySpawner> enemySpawners = new();
+    [Header("Spawners de la sala")]
+    [Tooltip("Lista de EnemySpawner que se usan en la sala. Si se deja vacío, se auto-detectan en los hijos del Room.")]
+    [SerializeField] private List<EnemySpawner> spawners = new();
 
-    private readonly List<EnemyBase> activeEnemies = new();
+    [Header("Rondas")]
+    [Tooltip("Cantidad total de rondas en esta sala. Ejemplo: 3 --> (4, 8, 12 enemigos)")]
+    [SerializeField] private int totalRounds = 3;
 
-    // ---------- PROPERTIES ----------
-    public int EnemyCount => activeEnemies.Count;
+    [Tooltip("Número base de enemigos en la primera ronda. Cada ronda multiplica este número por el índice de ronda. Ejemplo: base = 4 --> ronda 1 = 4, ronda 2 = 8, ronda 3 = 12.")]
+    [SerializeField] private int basePerRound = 4;  // 4, 8, 12...
 
-    // ---------- EVENTS ----------
     public event Action OnAllEnemiesDefeated;
 
-    // ---------- PUBLIC API ----------
+    private int currentLayer;
+    private int aliveCount;
+    private bool initialized;
 
-    /// <summary>
-    /// Inicializa el handler y activa un número aleatorio de spawners.
-    /// </summary>
     public void Initialize(RoomConfig config, int layer)
     {
-        Cleanup();
+        currentLayer = layer;
+        aliveCount = 0;
+        initialized = true;
 
-        if (enemySpawners.Count == 0)
+        if (spawners == null || spawners.Count == 0)
         {
-            Debug.LogWarning($"[EnemyHandler] Sala {name} no tiene spawners configurados.");
-            return;
+            spawners = new List<EnemySpawner>(GetComponentsInChildren<EnemySpawner>(true));
         }
 
-        // Determinar cuántos spawners se activan
-        int minSpawns = config.baseEnemyCount;
-        int maxSpawns = Mathf.Min(config.enemySpawnPointCount, enemySpawners.Count);
-
-        int spawnCount = UnityEngine.Random.Range(minSpawns, maxSpawns + 1);
-
-        // Elegir aleatoriamente los spawners a activar
-        List<EnemySpawner> shuffled = new List<EnemySpawner>(enemySpawners);
-        shuffled = RouletteSelection.Shuffle(shuffled);
-
-        for (int i = 0; i < spawnCount; i++)
-        {
-            EnemySpawner spawner = shuffled[i];
-            List<EnemyBase> spawned = spawner.SpawnEnemies(layer);
-
-            foreach (var enemy in spawned)
-            {
-                RegisterEnemy(enemy);
-            }
-        }
-
-        Debug.Log($"[EnemyHandler] Spawneados {activeEnemies.Count} enemigos en sala {name}.");
+        StopAllCoroutines();
+        StartCoroutine(RunRounds());
     }
 
-    /// <summary>
-    /// Limpia enemigos activos y resetea spawners.
-    /// </summary>
     public void Cleanup()
     {
-        foreach (var enemy in activeEnemies)
-        {
-            if (enemy != null)
-            {
-                enemy.OnDeath -= HandleEnemyDeath;
-                Destroy(enemy.gameObject);
-            }
-        }
-        activeEnemies.Clear();
+        StopAllCoroutines();
+        foreach (var s in spawners)
+            s?.ResetSpawner();
 
-        foreach (var spawner in enemySpawners)
-            spawner.ResetSpawner();
+        initialized = false;
+        aliveCount = 0;
     }
 
-    // ---------- PRIVATE METHODS ----------
+    private IEnumerator RunRounds()
+    {
+        if (!initialized || spawners == null || spawners.Count == 0)
+        {
+            Debug.LogWarning("[EnemyHandler] No hay spawners configurados en la sala.");
+            yield break;
+        }
 
-    private void RegisterEnemy(EnemyBase enemy)
+        for (int round = 1; round <= totalRounds; round++)
+        {
+            int toSpawn = basePerRound * round; // 4, 8, 12...
+            yield return SpawnRound(toSpawn);
+
+            // Esperar a que mueran todos los enemigos antes de la siguiente ronda
+            yield return new WaitUntil(() => aliveCount <= 0);
+        }
+
+        OnAllEnemiesDefeated?.Invoke();
+    }
+
+    private IEnumerator SpawnRound(int totalToSpawn)
+    {
+        if (totalToSpawn <= 0) yield break;
+
+        int spawnerCount = spawners.Count;
+        int basePerSpawner = totalToSpawn / spawnerCount;
+        int remainder = totalToSpawn % spawnerCount;
+
+        var coroutines = new List<Coroutine>();
+
+        for (int i = 0; i < spawnerCount; i++)
+        {
+            int countForThis = basePerSpawner + (i < remainder ? 1 : 0);
+            if (countForThis <= 0) continue;
+
+            var s = spawners[i];
+            Coroutine c = StartCoroutine(s.SpawnEnemies(countForThis, currentLayer, OnEnemySpawned));
+            coroutines.Add(c);
+        }
+
+        // Esperar a que todos los spawners terminen de soltar su tanda
+        foreach (var c in coroutines)
+            yield return c;
+    }
+
+    private void OnEnemySpawned(EnemyBase enemy)
     {
         if (enemy == null) return;
 
-        activeEnemies.Add(enemy);
+        aliveCount++;
+
+        // Asegurarse de desuscribirse
+        enemy.OnDeath -= HandleEnemyDeath;
         enemy.OnDeath += HandleEnemyDeath;
     }
 
-    private void HandleEnemyDeath(EnemyBase deadEnemy)
+    private void HandleEnemyDeath(EnemyBase e)
     {
-        deadEnemy.OnDeath -= HandleEnemyDeath;
-        activeEnemies.Remove(deadEnemy);
-
-        Debug.Log($"[EnemyHandler] Enemigo derrotado. Restantes: {activeEnemies.Count}");
-
-        if (activeEnemies.Count == 0)
-        {
-            Debug.Log($"[EnemyHandler] Todos los enemigos derrotados en sala {name}.");
-            OnAllEnemiesDefeated?.Invoke();
-        }
+        e.OnDeath -= HandleEnemyDeath;
+        aliveCount--;
     }
 }

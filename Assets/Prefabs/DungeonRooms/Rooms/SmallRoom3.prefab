@@ -13993,6 +13993,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1793772757574130212}
+  - component: {fileID: 4423687172482460946}
   m_Layer: 0
   m_Name: SmallRoom3
   m_TagString: Untagged
@@ -14348,6 +14349,25 @@ Transform:
   - {fileID: 372116664921117715}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4423687172482460946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728561543117141684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c5afe12662a934796de9cda2bc9d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 0}
+  enemyHandler: {fileID: 0}
+  lootHandler: {fileID: 0}
+  trapHandler: {fileID: 0}
+  entryDoor: {fileID: 0}
+  exitDoors: []
+  roomSpawnPoint: {fileID: 0}
 --- !u!1 &3731026791067889354
 GameObject:
   m_ObjectHideFlags: 0
