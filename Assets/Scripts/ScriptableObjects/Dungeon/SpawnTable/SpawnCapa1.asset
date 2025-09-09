@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8083edde5dd957248bf5ac8838b4dcdd, type: 3}
   m_Name: SpawnCapa1
   m_EditorClassIdentifier: 
-  spawnDataList:
-  - enemyId: rat
-    spawnChance: 50
-  - enemyId: wolf
-    spawnChance: 30
-  - enemyId: bear
-    spawnChance: 20
+  tables:
+  - layer: 0
+    spawnDataList:
+    - enemyType: {fileID: 0}
+      spawnChance: 0

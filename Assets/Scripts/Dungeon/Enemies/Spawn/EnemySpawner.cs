@@ -13,6 +13,9 @@ public class EnemySpawner : MonoBehaviour
     [Tooltip("Scaler de estadísticas. Aplica modificadores según la capa actual. (Opcional, pero recomendado)")]
     [SerializeField] private StatScaler statScaler;
 
+    [Header("Spawn Table")]
+    [SerializeField] private EnemySpawnTableData spawnTableData;
+
     [Header("Spawnpoints")]
     [Tooltip("Lista de Transforms que definen las posiciones posibles de spawn. El sistema elige uno al azar cada vez.")]
     [SerializeField] private List<Transform> spawnPoints = new();
@@ -52,18 +55,18 @@ public class EnemySpawner : MonoBehaviour
             //    if (marker != null) Destroy(marker);
             //}
 
-           
-            string enemyId = GetEnemyIdForLayer(layer);
-            EnemyBase enemy = GetFromPoolOrCreate(enemyId, point.position, point.rotation);
 
-            if (enemy != null)
+            EnemyTypeSO enemyType = GetEnemyTypeForLayer(layer);
+
+            if (enemyType != null)
             {
+                EnemyBase enemy = GetFromPoolOrCreate(enemyType.enemyId, point.position, point.rotation);
                 statScaler?.ApplyScaling(enemy, layer);
 
                 // Bind de retorno al pool cuando muere
                 var binder = enemy.GetComponent<EnemyPoolBinder>();
                 if (binder == null) binder = enemy.gameObject.AddComponent<EnemyPoolBinder>();
-                binder.Bind(this, enemyId, enemy);
+                binder.Bind(this, enemyType.enemyId, enemy);
 
                 onSpawned?.Invoke(enemy);
             }
@@ -113,6 +116,7 @@ public class EnemySpawner : MonoBehaviour
                 var t = instance.transform;
                 t.SetPositionAndRotation(pos, rot);
                 instance.gameObject.SetActive(true);
+
                 return instance;
             }
         }
@@ -122,50 +126,25 @@ public class EnemySpawner : MonoBehaviour
         return instance;
     }
 
-    // ---------- Selección por Capa (usa porcentajes de tu Spec) ----------
-    private string GetEnemyIdForLayer(int layer)
+
+    private EnemyTypeSO GetEnemyTypeForLayer(int layer)
     {
-        const string RATA = "rat";
-        const string LOBO = "wolf";
-        const string OSO = "bear";
-        const string CAZADOR = "hunter";
-        const string CLERIGO = "cleric";
-        const string PALADIN = "paladin";
+        if (spawnTableData == null || spawnTableData.tables.Count == 0) return null;
 
-        var weighted = new Dictionary<string, float>();
+        LayerSpawnTable table = spawnTableData.tables
+            .OrderBy(t => t.layer)
+            .FirstOrDefault(t => layer <= t.layer);
 
-        if (layer <= 2)                             // Capas 1-2
-        {
-            weighted[RATA] = 50;
-            weighted[LOBO] = 30;
-            weighted[OSO] = 20;
-        }
-        else if (layer <= 4)                        // Capas 3-4
-        {
-            weighted[RATA] = 35;
-            weighted[LOBO] = 35;
-            weighted[OSO] = 25;
-            weighted[CAZADOR] = 5;
-        }
-        else if (layer <= 6)                        // Capas 5-6
-        {
-            weighted[RATA] = 15;
-            weighted[LOBO] = 15;
-            weighted[OSO] = 30;
-            weighted[CAZADOR] = 20;
-            weighted[CLERIGO] = 20;
-        }
-        else                                        // Capas 7+
-        {
-            weighted[RATA] = 5;
-            weighted[LOBO] = 5;
-            weighted[OSO] = 15;
-            weighted[CAZADOR] = 30;
-            weighted[CLERIGO] = 30;
-            weighted[PALADIN] = 15;
-        }
+        if (table == null)
+            table = spawnTableData.tables.Last();
 
-        // Reutilizo tu ruleta si existe
+        if (table.spawnDataList.Count == 0)
+            return null;
+
+        var weighted = new Dictionary<EnemyTypeSO, float>();
+        foreach (var data in table.spawnDataList)
+            weighted[data.enemyType] = data.spawnChance;
+
         return RouletteSelection.Roulette(weighted);
     }
 }

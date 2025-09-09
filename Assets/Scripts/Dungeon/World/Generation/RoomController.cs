@@ -21,7 +21,6 @@ public class RoomController : MonoBehaviour
 
     private bool isActive = false;
     private bool allEnemiesDefeated = false;
-    private int currentLayer;
 
     // ---------- PROPERTIES ----------
     public RoomConfig Config => config;
@@ -48,7 +47,6 @@ public class RoomController : MonoBehaviour
     {
         if (isActive) return;
 
-        currentLayer = layer;
         isActive = true;
         allEnemiesDefeated = false;
 
@@ -91,9 +89,24 @@ public class RoomController : MonoBehaviour
     }
     private void InitializeHandlers()
     {
-        if (enemyHandler == null) enemyHandler = GetComponentInChildren<EnemyHandler>();
-        if (lootHandler == null) lootHandler = GetComponentInChildren<LootHandler>();
-        if (trapHandler == null) trapHandler = GetComponentInChildren<TrapHandler>();
+        if (enemyHandler == null)
+        {
+            enemyHandler = GetComponentInChildren<EnemyHandler>();
+            if (enemyHandler == null)
+                Debug.LogError($"[RoomController] EnemyHandler not found in children of {name}");
+        }
+        if (lootHandler == null)
+        {
+            lootHandler = GetComponentInChildren<LootHandler>();
+            if (lootHandler == null)
+                Debug.LogWarning($"[RoomController] LootHandler not found in children of {name}");
+        }
+        if (trapHandler == null)
+        {
+            trapHandler = GetComponentInChildren<TrapHandler>();
+            if (trapHandler == null)
+                Debug.LogWarning($"[RoomController] TrapHandler not found in children of {name}");
+        }
     }
     private void HandleRoomCleared()
     {

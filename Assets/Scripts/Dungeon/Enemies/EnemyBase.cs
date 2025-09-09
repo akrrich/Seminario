@@ -11,8 +11,9 @@ using UnityEngine.AI;
 public abstract class EnemyBase : MonoBehaviour,IDamageable
 {
     [Header("Data")]
-    public EnemyData enemyData;
+    public EnemyTypeSO enemyData;
     [SerializeField] private string id;
+    private EnemyTypeSO originalData;
     public string Id => id;
 
     [Header("LoS")]
@@ -52,7 +53,7 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
             enabled = false;
             return;
         }
-
+        originalData = enemyData;
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -81,9 +82,9 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     }
     public void SetScaledStats(float hpMul, float dmgMul, float speedMul)
     {
-        enemyData = Instantiate(enemyData);
+        enemyData = Instantiate(originalData);
 
-        enemyData.HP = Mathf.RoundToInt(enemyData.HP * (1 + hpMul));
+        enemyData.HP= Mathf.RoundToInt(enemyData.HP * (1 + hpMul));
         enemyData.Damage = Mathf.RoundToInt(enemyData.Damage * (1 + dmgMul));
         enemyData.Speed *= (1 + speedMul);
 

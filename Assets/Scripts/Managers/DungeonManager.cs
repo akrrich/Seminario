@@ -82,7 +82,10 @@ public class DungeonManager : Singleton<DungeonManager>
     public void OnRoomCleared(RoomController clearedRoom)
     {
         Debug.Log($"[DungeonManager] Room {clearedRoom.Config.roomID} cleared. Moviendo a la siguiente sala...");
-
+        if ((currentRoomIndex + 1) % 4 == 0)
+        {
+            AdvanceLayer();
+        }
         // Avanzar a la siguiente sala automáticamente
         MoveToNext();
     }
@@ -155,10 +158,6 @@ public class DungeonManager : Singleton<DungeonManager>
                 runSequence.Add(hallway);
                 AddToHistory(recentHallways, hallway);
             }
-
-            // --- Aumentar capa cada 4 habitaciones ---
-            if ((i + 1) % 4 == 0)
-                currentLayer++;
         }
     }
 
@@ -191,7 +190,8 @@ public class DungeonManager : Singleton<DungeonManager>
         }
         else
         {
-            Debug.LogWarning("[DungeonManager] Spawn sin RoomController padre.");
+            Debug.Log("[DungeonManager] Hallway reached, no room logic triggered.");
+
         }
     }
     private void MovePlayerTo(Transform target)

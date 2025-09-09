@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemySpawnTableData", menuName = "ScriptableObjects/Dungeon/Create New EnemySpawnTableData")]
+[System.Serializable]
+public class LayerSpawnTable
+{
+    public int layer;
+    public List<EnemySpawnData> spawnDataList = new();
+}
+
+[CreateAssetMenu(fileName = "EnemySpawnTableData", menuName = "ScriptableObjects/Dungeon/EnemySpawnTableData")]
 public class EnemySpawnTableData : ScriptableObject
 {
-    public List<EnemySpawnData> spawnDataList = new();
+    public List<LayerSpawnTable> tables = new();
 }

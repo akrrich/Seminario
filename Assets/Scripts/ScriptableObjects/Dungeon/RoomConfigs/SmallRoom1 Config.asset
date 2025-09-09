@@ -66,7 +66,10 @@ MonoBehaviour:
   enemySpawnPointCount: 0
   lootSpawnPointCount: 0
   trapSpawnPointCount: 0
-  possibleEnemies: []
+  possibleEnemies:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   possibleLoot: []
   possibleTraps: []
   ambientVariants: []

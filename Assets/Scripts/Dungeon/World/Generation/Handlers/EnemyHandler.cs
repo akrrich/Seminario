@@ -19,6 +19,8 @@ public class EnemyHandler : MonoBehaviour
 
     public event Action OnAllEnemiesDefeated;
 
+    private Coroutine roundsCoroutine;
+
     private int currentLayer;
     private int aliveCount;
     private bool initialized;
@@ -34,13 +36,18 @@ public class EnemyHandler : MonoBehaviour
             spawners = new List<EnemySpawner>(GetComponentsInChildren<EnemySpawner>(true));
         }
 
-        StopAllCoroutines();
-        StartCoroutine(RunRounds());
+        if(roundsCoroutine != null)
+            StopCoroutine(roundsCoroutine);
+        roundsCoroutine = StartCoroutine(RunRounds());
     }
 
     public void Cleanup()
     {
-        StopAllCoroutines();
+        if (roundsCoroutine != null)
+        {
+            StopCoroutine(roundsCoroutine);
+            roundsCoroutine = null;
+        }
         foreach (var s in spawners)
             s?.ResetSpawner();
 

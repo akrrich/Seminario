@@ -4,21 +4,30 @@ using UnityEngine;
 
 public class TrapHandler : MonoBehaviour
 {
+    [Header("Prefabs")]
+    [Tooltip("Prefabs posibles de trampas que se pueden instanciar")]
     [SerializeField] private GameObject[] trapPrefabs;
+
+    [Header("Spawnpoints")]
+    [Tooltip("Posiciones fijas donde se pueden spawnear trampas en la sala")]
+    [SerializeField] private Transform[] trapSpawnpoints;
+
     private GameObject[] spawnedTraps;
     public void SpawnTraps(RoomConfig config, int layer)
     {
-        int trapCount = GetTrapCountByRoomSize(config.size);
+        int trapCount = Mathf.Min(GetTrapCountByRoomSize(config.size), trapSpawnpoints.Length);
         spawnedTraps = new GameObject[trapCount];
 
         for (int i = 0; i < trapCount; i++)
         {
-            Vector3 spawnPos = GetRandomTrapPosition();
             GameObject trapPrefab = trapPrefabs[Random.Range(0, trapPrefabs.Length)];
-            spawnedTraps[i] = Instantiate(trapPrefab, spawnPos, Quaternion.identity, transform);
+
+            Transform spawnPoint = trapSpawnpoints[i];
+
+            spawnedTraps[i] = Instantiate(trapPrefab, spawnPoint.position, spawnPoint.rotation, transform);
         }
 
-        Debug.Log($"[TrapHandler] Spawned {trapCount} traps.");
+        Debug.Log($"[TrapHandler] Spawned {trapCount} traps in {name}.");
     }
     public void Cleanup()
     {
@@ -41,9 +50,5 @@ public class TrapHandler : MonoBehaviour
             case RoomSize.Large: return 3;
             default: return 1;
         }
-    }
-    private Vector3 GetRandomTrapPosition()
-    {
-        return transform.position + new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3));
     }
 }

@@ -1,10 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LootHandler : MonoBehaviour
 {
     [Header("Spawn Points")]
-    [SerializeField] private Transform[] barrelSpawnPoints;
-    [SerializeField] private Transform[] chestSpawnPoints;
+    [SerializeField] private Transform[] lootSpawnpoints;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject barrelPrefab;
@@ -15,13 +15,42 @@ public class LootHandler : MonoBehaviour
 
     public void SpawnLoot(RoomSize roomSize, int currentLayer = 1)
     {
-        SpawnChest(roomSize, currentLayer);
-        SpawnBarrels(roomSize, currentLayer);
+        if (lootSpawnpoints.Length == 0) return;
+
+        int spawnCount = GetSpawnCount(roomSize, currentLayer);
+
+        Transform[] shuffledPoints = RouletteSelection.Shuffle((Transform[])lootSpawnpoints.Clone());
+       
+        for (int i = 0; i < spawnCount; i++)
+        {
+            Transform spawnPoint = shuffledPoints[i];
+            GameObject prefabToSpawn = RollLootType(roomSize, currentLayer);
+
+            if (prefabToSpawn != null)
+            {
+                Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity, transform);
+            }
+        }
     }
 
-    private void SpawnChest(RoomSize roomSize, int currentLayer)
+    private int GetSpawnCount(RoomSize roomSize, int currentLayer)
     {
-        float baseChance = roomSize switch
+        int baseCount = roomSize switch
+        {
+            RoomSize.Small => 2,
+            RoomSize.Medium => 3,
+            RoomSize.Large => 4,
+            _ => 0
+        };
+
+        int extra = Mathf.Min(currentLayer / 2, 2); // bonus por capas
+        return Mathf.Min(baseCount + extra, lootSpawnpoints.Length);
+    }
+
+    private GameObject RollLootType(RoomSize roomSize, int currentLayer)
+    {
+        // Chance base de cofre
+        float chestChance = roomSize switch
         {
             RoomSize.Small => 0.20f,
             RoomSize.Medium => 0.30f,
@@ -29,38 +58,18 @@ public class LootHandler : MonoBehaviour
             _ => 0f
         };
 
-        // Aumentar chance según capa
+        // Bonus por capa (máx 30%)
         float layerBonus = Mathf.Min(currentLayer * lootMultiplierPerLayer, 0.3f);
-        float finalChance = baseChance + layerBonus;
+        chestChance += layerBonus;
 
-        if (UnityEngine.Random.value < finalChance && chestSpawnPoints.Length > 0)
+        // Probabilidades en una ruleta
+        var lootOptions = new Dictionary<GameObject, float>()
         {
-            int index = UnityEngine.Random.Range(0, chestSpawnPoints.Length);
-            Instantiate(chestPrefab, chestSpawnPoints[index].position, Quaternion.identity, transform);
-        }
-    }
-
-    private void SpawnBarrels(RoomSize roomSize, int currentLayer)
-    {
-        int baseBarrels = roomSize switch
-        {
-            RoomSize.Small => 1,
-            RoomSize.Medium => 2,
-            RoomSize.Large => 3,
-            _ => 0
+            { chestPrefab, chestChance },
+            { barrelPrefab, 1f - chestChance } // lo que sobra es barrel
         };
 
-        // Añadir barriles extras según capa
-        int extraBarrels = Mathf.Min(currentLayer / 2, 3); // Máximo 3 extras
-        int totalBarrels = baseBarrels + extraBarrels;
-
-        // Asegurar que no excedamos los puntos de spawn
-        totalBarrels = Mathf.Min(totalBarrels, barrelSpawnPoints.Length);
-
-        for (int i = 0; i < totalBarrels; i++)
-        {
-            Instantiate(barrelPrefab, barrelSpawnPoints[i].position, Quaternion.identity, transform);
-        }
+        return RouletteSelection.Roulette(lootOptions);
     }
 
     public void Cleanup()
