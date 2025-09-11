@@ -55,6 +55,7 @@ public class DungeonManager : Singleton<DungeonManager>
         {
             player.position = startSpawnPoint.position;
         }
+        PlayerDungeonHUD.OnLayerChanged?.Invoke(currentLayer);
     }
     /* ------------------ API ---------------------- */
    
@@ -76,24 +77,29 @@ public class DungeonManager : Singleton<DungeonManager>
 
         currentRoom = room;
         Debug.Log($"[DungeonManager] Entrando a sala {room.Config.roomID} en Layer {CurrentLayer}");
-        room.ActivateRoom(CurrentLayer);
+        room.ActivateRoom();
     }
 
     public void OnRoomCleared(RoomController clearedRoom)
     {
         Debug.Log($"[DungeonManager] Room {clearedRoom.Config.roomID} cleared. Moviendo a la siguiente sala...");
-        if ((currentRoomIndex + 1) % 4 == 0)
+        if ((currentRoomIndex + 1) % 4 == 0 && currentRoomIndex + 1 < totalRooms )
         {
             AdvanceLayer();
         }
-        // Avanzar a la siguiente sala automáticamente
-        MoveToNext();
     }
 
     public void MoveToNext()
     {
-        currentRoomIndex++;
+        
+        if (currentRoom != null)
+        {
+            Debug.Log($"[DungeonManager] Reiniciando la sala {currentRoom.Config.roomID} antes de avanzar.");
+            currentRoom.ResetRoom();
+        }
 
+        currentRoomIndex++;
+        
         if (currentRoomIndex >= runSequence.Count)
         {
             Debug.Log("[DungeonManager] Dungeon completado. Volviendo al Lobby.");

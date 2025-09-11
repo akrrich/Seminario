@@ -43,12 +43,14 @@ public class RoomController : MonoBehaviour
     }
     //------------------ API ------------------
 
-    public void ActivateRoom(int layer)
+    public void ActivateRoom()
     {
         if (isActive) return;
-
+       
         isActive = true;
         allEnemiesDefeated = false;
+
+        int layer = DungeonManager.Instance.CurrentLayer;
 
         Debug.Log($"[RoomController] Activando sala {config.roomID} en layer {layer}");
 
@@ -117,8 +119,10 @@ public class RoomController : MonoBehaviour
 
         UnlockExitDoors();
 
-        OnAllEnemiesDefeated?.Invoke();
         DungeonManager.Instance?.OnRoomCleared(this);
+       
+        OnAllEnemiesDefeated?.Invoke();
+        OnAllEnemiesDefeated = null;
     }
 
     private void LockExitDoors()

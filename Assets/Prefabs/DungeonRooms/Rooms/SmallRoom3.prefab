@@ -13994,6 +13994,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1793772757574130212}
   - component: {fileID: 4423687172482460946}
+  - component: {fileID: 1121486265534821834}
+  - component: {fileID: 7038139261149574431}
+  - component: {fileID: 4649795490693772558}
   m_Layer: 0
   m_Name: SmallRoom3
   m_TagString: Untagged
@@ -14368,6 +14371,51 @@ MonoBehaviour:
   entryDoor: {fileID: 0}
   exitDoors: []
   roomSpawnPoint: {fileID: 0}
+--- !u!114 &1121486265534821834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728561543117141684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 483c85b90f97f3f41a109abba073601c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawners: []
+  totalRounds: 3
+  basePerRound: 4
+--- !u!114 &7038139261149574431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728561543117141684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f4dc595f6bfdc48a48b895bb586564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootSpawnpoints: []
+  barrelPrefab: {fileID: 0}
+  chestPrefab: {fileID: 0}
+  lootMultiplierPerLayer: 0.1
+--- !u!114 &4649795490693772558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728561543117141684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ab5a5290ccf2a4e8e99ed65576a249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trapPrefabs: []
+  trapSpawnpoints: []
 --- !u!1 &3731026791067889354
 GameObject:
   m_ObjectHideFlags: 0

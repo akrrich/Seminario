@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93905a170b98ee641a57c3630141a81c, type: 3}
   m_Name: Rat Data
   m_EditorClassIdentifier: 
-  enemyId: 
+  enemyId: Rat
   enemyName: 
-  enemyPrefab: {fileID: 0}
-  HP: 100
-  Damage: 10
-  Speed: 3.5
+  enemyPrefab: {fileID: 7724425054083080287, guid: bc693e6355413c340828973b2af72ed0, type: 3}
+  HP: 30
+  Damage: 5
+  Speed: 6
   DistanceToPlayer: 3
   AttackCooldown: 1.5
   minCoins: 1

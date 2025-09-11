@@ -69,22 +69,23 @@ public class DoorController : MonoBehaviour,IInteractable
     public void Interact(bool isPressed)
     {
         Debug.Log("Interactuando con la puerta");
+
         if (isLocked)
         {
             Debug.Log("[DoorController] Intento de interactuar, pero está bloqueada.");
             return;
         }
 
-        if (!isExitDoor) return;
-
+        // Si es la primera puerta y la run no ha comenzado, iniciar la run.
         if (isFirstDoor && !DungeonManager.Instance.RunStarted)
         {
             DungeonManager.Instance.StartDungeonRun();
             return;
         }
-        else
+        // Si la puerta es una salida y no está bloqueada (porque la sala ya se despejó),
+        // el jugador puede pasar a la siguiente sala.
+        if (isExitDoor)
         {
-
             DungeonManager.Instance.MoveToNext();
         }
     }

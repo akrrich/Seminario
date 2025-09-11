@@ -30,6 +30,8 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
     [Header("Runtime")]
     public int CurrentHP { get; private set; }
     public bool IsDead { get; private set; }
+
+    //public static int GlobalDeathCount = 0;
     //---References---
     protected DropHandler dropHandler;
     protected DamageFlash damageFlash;
@@ -97,6 +99,9 @@ public abstract class EnemyBase : MonoBehaviour,IDamageable
 
         IsDead = true;
         agent.isStopped = true;
+
+        //GlobalDeathCount++;
+        //Debug.Log($"[EnemyBase] {name} murió. Total muertes: {GlobalDeathCount}");
 
         dropHandler?.DropLoot();
         SpawnBloodDecal();

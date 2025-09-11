@@ -131,6 +131,11 @@ public class EnemySpawner : MonoBehaviour
     {
         if (spawnTableData == null || spawnTableData.tables.Count == 0) return null;
 
+        if(layer >= 7)
+        {
+            layer = 7;
+        }
+
         LayerSpawnTable table = spawnTableData.tables
             .OrderBy(t => t.layer)
             .FirstOrDefault(t => layer <= t.layer);

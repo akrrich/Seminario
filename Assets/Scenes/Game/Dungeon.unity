@@ -1415,6 +1415,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1974906467}
     m_Modifications:
+    - target: {fileID: 1542908580730080722, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: m_Name
+      value: SpawnerSmall2
+      objectReference: {fileID: 0}
     - target: {fileID: 1921313575417905825, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
       propertyPath: m_Name
       value: SmallRoom2
@@ -20102,6 +20106,10 @@ PrefabInstance:
       propertyPath: 'trapSpawnpoints.Array.data[1]'
       value: 
       objectReference: {fileID: 5106748181100989357}
+    - target: {fileID: 916278765821916983, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
+      propertyPath: m_Name
+      value: SpawnerSmall1
+      objectReference: {fileID: 0}
     - target: {fileID: 6079069351531706623, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 19.05776

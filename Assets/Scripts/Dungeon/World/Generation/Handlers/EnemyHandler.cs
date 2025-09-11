@@ -20,15 +20,18 @@ public class EnemyHandler : MonoBehaviour
     public event Action OnAllEnemiesDefeated;
 
     private Coroutine roundsCoroutine;
-
     private int currentLayer;
     private int aliveCount;
+    private int currentRound;
     private bool initialized;
+
+    public List<EnemySpawner> Spawners => spawners;
 
     public void Initialize(RoomConfig config, int layer)
     {
         currentLayer = layer;
         aliveCount = 0;
+        currentRound = 0;
         initialized = true;
 
         if (spawners == null || spawners.Count == 0)
@@ -53,10 +56,12 @@ public class EnemyHandler : MonoBehaviour
 
         initialized = false;
         aliveCount = 0;
+        OnAllEnemiesDefeated = null;
     }
 
     private IEnumerator RunRounds()
     {
+       
         if (!initialized || spawners == null || spawners.Count == 0)
         {
             Debug.LogWarning("[EnemyHandler] No hay spawners configurados en la sala.");
@@ -65,13 +70,14 @@ public class EnemyHandler : MonoBehaviour
 
         for (int round = 1; round <= totalRounds; round++)
         {
-            int toSpawn = basePerRound * round; // 4, 8, 12...
+            currentRound = round;
+            int toSpawn = basePerRound;
             yield return SpawnRound(toSpawn);
 
-            // Esperar a que mueran todos los enemigos antes de la siguiente ronda
             yield return new WaitUntil(() => aliveCount <= 0);
         }
 
+        Debug.Log("[EnemyHandler] Todas las rondas completadas, invocando OnAllEnemiesDefeated.");
         OnAllEnemiesDefeated?.Invoke();
     }
 
@@ -106,13 +112,13 @@ public class EnemyHandler : MonoBehaviour
 
         aliveCount++;
 
-        // Asegurarse de desuscribirse
         enemy.OnDeath -= HandleEnemyDeath;
         enemy.OnDeath += HandleEnemyDeath;
     }
 
     private void HandleEnemyDeath(EnemyBase e)
     {
+        Debug.Log($"[EnemyHandler] Recibido OnDeath de {e.name}");
         e.OnDeath -= HandleEnemyDeath;
         aliveCount--;
     }

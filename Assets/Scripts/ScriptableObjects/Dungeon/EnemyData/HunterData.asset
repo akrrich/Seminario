@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93905a170b98ee641a57c3630141a81c, type: 3}
   m_Name: HunterData
   m_EditorClassIdentifier: 
-  enemyId: 
+  enemyId: Hunter
   enemyName: 
   enemyPrefab: {fileID: 0}
   HP: 100
