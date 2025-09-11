@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyId: Wolf
   enemyName: 
   enemyPrefab: {fileID: 6976176869298022470, guid: 48484421a9435604c9805c30a90289a3, type: 3}
-  HP: 100
+  HP: 1
   Damage: 12
   Speed: 4
   DistanceToPlayer: 3

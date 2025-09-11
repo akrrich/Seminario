@@ -63,20 +63,20 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  enemySpawnPointCount: 0
-  lootSpawnPointCount: 0
-  trapSpawnPointCount: 0
+  enemySpawnPointCount: 3
+  lootSpawnPointCount: 5
+  trapSpawnPointCount: 2
   possibleEnemies:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8454660039181778633, guid: 74fb03bdaf2a08645829303757536213, type: 3}
+  - {fileID: 7724425054083080287, guid: bc693e6355413c340828973b2af72ed0, type: 3}
+  - {fileID: 6976176869298022470, guid: 48484421a9435604c9805c30a90289a3, type: 3}
   possibleLoot: []
   possibleTraps: []
   ambientVariants: []
   possibleFloorMaterials: []
   possibleWallMaterials: []
   possibleLightingSetups: []
-  allowFog: 1
+  allowFog: 0
   allowTraps: 1
   allowLoot: 1
   isBossRoom: 0

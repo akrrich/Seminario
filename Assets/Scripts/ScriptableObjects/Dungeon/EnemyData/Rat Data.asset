@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyId: Rat
   enemyName: 
   enemyPrefab: {fileID: 7724425054083080287, guid: bc693e6355413c340828973b2af72ed0, type: 3}
-  HP: 30
+  HP: 1
   Damage: 5
   Speed: 6
   DistanceToPlayer: 3

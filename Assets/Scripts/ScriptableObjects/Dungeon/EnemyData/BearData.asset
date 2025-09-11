@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyId: Bear
   enemyName: 
   enemyPrefab: {fileID: 8454660039181778633, guid: 74fb03bdaf2a08645829303757536213, type: 3}
-  HP: 150
+  HP: 1
   Damage: 20
   Speed: 2
   DistanceToPlayer: 3
