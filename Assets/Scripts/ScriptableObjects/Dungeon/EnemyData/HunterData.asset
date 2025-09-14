@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyId: Hunter
   enemyName: 
   enemyPrefab: {fileID: 0}
-  HP: 100
-  Damage: 10
-  Speed: 3.5
-  DistanceToPlayer: 3
-  AttackCooldown: 1.5
-  minCoins: 1
-  maxCoins: 5
+  HP: 80
+  Damage: 15
+  Speed: 3
+  DistanceToPlayer: 7
+  AttackCooldown: 2
+  minCoins: 0
+  maxCoins: 25
   description: 

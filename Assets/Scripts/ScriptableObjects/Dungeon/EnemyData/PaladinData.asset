@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyId: Paladin
   enemyName: 
   enemyPrefab: {fileID: 0}
-  HP: 100
-  Damage: 10
-  Speed: 3.5
+  HP: 200
+  Damage: 25
+  Speed: 2
   DistanceToPlayer: 3
-  AttackCooldown: 1.5
-  minCoins: 1
-  maxCoins: 5
+  AttackCooldown: 3.5
+  minCoins: 0
+  maxCoins: 40
   description: 
