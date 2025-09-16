@@ -39,7 +39,7 @@ public class InteractionManager : Singleton<InteractionManager>
         previousTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
         currentTarget?.HideOutline();
         currentTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
-        InteractionManagerUI.instance.InteractionMessage.gameObject.SetActive(false);
+       
         previousTarget = null;
         currentTarget = null;
     }
@@ -63,7 +63,7 @@ public class InteractionManager : Singleton<InteractionManager>
             previousTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
             currentTarget?.HideOutline();
             currentTarget?.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
-            InteractionManagerUI.instance.InteractionMessage.gameObject.SetActive(false);
+           
             previousTarget = null;
             currentTarget = null;
         }
@@ -79,7 +79,7 @@ public class InteractionManager : Singleton<InteractionManager>
                 {
                     previousTarget.HideOutline();
                     previousTarget.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
-                    InteractionManagerUI.instance.InteractionMessage.gameObject.SetActive(true);
+                   
                 }
 
                 currentTarget = hitTarget;
@@ -88,7 +88,7 @@ public class InteractionManager : Singleton<InteractionManager>
                 // Mostrar outline siempre, aunque sea el mismo objeto
                 currentTarget.ShowOutline();
                 currentTarget.ShowMessage(InteractionManagerUI.Instance.InteractionMessageText);
-                InteractionManagerUI.instance.InteractionMessage.gameObject.SetActive(true);
+               
                 return;
             }
         }
@@ -113,7 +113,7 @@ public class InteractionManager : Singleton<InteractionManager>
                         currentTarget.Interact(true);
                         currentTarget.HideOutline();
                         currentTarget.HideMessage(InteractionManagerUI.Instance.InteractionMessageText);
-                        InteractionManagerUI.instance.InteractionMessage.gameObject.SetActive(false);
+                        
                     }
                     break;
 
@@ -121,13 +121,13 @@ public class InteractionManager : Singleton<InteractionManager>
                     if (PlayerInputs.Instance.InteractHold())
                     {
                         currentTarget.Interact(true);
-                        InteractionManagerUI.instance.InteractionMessage.gameObject.SetActive(true);
+                        
                     }
 
                     else
                     {
                         currentTarget.Interact(false);
-                        InteractionManagerUI.instance.InteractionMessage.gameObject.SetActive(false);
+                      
                     }
                     break;
             }
