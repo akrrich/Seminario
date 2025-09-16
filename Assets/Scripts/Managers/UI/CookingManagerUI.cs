@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class CookingManagerUI : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class CookingManagerUI : MonoBehaviour
 
     [SerializeField] private List<RecipeInformationUI> recipesInformationUI;
 
-    private List<GameObject> buttonsCooking  = new List<GameObject>();
+    private List<GameObject> buttonsInformationReciepes  = new List<GameObject>();
 
     private GameObject lastSelectedButtonFromCookingPanel;
 
@@ -29,6 +30,8 @@ public class CookingManagerUI : MonoBehaviour
 
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
+
+    private List<IngredientType> selectedIngredients = new List<IngredientType>();
 
     private bool ignoreFirstButtonSelected = true;
 
@@ -66,7 +69,7 @@ public class CookingManagerUI : MonoBehaviour
     {
         if (EventSystem.current != null)
         {
-            EventSystem.current.SetSelectedGameObject(buttonsCooking[indexButton]);
+            EventSystem.current.SetSelectedGameObject(buttonsInformationReciepes[indexButton]);
         }
     }
 
@@ -111,13 +114,59 @@ public class CookingManagerUI : MonoBehaviour
         }
     }
 
-    // Funcion asignada a los botones de la UI
-    public void ButtonGetFood(string foodName)
+    public void ButtonSelectCurrentIngredient(string ingredientType)
     {
-        buttonClick.Play();
-        onButtonGetFood?.Invoke(foodName);
+        if (!Enum.TryParse(ingredientType, out IngredientType ingredient))
+        {
+            Debug.LogError($"El ingrediente {ingredientType} no existe en IngredientType.");
+            return;
+        }
+
+        if (selectedIngredients.Contains(ingredient))
+            selectedIngredients.Remove(ingredient);
+        else
+            selectedIngredients.Add(ingredient);
+
+        buttonSelected.Play();
     }
 
+    public void CookSelectedIngredients()
+    {
+        foreach (var recipe in IngredientInventoryManager.Instance.GetAllRecipes())
+        {
+            // Ingredientes de la receta
+            var recipeIngredients = recipe.Ingridients.Select(i => i.IngredientType).ToList();
+
+            // Verificamos que los seleccionados coincidan exactamente con los de la receta
+            if (selectedIngredients.Count == recipeIngredients.Count &&
+                !selectedIngredients.Except(recipeIngredients).Any())
+            {
+                // Ahora verificamos stock
+                bool canCraft = true;
+                foreach (var ing in recipe.Ingridients)
+                {
+                    if (IngredientInventoryManager.Instance.GetStock(ing.IngredientType) < ing.Amount)
+                    {
+                        canCraft = false;
+                        break;
+                    }
+                }
+
+                if (canCraft)
+                {
+                    // Cocinar
+                    buttonClick.Play();
+                    onButtonGetFood?.Invoke(recipe.FoodType.ToString());
+
+                    Debug.Log($"Cocinaste {recipe.FoodType}!");
+                    selectedIngredients.Clear();
+                    return;
+                }
+            }
+        }
+
+        Debug.Log("No hay receta con esos ingredientes o no alcanza el stock.");
+    }
 
     private void SuscribeToUpdateManagerEvent()
     {
@@ -159,9 +208,11 @@ public class CookingManagerUI : MonoBehaviour
 
     private void GetComponents()
     {
-        foreach (Transform childs in rootGameObject.transform)
+        Transform rootButtonsInformationReciepes = rootGameObject.transform.Find("ButtonsInformationReciepes");
+
+        foreach (Transform childs in rootButtonsInformationReciepes.transform)
         {
-            buttonsCooking.Add(childs.gameObject);
+            buttonsInformationReciepes.Add(childs.gameObject);
         }
     }
 
@@ -174,7 +225,7 @@ public class CookingManagerUI : MonoBehaviour
         if (state)
         {
             DeviceManager.Instance.IsUIModeActive = true;
-            onSetSelectedCurrentGameObject?.Invoke(buttonsCooking[0]);
+            onSetSelectedCurrentGameObject?.Invoke(buttonsInformationReciepes[0]);
         }
 
         else

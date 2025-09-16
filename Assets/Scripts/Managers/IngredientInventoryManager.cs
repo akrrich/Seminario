@@ -80,6 +80,11 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
     }
 
     public List<IngredientType> GetAllIngredients() => new List<IngredientType>(ingredientInventory.Keys);
+    
+    public List<FoodRecipeData> GetAllRecipes()
+    {
+        return recipeDict.Values.ToList();
+    }
 
 
     private void InitializeInventory()
