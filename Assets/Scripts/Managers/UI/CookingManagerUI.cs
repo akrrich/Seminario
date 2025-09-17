@@ -32,7 +32,7 @@ public class CookingManagerUI : MonoBehaviour
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
 
-    [SerializeField] private List<IngredientType> selectedIngredients = new List<IngredientType>();
+    private List<IngredientType> selectedIngredients = new List<IngredientType>();
 
     private bool ignoreFirstButtonSelected = true;
 
