@@ -194,11 +194,7 @@ public class DungeonManager : Singleton<DungeonManager>
         {
             EnterRoom(controller);
         }
-        else
-        {
-            Debug.Log("[DungeonManager] Hallway reached, no room logic triggered.");
-
-        }
+           
     }
     private void MovePlayerTo(Transform target)
     {

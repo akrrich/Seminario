@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 39511502260140425}
   - component: {fileID: 39511502261543227}
   - component: {fileID: 3874877237600380926}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -840,6 +840,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4419618877109244693}
+  - component: {fileID: 6686963576207250042}
   m_Layer: 0
   m_Name: Aisle D
   m_TagString: Untagged
@@ -1066,8 +1067,22 @@ Transform:
   - {fileID: 6689324702142264617}
   - {fileID: 1117232727732083308}
   - {fileID: 7016940041642990857}
+  - {fileID: 1717958105511729551}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &6686963576207250042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380899362970635423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb9c9ec91c60fa246bb04162e1b4328a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doors: []
 --- !u!1 &387196376646748831
 GameObject:
   m_ObjectHideFlags: 0
@@ -2273,7 +2288,7 @@ GameObject:
   - component: {fileID: 711718204480738257}
   - component: {fileID: 711718204482145123}
   - component: {fileID: 547526465140685568}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2849,7 +2864,7 @@ GameObject:
   - component: {fileID: 1062864493176573959}
   - component: {fileID: 1062864493177645321}
   - component: {fileID: 8299578661700459678}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8259,7 +8274,7 @@ GameObject:
   - component: {fileID: 1437619632266879213}
   - component: {fileID: 1437619632267975139}
   - component: {fileID: 4249153352548969090}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8920,7 +8935,7 @@ GameObject:
   - component: {fileID: 1759070124758054622}
   - component: {fileID: 1759070124756979664}
   - component: {fileID: 5395816842771789563}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9027,7 +9042,7 @@ GameObject:
   - component: {fileID: 1775011152801386193}
   - component: {fileID: 1775011152800323821}
   - component: {fileID: 5207258435692411487}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_Corner_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9688,7 +9703,7 @@ GameObject:
   - component: {fileID: 2085650953393464010}
   - component: {fileID: 2085650953392781944}
   - component: {fileID: 1563312521557089104}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10519,7 +10534,7 @@ GameObject:
   - component: {fileID: 2394609500988399396}
   - component: {fileID: 2394609500987369002}
   - component: {fileID: 8243028174015469158}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11443,7 +11458,7 @@ GameObject:
   - component: {fileID: 2952755332907921765}
   - component: {fileID: 2952755332906707415}
   - component: {fileID: 6797238825874105101}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11636,7 +11651,7 @@ GameObject:
   - component: {fileID: 3031660367602711583}
   - component: {fileID: 5671377203812817578}
   - component: {fileID: 6771235421355661491}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Wood_Bridge_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13780,7 +13795,7 @@ GameObject:
   - component: {fileID: 4500306974592535655}
   - component: {fileID: 4500306974593488085}
   - component: {fileID: 8141190443503959055}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14293,7 +14308,7 @@ GameObject:
   - component: {fileID: 4853674045992635942}
   - component: {fileID: 4853674045993522836}
   - component: {fileID: 8694281595482376206}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15017,7 +15032,7 @@ GameObject:
   - component: {fileID: 5027762780703149089}
   - component: {fileID: 5027762780702061871}
   - component: {fileID: 5836124204157338450}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21941,7 +21956,7 @@ GameObject:
   - component: {fileID: 6075217607011870773}
   - component: {fileID: 6075217607012962619}
   - component: {fileID: 305182501035234925}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22325,7 +22340,7 @@ GameObject:
   - component: {fileID: 6226090739304947212}
   - component: {fileID: 6226090739303851778}
   - component: {fileID: 8359777074361435169}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22432,7 +22447,7 @@ GameObject:
   - component: {fileID: 6245675112037269714}
   - component: {fileID: 6245675112036186588}
   - component: {fileID: 9145368033309490009}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22624,7 +22639,7 @@ GameObject:
   - component: {fileID: 6264085391827280781}
   - component: {fileID: 6264085391826279043}
   - component: {fileID: 6735963325022205821}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23030,7 +23045,7 @@ GameObject:
   - component: {fileID: 6523854511236965156}
   - component: {fileID: 6523854511235865130}
   - component: {fileID: 8090510245023557078}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24862,7 +24877,7 @@ GameObject:
   - component: {fileID: 7422060738175109944}
   - component: {fileID: 7422060738176217654}
   - component: {fileID: 2995964843572307308}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25438,7 +25453,7 @@ GameObject:
   - component: {fileID: 7686553345822291971}
   - component: {fileID: 7686553345821335729}
   - component: {fileID: 8357712237989654956}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25737,7 +25752,7 @@ GameObject:
   - component: {fileID: 7727109118374386813}
   - component: {fileID: 7727109118375486835}
   - component: {fileID: 7827590736719925968}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26505,7 +26520,7 @@ GameObject:
   - component: {fileID: 8002926109560757315}
   - component: {fileID: 8002926109559727437}
   - component: {fileID: 6551245756079178020}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Tiles_01 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27577,7 +27592,7 @@ GameObject:
   - component: {fileID: 8777730357994340014}
   - component: {fileID: 8777730357995546140}
   - component: {fileID: 4568341229596930753}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28685,7 +28700,7 @@ GameObject:
   - component: {fileID: 9184077008164202935}
   - component: {fileID: 9184077008162992389}
   - component: {fileID: 2771345699012853798}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Env_Sewer_Canal_01 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29117,6 +29132,76 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 160306821386337479, guid: d223b76c1ae0bd74f94497b6b691092d, type: 3}
   m_PrefabInstance: {fileID: 988736980116612779}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4860824147083958323
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4419618877109244693}
+    m_Modifications:
+    - target: {fileID: 3776700194253814088, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_Name
+      value: Teleport
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.0000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 29.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 14.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 21.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8754261
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.40821788
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.23456968
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.10938163
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+--- !u!4 &1717958105511729551 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6098564412930720188, guid: a50e53b6524ff8449bcc4960242d10af, type: 3}
+  m_PrefabInstance: {fileID: 4860824147083958323}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6840061099365272046
 PrefabInstance:
