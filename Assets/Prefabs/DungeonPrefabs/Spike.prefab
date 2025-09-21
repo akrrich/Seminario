@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 4123466818715722823}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.98, y: 31.7, z: 38.36}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.1369646, y: 2.1369643, z: 2.0218678}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -105,6 +105,8 @@ MonoBehaviour:
   spikeSpeed: 5
   resetDelay: 1
   cooldownTime: 2
+  damageDelay: 0.5
+  spikeDirection: {x: 0, y: 1, z: 0}
   spikeMesh: {fileID: 2767866439931570372}
 --- !u!65 &4901985648786548733
 BoxCollider:
