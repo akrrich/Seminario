@@ -58,6 +58,8 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public int CurrentWeaponDamage { get => currentWeaponDamage; set => currentWeaponDamage = value; }
     public float AttackCooldown { get => attackCooldown; set => attackCooldown = value; }
 
+    public bool isTeleportPannelOpened = false;
+
     public event Action<float, float> OnHealthChanged;
     public event Action<float, float> OnStaminaChanged;
     public event Action OnPlayerDied;
@@ -68,8 +70,12 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     private void Awake()
     {
         GetComponents();
+        PlayerDungeonHUD.OnShowTeleportConfirm += TeleportMessageToggle;
     }
-
+    private void OnDestroy()
+    {
+        PlayerDungeonHUD.OnShowTeleportConfirm -= TeleportMessageToggle;
+    }
     private void FixedUpdate()
     {
         if (PlayerInputs.Instance != null)
@@ -103,6 +109,11 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     {
         if (PlayerInputs.Instance == null) return;
 
+        if (PauseManager.Instance == null) return;
+        if (PauseManager.Instance.IsGamePaused) return;
+
+        if (isTeleportPannelOpened) return;
+       
         if (PlayerInputs.Instance.Jump())
             Jump();
 
@@ -161,6 +172,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
 
     private void MovePlayer()
     {
+        if(isTeleportPannelOpened) return;
         Vector2 input = PlayerInputs.Instance.GetMoveAxis();
         Vector3 targetDir = (orientation.forward * input.y + orientation.right * input.x).normalized;
 
@@ -252,10 +264,15 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
             playerStamina.OnStaminaChanged += (current, max) => OnStaminaChanged?.Invoke(current, max);
         }
     }
-    #endregion
 
-    #region Gizmos
-    private void OnDrawGizmosSelected()
+    private void TeleportMessageToggle(string nada)
+    {
+      isTeleportPannelOpened = true;
+    }
+#endregion
+
+#region Gizmos
+private void OnDrawGizmosSelected()
     {
         if (!showGroundGizmo) return;
 

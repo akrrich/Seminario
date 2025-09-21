@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 262356201725940883}
   - component: {fileID: 936637594050138167}
   - component: {fileID: 3123905715614067944}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Prop_Tech_Crystal_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6098564412930720188}
   - component: {fileID: 6396301691810723798}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Teleport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 7999749656689093815}
   - component: {fileID: 6438985991145603257}
   - component: {fileID: 194054540951755622}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Env_Tiles_Rune_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

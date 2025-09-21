@@ -27,23 +27,8 @@ public class Teleport : MonoBehaviour, IInteractable
     }
     public void Interact(bool isPressed)
     {
-        TeleportToLobby();
+        PlayerDungeonHUD.OnShowTeleportConfirm?.Invoke(interactionMessage);
     }
-
-    private void TeleportToLobby()
-    {
-        Debug.Log($"[Teleport] Teleporting player to lobby from {gameObject.name}");
-
-        if (DungeonManager.Instance != null)
-        {
-            DungeonManager.Instance.TeleportToLobby();
-        }
-        else
-        {
-            Debug.LogWarning("[Teleport] DungeonManager instance not found!");
-        }
-    }
-
     public void ShowOutline()
     {
         if (OutlineManager.Instance != null)
@@ -62,21 +47,12 @@ public class Teleport : MonoBehaviour, IInteractable
 
     public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
     {
-        if (interactionManagerUIText != null)
-        {
-            string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
-            interactionManagerUIText.text = $"Press" + keyText + $"to {interactionMessage.ToLower()}";
-            interactionManagerUIText.gameObject.SetActive(true);
-        }
+       
     }
 
     public void HideMessage(TextMeshProUGUI interactionManagerUIText)
     {
-        if (interactionManagerUIText != null)
-        {
-            interactionManagerUIText.text = string.Empty;
-            interactionManagerUIText.gameObject.SetActive(false);
-        }
+       
     }
 
     private IEnumerator RegisterOutline()

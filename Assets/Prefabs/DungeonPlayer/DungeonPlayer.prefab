@@ -178,6 +178,7 @@ MonoBehaviour:
     m_Bits: 2048
   showGroundGizmo: 1
   debugLogs: 1
+  isTeleportPannelOpened: 0
 --- !u!114 &1315870567522119900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -929,7 +930,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d2f6b319cdd242b438dfb67e80bfbd4f, type: 2}
+  - {fileID: 2100000, guid: 366a57b7c4e73e94ea776eab48827b70, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
