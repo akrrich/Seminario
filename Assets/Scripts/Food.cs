@@ -1,39 +1,57 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
-public enum FoodType
+public enum FoodType // FrutosDelBosqueOscuro, SopaDeLaLunaPlateada, CarneDeBestia, CarneCuradaDelAbismo, SusurroDelElixir
 {
-    VegetableSoup, BeefStew, TomatoAndLettuceSalad, BeastMeatPie, HumanFleshStew
+    DarkWoodBerries, SoupOfTheSilverMoon, BeastStew, AbyssCuredMeet, LastWhisperElixir
 }
 
-public class Food : MonoBehaviour
+public enum CookingStates
+{
+    Raw,
+    Cooked,
+    Burned
+}
+
+public class Food : MonoBehaviour, IInteractable
 {
     // No usar el metodo OnDisabled de Unity
+
+    [SerializeField] private FoodData foodData;
 
     private CookingManager cookingManager;
     private Table currentTable; // Esta Table hace referencia a la mesa en la cual podemos entregar el pedido
 
-    private Transform stovePosition;
-    private Transform cookedPosition;
-    private Transform dishPosition;
-
     private Rigidbody rb;
     private BoxCollider boxCollider;
+    private MeshRenderer meshRenderer;
+    private Color originalColor;
+
+    private Transform stovePosition;
+    private Transform playerDishPosition;
 
     [SerializeField] private FoodType foodType;
-    [SerializeField] private float timeToBeenCooked;
+    private CookingStates currentCookingState;
+
+    private float cookTimeCounter = 0f;
 
     private bool isInstantiateFirstTime = true;
-    private bool isCooked = false;
     private bool isInPlayerDishPosition = false;
+    private bool isServedInTable = false;
 
-    public float TimeToBeenCooked { get => timeToBeenCooked; }
+    public InteractionMode InteractionMode { get => InteractionMode.Press; }
+
+    public FoodType FoodType { get => foodType; }
+    public CookingStates CurrentCookingState { get => currentCookingState; }
 
 
     void Awake()
     {
         SuscribeToPlayerControllerEvents();
         GetComponents();
+        CoroutineHelper.Instance.StartHelperCoroutine(RegisterOutline());
+        Initialize();
     }
 
     void OnEnable()
@@ -44,8 +62,53 @@ public class Food : MonoBehaviour
     void OnDestroy()
     {
         UnsuscribeToPlayerControllerEvents();
+        OutlineManager.Instance.Unregister(gameObject);
     }
 
+
+    public void Interact(bool isPressed)
+    {
+        if (gameObject.activeSelf && !isServedInTable && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
+        {
+            PlayerView.OnEnabledDishForced?.Invoke(true);
+
+            isInPlayerDishPosition = true;
+
+            cookingManager.ReleaseStovePosition(stovePosition);
+            playerDishPosition = cookingManager.MoveFoodToDish(this);
+
+            StartCoroutine(DisablePhysics());
+        }
+    }
+
+    public void ShowOutline()
+    {
+        if (cookingManager.AvailableDishPositions.Count > 0 && !isServedInTable && !isInPlayerDishPosition)
+        {
+            OutlineManager.Instance.ShowWithDefaultColor(gameObject);
+            InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Interactive);
+        }
+    }
+
+    public void HideOutline()
+    {
+        OutlineManager.Instance.Hide(gameObject);
+        InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
+    }
+
+    public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
+    {
+        if (cookingManager.AvailableDishPositions.Count > 0 && !isServedInTable && !isInPlayerDishPosition)
+        {
+            string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
+            interactionManagerUIText.text = $"Press" + keyText + "to grab food";
+        }
+    }
+
+    public void HideMessage(TextMeshProUGUI interactionManagerUIText)
+    {
+        interactionManagerUIText.text = string.Empty;
+    }
 
     public void ReturnObjetToPool()
     {
@@ -56,8 +119,9 @@ public class Food : MonoBehaviour
 
     private void SuscribeToPlayerControllerEvents()
     {
-        PlayerController.OnGrabFood += Grab;
         PlayerController.OnHandOverFood += HandOver;
+        PlayerController.OnSupportFood += SupportFood;
+        PlayerController.OnThrowFoodToTrash += ThrowFoodToTrash;
 
         PlayerController.OnTableCollisionEnterForHandOverFood += SaveTable;
         PlayerController.OnTableCollisionExitForHandOverFood += ClearTable;
@@ -65,8 +129,9 @@ public class Food : MonoBehaviour
 
     private void UnsuscribeToPlayerControllerEvents()
     {
-        PlayerController.OnGrabFood -= Grab;
         PlayerController.OnHandOverFood -= HandOver;
+        PlayerController.OnSupportFood -= SupportFood;
+        PlayerController.OnThrowFoodToTrash -= ThrowFoodToTrash;
 
         PlayerController.OnTableCollisionEnterForHandOverFood -= SaveTable;
         PlayerController.OnTableCollisionExitForHandOverFood -= ClearTable;
@@ -77,21 +142,49 @@ public class Food : MonoBehaviour
         cookingManager = FindFirstObjectByType<CookingManager>();
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    // Ejecutar unicamente la corrutina cuando se activa el objeto, si se activo porque entrego la comida
+    private IEnumerator RegisterOutline()
+    {
+        yield return new WaitUntil(() => OutlineManager.Instance != null);
+
+        OutlineManager.Instance.Register(gameObject);
+    }
+
+    private void Initialize()
+    {
+        originalColor = meshRenderer.material.color;
+        currentCookingState = CookingStates.Raw;
+    }
+
+    // Ejecutar unicamente la corrutina cuando se activa el objeto en caso de que se haya puesto en la hornalla
     private IEnumerator CookGameObject()
     {
         if (!isInPlayerDishPosition && !isInstantiateFirstTime)
         {
             stovePosition = cookingManager.CurrentStove;
 
-            yield return new WaitForSeconds(timeToBeenCooked);
+            cookTimeCounter = 0f;
 
-            cookingManager.ReleaseStovePosition(stovePosition);
-            cookedPosition = cookingManager.MoveFoodWhenIsCooked(this);
+            while (cookTimeCounter <= foodData.TimeToBeenCooked + foodData.TimeToBeenBurned)
+            {
+                cookTimeCounter += Time.deltaTime;
 
-            isCooked = true;
+                if (isInPlayerDishPosition)
+                {
+                    CheckCookingState();
+                    yield break;
+                }
+
+                // Lerp del color original a un color oscuro
+                Color targetColor = Color.Lerp(originalColor, Color.black, cookTimeCounter / (foodData.TimeToBeenCooked + foodData.TimeToBeenBurned));
+                meshRenderer.material.color = targetColor;                
+
+                yield return null;
+            }
+
+            CheckCookingState();
         }
 
         isInstantiateFirstTime = false;
@@ -104,17 +197,28 @@ public class Food : MonoBehaviour
         boxCollider.enabled = false;
     }
 
+    private IEnumerator EnabledPhysics()
+    {
+        yield return null; // Esperar un frame
+        rb.isKinematic = false;
+        boxCollider.enabled = true;
+    }
+
     private void RestartValues()
     {
+        meshRenderer.material.color = originalColor;
+
         stovePosition = null;
-        cookedPosition = null;
-        dishPosition = null;
+        playerDishPosition = null;
 
         rb.isKinematic = false;
         boxCollider.enabled = true;
 
-        isCooked = false;
+        currentCookingState = CookingStates.Raw;
+
+        cookTimeCounter = 0f;
         isInPlayerDishPosition = false;
+        isServedInTable = false;
     }
 
     private void SaveTable(Table table)
@@ -130,16 +234,21 @@ public class Food : MonoBehaviour
         currentTable = null;
     }
 
-    private void Grab()
-    {                                               // Si hay posiciones disponibles en la bandeja
-        if (isCooked && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
+    private void CheckCookingState()
+    {
+        if (cookTimeCounter < foodData.TimeToBeenCooked)
         {
-            cookingManager.ReleaseCookedPosition(cookedPosition);
-            dishPosition = cookingManager.MoveFoodToDish(this);
+            currentCookingState = CookingStates.Raw;
+        }
 
-            StartCoroutine(DisablePhysics());
+        else if (cookTimeCounter >= foodData.TimeToBeenCooked && cookTimeCounter <= foodData.TimeToBeenCooked + foodData.TimeToBeenBurned)
+        {
+            currentCookingState = CookingStates.Cooked;
+        }
 
-            isInPlayerDishPosition = true;
+        else if (cookTimeCounter > foodData.TimeToBeenCooked + foodData.TimeToBeenBurned)
+        {
+            currentCookingState = CookingStates.Burned;
         }
     }
 
@@ -147,9 +256,7 @@ public class Food : MonoBehaviour
     {
         if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
         {
-            PlayerView.OnHandOverCompletedForHandOverMessage?.Invoke();
-
-            cookingManager.ReleaseDishPosition(dishPosition);
+            cookingManager.ReleaseDishPosition(playerDishPosition);
 
             Transform freeSpot = null;
 
@@ -170,12 +277,31 @@ public class Food : MonoBehaviour
                 rb.isKinematic = false;
                 boxCollider.enabled = true;
                 isInPlayerDishPosition = false;
-                isCooked = false;
+                isServedInTable = true;
 
                 currentTable.CurrentFoods.Add(this); 
 
                 ClearTable();
             }
+        }
+    }
+
+    private void SupportFood(GameObject currentFood)
+    {
+        if (currentFood != null && isInPlayerDishPosition)
+        {
+            cookingManager.ReleaseDishPosition(playerDishPosition);
+            isInPlayerDishPosition = false;
+            StartCoroutine(EnabledPhysics());
+        }  
+    }
+
+    private void ThrowFoodToTrash()
+    {
+        if (gameObject.activeSelf && isInPlayerDishPosition)
+        {
+            cookingManager.ReleaseDishPosition(playerDishPosition);
+            ReturnObjetToPool();
         }
     }
 }

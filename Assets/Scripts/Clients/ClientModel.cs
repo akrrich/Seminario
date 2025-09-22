@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum ClientStates
 {
@@ -12,13 +13,18 @@ public enum ClientType
 
 public class ClientModel : MonoBehaviour
 {
+    /// <summary>
+    /// El bug del Animation gameObject que se separa del padre esta solucionado, ya que vuelve a su posicion cuando entra en idle
+    /// </summary>
+    /// 
     [SerializeField] private ClientData clientData;
 
     private ClientManager clientManager;
 
-    private ObstacleAvoidance obstacleAvoidance;
     private Rigidbody rb;
-    private Table currentTablePosition;
+    private NavMeshAgent navMeshAgent;
+    private CapsuleCollider capsuleCollider;
+    private Table currentTable;
 
     private Vector3 currentDirection;
 
@@ -30,8 +36,8 @@ public class ClientModel : MonoBehaviour
 
     public ClientManager ClientManager { get => clientManager; }
 
-    public ObstacleAvoidance ObstacleAvoidance { get => obstacleAvoidance; }
-    public Table CurrentTablePosition { get => currentTablePosition; set => currentTablePosition = value; }
+    public NavMeshAgent NavMeshAgent { get => navMeshAgent; }
+    public Table CurrentTable { get => currentTable; set => currentTable = value; }
 
     public ClientType ClientType { get => clientType; }
 
@@ -39,6 +45,7 @@ public class ClientModel : MonoBehaviour
     void Awake()
     {
         GetComponents();
+        InitializeValuesFromNavMeshAgent();
     }
 
     void OnEnable()
@@ -46,23 +53,20 @@ public class ClientModel : MonoBehaviour
         InitializeClientForPool();
     }
 
-    void FixedUpdate()
-    {
-        Movement();
-    }
 
+    public void Movement()
+    {
+        if (!rb.isKinematic)
+        {
+            rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
+        }
+    }
 
     public void MoveToTarget(Vector3 target)
     {
-        Vector3 newDirection = (target - transform.position).normalized;
-        currentDirection = newDirection;
+        navMeshAgent.isStopped = false;
+        navMeshAgent.SetDestination(target);
     }
-
-    // Para ObstacleAvoidance
-    /*public void MoveToTarget(Vector3 target)
-    {
-        currentDirection = target;
-    }*/
 
     public void LookAt(Vector3 target, Transform anim)
     {
@@ -79,27 +83,25 @@ public class ClientModel : MonoBehaviour
 
     public void StopVelocity()
     {
-        currentDirection = Vector3.zero;
+        navMeshAgent.isStopped = true;
+        navMeshAgent.velocity = Vector3.zero;
     }
 
-    public void ReturnFoodFromTableToPool(bool dishesMatch)
+    /// Metodo para futuro setea del npc correctamente la posicion de la animacion en la silla
+    public void SetRbAndCollider(bool rb, bool collider)
     {
-        foreach (Food food in currentTablePosition.CurrentFoods)
+        this.rb.isKinematic = rb;
+        capsuleCollider.enabled = collider;
+    }
+
+    public void ReturnFoodFromTableToPool()
+    {
+        foreach (Food food in currentTable.CurrentFoods)
         {
             food.ReturnObjetToPool();
         }
 
-        currentTablePosition.CurrentFoods.Clear();
-
-        if (dishesMatch)
-        {
-            MoneyManager.Instance.AddMoney(500);
-        }
-
-        else
-        {
-            MoneyManager.Instance.SubMoney(250);
-        }
+        currentTable.CurrentFoods.Clear();
     }
 
 
@@ -107,8 +109,14 @@ public class ClientModel : MonoBehaviour
     {
         clientManager = FindFirstObjectByType<ClientManager>();
 
-        obstacleAvoidance = GetComponent<ObstacleAvoidance>();
         rb = GetComponent<Rigidbody>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        capsuleCollider =  GetComponent<CapsuleCollider>();
+    }
+
+    private void InitializeValuesFromNavMeshAgent()
+    {
+        navMeshAgent.speed = clientData.Speed;
     }
 
     public void InitializeSpawnPosition()
@@ -118,7 +126,7 @@ public class ClientModel : MonoBehaviour
 
     public void InitializeTablePosition()
     {
-        currentTablePosition = clientManager.GetRandomAvailableTable();
+        currentTable = TablesManager.Instance.GetRandomAvailableTableForClient();
     }
 
     private void InitializeClientForPool()
@@ -131,10 +139,5 @@ public class ClientModel : MonoBehaviour
         }
 
         isInstantiateFirstTime = false;
-    }
-
-    private void Movement()
-    {
-        rb.velocity = currentDirection * clientData.Speed * Time.fixedDeltaTime;
     }
 }

@@ -14,11 +14,6 @@ public class CookingManager : MonoBehaviour
     private Queue<Transform> availableStovesPositions = new Queue<Transform>();
     private HashSet<Transform> occupiedStovesPositions = new HashSet<Transform>();
 
-    // Para las posiciones cuando se terminan de cocinar
-    [SerializeField] private List<Transform> cookedPositions;
-    private Queue<Transform> availableCookedPositions = new Queue<Transform>(); 
-    private HashSet<Transform> occupiedCookedPositions = new HashSet<Transform>();
-
     // Para las posiciones en la bandeja del player
     [SerializeField] private List<Transform> dishPositions;
     private Queue<Transform> availableDishPositions = new Queue<Transform>();
@@ -34,7 +29,6 @@ public class CookingManager : MonoBehaviour
     {
         SuscribeToCookingManagerUIEvent();
         EnqueueStovesPositions();
-        EnqueueCookedPosition();
         EnqueueDishPositions();
         InitializeFoodPoolDictionary();
     }
@@ -55,49 +49,19 @@ public class CookingManager : MonoBehaviour
 
     public void ReleaseStovePosition(Transform stovePosition)
     {
-        // Solamanete liberar posiciones de sarten si hay lugar en los espacios donde va la comida cocinada
-        if (availableCookedPositions.Count > 0)
+        if (occupiedStovesPositions.Contains(stovePosition))
         {
-            if (occupiedStovesPositions.Contains(stovePosition))
-            {
-                occupiedStovesPositions.Remove(stovePosition);
-                availableStovesPositions.Enqueue(stovePosition);
-            }
+            occupiedStovesPositions.Remove(stovePosition);
+            availableStovesPositions.Enqueue(stovePosition);
         }
     }
 
-    public Transform MoveFoodWhenIsCooked(Food currentFood)
+    public void ReleaseDishPosition(Transform dishPosition)
     {
-        Transform targetPosition = null;
-
-        while (availableCookedPositions.Count > 0)
+        if (occupiedDishPositions.Contains(dishPosition))
         {
-            targetPosition = availableCookedPositions.Dequeue();
-
-            if (occupiedCookedPositions.Contains(targetPosition))
-            {
-                availableCookedPositions.Enqueue(targetPosition);  
-                continue;
-            }
-
-            occupiedCookedPositions.Add(targetPosition);
-            break;
-        }
-
-        if (targetPosition != null)
-        {
-            currentFood.transform.position = targetPosition.position;
-        }
-
-        return targetPosition;
-    }
-
-    public void ReleaseCookedPosition(Transform cookedPosition)
-    {
-        if (occupiedCookedPositions.Contains(cookedPosition))
-        {
-            occupiedCookedPositions.Remove(cookedPosition); 
-            availableCookedPositions.Enqueue(cookedPosition);
+            occupiedDishPositions.Remove(dishPosition);
+            availableDishPositions.Enqueue(dishPosition);
         }
     }
 
@@ -126,15 +90,6 @@ public class CookingManager : MonoBehaviour
         }
 
         return targetPosition;
-    }
-
-    public void ReleaseDishPosition(Transform dishPosition)
-    {
-        if (occupiedDishPositions.Contains(dishPosition))
-        {
-            occupiedDishPositions.Remove(dishPosition);
-            availableDishPositions.Enqueue(dishPosition);
-        }
     }
 
 
@@ -168,10 +123,7 @@ public class CookingManager : MonoBehaviour
     {
         Transform targetPosition = null;
 
-        if (availableStovesPositions.Count == 0)
-        {
-            return null;
-        }
+        if (availableStovesPositions.Count == 0) return null;
 
         while (availableStovesPositions.Count > 0)
         {
@@ -198,14 +150,6 @@ public class CookingManager : MonoBehaviour
         }
     }
 
-    private void EnqueueCookedPosition()
-    {
-        foreach (var position in cookedPositions)
-        {
-            availableCookedPositions.Enqueue(position);
-        }
-    }
-
     private void EnqueueDishPositions()
     {
         foreach (var position in dishPositions)
@@ -218,10 +162,11 @@ public class CookingManager : MonoBehaviour
     {
         for (int i = 0; i < foodPools.Count; i++)
         {
-            if (Enum.IsDefined(typeof(FoodType), i)) 
+            GameObject prefab = foodPools[i].Prefab;
+
+            if (Enum.TryParse(prefab.name, out FoodType foodType))
             {
-                FoodType foodType = (FoodType) i;
-                foodPoolDictionary[foodType] = foodPools[i]; 
+                foodPoolDictionary[foodType] = foodPools[i];
             }
         }
     }

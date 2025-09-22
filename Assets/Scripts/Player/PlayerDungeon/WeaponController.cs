@@ -4,32 +4,42 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    public GameObject Sword;
-    public bool canAttack = true;
-    public float AttackCooldown = 1f;
+    [Header("Weapon Settings")]
+    [SerializeField] private GameObject sword;
+    [SerializeField] private float attackCooldown = 1f;
 
-    private void Update()
+    private Animator swordAnimator;
+    private float lastAttackTime = -Mathf.Infinity;
+
+    private void Awake()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (sword != null)
         {
-            if (canAttack)
-            {
-                SwordAttack();                
-            }
+            swordAnimator = sword.GetComponent<Animator>();
+        }
+
+        if (swordAnimator == null)
+        {
+            Debug.LogWarning("WeaponController: No Animator found on sword object.");
         }
     }
 
-    public void SwordAttack()
+    public bool CanAttack()
     {
-        canAttack = false;
-        Animator Anim = Sword.GetComponent<Animator>();
-        Anim.SetTrigger("Attack");
-        StartCoroutine(ResetAttackCooldown());
+        return Time.time >= lastAttackTime + attackCooldown;
     }
 
-    IEnumerator ResetAttackCooldown()
+    public void PerformAttack()
     {
-        yield return new WaitForSeconds(AttackCooldown);
-        canAttack = true;
+        if (!CanAttack()) return;
+
+        lastAttackTime = Time.time;
+
+        if (swordAnimator != null)
+        {
+            swordAnimator.SetTrigger("Attack");
+        }
     }
+
+    public float AttackCooldown => attackCooldown;
 }

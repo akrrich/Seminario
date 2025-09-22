@@ -11,10 +11,24 @@ public class ClientController : MonoBehaviour
     private FSM<ClientStates> fsm = new FSM<ClientStates>();
     private ITreeNode root;
 
+    private bool onCollisionEnterWithTriggerChair = false;
+
+    public bool OnCollisionEnterWithTriggerChair { get => onCollisionEnterWithTriggerChair; set => onCollisionEnterWithTriggerChair = value; }
+
 
     void Awake()
     {
         GetComponents();
+    }
+
+    void OnEnable()
+    {
+        SuscribeToUpdateManagerEvents();
+    }
+
+    void OnDisable()
+    {
+        UnsuscribeToUpdateManagerEvents();
     }
 
     void Start()
@@ -24,12 +38,42 @@ public class ClientController : MonoBehaviour
         InitializeTree();
     }
 
-    void Update()
+    // Simulacion de Update
+    void UpdateClientController()
     {
         fsm.OnExecute();
-        root.Execute();
+        root?.Execute();
+        clientView.RotateOrderUIToLookAtPlayer();
     }
 
+    // Simulacion de FixedUpdate
+    void FixedUpdateClientController()
+    {
+        clientModel.Movement();
+    }
+
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvents();
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        OnTriggerEnterWithChair(collider);
+    }
+
+
+    private void SuscribeToUpdateManagerEvents()
+    {
+        UpdateManager.OnUpdate += UpdateClientController;
+        UpdateManager.OnFixedUpdate += FixedUpdateClientController;
+    }
+
+    private void UnsuscribeToUpdateManagerEvents()
+    {
+        UpdateManager.OnUpdate -= UpdateClientController;
+        UpdateManager.OnFixedUpdate -= FixedUpdateClientController;
+    }
 
     private void GetComponents()
     {
@@ -40,8 +84,8 @@ public class ClientController : MonoBehaviour
     private void InitializeFSM()
     {
         ClientStateIdle<ClientStates> csIdle = new ClientStateIdle<ClientStates>(clientModel, clientView);
-        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTablePosition.ChairPosition);
-        csLeave = new ClientStateLeave<ClientStates>(clientModel, clientView, clientModel.ClientManager.OutsidePosition);
+        ClientStateGoChair<ClientStates> csChair = new ClientStateGoChair<ClientStates>(clientModel, clientView, () => clientModel.CurrentTable.ChairPosition);
+        csLeave = new ClientStateLeave<ClientStates>(this, clientModel, clientView, clientModel.ClientManager.OutsidePosition);
         csEating = new ClientStateEating<ClientStates>(clientModel, clientView, csLeave);
         ClientStateWaitingFood<ClientStates> csWaitingFood = new ClientStateWaitingFood<ClientStates>(clientModel, clientView, csLeave, csEating);
         ClientStateWaitingForChair<ClientStates> csWaitingForChair = new ClientStateWaitingForChair<ClientStates>(clientModel, clientView, csLeave);
@@ -111,10 +155,10 @@ public class ClientController : MonoBehaviour
 
     private bool QuestionCanGoToChair()
     {
-        if (clientModel.CurrentTablePosition != null)
+        if (clientModel.CurrentTable != null)
         {
-            // si esta fuera del rango de la silla (lejos de la silla)
-            if (Vector3.Distance(clientModel.CurrentTablePosition.ChairPosition.position, transform.position) > 2f)
+            // si no esta colisionando con el trigger de la silla
+            if (!onCollisionEnterWithTriggerChair)
             {
                 return true;
             }
@@ -132,7 +176,7 @@ public class ClientController : MonoBehaviour
             return true;
         }
 
-        if (clientModel.CurrentTablePosition != null)
+        if (clientModel.CurrentTable != null)
         {
             return true;
         }
@@ -141,12 +185,21 @@ public class ClientController : MonoBehaviour
     }
 
     private bool QuestionIsOutside()
-    {                                                            // si esta dentro del rango de OutsidePosition
+    {
+        // si esta cerca del Transform de OutsidePosition
         if (Vector3.Distance(clientModel.ClientManager.OutsidePosition.position, transform.position) <= 2f)
         {
             return true;
         }
 
         return false;
+    }
+
+    private void OnTriggerEnterWithChair(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Chair"))
+        {
+            onCollisionEnterWithTriggerChair = true;
+        }
     }
 }

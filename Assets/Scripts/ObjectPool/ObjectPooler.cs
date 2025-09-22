@@ -39,6 +39,15 @@ public class ObjectPooler : MonoBehaviour
         pool.Enqueue(obj);
     }
 
+    public System.Collections.IEnumerator ReturnObjectToPool(MonoBehaviour obj, float maxTime)
+    {
+        yield return new WaitForSeconds(maxTime);
+
+        obj.gameObject.transform.SetParent(transform);
+        obj.gameObject.SetActive(false);
+        pool.Enqueue(obj);
+    }
+
 
     private void InitializePool()
     {
