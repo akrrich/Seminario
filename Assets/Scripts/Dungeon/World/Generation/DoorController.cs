@@ -2,14 +2,10 @@ using UnityEngine;
 using TMPro;
 public class DoorController : MonoBehaviour,IInteractable
 {
-    [Header("Animation")]
-    [SerializeField] private Animator doorAnimator;
-    [SerializeField] private string openTrigger = "Open";
-    [SerializeField] private string closeTrigger = "Close";
-
-    [Header("VFX")]
-    [SerializeField] private ParticleSystem openVFX;
-    [SerializeField] private ParticleSystem closeVFX;
+    //[Header("Animation")]
+    //[SerializeField] private Animator doorAnimator;
+    //[SerializeField] private string openTrigger = "Open";
+    //[SerializeField] private string closeTrigger = "Close";
 
     [Header("Room Connection")]
     [SerializeField] private RoomController connectedRoom;
@@ -129,6 +125,6 @@ public class DoorController : MonoBehaviour,IInteractable
     private void GetComponents()
     {
         doorOutline = GetComponent<Outline>();
-        doorAnimator = GetComponent<Animator>();
+       //doorAnimator = GetComponent<Animator>();
     }
 }

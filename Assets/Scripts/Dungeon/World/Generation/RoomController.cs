@@ -56,7 +56,7 @@ public class RoomController : MonoBehaviour
 
         if (enemyHandler != null)
         {
-            enemyHandler.Initialize(config, layer);
+            enemyHandler.Initialize(layer);
             enemyHandler.OnAllEnemiesDefeated += HandleRoomCleared;
         }
 

@@ -27,7 +27,7 @@ public class EnemyHandler : MonoBehaviour
 
     public List<EnemySpawner> Spawners => spawners;
 
-    public void Initialize(RoomConfig config, int layer)
+    public void Initialize(int layer)
     {
         currentLayer = layer;
         aliveCount = 0;
