@@ -11,6 +11,9 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     [SerializeField] private bool testJoystickButtonsInDebugger;
 
+    public InputsData KeyboardInputs { get => keyboardInputs; }
+    public InputsData JoystickInputs { get => joystickInputs; } 
+
 
     void Awake()
     {
@@ -33,12 +36,12 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     public Vector2 MouseRotation()
     {
-        return new Vector2(Input.GetAxis("Mouse X") * keyboardInputs.SensitivityX, Input.GetAxis("Mouse Y") * keyboardInputs.SensitivityY);
+        return new Vector2(Input.GetAxis("Mouse X") * keyboardInputs.SensitivityX * 1f, Input.GetAxis("Mouse Y") * keyboardInputs.SensitivityY * 1f);
     }
 
     public Vector2 JoystickRotation()
     {
-        return new Vector2(joystick.x * joystickInputs.SensitivityX, joystick.y * joystickInputs.SensitivityY);
+        return new Vector2(joystick.x * joystickInputs.SensitivityX * 1f, joystick.y * joystickInputs.SensitivityY * 1f);
     }
 
 

@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLauncher
       objectReference: {fileID: 0}
+    - target: {fileID: 298159009186554183, guid: 61c2bc82568997f4b9eaef912d7a0bf5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2612127796447884817, guid: 61c2bc82568997f4b9eaef912d7a0bf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1291.3352
@@ -359,7 +363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79f423a18f836a64b98a4a095afe7a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonsMainMenu: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

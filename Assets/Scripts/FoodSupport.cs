@@ -49,7 +49,10 @@ public class FoodSupport : MonoBehaviour, IInteractable
 
     public void HideOutline()
     {
-        foreach (Transform child in playerController.PlayerView.Dish.transform)
+        currentFood = null;
+        OutlineManager.Instance.Hide(gameObject);
+
+        /*foreach (Transform child in playerController.PlayerView.Dish.transform)
         {
             // Verifica que las posiciones de la bandeja NO tengan hijos (COMIDAS)
             if (child.childCount < 1)
@@ -57,7 +60,7 @@ public class FoodSupport : MonoBehaviour, IInteractable
                 currentFood = null;
                 OutlineManager.Instance.Hide(gameObject);
             }
-        }
+        }*/
     }
 
     public void ShowMessage(TextMeshProUGUI interactionManagerUIText)
@@ -75,14 +78,16 @@ public class FoodSupport : MonoBehaviour, IInteractable
 
     public void HideMessage(TextMeshProUGUI interactionManagerUIText)
     {
-        foreach (Transform child in playerController.PlayerView.Dish.transform)
+        interactionManagerUIText.text = string.Empty;
+
+        /*foreach (Transform child in playerController.PlayerView.Dish.transform)
         {
             // Verifica que las posiciones de la bandeja NO tengan hijos (COMIDAS)
             if (child.childCount < 1)
             {
                 interactionManagerUIText.text = string.Empty;
             }
-        }
+        }*/
     }
 
 

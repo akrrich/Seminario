@@ -55,6 +55,7 @@ public class CookingManagerUI : MonoBehaviour
     void UpdateCookingManagerUI()
     {
         CheckLastSelectedButtonIfCookingPanelIsOpen();
+        CheckJoystickInputsToChangeSelection();
     }
 
     void OnDestroy()
@@ -316,6 +317,26 @@ public class CookingManagerUI : MonoBehaviour
         ColorBlock colorWhite = currentButton.colors;
         colorWhite.normalColor = new Color32(0xFF, 0xFF, 0xFF, 0xFF);
         currentButton.colors = colorWhite;
+    }
+
+    private void CheckJoystickInputsToChangeSelection()
+    {
+        if (EventSystem.current == null || EventSystem.current.currentSelectedGameObject == null) return;
+
+        GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
+
+        if (PlayerInputs.Instance.L1() || PlayerInputs.Instance.R1())
+        {
+            if (buttonsInformationReciepes.Any(b => b.gameObject == currentSelected))
+            {
+                onSetSelectedCurrentGameObject?.Invoke(buttonsIngredients[0].gameObject);
+            }
+
+            else if (buttonsIngredients.Any(b => b.gameObject == currentSelected))
+            {
+                onSetSelectedCurrentGameObject?.Invoke(buttonsInformationReciepes[0].gameObject);
+            }
+        }
     }
 }
 

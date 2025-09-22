@@ -18,8 +18,8 @@ public class MoneyManager : Singleton<MoneyManager>
     void Awake()
     {
         CreateSingleton(true);
-        InitializeCurrentMoney();
         SuscribeToMoneyTextEvent();
+        SuscribeToGameManagerEvent();
     }
 
 
@@ -27,6 +27,7 @@ public class MoneyManager : Singleton<MoneyManager>
     {
         currentMoney += amount;
         UpdateMoneyText();
+        SaveMoney();
         ShowFloatingMoneyText(amount, true);
     }
 
@@ -39,14 +40,19 @@ public class MoneyManager : Singleton<MoneyManager>
         }
 
         UpdateMoneyText();
+        SaveMoney();
         ShowFloatingMoneyText(amount, false);
     }
 
 
-    // No es necesario desuscribirse porque es singleton
     private void SuscribeToMoneyTextEvent()
     {
         MoneyManagerUI.OnTextGetComponent += GetComponentFromEvent;
+    }
+
+    private void SuscribeToGameManagerEvent()
+    {
+        GameManager.Instance.OnGameSessionStarted += OnInitializeCurrentMoney;
     }
 
     private void GetComponentFromEvent(TextMeshProUGUI moneyText)
@@ -56,9 +62,27 @@ public class MoneyManager : Singleton<MoneyManager>
         UpdateMoneyText();
     }
 
-    private void InitializeCurrentMoney()
+    private void OnInitializeCurrentMoney()
     {
-        currentMoney = moneyManagerData.InitializeCurrentMoneyValue;
+        if (GameManager.Instance.GameSessionType == GameSessionType.Load && SaveSystemManager.SaveExists())
+        {
+            SaveData data = SaveSystemManager.LoadGame();
+            currentMoney = data.money;
+            SaveMoney();
+        } 
+
+        else
+        {
+            currentMoney = moneyManagerData.InitializeCurrentMoneyValue;
+            SaveMoney();
+        }
+    }
+
+    private void SaveMoney()
+    {
+        SaveData data = SaveSystemManager.LoadGame();
+        data.money = currentMoney;
+        SaveSystemManager.SaveGame(data);
     }
 
     private void UpdateMoneyText()
