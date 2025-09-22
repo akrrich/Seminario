@@ -80,6 +80,8 @@ public class PauseManager : Singleton<PauseManager>
         buttonClick.Play();
         Time.timeScale = 1f;
 
+        SaveLastSceneName();
+        GameManager.Instance.GameSessionType = GameSessionType.None;
         string[] additiveScenes = { "MainMenuUI" };
         StartCoroutine(loadSceneAfterSeconds("MainMenu", additiveScenes));
     }
@@ -145,6 +147,13 @@ public class PauseManager : Singleton<PauseManager>
             buttonClick.Play();
             (isGamePaused ? (Action)HidePause : ShowPause)();
         }
+    }
+
+    private void SaveLastSceneName()
+    {
+        SaveData data = SaveSystemManager.LoadGame();
+        data.lastSceneName = ScenesManager.Instance.CurrentSceneName;
+        SaveSystemManager.SaveGame(data);
     }
 
     private IEnumerator loadSceneAfterSeconds(string sceneName, string[] sceneNameAdditive)

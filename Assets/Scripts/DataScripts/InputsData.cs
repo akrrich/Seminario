@@ -36,6 +36,6 @@ public class InputsData : ScriptableObject
     public KeyCode Pause { get => pause; }
 
 
-    public float SensitivityX { get => sensitivityX; }
-    public float SensitivityY { get => sensitivityY; }
+    public float SensitivityX { get => sensitivityX; set => sensitivityX = value; }
+    public float SensitivityY { get => sensitivityY; set => sensitivityY = value; }
 }

@@ -67,7 +67,7 @@ public class BookManagerUI : Singleton<BookManagerUI>
 
     private IEnumerator FindPanelsInHierarchy()
     {
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(3);
 
         bookElementsUI = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<IBookableUI>().Where(p => ((MonoBehaviour)p).gameObject.scene.isLoaded).OrderBy(p => p.IndexPanel).ToList();
     }
