@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> buttonsMainMenu;
+    [SerializeField] private List<Button> buttonsMainMenu;
 
     [SerializeField] private GameObject panelSettings;
-
-    [SerializeField] private AudioSource buttonClick;
-    [SerializeField] private AudioSource buttonSelected;
 
     private static event Action<List<GameObject>> onSendButtonsToEventSystem;
     private static event Action onButtonSettingsClickToShowCorrectPanel;
@@ -27,13 +25,18 @@ public class MainMenu : MonoBehaviour
         InvokeEventToSendButtonsReferences();
     }
 
+    void Start()
+    {
+        InitializeLoadGameButtonIfLoadDataExists();
+    }
+
 
     // Funcion asignada a botones en la UI para setear el selected GameObject del EventSystem con Mouse
     public void SetButtonAsSelectedGameObjectIfHasBeenHover(int indexButton)
     {
         if (EventSystem.current != null)
         {
-            EventSystem.current.SetSelectedGameObject(buttonsMainMenu[indexButton]);
+            EventSystem.current.SetSelectedGameObject(buttonsMainMenu[indexButton].gameObject);
         }
     }
 
@@ -42,7 +45,7 @@ public class MainMenu : MonoBehaviour
     {
         if (!ignoreFirstButtonSelected)
         {
-            buttonSelected.Play();
+            AudioManager.Instance.PlaySFX("ButtonSelected");
             return;
         }
 
@@ -71,11 +74,11 @@ public class MainMenu : MonoBehaviour
     // Funcion asignada a boton en la UI
     public void ButtonSettings()
     {
-        buttonClick.Play();
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
 
         foreach (var button in buttonsMainMenu)
         {
-            button.SetActive(false);
+            button.gameObject.SetActive(false);
         }
 
         panelSettings.SetActive(true);
@@ -85,7 +88,7 @@ public class MainMenu : MonoBehaviour
     // Funcion asignada a boton en la UI
     public void ButtonCredits()
     {
-        buttonClick.Play();
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
     }
 
     // Funcion asignada a boton en la UI
@@ -98,26 +101,47 @@ public class MainMenu : MonoBehaviour
     // Funcion asignada a boton en la UI
     public void ButtonBack()
     {
-        buttonClick.Play();
+        ignoreFirstButtonSelected = true;
+
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
 
         foreach (var button in buttonsMainMenu)
         {
-            button.SetActive(true);
+            button.gameObject.SetActive(true);
         }
 
         panelSettings.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(buttonsMainMenu[2]);
+        EventSystem.current.SetSelectedGameObject(buttonsMainMenu[2].gameObject);
     }
 
 
     private void InvokeEventToSendButtonsReferences()
     {
-        onSendButtonsToEventSystem?.Invoke(buttonsMainMenu);
+        onSendButtonsToEventSystem?.Invoke(buttonsMainMenu.ConvertAll(b => b.gameObject));
+    }
+
+    private void InitializeLoadGameButtonIfLoadDataExists()
+    {
+        if (!SaveSystemManager.SaveExists())
+        {
+            buttonsMainMenu[1].gameObject.SetActive(false);
+
+            Navigation nav0 = buttonsMainMenu[0].navigation;
+            nav0.mode = Navigation.Mode.Explicit;
+            nav0.selectOnDown = buttonsMainMenu[2];
+            buttonsMainMenu[0].navigation = nav0;
+
+            // Ajusto la navegación de Settings (índice 2) para que vuelva hacia NewGame (índice 0)
+            Navigation nav2 = buttonsMainMenu[2].navigation;
+            nav2.mode = Navigation.Mode.Explicit;
+            nav2.selectOnUp = buttonsMainMenu[0];
+            buttonsMainMenu[2].navigation = nav2;
+        }
     }
 
     private IEnumerator LoadSceneAfterButtonClick()
     {
-        buttonClick.Play();
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
 
         if (GameManager.Instance.GameSessionType == GameSessionType.Load && SaveSystemManager.SaveExists())
         {

@@ -3,26 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PauseManager : Singleton<PauseManager>
 {
-    [SerializeField] private AudioSource buttonClick;
-    [SerializeField] private AudioSource buttonSelected;
-
     [Header("UI")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingsPanel;
-    [SerializeField] private List<GameObject> buttonsPause;
+    [SerializeField] private List<Button> buttonsPause;
 
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
+    private static event Action onButtonSettingsClickToShowCorrectPanel;
 
     private static event Action onRestoreSelectedGameObject; // Este evento es generico y sirve para todos los paneles de UI que esten abiertos cuando se pausa el juego
 
     private bool isGamePaused = false;
+    private bool ignoreFirstSelectedSound = false;
 
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
     public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
+    public static Action OnButtonSettingsClickToShowCorrectPanel { get => onButtonSettingsClickToShowCorrectPanel; set => onButtonSettingsClickToShowCorrectPanel = value; }
 
     public static Action OnRestoreSelectedGameObject { get => onRestoreSelectedGameObject; set => onRestoreSelectedGameObject = value; }    
 
@@ -52,32 +53,38 @@ public class PauseManager : Singleton<PauseManager>
     {
         if (EventSystem.current != null)
         {
-            EventSystem.current.SetSelectedGameObject(buttonsPause[indexButton]);
+            EventSystem.current.SetSelectedGameObject(buttonsPause[indexButton].gameObject);
         }
     }
 
     // Funcion asignada a botones en la UI para reproducir el sonido selected
     public void PlayAudioButtonSelectedWhenChangeSelectedGameObjectExceptFirstTime()
     {
-        buttonSelected.Play();
+        if (!ignoreFirstSelectedSound)
+        {
+            AudioManager.Instance.PlaySFX("ButtonSelected");
+            return;
+        }
+
+        ignoreFirstSelectedSound = false;
     }
 
     // Funciones asignadas a botones de la UI
     public void ButtonResume()
     {
-        buttonClick.Play();
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
         HidePause();
     }
 
     public void ButtonSettings()
     {
-        buttonClick.Play();
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
         ShowSettings();
     }
 
     public void ButtonMainMenu()
     {
-        buttonClick.Play();
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
         Time.timeScale = 1f;
 
         SaveLastSceneName();
@@ -88,13 +95,14 @@ public class PauseManager : Singleton<PauseManager>
 
     public void ButtonExit()
     {
-        buttonClick.Play();
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
         StartCoroutine(ExitGameAfterSeconds());
     }
 
     public void ButtonBack()
     {
-        buttonClick.Play();
+        ignoreFirstSelectedSound = true;
+        AudioManager.Instance.PlaySFX("ButtonClickWell");
         HideSettings();
     }
 
@@ -111,7 +119,12 @@ public class PauseManager : Singleton<PauseManager>
 
     private void ShowPause()
     {
-        onSetSelectedCurrentGameObject?.Invoke(buttonsPause[0]);
+        foreach (var button in buttonsPause)
+        {
+            button.gameObject.SetActive(true);
+        }
+
+        onSetSelectedCurrentGameObject?.Invoke(buttonsPause[0].gameObject);
         Time.timeScale = 0f;
         isGamePaused = true;
         pausePanel.SetActive(true);
@@ -132,19 +145,31 @@ public class PauseManager : Singleton<PauseManager>
 
     private void ShowSettings()
     {
+        foreach (var button in buttonsPause)
+        {
+            button.gameObject.SetActive(false);
+        }
+
         settingsPanel.SetActive(true);
+        onButtonSettingsClickToShowCorrectPanel?.Invoke();
     }
 
     private void HideSettings()
     {
+        foreach (var button in buttonsPause)
+        {
+            button.gameObject.SetActive(true);
+        }
+
         settingsPanel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(buttonsPause[1].gameObject);
     }
 
     private void EnabledOrDisabledPausePanel()
     {
         if (PlayerInputs.Instance.Pause())
         {
-            buttonClick.Play();
+            AudioManager.Instance.PlaySFX("ButtonClickWell");
             (isGamePaused ? (Action)HidePause : ShowPause)();
         }
     }
