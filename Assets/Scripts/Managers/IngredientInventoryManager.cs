@@ -119,8 +119,6 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
                     var stock = ingredientData.InitializeStock;
                     ingredientInventory[type] = stock;
                 }
-
-                return;
             }
 
             else
@@ -133,6 +131,8 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
                 }
             }
         }
+
+        SaveInventory();
     }
 
     private void SaveInventory()
