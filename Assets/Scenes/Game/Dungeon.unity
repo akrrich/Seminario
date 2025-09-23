@@ -1852,7 +1852,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: WeaponAnchor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 192060867222265429, guid: 6be7ba1e6d6486f4d94f64b301c89930, type: 3}
     m_RemovedGameObjects:
     - {fileID: 1183691308403942056, guid: 6be7ba1e6d6486f4d94f64b301c89930, type: 3}
     m_AddedGameObjects: []
@@ -2081,8 +2082,6 @@ MonoBehaviour:
   - {fileID: 913185241}
   - {fileID: 1826940057}
   - {fileID: 1686524457}
-  rooms:
-  - {fileID: 5106748181100989354}
   startSpawnPoint: {fileID: 1887289745}
   historyLimit: 3
   totalRooms: 18
@@ -14458,17 +14457,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6079069351531706623, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
   m_PrefabInstance: {fileID: 5106748181100989352}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5106748181100989354 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5006444599766533303, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
-  m_PrefabInstance: {fileID: 5106748181100989352}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c5afe12662a934796de9cda2bc9d19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5106748181100989355 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5080969011622476001, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
