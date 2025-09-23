@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyFactory: {fileID: 5653556251869384128}
   statScaler: {fileID: 6781351402847274416}
-  spawnTableData: {fileID: 0}
+  spawnTableData: {fileID: 11400000, guid: 81fa1d47c1244674496dbe2303d025e8, type: 2}
   spawnPoints: []
 --- !u!114 &6781351402847274416
 MonoBehaviour:
