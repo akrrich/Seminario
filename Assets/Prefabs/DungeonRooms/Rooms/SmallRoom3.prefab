@@ -12844,9 +12844,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 32002b2f4f914c9428ed71ea458b6777, type: 2}
-  enemyHandler: {fileID: 0}
-  lootHandler: {fileID: 0}
-  trapHandler: {fileID: 0}
+  enemyHandler: {fileID: 1121486265534821834}
+  lootHandler: {fileID: 7038139261149574431}
+  trapHandler: {fileID: 4649795490693772558}
   entryDoor: {fileID: 0}
   exitDoors: []
   roomSpawnPoint: {fileID: 0}
