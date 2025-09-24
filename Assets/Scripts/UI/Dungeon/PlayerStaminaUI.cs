@@ -9,7 +9,7 @@ public class PlayerStaminaUI : MonoBehaviour
     [SerializeField] private float duration = 0.3f; // Duración de la transición
 
     private Coroutine staminaCoroutine;
-    private void OnEnable()
+    private void Awake()
     {
         // Suscribirse al evento estático
         PlayerDungeonHUD.OnStaminaChanged += UpdateStaminaUI;

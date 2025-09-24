@@ -10,9 +10,6 @@ public class DungeonManager : Singleton<DungeonManager>
     [SerializeField] private List<Transform> roomPrefabsList;     // 8 disponibles
     [SerializeField] private List<Transform> hallwayPrefabsList;  // 4 disponibles
 
-    [Header("Dungeon Settings")]
-    [SerializeField] private List<RoomController> rooms;
-
     [Header("Run Settings")]
     [SerializeField] private Transform startSpawnPoint;
     [SerializeField] private int historyLimit = 2;

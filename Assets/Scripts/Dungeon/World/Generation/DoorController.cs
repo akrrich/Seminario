@@ -8,7 +8,6 @@ public class DoorController : MonoBehaviour,IInteractable
     //[SerializeField] private string closeTrigger = "Close";
 
     [Header("Room Connection")]
-    [SerializeField] private RoomController connectedRoom;
     [SerializeField] private bool isExitDoor = true;
     [SerializeField] private bool isFirstDoor = false;
 
