@@ -868,17 +868,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1974906467}
     m_Modifications:
-    - target: {fileID: 1542908580730080722, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
-      propertyPath: m_Name
-      value: SpawnerSmall2
-      objectReference: {fileID: 0}
     - target: {fileID: 1921313575417905825, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
       propertyPath: m_Name
       value: SmallRoom2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1938365568299039785, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
-      propertyPath: m_Name
-      value: Enter Spawnpoint Room 2
       objectReference: {fileID: 0}
     - target: {fileID: 3809728799881283133, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -920,14 +912,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5232511180372278323, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.263
-      objectReference: {fileID: 0}
-    - target: {fileID: 6466529202734893960, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
-      propertyPath: spawnTableData
-      value: 
-      objectReference: {fileID: 11400000, guid: 81fa1d47c1244674496dbe2303d025e8, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14288,7 +14272,7 @@ PrefabInstance:
     - target: {fileID: 13238500874200899, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: 'trapPrefabs.Array.data[0]'
       value: 
-      objectReference: {fileID: 5106748181100989356}
+      objectReference: {fileID: 0}
     - target: {fileID: 13238500874200899, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: trapSpawnpoints.Array.size
       value: 2
@@ -14409,11 +14393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3fec6fa4972b14dae6ce5908057c3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &5106748181100989356 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5819345504646456515, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
-  m_PrefabInstance: {fileID: 5106748181100989352}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5106748181100989357 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8700148879602492668, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
