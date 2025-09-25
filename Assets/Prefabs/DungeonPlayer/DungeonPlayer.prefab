@@ -630,7 +630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 6515142177530854106}
-  duration: 0.01
+  duration: 0.5
   magnitude: 0.5
   zoomAmount: 0.05
 --- !u!114 &2311310904376503321

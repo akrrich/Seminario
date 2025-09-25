@@ -872,6 +872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmallRoom2
       objectReference: {fileID: 0}
+    - target: {fileID: 3755589667571193282, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: lootMultiplierPerLayer
+      value: 2.52
+      objectReference: {fileID: 0}
     - target: {fileID: 3809728799881283133, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -54.990154
@@ -912,6 +916,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4200912619901498306, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: trapPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4200912619901498306, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: 'trapPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4123466818715722823, guid: 7b26193914233294596035c944a8e2c9, type: 3}
+    - target: {fileID: 5285339135782042609, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462105092035641538, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6502590780756404668, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8049701658501769743, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939401720756667359, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -920,11 +952,6 @@ PrefabInstance:
 --- !u!4 &522659240 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3809728799881283133, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
-  m_PrefabInstance: {fileID: 522659239}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &522659241 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5232511180372278323, guid: 6931f98c4dc56cc4fae913871cabb1bc, type: 3}
   m_PrefabInstance: {fileID: 522659239}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &539594323
@@ -1134,6 +1161,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmallRoom3
       objectReference: {fileID: 0}
+    - target: {fileID: 4649795490693772558, guid: 359159b06cc576844b83cd7416f70872, type: 3}
+      propertyPath: trapPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649795490693772558, guid: 359159b06cc576844b83cd7416f70872, type: 3}
+      propertyPath: 'trapPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 4123466818715722823, guid: 7b26193914233294596035c944a8e2c9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1350,7 +1385,7 @@ MonoBehaviour:
   - id: Small Room 1
     point: {fileID: 1014251166}
   - id: Small Room 2
-    point: {fileID: 522659241}
+    point: {fileID: 0}
   - id: Small Room 3
     point: {fileID: 595308629}
   - id: Aisle A
@@ -14342,7 +14377,11 @@ PrefabInstance:
     - target: {fileID: 13238500874200899, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: 'trapPrefabs.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4123466818715722823, guid: 7b26193914233294596035c944a8e2c9, type: 3}
+    - target: {fileID: 13238500874200899, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
+      propertyPath: 'trapPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 4123466818715722823, guid: 7b26193914233294596035c944a8e2c9, type: 3}
     - target: {fileID: 13238500874200899, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: trapSpawnpoints.Array.size
       value: 2
@@ -14355,6 +14394,10 @@ PrefabInstance:
       propertyPath: 'trapSpawnpoints.Array.data[1]'
       value: 
       objectReference: {fileID: 5106748181100989357}
+    - target: {fileID: 539955351709934070, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -48.71
+      objectReference: {fileID: 0}
     - target: {fileID: 916278765821916983, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: m_Name
       value: SpawnerSmall1
@@ -14418,6 +14461,10 @@ PrefabInstance:
     - target: {fileID: 6079069351531706623, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743035837445008084, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6743035837445008084, guid: 1a24183d6fb2b0b4eb92b6b1a15c5b2e, type: 3}
       propertyPath: spawners.Array.size
