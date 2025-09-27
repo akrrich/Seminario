@@ -18,10 +18,16 @@ MonoBehaviour:
     maxAmount: 1
     probability: 0.5
     minLayer: 1
-    maxLayer: 5
+    maxLayer: 7
   - lootName: Rare Ingredient
     minAmount: 1
     maxAmount: 1
     probability: 0.2
     minLayer: 1
-    maxLayer: 5
+    maxLayer: 7
+  - lootName: Teeth
+    minAmount: 1
+    maxAmount: 15
+    probability: 0.3
+    minLayer: 1
+    maxLayer: 7

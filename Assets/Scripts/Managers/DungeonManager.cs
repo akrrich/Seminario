@@ -7,16 +7,16 @@ public class DungeonManager : Singleton<DungeonManager>
     [SerializeField] private Transform player;
 
     [Header("Dungeon Pools")]
-    [SerializeField] private List<Transform> roomPrefabsList;     // 8 disponibles
-    [SerializeField] private List<Transform> hallwayPrefabsList;  // 4 disponibles
+    [SerializeField] private List<Transform> roomTransformList;     // 8 disponibles
+    [SerializeField] private List<Transform> hallwayTransformList;  // 4 disponibles
 
     [Header("Run Settings")]
     [SerializeField] private Transform startSpawnPoint;
     [SerializeField] private int historyLimit = 2;
     [SerializeField] private int totalRooms = 18;
 
-    private Dictionary<string, Transform> roomPrefabs = new();
-    private Dictionary<string, Transform> hallwayPrefabs = new();
+    private Dictionary<string, Transform> roomRefs = new();
+    private Dictionary<string, Transform> hallwayRefs = new();
     private List<Transform> runSequence = new();
 
     private int currentRoomIndex = 0;
@@ -130,14 +130,14 @@ public class DungeonManager : Singleton<DungeonManager>
 
     private void InitializeDictionaries()
     {
-        roomPrefabs.Clear();
-        hallwayPrefabs.Clear();
+        roomRefs.Clear();
+        hallwayRefs.Clear();
 
-        for (int i = 0; i < roomPrefabsList.Count; i++)
-            roomPrefabs.Add("Room_" + i, roomPrefabsList[i]);
+        for (int i = 0; i < roomTransformList.Count; i++)
+            roomRefs.Add("Room_" + i, roomTransformList[i]);
 
-        for (int i = 0; i < hallwayPrefabsList.Count; i++)
-            hallwayPrefabs.Add("Hallway_" + i, hallwayPrefabsList[i]);
+        for (int i = 0; i < hallwayTransformList.Count; i++)
+            hallwayRefs.Add("Hallway_" + i, hallwayTransformList[i]);
     }
 
     private void GenerateRunSequence()
@@ -150,14 +150,14 @@ public class DungeonManager : Singleton<DungeonManager>
         for (int i = 0; i < totalRooms; i++)
         {
             // --- Habitación ---
-            var room = GetRandomFromDict(roomPrefabs, recentRooms);
+            var room = GetRandomFromDict(roomRefs, recentRooms);
             runSequence.Add(room);
             AddToHistory(recentRooms, room);
 
             // --- Pasillo ---
             if (i < totalRooms - 1)
             {
-                var hallway = GetRandomFromDict(hallwayPrefabs, recentHallways);
+                var hallway = GetRandomFromDict(hallwayRefs, recentHallways);
                 runSequence.Add(hallway);
                 AddToHistory(recentHallways, hallway);
             }

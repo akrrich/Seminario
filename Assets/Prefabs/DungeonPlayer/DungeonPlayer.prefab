@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 420065052561587980}
   - component: {fileID: 8416608708383242395}
   - component: {fileID: 7430384004465307063}
+  - component: {fileID: 2542256071473105741}
   m_Layer: 7
   m_Name: DungeonPlayer
   m_TagString: Player
@@ -328,6 +329,20 @@ MonoBehaviour:
   lerpSpeed: 12
   useOffsetFallback: 0
   loweredOffset: {x: 0, y: -2.85, z: -0.1}
+--- !u!114 &2542256071473105741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422702052002452655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c47b18f0919dbd44f8545ac07c44c47f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallThreshold: -10
+  saveFrequency: 0.5
 --- !u!1 &449254278659169392
 GameObject:
   m_ObjectHideFlags: 0

@@ -119,18 +119,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2066860163767535631}
     m_Modifications:
-    - target: {fileID: 619305014450971977, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_text
-      value: Bicurious_George
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443273811739617517, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: eb7d56ed5ca3d0243ac18aca84456326, type: 3}
     - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_text
       value: Ashe
@@ -138,6 +126,10 @@ PrefabInstance:
     - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_fontSize
       value: 33.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 1128350449854743436, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -149,6 +141,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1128350449854743436, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1128350449854743436, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2882445530360635198, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
@@ -209,6 +205,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6922718796119873083, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922718796119873083, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7208366404144078563, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
@@ -303,6 +303,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: af27e4c52ae46c34cb76f812615b8b5e, type: 3}
+    - target: {fileID: 619305014450971977, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_text
+      value: Bicurious_George
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443273811739617517, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: eb7d56ed5ca3d0243ac18aca84456326, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -321,30 +333,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2066860163767535631}
     m_Modifications:
-    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_text
-      value: Slop_Lobster
-      objectReference: {fileID: 0}
-    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_fontColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_fontColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443273811739617517, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 14caa9b323ff5784ba19f37c4f831197, type: 3}
     - target: {fileID: 136265536744309606, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -352,6 +340,10 @@ PrefabInstance:
     - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_text
       value: Slop_Lobster
+      objectReference: {fileID: 0}
+    - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 1128350449854743436, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -411,6 +403,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6922718796119873083, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922718796119873083, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7208366404144078563, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
@@ -505,6 +501,30 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 58d6106235176d94b81dd074c8a73472, type: 3}
+    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_text
+      value: Slop_Lobster
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649488886811418718, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443273811739617517, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 14caa9b323ff5784ba19f37c4f831197, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -534,6 +554,10 @@ PrefabInstance:
     - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_fontSize
       value: 33.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 1128350449854743436, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -717,10 +741,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2066860163767535631}
     m_Modifications:
-    - target: {fileID: 7443273811739617517, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: d6b85c8ce861a474092aa5beeddb0ebf, type: 3}
     - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_text
       value: Antzzz
@@ -728,6 +748,10 @@ PrefabInstance:
     - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_fontSize
       value: 33.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 467765026718247195, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 1128350449854743436, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -787,6 +811,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6922718796119873083, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922718796119873083, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7208366404144078563, guid: e24621f18c5e08f4aad4e041ac80601d, type: 3}
@@ -881,6 +909,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 00edb5cba672e9c4c8aa4c52378c595d, type: 3}
+    - target: {fileID: 7443273811739617517, guid: 2b2b8323522649b49a9cd0620bf5681d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d6b85c8ce861a474092aa5beeddb0ebf, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

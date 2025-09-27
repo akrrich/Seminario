@@ -37,6 +37,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     private Transform orientation;
     private Rigidbody rb;
     private CombatHandler combatHandler;
+    private SafetyPoint safetyPoint;
 
     [SerializeField] private bool debugLogs = true;
     private bool wasRunning = false;
@@ -253,6 +254,7 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         playerHealth = GetComponent<PlayerHealth>();
         combatHandler = GetComponent<CombatHandler>();
         playerStamina = GetComponent<PlayerStamina>();
+        safetyPoint = GetComponent<SafetyPoint>();
         orientation = transform.Find("Orientation");
         rb.freezeRotation = true;
 
@@ -269,10 +271,10 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     {
       isTeleportPannelOpened = true;
     }
-#endregion
+    #endregion
 
-#region Gizmos
-private void OnDrawGizmosSelected()
+    #region Gizmos
+    private void OnDrawGizmosSelected()
     {
         if (!showGroundGizmo) return;
 

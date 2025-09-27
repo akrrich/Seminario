@@ -467,7 +467,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.01, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 885139863319516323}
@@ -551,7 +551,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clientsFoodPreferencesData: {fileID: 11400000, guid: 63714c0a58552cf47b4421e96a70b638, type: 2}
-  favoritesFoodTypes: 0000000001000000020000000300000004000000
 --- !u!114 &7928818473667244909
 MonoBehaviour:
   m_ObjectHideFlags: 0
