@@ -15,7 +15,7 @@ public class EnemyHandler : MonoBehaviour
     [SerializeField] private int totalRounds = 3;
 
     [Tooltip("Número base de enemigos en la primera ronda. Cada ronda multiplica este número por el índice de ronda. Ejemplo: base = 4 --> ronda 1 = 4, ronda 2 = 8, ronda 3 = 12.")]
-    [SerializeField] private int basePerRound = 4;  // 4, 8, 12...
+    [SerializeField] private int basePerRound = 2;  // 4, 8, 12...
 
     public event Action OnAllEnemiesDefeated;
 
@@ -71,7 +71,16 @@ public class EnemyHandler : MonoBehaviour
         for (int round = 1; round <= totalRounds; round++)
         {
             currentRound = round;
-            int toSpawn = basePerRound;
+
+            int toSpawn = basePerRound * round;
+
+            int layerBonus = currentLayer / 3;
+            toSpawn += layerBonus;
+
+            if (toSpawn <= 0) toSpawn = 1; 
+
+            Debug.Log($"[EnemyHandler] Iniciando Ronda {round}. Enemigos a spawnear: {toSpawn}");
+
             yield return SpawnRound(toSpawn);
 
             yield return new WaitUntil(() => aliveCount <= 0);

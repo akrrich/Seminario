@@ -164,14 +164,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaRunCostPerSecond: 5
   speed: 0
-  walkSpeed: 5
+  walkSpeed: 4.46
   runSpeed: 1000
   acceleration: 20
   deceleration: 10
   airMultiplier: 5
   groundDrag: 0
   jumpForce: 7
-  currentWeaponDamage: 5
+  currentWeaponDamage: 25
   attackCooldown: 1
   groundCheckDistance: 1.05
   groundLayer:

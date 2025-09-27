@@ -71,11 +71,13 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     private void Awake()
     {
         GetComponents();
-        PlayerDungeonHUD.OnShowTeleportConfirm += TeleportMessageToggle;
+        PlayerDungeonHUD.OnShowTeleportConfirm += TeleportMessageShow;
+        PlayerDungeonHUD.OnHideTeleportConfirm += HideTeleportMessage;
     }
     private void OnDestroy()
     {
-        PlayerDungeonHUD.OnShowTeleportConfirm -= TeleportMessageToggle;
+        PlayerDungeonHUD.OnShowTeleportConfirm -= TeleportMessageShow;
+        PlayerDungeonHUD.OnHideTeleportConfirm -= HideTeleportMessage;
     }
     private void FixedUpdate()
     {
@@ -103,6 +105,12 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
     public void SetInvulnerable(bool value) => IsInvulnerable = value;
 
     public PlayerStamina GetStaminaManager() => playerStamina;
+
+    public void SetTeleportPanel(bool value)
+    {
+        isTeleportPannelOpened = value;
+        rb.velocity = Vector3.zero;
+    }
     #endregion
 
     #region Inputs & Movimiento
@@ -267,9 +275,14 @@ public class PlayerDungeonModel : MonoBehaviour, IDamageable
         }
     }
 
-    private void TeleportMessageToggle(string nada)
+    private void TeleportMessageShow(string nada)
     {
-      isTeleportPannelOpened = true;
+        SetTeleportPanel(true);
+    }
+    private void HideTeleportMessage()
+    {
+        isTeleportPannelOpened = false;
+        if (debugLogs) Debug.Log("[Teleport] Panel cerrado");
     }
     #endregion
 
