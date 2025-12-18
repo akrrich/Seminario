@@ -173,14 +173,14 @@ public class AdministratingManagerUI : MonoBehaviour
     private void HandleTavernOpened()
     {
         localTavernState = true;
-        startTavernSwitch.SetSelected(true);  
-        startTavernSwitch.LockSwitch();        
+        startTavernSwitch.SetSelected(true);
+        startTavernSwitch.LockSwitch();
     }
     private void HandleTavernClosed()
     {
         localTavernState = false;
-        startTavernSwitch.SetSelected(false);  
-        startTavernSwitch.UnlockSwitch();      
+        startTavernSwitch.SetSelected(false);
+        startTavernSwitch.UnlockSwitch();
     }
     public void ButtonExit()
     {
@@ -263,7 +263,7 @@ public class AdministratingManagerUI : MonoBehaviour
             return;
 
         AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
-        if(confirmationText != null) confirmationText.text = $"Are you sure you want to spend <color=yellow>${data.Cost}</color> to buy this upgrade";
+        if (confirmationText != null) confirmationText.text = $"Are you sure you want to spend <color=yellow>${data.Cost}</color> to buy this upgrade";
 
         // Mostrar panel de confirmación y asignar la acción a realizar si presiona YES
         if (confirmationPanel != null)
@@ -377,12 +377,12 @@ public class AdministratingManagerUI : MonoBehaviour
     private void HandlePlayerEnterAdmin()
     {
         AudioManager.Instance.PlayOneShotSFX("Admin/Cook/Pause");
-        
+
         PrepareInitialUIState();
         PreRefreshUI();
 
         SetupInitialTab();
-        
+
         panelAnimator?.AnimateIn();
     }
 
@@ -426,9 +426,9 @@ public class AdministratingManagerUI : MonoBehaviour
                 ShowCurrentZoneInformation(nextIndex);
         }
 
-       if (tabGroup.CurrentSelectedButton != null)
+        if (tabGroup.CurrentSelectedButton != null)
             onSetSelectedCurrentGameObject?.Invoke(tabGroup.CurrentSelectedButton.gameObject);
- 
+
         if (startTavernSwitch != null)
         {
             localTavernState = TabernManager.Instance.IsTabernOpen;

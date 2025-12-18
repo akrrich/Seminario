@@ -22,7 +22,7 @@ public class Upgrades3 : MonoBehaviour, IUpgradable
         {
             foreach (var debris in debris) // Desbloquear escombros
             {
-                debris.gameObject.SetActive(false);
+                debris.gameObject.SetActive(!debris.gameObject.activeSelf);
             }
         }
 

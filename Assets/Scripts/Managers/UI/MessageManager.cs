@@ -110,7 +110,6 @@ public class MessageManager : MonoBehaviour
             idleTweenId = LeanTween.scale(text.rectTransform, Vector3.one * 1.05f, 0.6f)
                 .setEaseInOutSine()
                 .setLoopPingPong()
-                .setIgnoreTimeScale(true)
                 .id;
         }
     }
@@ -151,12 +150,10 @@ public class MessageManager : MonoBehaviour
         messagePanel.transform.localScale = Vector3.zero;
 
         LeanTween.move(messageRect, initialPos, animTime)
-            .setEaseOutBack()
-            .setIgnoreTimeScale(true);
+            .setEaseOutBack();
 
         LeanTween.scale(messagePanel, Vector3.one, animTime)
-            .setEaseOutBack()
-            .setIgnoreTimeScale(true);
+            .setEaseOutBack();
 
         StartIdleAnim();
         autoHideCoroutine = StartCoroutine(AutoHide());
@@ -164,7 +161,7 @@ public class MessageManager : MonoBehaviour
 
     private void HideMessage()
     {
-       if (messagePanel == null || !messagePanel.activeSelf) return;
+        if (messagePanel == null || !messagePanel.activeSelf) return;
 
         StopIdleAnim();
         if (autoHideCoroutine != null)
@@ -175,12 +172,10 @@ public class MessageManager : MonoBehaviour
         Vector2 targetPos = initialPos + new Vector2(0, verticalOffset);
 
         LeanTween.move(messageRect, targetPos, 0.25f)
-             .setEaseInBack()
-             .setIgnoreTimeScale(true);
+             .setEaseInBack();
 
         LeanTween.scale(messagePanel, Vector3.zero, 0.25f)
             .setEaseInBack()
-            .setIgnoreTimeScale(true)
             .setOnComplete(() =>
             {
                 if (messagePanel != null)
@@ -207,7 +202,6 @@ public class MessageManager : MonoBehaviour
         LeanTween.cancel(allUpgradesPanel);
         LeanTween.scale(allUpgradesPanel, Vector3.one, 0.3f)
             .setFrom(Vector3.zero)
-            .setEaseOutBack()
-            .setIgnoreTimeScale(true);
+            .setEaseOutBack();
     }
 }
