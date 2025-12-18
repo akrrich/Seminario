@@ -39,14 +39,12 @@ public class AdminUIAppear : MonoBehaviour
 
         LeanTween.cancel(gameObject);
 
-        OnAnimateInStart?.Invoke();
+        rectTransform.anchoredPosition = hiddenPosition;
+        canvasGroup.alpha = 0f;
 
-        if (!gameObject.activeSelf)
-        {
-            gameObject.SetActive(true);
-            rectTransform.anchoredPosition = hiddenPosition;
-            canvasGroup.alpha = 0f;
-        }
+        gameObject.SetActive(true);
+
+        OnAnimateInStart?.Invoke();
 
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
