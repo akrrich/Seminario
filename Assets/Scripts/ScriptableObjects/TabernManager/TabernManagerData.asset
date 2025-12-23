@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: TabernManagerData
   m_EditorClassIdentifier: 
   timeSpeed: 1
-  maintenanceCostPerDay: 30
-  maintenanceCostPerTable: 7
+  maintenanceCostPerDay: 20
+  maintenanceCostPerTable: 5
   costPerBurntDish: 2
   costPerBrokenThings: 3
-  taxesPorcentajeFromIncomes: 10.5
+  taxesPorcentajeFromIncomes: 5

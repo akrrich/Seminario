@@ -47,6 +47,6 @@ MonoBehaviour:
   - FoodType: 9
     PaymentAmount: 130
   minimumPaymentAmount: 20
-  minSpawnTime: 10
-  maxSpawnTime: 15
-  delayToFreeTableWhenClientLeaveTable: 1.5
+  minSpawnTime: 3
+  maxSpawnTime: 55
+  delayToFreeTableWhenClientLeaveTable: 3

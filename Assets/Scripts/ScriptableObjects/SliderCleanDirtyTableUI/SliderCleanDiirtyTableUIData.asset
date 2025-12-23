@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: SliderCleanDiirtyTableUIData
   m_EditorClassIdentifier: 
   sliderType: 0
-  initializeMaxHoldTime: 5
+  initializeMaxHoldTime: 3
