@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private static event Action onHandOverFood;
     private static event Action onTakeOrder;
-    private static event Action<GameObject> onSupportFood;
+    private static event Action<Food> onSupportFood;
     private static event Action onThrowFoodToTrash;
 
     // Estos 2 eventos corresponden a entregar el plato una vez tomado el pedido
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     public static Action OnHandOverFood { get => onHandOverFood; set => onHandOverFood = value; }
     public static Action OnTakeOrder { get => onTakeOrder; set => onTakeOrder = value; }
-    public static Action<GameObject> OnSupportFood { get => onSupportFood; set => onSupportFood = value; }
+    public static Action<Food> OnSupportFood { get => onSupportFood; set => onSupportFood = value; }
     public static Action OnThrowFoodToTrash { get => onThrowFoodToTrash; set => onThrowFoodToTrash = value; }
 
     // Estos 2 eventos corresponden a Entregar el plato una vez tomado el pedido

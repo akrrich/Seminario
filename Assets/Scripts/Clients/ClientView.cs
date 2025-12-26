@@ -3,10 +3,6 @@ using System.Collections.Generic;
 
 public class ClientView : MonoBehaviour
 {
-    /// <summary>
-    /// Recordatorio: Buscar en la mesa el componente hijo Food y tomar el tiempo que tarda en cocinarse en ese instante de forma local
-    /// </summary>
-
     [SerializeField] private ClientsFoodPreferencesData clientsFoodPreferencesData;
 
     private ClientModel clientModel;

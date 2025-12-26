@@ -802,6 +802,11 @@ MonoBehaviour:
   - {fileID: 346120902796299198}
   foodSupports:
   - {fileID: 1672230555}
+--- !u!4 &314338849 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1965448667370522848, guid: 24709164769e8ee4e99ed86b1b0adc09, type: 3}
+  m_PrefabInstance: {fileID: 6687115788717070724}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &331262694
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,11 +1177,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66e0ac7c499c290468b7dd8a324536b7, type: 3}
---- !u!4 &462181109 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5779018448953093866, guid: 24709164769e8ee4e99ed86b1b0adc09, type: 3}
-  m_PrefabInstance: {fileID: 6687115788717070724}
-  m_PrefabAsset: {fileID: 0}
 --- !u!20 &523071811 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5043259274952322534, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
@@ -1760,6 +1760,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 23f0befa46748c646b278c0c510fc1fa, type: 2}
   - {fileID: 11400000, guid: 944dcb1978895b44ead695db26ef3457, type: 2}
   - {fileID: 11400000, guid: 9109b0ca099f6284c8c0bff1bf354376, type: 2}
+  - {fileID: 11400000, guid: 9892d7f26ce172743a4952df8feca104, type: 2}
+  - {fileID: 11400000, guid: 78273d58d5dbe9b4bb31a21f00a4d2e7, type: 2}
+  - {fileID: 11400000, guid: d69d14d6b9a13bc418014b22877ba59e, type: 2}
+  - {fileID: 11400000, guid: bbaa844d872dfda42a15fdeda84ed6d0, type: 2}
+  - {fileID: 11400000, guid: 2ff9e4d3b1b00654a87a1b2038e6a480, type: 2}
 --- !u!1 &1062425381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2050,7 +2055,9 @@ MonoBehaviour:
   - {fileID: 185447746}
   - {fileID: 1300811988}
   dishPositions:
-  - {fileID: 462181109}
+  - {fileID: 6687115788717070725}
+  - {fileID: 314338849}
+  - {fileID: 1433215455}
 --- !u!4 &1248561843 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7773234944060349184, guid: fabfc885625d6964b981e6a432d8a404, type: 3}
@@ -2466,6 +2473,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fa5d8c1ab4e94043b3fc77389fbed69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1433215455 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7912163618687628930, guid: 24709164769e8ee4e99ed86b1b0adc09, type: 3}
+  m_PrefabInstance: {fileID: 6687115788717070724}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1454275152
 GameObject:
   m_ObjectHideFlags: 0
@@ -3974,6 +3986,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24709164769e8ee4e99ed86b1b0adc09, type: 3}
+--- !u!4 &6687115788717070725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5921233965162236390, guid: 24709164769e8ee4e99ed86b1b0adc09, type: 3}
+  m_PrefabInstance: {fileID: 6687115788717070724}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7579311856893306655
 PrefabInstance:
   m_ObjectHideFlags: 0
