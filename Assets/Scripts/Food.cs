@@ -259,7 +259,7 @@ public class Food : MonoBehaviour, IInteractable
 
     private void SuscribeToPlayerControllerEvents()
     {
-        PlayerController.OnHandOverFood += HandOver;
+        //PlayerController.OnHandOverFood += HandOver;
         PlayerController.OnSupportFood += SupportFood;
         PlayerController.OnThrowFoodToTrash += ThrowFoodToTrash;
 
@@ -269,7 +269,7 @@ public class Food : MonoBehaviour, IInteractable
 
     private void UnsuscribeToPlayerControllerEvents()
     {
-        PlayerController.OnHandOverFood -= HandOver;
+        //PlayerController.OnHandOverFood -= HandOver;
         PlayerController.OnSupportFood -= SupportFood;
         PlayerController.OnThrowFoodToTrash -= ThrowFoodToTrash;
 
@@ -584,18 +584,49 @@ public class Food : MonoBehaviour, IInteractable
         }
     }
 
-    private void SupportFood(GameObject currentFood)
+    public void HandOverToTable(Table table)
     {
-        if (currentFood != null && isInPlayerDishPosition)
-        {
-            isInFoodSupport = true;
-            Vector3 biggerSize = nativeParentScaleSize * 1.5f;
-            SetGlobalScale(transform, biggerSize);
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            cookingManager.ReleaseDishPosition(playerDishPosition);
-            isInPlayerDishPosition = false;
-            EnabledOrDisablePhysics(foodMesh, true);
-        }
+        if (!isInPlayerDishPosition || !table.IsOccupied)
+            return;
+
+        AudioManager.Instance.PlayOneShotSFX("DeliverOrder");
+
+        Vector3 biggerSize = nativeParentScaleSize * 2f;
+        SetGlobalScale(transform, biggerSize);
+        transform.rotation = Quaternion.identity;
+
+        cookingManager.ReleaseDishPosition(playerDishPosition);
+
+        Transform freeSpot = table.DishPositions
+            .Find(t => t.childCount == 0);
+
+        if (freeSpot == null) return;
+
+        transform.SetParent(freeSpot);
+        transform.position = freeSpot.position + new Vector3(0, 0.1f, 0);
+
+        EnabledOrDisablePhysics(foodMesh, true);
+
+        isInPlayerDishPosition = false;
+        isServedInTable = true;
+
+        table.CurrentFoods.Add(this);
+
+        ClearTable();
+    }
+
+    private void SupportFood(Food currentFood)
+    {
+        if (currentFood != this) return;
+        if (!isInPlayerDishPosition) return;
+        
+        isInFoodSupport = true;
+        Vector3 biggerSize = nativeParentScaleSize * 1.5f;
+        SetGlobalScale(transform, biggerSize);
+        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        cookingManager.ReleaseDishPosition(playerDishPosition);
+        isInPlayerDishPosition = false;
+        EnabledOrDisablePhysics(foodMesh, true);
     }
 
     private void ThrowFoodToTrash()
