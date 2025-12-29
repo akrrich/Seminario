@@ -51137,7 +51137,7 @@ GameObject:
   - component: {fileID: 2262247547455598826}
   - component: {fileID: 2234713662476604558}
   - component: {fileID: 2244824916426637850}
-  - component: {fileID: 7725061657813603680}
+  - component: {fileID: 498508961381361821}
   m_Layer: 0
   m_Name: SM_Env_Dwarf_Stairs_Half_Wall_01
   m_TagString: Untagged
@@ -51212,8 +51212,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7725061657813603680
-BoxCollider:
+--- !u!64 &498508961381361821
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -51230,9 +51230,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.45434508, y: 1.2533035, z: 2.500121}
-  m_Center: {x: 0.084780574, y: 0.6266514, z: -1.2500622}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 21581e6a986432d4da740c6ba3c69204, type: 3}
 --- !u!1 &2268005755576779540
 GameObject:
   m_ObjectHideFlags: 0
@@ -191706,7 +191707,7 @@ GameObject:
   - component: {fileID: 7094366173441810246}
   - component: {fileID: 7066730996812249890}
   - component: {fileID: 7076956035047714230}
-  - component: {fileID: 3969377690012229421}
+  - component: {fileID: 4658809943362380591}
   m_Layer: 0
   m_Name: SM_Env_Dwarf_Stairs_Half_Wall_01 (2)
   m_TagString: Untagged
@@ -191781,8 +191782,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3969377690012229421
-BoxCollider:
+--- !u!64 &4658809943362380591
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -191799,9 +191800,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.45434508, y: 1.2533035, z: 2.5001216}
-  m_Center: {x: 0.084780574, y: 0.6266515, z: -1.250061}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 21581e6a986432d4da740c6ba3c69204, type: 3}
 --- !u!1 &7090304683592023079
 GameObject:
   m_ObjectHideFlags: 0
