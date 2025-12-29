@@ -326,7 +326,7 @@ MonoBehaviour:
   AdministrationZone: {fileID: 0}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 2049
+    m_Bits: 134145
   spawnPosition: 0
 --- !u!114 &8269491088820707220
 MonoBehaviour:
