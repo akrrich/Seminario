@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class AppearTutorialScreen : MonoBehaviour
 {
+    /// <summary>
+    /// Este script tira un error ya que esta adjunto a un gameobject en la jerarquia el cual se encuentra desactivado al momento de ejecutar algun metodo.
+    /// </summary>
+
     [Header("animation settings")]
     [SerializeField] private float animTime = 0.5f;
     [SerializeField] private LeanTweenType easeType = LeanTweenType.easeOutBack;

@@ -61,7 +61,7 @@ public class TabernManager : Singleton<TabernManager>
     void Start()
     {
         StartCoroutine(PlayCurrentTabernMusic("TabernClose"));
-        StartCoroutine(InvokeSaveSystemManagerLoadAllGameDataEvent());
+        //StartCoroutine(InvokeSaveSystemManagerLoadAllGameDataEvent());
     }
 
     void OnDestroy()

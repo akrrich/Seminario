@@ -358,7 +358,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Do you want to throw the food to the trash?
+  m_text: Are you sure you want to Throw ALL the food on your plate?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 26283ae9eee2ccc48aab686d4433b097, type: 2}
   m_sharedMaterial: {fileID: -1937028826873484698, guid: 5909a4574baeee6429b40b9ff9d251a2, type: 2}

@@ -3476,6 +3476,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2695200613810050839, guid: 71038c3c830dfea4fb10a6fcda38bcf3, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4316921306150641650, guid: 71038c3c830dfea4fb10a6fcda38bcf3, type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4316921306150641650, guid: 71038c3c830dfea4fb10a6fcda38bcf3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806512678830912497, guid: 71038c3c830dfea4fb10a6fcda38bcf3, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5140508095194014080, guid: 71038c3c830dfea4fb10a6fcda38bcf3, type: 3}
       propertyPath: m_Name
       value: Tables

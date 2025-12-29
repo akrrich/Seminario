@@ -59,7 +59,7 @@ public class Trash : MonoBehaviour, IInteractable
             if (child.childCount > 0)
             {
                 string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
-                message = $"Press" + keyText + "to throw food in the trash";
+                message = $"Press" + keyText + "to throw all the food from the tray in the trash";
                 return true;
             }
         }

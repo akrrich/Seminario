@@ -57,11 +57,11 @@ public class SaveSystemManager : Singleton<SaveSystemManager>
     {
         //if (!instance.saveSystemData.UseSaveSystem) return;
 
-        if (File.Exists(instance.path))
-        {
+        //if (File.Exists(instance.path))
+        //{
             File.Delete(instance.path);
             onDeleteAllGameData?.Invoke();
             Debug.Log("Save eliminado en: " + instance.path);
-        }   
+        //}   
     }
 }
