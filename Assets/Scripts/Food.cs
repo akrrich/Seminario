@@ -545,7 +545,7 @@ public class Food : MonoBehaviour, IInteractable
         }
     }
 
-    private void HandOver()
+    /*private void HandOver()
     {
         if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
         {
@@ -582,7 +582,7 @@ public class Food : MonoBehaviour, IInteractable
                 ClearTable();
             }
         }
-    }
+    }*/
 
     public void HandOverToTable(Table table)
     {

@@ -13,6 +13,7 @@ public class ClientManagerData : ScriptableObject
     [SerializeField] private float minSpawnTime;
     [SerializeField] private float maxSpawnTime;
     [SerializeField] private float delayToFreeTableWhenClientLeaveTable;
+    [SerializeField] private float delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs;
 
     [Serializable]
     public class ClientSpawnChance
@@ -33,6 +34,7 @@ public class ClientManagerData : ScriptableObject
     public float MinSpawnTime { get => minSpawnTime; }
     public float MaxSpawnTime { get => maxSpawnTime; }
     public float DelayToFreeTableWhenClientLeaveTable { get => delayToFreeTableWhenClientLeaveTable; }
+    public float DelayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs { get => delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs; }
 
 
     public ClientType? GetRandomClient(List<ClientType> availableClientTypes)

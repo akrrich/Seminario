@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +25,8 @@ public class ClientManager : Singleton<ClientManager>
 
     [SerializeField] private bool spawnDifferentTypeOfClients;
     [SerializeField] private bool spawnTheSameClient;
+
+    private bool isDelayInProgressToSpawnNewClients = false;
 
     public ClientManagerData ClientManagerData { get => clientManagerData; }
 
@@ -132,6 +133,8 @@ public class ClientManager : Singleton<ClientManager>
     {
         if (TabernManager.Instance.IsTabernOpen && GetIfAllWaitingChairPositionsAreOccupied())
         {
+            if (isDelayInProgressToSpawnNewClients) return;
+
             if (spawnTheSameClient)
             {
                 GetTheSameClientFromPool();
@@ -161,6 +164,11 @@ public class ClientManager : Singleton<ClientManager>
                     clientsInsideTabern.Add(newClient);
                     StartCoroutine(PlaySoundWhenClientEnterTabern());
                 }
+            }
+
+            if (!GetIfAllWaitingChairPositionsAreOccupied())
+            {
+                StartCoroutine(DelayToSpawnClientsAgain());
             }
 
             spawnTime = 0f;
@@ -261,6 +269,15 @@ public class ClientManager : Singleton<ClientManager>
         yield return new WaitForSeconds(4);
 
         AudioManager.Instance.PlayOneShotSFX("ClientEnterTabern");
+    }
+
+    private IEnumerator DelayToSpawnClientsAgain()
+    {
+        isDelayInProgressToSpawnNewClients = true;
+
+        yield return new WaitForSeconds(clientManagerData.DelayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs);
+
+        isDelayInProgressToSpawnNewClients = false;
     }
 }
 

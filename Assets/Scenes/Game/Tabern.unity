@@ -1447,8 +1447,6 @@ MonoBehaviour:
     priorityIndex: 0
   - position: {fileID: 2024253390}
     priorityIndex: 1
-  - position: {fileID: 1951631635}
-    priorityIndex: 2
   clientAbstractFactory: {fileID: 15424188}
   clientPools:
   - {fileID: 1574511859}
