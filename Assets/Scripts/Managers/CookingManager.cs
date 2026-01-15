@@ -61,13 +61,13 @@ public class CookingManager : Singleton<CookingManager>
         if (occupiedDishPositions.Contains(dishPosition))
         {
             occupiedDishPositions.Remove(dishPosition);
-            availableDishPositions.Enqueue(dishPosition);
+            //availableDishPositions.Enqueue(dishPosition);
         }
     }
 
     public Transform MoveFoodToDish(Food currentFood)
     {
-        Transform targetPosition = null;
+        /*Transform targetPosition = null;
 
         while (availableDishPositions.Count > 0)
         {
@@ -91,7 +91,26 @@ public class CookingManager : Singleton<CookingManager>
             currentFood.transform.position = targetPosition.position + new Vector3(0, offsetY, 0);
         }
 
-        return targetPosition;
+        return targetPosition;*/
+
+        for (int i = 0; i < dishPositions.Count; i++)
+        {
+            Transform targetPosition = dishPositions[i];
+
+            if (!occupiedDishPositions.Contains(targetPosition))
+            {
+                occupiedDishPositions.Add(targetPosition);
+
+                currentFood.transform.SetParent(targetPosition);
+                float offsetY = currentFood.GetBottomOffset() - 0.030f;
+                currentFood.transform.rotation = targetPosition.rotation;
+                currentFood.transform.position = targetPosition.position + new Vector3(0, offsetY, 0);
+
+                return targetPosition;
+            }
+        }
+
+        return null;
     }
 
 

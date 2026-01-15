@@ -2053,8 +2053,8 @@ MonoBehaviour:
   - {fileID: 185447746}
   - {fileID: 1300811988}
   dishPositions:
-  - {fileID: 6687115788717070725}
   - {fileID: 314338849}
+  - {fileID: 6687115788717070725}
   - {fileID: 1433215455}
 --- !u!4 &1248561843 stripped
 Transform:
