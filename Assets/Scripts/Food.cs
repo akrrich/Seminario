@@ -127,7 +127,7 @@ public class Food : MonoBehaviour, IInteractable
             currentAudioSource3D.Stop();
             AudioManager.Instance.PlayOneShotSFX("GrabFood");
 
-            transform.localScale = nativeParentScaleSize;
+            transform.localScale = nativeParentScaleSize / 1.5f; // Ajustar este valor
 
             if (cookingBarUI.gameObject.activeSelf)
             {
