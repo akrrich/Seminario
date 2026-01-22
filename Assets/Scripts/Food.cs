@@ -122,7 +122,7 @@ public class Food : MonoBehaviour, IInteractable
 
     public void Interact(bool isPressed)
     {
-        if (gameObject.activeSelf && !isServedInTable && !isInPlayerDishPosition && cookingManager.AvailableDishPositions.Count > 0)
+        if (gameObject.activeSelf && !isServedInTable && !isInPlayerDishPosition && cookingManager.OccupiedDishPositions.Count < cookingManager.DishPositions.Count)
         {
             currentAudioSource3D.Stop();
             AudioManager.Instance.PlayOneShotSFX("GrabFood");
@@ -157,7 +157,7 @@ public class Food : MonoBehaviour, IInteractable
 
     public void ShowOutline()
     {
-        if (cookingManager.AvailableDishPositions.Count > 0 && !isServedInTable && !isInPlayerDishPosition)
+        if (cookingManager.OccupiedDishPositions.Count < cookingManager.DishPositions.Count && !isServedInTable && !isInPlayerDishPosition)
         {
             OutlineManager.Instance.ShowWithDefaultColor(defaultMesh.root);
             OutlineManager.Instance.ShowWithDefaultColor(foodMesh.root);
@@ -176,7 +176,7 @@ public class Food : MonoBehaviour, IInteractable
 
     public bool TryGetInteractionMessage(out string message)
     {
-        if (cookingManager.AvailableDishPositions.Count > 0 && !isServedInTable && !isInPlayerDishPosition)
+        if (cookingManager.OccupiedDishPositions.Count < cookingManager.DishPositions.Count && !isServedInTable && !isInPlayerDishPosition)
         {
             string keyText = $"<color=yellow> {PlayerInputs.Instance.GetInteractInput()} </color>";
             message = $"Press {keyText} to grab food";

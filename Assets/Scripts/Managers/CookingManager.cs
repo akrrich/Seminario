@@ -19,10 +19,15 @@ public class CookingManager : Singleton<CookingManager>
 
     private Dictionary<FoodType, ObjectPooler> foodPoolDictionary = new Dictionary<FoodType, ObjectPooler>();
 
+    public CookingDeskUI CurrentDesk => currentDesk;
+
     public Transform CurrentStove { get => currentStove; }
+    public List<Transform> DishPositions { get => dishPositions; }
     public Queue<Transform> AvailableDishPositions { get => availableDishPositions; }
+    public HashSet<Transform> OccupiedDishPositions {  get => occupiedDishPositions; }
 
     public Action<int> OnAvailableStoveIndex { get => onAvailableStoveIndex; set => onAvailableStoveIndex = value; }
+
 
     void Awake()
     {
@@ -61,7 +66,7 @@ public class CookingManager : Singleton<CookingManager>
         if (occupiedDishPositions.Contains(dishPosition))
         {
             occupiedDishPositions.Remove(dishPosition);
-            //availableDishPositions.Enqueue(dishPosition);
+            availableDishPositions.Enqueue(dishPosition);
         }
     }
 

@@ -199,7 +199,7 @@ public class CookingManagerUI : Singleton<CookingManagerUI>
 
     public void CookSelectedIngredients()
     {
-        foreach (var recipe in IngredientInventoryManager.Instance.GetAllRecipes())
+        /*foreach (var recipe in IngredientInventoryManager.Instance.GetAllRecipes())
         {
             var recipeIngredients = recipe.Ingridients.Select(i => i.IngredientType).ToList();
 
@@ -220,7 +220,7 @@ public class CookingManagerUI : Singleton<CookingManagerUI>
                     onButtonGetFood?.Invoke(recipe.FoodType.ToString(), true);
                     Debug.Log($"Cocinaste {recipe.FoodType}!");
                     UpdateStocksForSelectedIngredients();
-                    UpdateStocksForSelectedIngredients();
+                    //UpdateStocksForSelectedIngredients();
                     DeselectAllIngredients();
                     return;
                 }
@@ -228,6 +228,52 @@ public class CookingManagerUI : Singleton<CookingManagerUI>
         }
 
         // --- Lógica de fallo ---
+        Debug.Log("No hay receta con esos ingredientes o no alcanza el stock.");
+        onButtonGetFood?.Invoke(string.Empty, false);
+        DeselectAllIngredients();*/
+
+        // Primero: ¿hay mesa de cocina activa y tiene stove libre?
+        if (CookingManager.Instance.CurrentDesk == null ||
+            !CookingManager.Instance.CurrentDesk.HasFreeStove())
+        {
+            Debug.Log("No hay stoves disponibles.");
+            onButtonGetFood?.Invoke(string.Empty, false);
+            DeselectAllIngredients();
+            return;
+        }
+
+        foreach (var recipe in IngredientInventoryManager.Instance.GetAllRecipes())
+        {
+            var recipeIngredients = recipe.Ingridients.Select(i => i.IngredientType).ToList();
+
+            if (selectedIngredients.Count == recipeIngredients.Count &&
+                !selectedIngredients.Except(recipeIngredients).Any())
+            {
+                bool canCraft = true;
+
+                foreach (var ing in recipe.Ingridients)
+                {
+                    if (IngredientInventoryManager.Instance.GetStock(ing.IngredientType) < ing.Amount)
+                    {
+                        canCraft = false;
+                        break;
+                    }
+                }
+
+                if (canCraft)
+                {
+                    // Ahora sí: todo es válido
+                    onButtonGetFood?.Invoke(recipe.FoodType.ToString(), true);
+                    Debug.Log($"Cocinaste {recipe.FoodType}!");
+
+                    UpdateStocksForSelectedIngredients(); // SOLO una vez
+                    DeselectAllIngredients();
+                    return;
+                }
+            }
+        }
+
+        // Si llegó acá, no hubo receta válida o no hubo stock
         Debug.Log("No hay receta con esos ingredientes o no alcanza el stock.");
         onButtonGetFood?.Invoke(string.Empty, false);
         DeselectAllIngredients();

@@ -361,7 +361,7 @@ MonoBehaviour:
   m_text: Are you sure you want to Throw ALL the food on your plate?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 26283ae9eee2ccc48aab686d4433b097, type: 2}
-  m_sharedMaterial: {fileID: -1937028826873484698, guid: 5909a4574baeee6429b40b9ff9d251a2, type: 2}
+  m_sharedMaterial: {fileID: 7728954799618007182, guid: 26283ae9eee2ccc48aab686d4433b097, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -518,7 +518,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963724382745963698, guid: 0fb64b0ea63dc2649a928ec87751c894, type: 3}
       propertyPath: m_text
-      value: YEs
+      value: Yes
       objectReference: {fileID: 0}
     - target: {fileID: 5295608378660587265, guid: 0fb64b0ea63dc2649a928ec87751c894, type: 3}
       propertyPath: m_SizeDelta.x
@@ -636,7 +636,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963724382745963698, guid: 0fb64b0ea63dc2649a928ec87751c894, type: 3}
       propertyPath: m_text
-      value: NO
+      value: 'No
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 5295608378660587265, guid: 0fb64b0ea63dc2649a928ec87751c894, type: 3}
       propertyPath: m_SizeDelta.x

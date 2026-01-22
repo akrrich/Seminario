@@ -102,13 +102,18 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
         if (occupiedStoves.Contains(stove))
         {
             occupiedStoves.Remove(stove);
-            //availableStoves.Enqueue(stove);
+            availableStoves.Enqueue(stove);
         }
     }
 
     public int StoveIndexOf(Transform stove)
     {
         return stovePositionsThisDesk.IndexOf(stove);
+    }
+
+    public bool HasFreeStove()
+    {
+        return occupiedStoves.Count < stovePositionsThisDesk.Count;
     }
 
 
