@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clientSpawnChances:
   - clientType: 2
-    probability: 71
+    probability: 19
   - clientType: 1
-    probability: 43
+    probability: 20
   - clientType: 0
-    probability: 57
-  - clientType: 3
-    probability: 35
-  - clientType: 4
-    probability: 25
-  - clientType: 5
     probability: 18
+  - clientType: 3
+    probability: 16
+  - clientType: 4
+    probability: 15
+  - clientType: 5
+    probability: 12
   foodPayments:
   - FoodType: 0
     PaymentAmount: 14
@@ -47,7 +47,7 @@ MonoBehaviour:
   - FoodType: 9
     PaymentAmount: 130
   minimumPaymentAmount: 20
-  minSpawnTime: 4.27
-  maxSpawnTime: 5.2
+  minSpawnTime: 3
+  maxSpawnTime: 30
   delayToFreeTableWhenClientLeaveTable: 3
-  delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs: 16.03
+  delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs: 30
