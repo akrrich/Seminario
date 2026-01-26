@@ -127,7 +127,7 @@ public class Food : MonoBehaviour, IInteractable
             currentAudioSource3D.Stop();
             AudioManager.Instance.PlayOneShotSFX("GrabFood");
 
-            transform.localScale = nativeParentScaleSize / 1.5f; // Ajustar este valor
+            transform.localScale = nativeParentScaleSize / 2f; // Ajustar este valor
 
             if (cookingBarUI.gameObject.activeSelf)
             {
@@ -591,7 +591,7 @@ public class Food : MonoBehaviour, IInteractable
 
         AudioManager.Instance.PlayOneShotSFX("DeliverOrder");
 
-        Vector3 biggerSize = nativeParentScaleSize * 2f;
+        Vector3 biggerSize = nativeParentScaleSize * 1.25f;
         SetGlobalScale(transform, biggerSize);
         transform.rotation = Quaternion.identity;
 
@@ -621,7 +621,7 @@ public class Food : MonoBehaviour, IInteractable
         if (!isInPlayerDishPosition) return;
         
         isInFoodSupport = true;
-        Vector3 biggerSize = nativeParentScaleSize * 1.5f;
+        Vector3 biggerSize = nativeParentScaleSize / 1f;
         SetGlobalScale(transform, biggerSize);
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         cookingManager.ReleaseDishPosition(playerDishPosition);
