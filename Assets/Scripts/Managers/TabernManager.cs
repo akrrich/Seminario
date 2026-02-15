@@ -21,6 +21,7 @@ public class TabernManager : Singleton<TabernManager>
 
     private bool isTabernOpen = false;
     private bool canOpenTabern = true;
+    public static event System.Action<bool> OnTabernStateChanged;
 
     private const int OPEN_HOUR = 8;
     private const float DAY_DURATION_MINUTES = 16f * 60f;
@@ -50,6 +51,8 @@ public class TabernManager : Singleton<TabernManager>
         SuscribeToSaveSystemManagerEvents();
         StartCoroutine(InitializeDayText());
         StartCoroutine(FindDailyCostAnim());
+        canOpenTabern = true;
+        isTabernOpen = false;
     }
 
     // Simulacion de Update
@@ -115,6 +118,16 @@ public class TabernManager : Singleton<TabernManager>
             "</color>) = <color=" + netColor + ">$" + finalAmount.ToString("0") + "</color>";
     }
 
+    public void StartNewDay()
+    {
+        currentDay++;
+        canOpenTabern = true;
+        isTabernOpen = false;
+
+        currentMinute = 0f;
+
+        OnTabernStateChanged?.Invoke(false);
+    }
 
     private void SubscribeToUpdateManagerEvent()
     {
@@ -180,6 +193,8 @@ public class TabernManager : Singleton<TabernManager>
             canOpenTabern = false;
             isTabernOpen = true;
 
+            OnTabernStateChanged?.Invoke(true);
+
             currentMinute = 0f;
             TabernManagerUI.instance.TabernStatusText.text = "Tabern is open";
 
@@ -191,13 +206,16 @@ public class TabernManager : Singleton<TabernManager>
     public void SetIsTabernClosed()
     {
         isTabernOpen = false;
+        canOpenTabern = false;
+
+        OnTabernStateChanged?.Invoke(false);
+        
         currentMinute = DAY_DURATION_MINUTES;
         TabernManagerUI.instance.TabernCurrentTimeText.text = "24 : 00";
         TabernManagerUI.instance.TabernStatusText.text = "Tabern is closed";
 
         StartCoroutine(PlayCurrentTabernMusic("TabernClose"));
         AdministratingManagerUI.OnSetSelectedCurrentGameObject?.Invoke(null);
-        AdministratingManagerUI.OnStartTabern?.Invoke();
 
         bool canTrigger = TutorialListener.Instance != null && TutorialListener.instance.TryTriggerManualTutorial(TutorialType.Bed);
         if (canTrigger)

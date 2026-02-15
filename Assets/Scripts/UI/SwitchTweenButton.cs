@@ -63,32 +63,37 @@ public class SwitchTweenButton : GenericTweenButton
     }
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (IsLocked)
+        var tabern = TabernManager.Instance;
+
+        //  CASO: está cerrado y no se puede abrir (fin del día)
+        if (!isSelected && !tabern.CanOpenTabern)
         {
             PlayRejectAnimation();
-            AudioManager.Instance?.PlayOneShotSFX("ButtonClickWrong");
-            MessagePopUp.Show("Tavern is closed. You need to go to Bed");
+            AudioManager.Instance.PlayOneShotSFX("ButtonClickWrong");
+            MessagePopUp.Show("You must go to sleep first.");
             return;
         }
 
-        if (isSelected && OnTryEnableCondition != null && !OnTryEnableCondition.Invoke())
+        //  CASO: está abierto y no se puede cerrar antes de 24
+        if (isSelected && tabern.IsTabernOpen)
         {
             PlayRejectAnimation();
-            AudioManager.Instance?.PlayOneShotSFX("ButtonClickWrong");
+            AudioManager.Instance.PlayOneShotSFX("ButtonClickWrong");
             MessagePopUp.Show("Can't close until 24:00");
             return;
         }
+
         base.OnPointerClick(eventData);
     }
     public void LockSwitch()
     {
         IsLocked = true;
-        SetInteractable(false);
+       // SetInteractable(false);
     }
     public void UnlockSwitch()
     {
         IsLocked = false;
-        SetInteractable(true);
+      //  SetInteractable(true);
     }
     private void PlayRejectAnimation()
     {
