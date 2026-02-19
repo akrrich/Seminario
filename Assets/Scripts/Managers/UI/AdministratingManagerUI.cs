@@ -56,7 +56,6 @@ public class AdministratingManagerUI : MonoBehaviour
     // --- Variables de control ---
     private GameObject lastSelectedButtonFromAdminPanel;
     private bool ignoreFirstButtonSelected = true;
-    private bool localTavernState = false;
 
     //--- Variable estaticas ---
     private static int lastTabIndex = -1;
@@ -149,38 +148,19 @@ public class AdministratingManagerUI : MonoBehaviour
     public void OnStartTavernSwitchClicked()
     {
         if (startTavernSwitch == null) return;
-
+        
         bool selected = startTavernSwitch.GetSelectedState();
+
         if (selected)
-        {
             OnStartTabern?.Invoke();
-            return;
-        }
-        if (TabernManager.Instance.IsTabernOpen)
-        {
-            // Cancel the visual change
-            startTavernSwitch.SetSelected(true);
-
-            AudioManager.Instance.PlayOneShotSFX("ButtonClickWrong");
-
-            MessagePopUp.Show("You can't close the tavern right now.");
-
-            return;
-        }
-
-        OnCloseTabern?.Invoke();
+        else
+            OnCloseTabern?.Invoke();
     }
-    private void HandleTavernOpened()
+    private void HandleTabernStateChanged(bool isOpen)
     {
-        localTavernState = true;
-        startTavernSwitch.SetSelected(true);
-        startTavernSwitch.LockSwitch();
-    }
-    private void HandleTavernClosed()
-    {
-        localTavernState = false;
-        startTavernSwitch.SetSelected(false);
-        startTavernSwitch.UnlockSwitch();
+        if (startTavernSwitch == null) return;
+
+        startTavernSwitch.SetSelected(isOpen);
     }
     public void ButtonExit()
     {
@@ -381,6 +361,8 @@ public class AdministratingManagerUI : MonoBehaviour
         PrepareInitialUIState();
         PreRefreshUI();
 
+        HandleTabernStateChanged(TabernManager.Instance.IsTabernOpen);
+
         SetupInitialTab();
 
         panelAnimator?.AnimateIn();
@@ -428,12 +410,6 @@ public class AdministratingManagerUI : MonoBehaviour
 
         if (tabGroup.CurrentSelectedButton != null)
             onSetSelectedCurrentGameObject?.Invoke(tabGroup.CurrentSelectedButton.gameObject);
-
-        if (startTavernSwitch != null)
-        {
-            localTavernState = TabernManager.Instance.IsTabernOpen;
-            startTavernSwitch.SetSelected(localTavernState);
-        }
     }
 
     private void PrepareInitialUIState()
@@ -481,13 +457,14 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private void SubscribeToTabernStateEvents()
     {
-        OnStartTabern += HandleTavernOpened;
-        OnCloseTabern += HandleTavernClosed;
+        TabernManager.OnTabernStateChanged += HandleTabernStateChanged;
+        
     }
+
+
     private void UnsubscribeToTabernStateEvents()
     {
-        OnStartTabern -= HandleTavernOpened;
-        OnCloseTabern -= HandleTavernClosed;
+        TabernManager.OnTabernStateChanged -= HandleTabernStateChanged;
     }
     private void GetComponents()
     {
