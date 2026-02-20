@@ -28,6 +28,16 @@ public class TabernManager : Singleton<TabernManager>
 
     public TabernManagerData TabernManagerData { get => tabernManagerData; }
 
+    public int CurrentHour
+    {
+        get
+        {
+            int hours = OPEN_HOUR + Mathf.FloorToInt(currentMinute / 60f);
+            if (hours >= 24) hours = 0;
+            return hours;
+        }
+    }
+
     public int CurrentDay { get => currentDay; set => currentDay = value; }
 
     public float OrderPaymentsAmount { get => orderPaymentsAmount; set => orderPaymentsAmount = value; }
@@ -51,14 +61,80 @@ public class TabernManager : Singleton<TabernManager>
         SuscribeToSaveSystemManagerEvents();
         StartCoroutine(InitializeDayText());
         StartCoroutine(FindDailyCostAnim());
-        canOpenTabern = true;
-        isTabernOpen = false;
     }
 
     // Simulacion de Update
     void UpdateTabernManager()
     {
         UpdateTimer();
+        CheckBankruptLoseCondition();
+    }
+
+    // Ajustar que cada 10 segundos tire el metodo dentro del Update y frenar los movimientos del player cuando muestra la pantalla de derrota.
+    public void CheckBankruptLoseCondition()
+    {
+        if (CurrentHour >= 8 && CurrentHour < 24)
+        {
+            bool cannotCookAnything =
+            !IngredientInventoryManager.Instance.CanCookAnyUnlockedRecipe();
+
+            bool cannotAffordAnyRecipe =
+                !CanAffordIngredientsForAnyRecipe();
+
+            bool noActiveDishes =
+                !CookingManager.Instance.HasActiveDishes();
+
+            print(cannotCookAnything);
+            print(cannotAffordAnyRecipe);
+            print(noActiveDishes);
+
+            if (cannotCookAnything && cannotAffordAnyRecipe && noActiveDishes)
+            {
+                if (LooseScreen.Instance.LooseText.text == "You ran out of money and resources, the tavern went bankrupt.") return;
+
+                LooseScreen.Instance.LooseText.text =
+                    "You ran out of money and resources, the tavern went bankrupt.";
+
+                LooseScreen.Instance.Show();
+            }
+        }
+    }
+
+    private bool CanAffordIngredientsForAnyRecipe()
+    {
+        var inventory = IngredientInventoryManager.Instance;
+        float currentMoney = MoneyManager.Instance.CurrentMoney;
+
+        var unlockedRecipes =
+            RecipeProgressManager.Instance.GetUnlockedRecipes();
+
+        foreach (var recipe in unlockedRecipes)
+        {
+            float totalCost = 0f;
+            bool needsIngredients = false;
+
+            foreach (var ing in recipe.Ingridients)
+            {
+                int currentStock =
+                    inventory.GetStock(ing.IngredientType);
+
+                int missingAmount =
+                    Mathf.Max(0, ing.Amount - currentStock);
+
+                if (missingAmount > 0)
+                    needsIngredients = true;
+
+                int ingredientPrice =
+                    inventory.GetPriceOfIngredient(ing.IngredientType);
+
+                totalCost += missingAmount * ingredientPrice;
+            }
+
+            if (needsIngredients && currentMoney >= totalCost)
+                return true;
+        }
+
+        return false;
     }
 
     void Start()
@@ -120,6 +196,7 @@ public class TabernManager : Singleton<TabernManager>
 
     public void StartNewDay()
     {
+        CookingManager.Instance.ReturnAllObjectsToPool();
         currentDay++;
         canOpenTabern = true;
         isTabernOpen = false;

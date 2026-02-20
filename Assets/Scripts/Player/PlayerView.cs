@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
-    private GameObject dish; // Representa la bandeja del player
+    [SerializeField] private GameObject dish; // Representa la bandeja del player
 
     private static event Action<bool> onEnabledDishForced;
 

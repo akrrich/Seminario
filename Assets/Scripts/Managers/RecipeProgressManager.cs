@@ -48,6 +48,19 @@ public class RecipeProgressManager : Singleton<RecipeProgressManager>
         }
     }
 
+    public List<FoodRecipeData> GetUnlockedRecipes()
+    {
+        List<FoodRecipeData> result = new List<FoodRecipeData>();
+
+        foreach (var recipe in allRecipes)
+        {
+            if (unlockedRecipes.Contains(recipe.FoodType))
+                result.Add(recipe);
+        }
+
+        return result;
+    }
+
 
     private void UnlockRecipesAndIngredientsByDefault()
     {
