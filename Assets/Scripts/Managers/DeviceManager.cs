@@ -18,7 +18,14 @@ public class DeviceManager : Singleton<DeviceManager>
 
     public Device CurrentDevice { get => currentDevice; set => currentDevice = value; }
 
-    public bool IsUIModeActive { get => isUIModeActive; set => isUIModeActive = value; }
+    public bool IsUIModeActive { 
+        get => isUIModeActive;
+        set
+        {
+            if (isUIModeActive == value) return;
+            isUIModeActive = value;
+        }
+    }
 
 
     void Awake()
