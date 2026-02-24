@@ -17,7 +17,6 @@ public class PauseAppear : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform rectTransform;
     public bool IsVisible => gameObject.activeSelf && canvasGroup.alpha > 0.01f;
-    private int animationToken = 0;
     private void Awake()
     {
         InitializeIfNeeded();
@@ -25,9 +24,8 @@ public class PauseAppear : MonoBehaviour
     public void AnimateIn()
     {
         InitializeIfNeeded();
-        CancelAllTweens();
 
-        int token = ++animationToken;
+        LeanTween.cancel(gameObject);
 
         OnAnimateInStart?.Invoke();
 
@@ -48,18 +46,13 @@ public class PauseAppear : MonoBehaviour
         LeanTween.scale(gameObject, Vector3.one, animationDuration)
                 .setEase(easeType)
                 .setIgnoreTimeScale(true)
-                .setOnComplete(() =>
-                {
-                    if (token == animationToken)
-                        OnInComplete();
-                });
+                .setOnComplete(OnInComplete);
     }
     public void AnimateOut()
     {
         InitializeIfNeeded();
-        CancelAllTweens();
 
-        int token = ++animationToken;
+        LeanTween.cancel(gameObject);
 
         OnAnimateOutStart?.Invoke();
 
@@ -73,11 +66,7 @@ public class PauseAppear : MonoBehaviour
         LeanTween.scale(gameObject, Vector3.zero, animationDuration)
               .setEase(easeType)
               .setIgnoreTimeScale(true)
-              .setOnComplete(() =>
-              {
-                  if (token == animationToken)  // mismo guard que AnimateIn
-                      OnOutComplete();
-              });
+              .setOnComplete(OnOutComplete);
     }
     private void OnInComplete()
     {
@@ -92,21 +81,15 @@ public class PauseAppear : MonoBehaviour
         canvasGroup.alpha = 0f;
         OnAnimateOutComplete.Invoke();
     }
-    private void CancelAllTweens()
-    {
-        LeanTween.cancel(gameObject);
-        if (canvasGroup != null)
-            LeanTween.cancel(canvasGroup.gameObject);
-    }
     private void InitializeIfNeeded()
     {
         if (rectTransform != null && canvasGroup != null) return;
-
+        
         canvasGroup = GetComponentInParent<CanvasGroup>();
         rectTransform = GetComponent<RectTransform>();
 
         if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
-
+        
         // Poner el estado inicial oculto
         rectTransform.localScale = Vector3.zero;
         canvasGroup.alpha = 0f;

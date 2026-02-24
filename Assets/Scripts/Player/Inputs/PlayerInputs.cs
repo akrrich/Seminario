@@ -12,7 +12,7 @@ public class PlayerInputs : Singleton<PlayerInputs>
     [SerializeField] private bool testJoystickButtonsInDebugger;
 
     public InputsData KeyboardInputs { get => keyboardInputs; }
-    public InputsData JoystickInputs { get => joystickInputs; }
+    public InputsData JoystickInputs { get => joystickInputs; } 
 
 
     void Awake()
@@ -75,11 +75,7 @@ public class PlayerInputs : Singleton<PlayerInputs>
     public KeyCode GetInteractInput() => DeviceManager.Instance.CurrentDevice == Device.Joystick ? instance.joystickInputs.Interact : instance.keyboardInputs.Interact;
     public bool BackPanelsUI()
     {
-        if (PauseManager.Instance != null && PauseManager.Instance.IsGamePaused)
-        {
-            return false;
-        }
-        if (hasWon) return false;
+        if(hasWon) return false;
         return Input.GetKeyDown(KeyCode.Escape);
     }
     // No es necesario desuscribirse porque es singleton

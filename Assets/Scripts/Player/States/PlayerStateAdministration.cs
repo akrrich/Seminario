@@ -8,7 +8,7 @@ public class PlayerStateAdministration<T> : State<T>
     private bool lastDishState;
 
     private T inputToIdle;
-    private bool ignoreInputThisFrame = false;
+
 
     public PlayerStateAdministration(T inputToIdle, PlayerModel playerModel, PlayerView playerView)
     {
@@ -21,21 +21,22 @@ public class PlayerStateAdministration<T> : State<T>
     public override void Enter()
     {
         base.Enter();
+        //Debug.Log("Administration");
+
         AdministratingManagerUI.OnExitAdmin += OnExitStateWhenClickOnButtonCloseUI;
-        PauseManager.OnGameUnPaused += OnGameUnPaused;
         PlayerView.OnEnterInAdministrationMode?.Invoke();
+
         playerModel.Rb.velocity = Vector3.zero;
         playerModel.CapsuleCollider.material = null;
+
         lastDishState = playerView.Dish.gameObject.activeSelf;
+
         playerView.ShowOrHideDish(false);
     }
 
     public override void Execute()
     {
         base.Execute();
-
-        if (PauseManager.Instance != null && PauseManager.Instance.IsGamePaused)
-            return;
 
         if (PlayerInputs.Instance.InteractPress() || PlayerInputs.Instance.BackPanelsUI())
         {
@@ -46,11 +47,12 @@ public class PlayerStateAdministration<T> : State<T>
     public override void Exit()
     {
         base.Exit();
+
         AdministratingManagerUI.OnExitAdmin -= OnExitStateWhenClickOnButtonCloseUI;
-        PauseManager.OnGameUnPaused -= OnGameUnPaused;
         PlayerView.OnExitInAdministrationMode?.Invoke();
         playerView.ShowOrHideDish(lastDishState);
         playerModel.IsAdministrating = false;
+
         playerModel.CapsuleCollider.material = playerModel.PhysicsMaterial;
     }
 
@@ -58,12 +60,8 @@ public class PlayerStateAdministration<T> : State<T>
     public void UnsuscribeToEventWhenPlayerDestroy()
     {
         AdministratingManagerUI.OnExitAdmin -= OnExitStateWhenClickOnButtonCloseUI;
-        PauseManager.OnGameUnPaused -= OnGameUnPaused;
     }
-    private void OnGameUnPaused()
-    {
-        ignoreInputThisFrame = true;
-    }
+
 
     private void OnExitStateWhenClickOnButtonCloseUI()
     {
