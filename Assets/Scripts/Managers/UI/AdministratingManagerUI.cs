@@ -56,6 +56,7 @@ public class AdministratingManagerUI : MonoBehaviour
     // --- Variables de control ---
     private GameObject lastSelectedButtonFromAdminPanel;
     private bool ignoreFirstButtonSelected = true;
+    private bool exitedDueToPause = false;
 
     //--- Variable estaticas ---
     private static int lastTabIndex = -1;
@@ -112,9 +113,11 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private void RestoreLastSelectedGameObjectIfGameWasPausedDuringAdministratingUI()
     {
+        Debug.Log($"RestoreLastSelected - panelAdministrating.activeSelf: {panelAdministrating?.activeSelf}");
         if (panelAdministrating == null) return; // Esta linea de codigo se agrego, porque sino cuando se volvio del game al mainmenu y luego se volvio a entrar al game, la pausa no anda y tira un error
         if (panelAdministrating.activeSelf)
         {
+            exitedDueToPause = false;
             ignoreFirstButtonSelected = true;
             DeviceManager.Instance.IsUIModeActive = true;
             onSetSelectedCurrentGameObject?.Invoke(lastSelectedButtonFromAdminPanel);
@@ -148,7 +151,7 @@ public class AdministratingManagerUI : MonoBehaviour
     public void OnStartTavernSwitchClicked()
     {
         if (startTavernSwitch == null) return;
-        
+
         bool selected = startTavernSwitch.GetSelectedState();
 
         if (selected)
@@ -370,8 +373,10 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private void HandlePlayerExitAdmin()
     {
+        Debug.Log($"HandlePlayerExitAdmin - panelAdministrating.activeSelf: {panelAdministrating.activeSelf} | IsGamePaused: {PauseManager.Instance.IsGamePaused}");
+
+
         AudioManager.Instance.PlayOneShotSFX("Admin/Cook/Pause");
-        DeviceManager.Instance.IsUIModeActive = false;
         onClearSelectedCurrentGameObject?.Invoke();
 
         if (tabGroup != null)
@@ -426,8 +431,13 @@ public class AdministratingManagerUI : MonoBehaviour
     {
         panelAnimator.OnAnimateOutComplete.AddListener(() =>
         {
+            Debug.Log($"OnAnimateOutComplete - IsGamePaused: {PauseManager.Instance.IsGamePaused}");
             panelIngredients.SetActive(false);
             panelUpgrades.SetActive(false);
+            if (!PauseManager.Instance.IsGamePaused)
+            {
+                DeviceManager.Instance.IsUIModeActive = false;
+            }
         });
     }
 
@@ -458,7 +468,7 @@ public class AdministratingManagerUI : MonoBehaviour
     private void SubscribeToTabernStateEvents()
     {
         TabernManager.OnTabernStateChanged += HandleTabernStateChanged;
-        
+
     }
 
 

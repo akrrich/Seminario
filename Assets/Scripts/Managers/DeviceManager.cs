@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,148 +6,139 @@ public enum Device
 {
     KeyboardMouse, Joystick
 }
-
+public enum UIModeSource
+{
+    Legacy,
+    Pause,
+    Administration,
+    Cooking,
+    TrashPanel,
+    Tutorial,
+    ResumeDay
+}
 public class DeviceManager : Singleton<DeviceManager>
 {
-    // El script funciona a la perfeccion el cursor, simplemente hay que correrlo en modo build para que se vea plasmado correctamente
-
+    [Header("Config")]
     [SerializeField] private DeviceManagerData deviceManagerData;
-
     private Device currentDevice;
 
-    private bool isUIModeActive = false; // Falso por defecto, se inicializa en ScenesManager y se setea cuando se quiere interactuar en la UI
+    private HashSet<UIModeSource> uiModeSources = new HashSet<UIModeSource>();
 
-    public Device CurrentDevice { get => currentDevice; set => currentDevice = value; }
-
-    public bool IsUIModeActive { 
+    private bool isUIModeActive;
+    public bool IsUIModeActive
+    {
         get => isUIModeActive;
         set
         {
-            if (isUIModeActive == value) return;
-            isUIModeActive = value;
+            if (value)
+                AddUIModeSource(UIModeSource.Legacy);
+            else
+                RemoveUIModeSource(UIModeSource.Legacy);
         }
     }
-
-
+    public Device CurrentDevice { get => currentDevice; set => currentDevice = value; }
     void Awake()
     {
         CreateSingleton(true);
-        SuscribeToUpdateManagerEvent();
+        SubscribeToUpdateManager();
     }
-
+    void OnDestroy()
+    {
+        UnsubscribeFromUpdateManager();
+    }
     // Simulacion de Update
     void UpdateDeviceManager()
     {
-        IsJoystickUsed();
-        IsMouseAndKeyboardUsed();
-        EnabledAndDisabledCursor();
+        DetectDevice();
+        RecalculateUIMode();
+        ApplyCursorState();
     }
 
 
-    private void SuscribeToUpdateManagerEvent()
+    private void SubscribeToUpdateManager()
     {
         UpdateManager.OnUpdateAllTime += UpdateDeviceManager;
     }
 
-    private void EnabledAndDisabledCursor()
+    private void UnsubscribeFromUpdateManager()
     {
-        if (deviceManagerData.UseCursorAllTime) return;
-
-        if (currentDevice == Device.Joystick)
+        UpdateManager.OnUpdateAllTime -= UpdateDeviceManager;
+    }
+    public void AddUIModeSource(UIModeSource source)
+    {
+        if (uiModeSources.Add(source))
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;   
-        }
-
-        else if (currentDevice == Device.KeyboardMouse)
-        {
-            if (isUIModeActive)
-            {
-                if (!Cursor.visible)
-                {
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                    InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(false);
-                }   
-            }
-
-            else
-            {
-                if (Cursor.visible)
-                {
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    InteractionManagerUI.Instance?.ShowOrHideCenterPointUI(true);
-                }   
-            }
+            // Solo recalcula si realmente cambió algo
+            RecalculateUIMode();
         }
     }
 
-    /// <summary>
-    /// Averiguar por el metodo Input.GetJoystickNames()
-    /// </summary>
-    private void IsJoystickUsed()
+    public void RemoveUIModeSource(UIModeSource source)
     {
-        /// Agregar este bloque de codigo en un futuro para el tema de la UI interactuable con joystick del libro
-        /*if (Mathf.Abs(Input.GetAxis("RightStickHorizontal")) > 0.1f)
+        if (uiModeSources.Remove(source))
         {
-            Debug.Log("Interactuo");
-        }*/
+            RecalculateUIMode();
+        }
+    }
 
-        for (int i = 0; i < 20; i++)
+    private void RecalculateUIMode()
+    {
+        isUIModeActive = uiModeSources.Count > 0;
+    }
+
+    private void ApplyCursorState()
+    {
+        if (deviceManagerData != null && deviceManagerData.UseCursorAllTime)
+            return;
+
+        if (isUIModeActive)
         {
-            if (Input.GetKey((KeyCode)((int)KeyCode.JoystickButton0 + i)))
+            if (!Cursor.visible || Cursor.lockState != CursorLockMode.None)
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+        }
+        else
+        {
+            if (Cursor.visible || Cursor.lockState != CursorLockMode.Locked)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+    }
+    private void DetectDevice()
+    {
+        // Detectar Gamepad (nuevo Input System)
+        if (Gamepad.current != null)
+        {
+            if (Gamepad.current.wasUpdatedThisFrame)
             {
                 currentDevice = Device.Joystick;
                 return;
             }
         }
 
-        Gamepad gamepad = Gamepad.current;
-        if (gamepad != null)
+        // Detectar Mouse movimiento
+        if (Mouse.current != null)
         {
-            if (gamepad.buttonSouth.isPressed || gamepad.leftStick.ReadValue().magnitude > 0.1f ||
-                gamepad.dpad.up.isPressed || gamepad.dpad.down.isPressed ||
-                gamepad.dpad.left.isPressed || gamepad.dpad.right.isPressed)
+            if (Mouse.current.delta.ReadValue() != Vector2.zero ||
+                Mouse.current.leftButton.wasPressedThisFrame)
             {
-                currentDevice = Device.Joystick;
+                currentDevice = Device.KeyboardMouse;
                 return;
             }
         }
 
-        if (Mathf.Abs(Input.GetAxis("LeftStickHorizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("LeftStickVertical")) > 0.1f)
+        // Detectar teclado
+        if (Keyboard.current != null)
         {
-            currentDevice = Device.Joystick;
-            return;
-        }
-    }
-
-    private void IsMouseAndKeyboardUsed()
-    {
-        if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
-        {
-            currentDevice = Device.KeyboardMouse;
-            return;
-        }
-
-        foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
-        {
-            if (key >= KeyCode.A && key <= KeyCode.Z ||        // Letras
-                key >= KeyCode.Alpha0 && key <= KeyCode.Alpha9 || // Números superiores
-                key >= KeyCode.Keypad0 && key <= KeyCode.Keypad9 || // Números del teclado numérico
-                key >= KeyCode.F1 && key <= KeyCode.F12 || // Teclas de función
-                key == KeyCode.Space || key == KeyCode.Return || key == KeyCode.Backspace || // Espacio, Enter, Borrar
-                key == KeyCode.Tab || key == KeyCode.Escape || key == KeyCode.LeftControl || key == KeyCode.RightControl ||
-                key == KeyCode.LeftShift || key == KeyCode.RightShift || key == KeyCode.LeftAlt || key == KeyCode.RightAlt ||
-                key == KeyCode.UpArrow || key == KeyCode.DownArrow || key == KeyCode.LeftArrow || key == KeyCode.RightArrow || // Flechas
-                key == KeyCode.BackQuote) // Tecla al lado del 1 (tilde)
+            if (Keyboard.current.anyKey.wasPressedThisFrame)
             {
-                if (Input.GetKeyDown(key))
-                {
-                    currentDevice = Device.KeyboardMouse;
-                    return;
-                }
+                currentDevice = Device.KeyboardMouse;
             }
         }
     }
+
 }

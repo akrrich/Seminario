@@ -15,12 +15,18 @@ public class InteractionManager : Singleton<InteractionManager>
         SuscribeToPlayerViewEvents();
         SuscribeToUpdateManagerEvent();
         SuscribeToScenesManagerEvent();
+        SuscribeToPauseManagerEvents();
+    }
+    private void OnDestroy()
+    {
+        UnsuscribeToPauseManagerEvents();
     }
 
     // Simulacion de Update
     void UpdateInteractionManager()
     {
         if (isPlayerInUI) return;
+        if (PauseManager.Instance == null || PauseManager.Instance.IsGamePaused) return;
         DetectTarget();
         InteractWithTarget();
     }
@@ -48,7 +54,15 @@ public class InteractionManager : Singleton<InteractionManager>
         ScenesManager.Instance.OnSceneLoadedEvent += OnCleanReferences;
         IngredientInventoryManagerUI.OnInventoryOpen += OnCleanReferences;
     }
+    private void SuscribeToPauseManagerEvents()
+    {
+        PauseManager.OnGamePaused += HandleGamePaused;
+    }
 
+    private void UnsuscribeToPauseManagerEvents()
+    {
+        PauseManager.OnGamePaused -= HandleGamePaused;
+    }
     private void OnCleanReferences()
     {
         if (currentTarget != null)
@@ -58,11 +72,19 @@ public class InteractionManager : Singleton<InteractionManager>
 
         currentTarget = null;
     }
+    private void HandleGamePaused()
+    {
+        if (currentTarget != null)
+        {
+            currentTarget.HideOutline();
+            currentTarget = null;
+        }
+    }
 
     private bool ShowCurrentTargetUI()
     {
         if (currentTarget == null || InteractionManagerUI.Instance == null) return false;
-       
+
         if (currentTarget.TryGetInteractionMessage(out string message))
         {
             currentTarget.ShowOutline();
