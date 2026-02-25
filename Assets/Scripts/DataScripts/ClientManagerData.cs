@@ -10,8 +10,10 @@ public class ClientManagerData : ScriptableObject
 
     [SerializeField] private int minimumPaymentAmount;
 
-    [SerializeField] private float minSpawnTime;
-    [SerializeField] private float maxSpawnTime;
+    [SerializeField] private float minSpawnNormalTime;
+    [SerializeField] private float maxSpawnNormalTime;
+    [SerializeField] private float minSpawnRushTime;
+    [SerializeField] private float maxSpawnRushTime;
     [SerializeField] private float delayToFreeTableWhenClientLeaveTable;
     [SerializeField] private float delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs;
 
@@ -31,8 +33,10 @@ public class ClientManagerData : ScriptableObject
 
     public int MinimumPaymentAmount { get => minimumPaymentAmount; }
 
-    public float MinSpawnTime { get => minSpawnTime; }
-    public float MaxSpawnTime { get => maxSpawnTime; }
+    public float MinSpawnNormalTime { get => minSpawnNormalTime; }
+    public float MaxSpawnNormalTime { get => maxSpawnNormalTime; }
+    public float MinSpawnRushTime { get => minSpawnRushTime; }
+    public float MaxSpawnRushTime { get => maxSpawnRushTime; }
     public float DelayToFreeTableWhenClientLeaveTable { get => delayToFreeTableWhenClientLeaveTable; }
     public float DelayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs { get => delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs; }
 

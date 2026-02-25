@@ -7,6 +7,7 @@ public class CookingManager : Singleton<CookingManager>
     [SerializeField] private AbstractFactory foodAbstractFactory;
     [SerializeField] private List<ObjectPooler> foodPools;
 
+    private PlayerView playerView;
     private CookingDeskUI currentDesk;
     private Transform currentStove;
 
@@ -35,6 +36,7 @@ public class CookingManager : Singleton<CookingManager>
         SuscribeToCookingManagerUIEvent();
         EnqueueDishPositions();
         InitializeFoodPoolDictionary();
+        playerView = FindAnyObjectByType<PlayerView>();
     }
 
     void OnDestroy()
@@ -54,6 +56,47 @@ public class CookingManager : Singleton<CookingManager>
         {
             foodPoolDictionary[foodType].ReturnObjectToPool(currentFood);
         }
+    }
+
+    public void ReturnAllObjectsToPool()
+    {
+        Food[] allFoods = FindObjectsByType<Food>(FindObjectsSortMode.None);
+
+        foreach (Food food in allFoods)
+        {
+            if (food.gameObject.activeSelf)
+            {
+                if (foodPoolDictionary.TryGetValue(food.FoodType, out ObjectPooler pool))
+                {
+                    pool.ReturnObjectToPool(food);
+                }
+            }
+        }
+    }
+
+    public bool HasActiveDishes()
+    {
+        foreach (Transform dishPosition in playerView.Dish.transform)
+        {
+            if (dishPosition.childCount > 0)
+            {
+                return true;
+            }
+        }
+
+        // 2?? Verificar si hay alguna Food activa en la escena
+        Food[] allFoods = FindObjectsByType<Food>(FindObjectsSortMode.None);
+
+        foreach (Food food in allFoods)
+        {
+            if (food.gameObject.activeSelf)
+            {
+                return true;
+            }
+        }
+
+        // 3?? No hay nada en ningún lado
+        return false;
     }
 
     public void ReleaseStovePosition(Transform stovePosition)

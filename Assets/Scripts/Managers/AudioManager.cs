@@ -39,6 +39,8 @@ public class AudioManager : Singleton<AudioManager>
 
     public void PlayOneShotSFX(string sfxName)
     {
+        if (ScenesManager.Instance.IsInLoadingScenePanel) return;
+
         if (!SFXDictionary.ContainsKey(sfxName))
         {
             Debug.LogWarning("SFX no encontrado: " + sfxName);

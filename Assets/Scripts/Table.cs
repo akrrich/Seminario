@@ -67,69 +67,11 @@ public class Table : MonoBehaviour, IInteractable
     public bool IsDirty { get => isDirty; }
 
 
-    private Food SelectFoodToDeliver(ClientView clientView)
-    {
-        FoodType requestedFood = clientView.CurrentSelectedFood;
-
-        List<Food> priorityA = new(); // Tipo correcto + Cooked
-        List<Food> priorityB = new(); // Tipo correcto + mal estado
-        List<Food> priorityC = new(); // Cualquier otra
-
-        foreach (Transform slot in playerController.PlayerView.Dish.transform)
-        {
-            if (slot.childCount == 0) continue;
-
-            Food food = slot.GetChild(0).GetComponent<Food>();
-            if (food == null) continue;
-
-            if (food.FoodType == requestedFood)
-            {
-                if (food.CurrentCookingState == CookingStates.Cooked)
-                    priorityA.Add(food);
-                else
-                    priorityB.Add(food);
-            }
-            else
-            {
-                priorityC.Add(food);
-            }
-        }
-
-        if (priorityA.Count > 0)
-            return priorityA[0];
-
-        if (priorityB.Count > 0)
-            return priorityB[0];
-
-        if (priorityC.Count > 0)
-            return priorityC[Random.Range(0, priorityC.Count)];
-
-        return null;
-    }
-
-    private void HandleHandOverFood()
-    {
-        if (auxiliarTable == null) return;
-
-        ClientView clientView = GetComponentInChildren<ClientView>();
-        if (clientView == null) return;
-
-        Food foodToDeliver = SelectFoodToDeliver(clientView);
-        if (foodToDeliver == null) return;
-
-        DeliverFood(foodToDeliver, clientView);
-    }
-
-    private void DeliverFood(Food food, ClientView clientView)
-    {
-        food.HandOverToTable(this);
-    }
-
     void Awake()
     {
         FindObjectsAndComponents();
         StartCoroutine(RegisterOutline());
-        PlayerController.OnHandOverFood += HandleHandOverFood;
+        //PlayerController.OnHandOverFood += HandleHandOverFood;
     }
 
     void OnEnable()
@@ -140,7 +82,7 @@ public class Table : MonoBehaviour, IInteractable
     void OnDestroy()
     {
         OutlineManager.Instance.Unregister(table);
-        PlayerController.OnHandOverFood -= HandleHandOverFood;
+        //PlayerController.OnHandOverFood -= HandleHandOverFood;
     }
 
 
@@ -206,7 +148,7 @@ public class Table : MonoBehaviour, IInteractable
 
     public void HideOutline()
     {
-        
+      
         OutlineManager.Instance.Hide(table);
         InteractionManagerUI.Instance.ModifyCenterPointUI(InteractionType.Normal);
 
@@ -351,3 +293,57 @@ public class Table : MonoBehaviour, IInteractable
         TablesManager.Instance.RegisterTableInListWhenActive(this);
     }
 }
+
+
+/*private Food SelectFoodToDeliver(ClientView clientView)
+    {
+        FoodType requestedFood = clientView.CurrentSelectedFood;
+
+        List<Food> priorityA = new(); // Tipo correcto + Cooked
+        List<Food> priorityB = new(); // Tipo correcto + mal estado
+        List<Food> priorityC = new(); // Cualquier otra
+
+        foreach (Transform slot in playerController.PlayerView.Dish.transform)
+        {
+            if (slot.childCount == 0) continue;
+
+            Food food = slot.GetChild(0).GetComponent<Food>();
+            if (food == null) continue;
+
+            if (food.FoodType == requestedFood)
+            {
+                if (food.CurrentCookingState == CookingStates.Cooked)
+                    priorityA.Add(food);
+                else
+                    priorityB.Add(food);
+            }
+            else
+            {
+                priorityC.Add(food);
+            }
+        }
+
+        if (priorityA.Count > 0)
+            return priorityA[0];
+
+        if (priorityB.Count > 0)
+            return priorityB[0];
+
+        if (priorityC.Count > 0)
+            return priorityC[Random.Range(0, priorityC.Count)];
+
+        return null;
+    }
+
+    private void HandleHandOverFood()
+    {
+        if (auxiliarTable == null) return;
+
+        ClientView clientView = GetComponentInChildren<ClientView>();
+        if (clientView == null) return;
+
+        Food foodToDeliver = SelectFoodToDeliver(clientView);
+        if (foodToDeliver == null) return;
+
+        foodToDeliver.HandOverToTable(this);
+    }*/

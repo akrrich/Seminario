@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -48,6 +49,8 @@ public class Food : MonoBehaviour, IInteractable
 
     [SerializeField] private FoodType foodType;
     private CookingStates currentCookingState;
+
+    private static bool isAnyFoodBeingDelivered = false;
 
     private float cookTimeCounter = 0f;
 
@@ -127,7 +130,7 @@ public class Food : MonoBehaviour, IInteractable
             currentAudioSource3D.Stop();
             AudioManager.Instance.PlayOneShotSFX("GrabFood");
 
-            transform.localScale = nativeParentScaleSize / 1.5f; // Ajustar este valor
+            transform.localScale = nativeParentScaleSize / 2f; // Ajustar este valor
 
             if (cookingBarUI.gameObject.activeSelf)
             {
@@ -259,7 +262,7 @@ public class Food : MonoBehaviour, IInteractable
 
     private void SuscribeToPlayerControllerEvents()
     {
-        //PlayerController.OnHandOverFood += HandOver;
+        PlayerController.OnHandOverFood += HandOver;
         PlayerController.OnSupportFood += SupportFood;
         PlayerController.OnThrowFoodToTrash += ThrowFoodToTrash;
 
@@ -269,7 +272,7 @@ public class Food : MonoBehaviour, IInteractable
 
     private void UnsuscribeToPlayerControllerEvents()
     {
-        //PlayerController.OnHandOverFood -= HandOver;
+        PlayerController.OnHandOverFood -= HandOver;
         PlayerController.OnSupportFood -= SupportFood;
         PlayerController.OnThrowFoodToTrash -= ThrowFoodToTrash;
 
@@ -545,59 +548,74 @@ public class Food : MonoBehaviour, IInteractable
         }
     }
 
-    /*private void HandOver()
+    private Food SelectFoodToDeliver(ClientView clientView)
     {
-        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
+        FoodType requestedFood = clientView.CurrentSelectedFood;
+
+        List<Food> priorityA = new(); // Tipo correcto + Cooked
+        List<Food> priorityB = new(); // Tipo correcto + mal estado
+        List<Food> priorityC = new(); // Cualquier otra
+
+        foreach (Transform slot in playerController.PlayerView.Dish.transform)
         {
-            AudioManager.Instance.PlayOneShotSFX("DeliverOrder");
+            if (slot.childCount == 0) continue;
 
-            Vector3 biggerSize = nativeParentScaleSize * 2f;
-            SetGlobalScale(transform, biggerSize);
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-            cookingManager.ReleaseDishPosition(playerDishPosition);
+            Food food = slot.GetChild(0).GetComponent<Food>();
+            if (food == null) continue;
 
-            Transform freeSpot = null;
-
-            foreach (Transform spot in currentTable.DishPositions)
+            if (food.FoodType == requestedFood)
             {
-                if (spot.childCount == 0)
-                {
-                    freeSpot = spot;
-                    break;
-                }
+                if (food.CurrentCookingState == CookingStates.Cooked)
+                    priorityA.Add(food);
+                else
+                    priorityB.Add(food);
             }
-
-            if (freeSpot != null)
+            else
             {
-                transform.SetParent(freeSpot);
-                transform.position = freeSpot.position + new Vector3(0, 0.1f, 0);
-
-                EnabledOrDisablePhysics(foodMesh, true);
-
-                isInPlayerDishPosition = false;
-                isServedInTable = true;
-
-                currentTable.CurrentFoods.Add(this);
-
-                ClearTable();
+                priorityC.Add(food);
             }
         }
-    }*/
 
-    public void HandOverToTable(Table table)
+        if (priorityA.Count > 0)
+            return priorityA[0];
+
+        if (priorityB.Count > 0)
+            return priorityB[0];
+
+        if (priorityC.Count > 0)
+            return priorityC[Random.Range(0, priorityC.Count)];
+
+        return null;
+    }
+
+    private void HandOver()
     {
-        if (!isInPlayerDishPosition || !table.IsOccupied)
-            return;
+        if (isAnyFoodBeingDelivered) return;
+        if (currentTable == null) return;
+        if (!isInPlayerDishPosition) return;
+        if (isInFoodSupport) return;
+        if (isServedInTable) return;
+
+        ClientView clientView = currentTable.GetComponentInChildren<ClientView>();
+        if (clientView == null) return;
+
+        Food foodToDeliver = SelectFoodToDeliver(clientView);
+        if (foodToDeliver != this) return;
+
+        isAnyFoodBeingDelivered = true;
+        StartCoroutine(ResetDeliverLock());
+
+        if (!isInPlayerDishPosition || !currentTable.IsOccupied) return;
 
         AudioManager.Instance.PlayOneShotSFX("DeliverOrder");
 
-        Vector3 biggerSize = nativeParentScaleSize * 2f;
+        Vector3 biggerSize = nativeParentScaleSize * 1.25f;
         SetGlobalScale(transform, biggerSize);
         transform.rotation = Quaternion.identity;
 
         cookingManager.ReleaseDishPosition(playerDishPosition);
 
-        Transform freeSpot = table.DishPositions
+        Transform freeSpot = currentTable.DishPositions
             .Find(t => t.childCount == 0);
 
         if (freeSpot == null) return;
@@ -610,9 +628,16 @@ public class Food : MonoBehaviour, IInteractable
         isInPlayerDishPosition = false;
         isServedInTable = true;
 
-        table.CurrentFoods.Add(this);
+        currentTable.CurrentFoods.Add(this);
 
         ClearTable();
+        StartCoroutine(ResetDeliverLock());
+    }
+
+    private IEnumerator ResetDeliverLock()
+    {
+        yield return null;
+        isAnyFoodBeingDelivered = false;
     }
 
     private void SupportFood(Food currentFood)
@@ -621,7 +646,7 @@ public class Food : MonoBehaviour, IInteractable
         if (!isInPlayerDishPosition) return;
         
         isInFoodSupport = true;
-        Vector3 biggerSize = nativeParentScaleSize * 1.5f;
+        Vector3 biggerSize = nativeParentScaleSize / 1f;
         SetGlobalScale(transform, biggerSize);
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         cookingManager.ReleaseDishPosition(playerDishPosition);
@@ -680,3 +705,43 @@ public class Food : MonoBehaviour, IInteractable
         canChangeCookingBarUIPosition = true;
     }
 }
+
+
+/*private void HandOver()
+    {
+        if (isInPlayerDishPosition && currentTable != null && currentTable.IsOccupied)
+        {
+            AudioManager.Instance.PlayOneShotSFX("DeliverOrder");
+
+            Vector3 biggerSize = nativeParentScaleSize * 2f;
+            SetGlobalScale(transform, biggerSize);
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            cookingManager.ReleaseDishPosition(playerDishPosition);
+
+            Transform freeSpot = null;
+
+            foreach (Transform spot in currentTable.DishPositions)
+            {
+                if (spot.childCount == 0)
+                {
+                    freeSpot = spot;
+                    break;
+                }
+            }
+
+            if (freeSpot != null)
+            {
+                transform.SetParent(freeSpot);
+                transform.position = freeSpot.position + new Vector3(0, 0.1f, 0);
+
+                EnabledOrDisablePhysics(foodMesh, true);
+
+                isInPlayerDishPosition = false;
+                isServedInTable = true;
+
+                currentTable.CurrentFoods.Add(this);
+
+                ClearTable();
+            }
+        }
+    }*/

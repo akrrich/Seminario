@@ -18,7 +18,14 @@ public class DeviceManager : Singleton<DeviceManager>
 
     public Device CurrentDevice { get => currentDevice; set => currentDevice = value; }
 
-    public bool IsUIModeActive { get => isUIModeActive; set => isUIModeActive = value; }
+    public bool IsUIModeActive { 
+        get => isUIModeActive;
+        set
+        {
+            if (isUIModeActive == value) return;
+            isUIModeActive = value;
+        }
+    }
 
 
     void Awake()
@@ -44,6 +51,11 @@ public class DeviceManager : Singleton<DeviceManager>
     private void EnabledAndDisabledCursor()
     {
         if (deviceManagerData.UseCursorAllTime) return;
+
+        if (ScenesManager.Instance.IsInLoadingScenePanel || ScenesManager.Instance.IsInExitGamePanel)
+        {
+            return;
+        }
 
         if (currentDevice == Device.Joystick)
         {

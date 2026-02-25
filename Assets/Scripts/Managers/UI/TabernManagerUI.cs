@@ -82,6 +82,7 @@ public class TabernManagerUI : Singleton<TabernManagerUI>
         PlayerView.OnEnterInAdministrationMode += OnDisableUI;
         PlayerView.OnEnterTutorial += OnDisableUI;
         PlayerView.OnEnterInResumeDay += OnDisableUI;
+        PlayerView.OnEnterInBankrupt += OnDisableUI;
 
         PlayerView.OnExitInCookMode += OnEnabledUI;
         PlayerView.OnExitInAdministrationMode += OnEnabledUI;
@@ -95,6 +96,7 @@ public class TabernManagerUI : Singleton<TabernManagerUI>
         PlayerView.OnEnterInAdministrationMode -= OnDisableUI;
         PlayerView.OnEnterTutorial -= OnDisableUI;
         PlayerView.OnEnterInResumeDay -= OnDisableUI;
+        PlayerView.OnEnterInBankrupt -= OnDisableUI;
 
         PlayerView.OnExitInCookMode -= OnEnabledUI;
         PlayerView.OnExitInAdministrationMode -= OnEnabledUI;
@@ -134,8 +136,8 @@ public class TabernManagerUI : Singleton<TabernManagerUI>
         TabernManager.Instance.BrokenThingsAmount = 0;
         TabernManager.Instance.PurchasedIngredientsAmount = 0;
 
-        TabernManager.Instance.CanOpenTabern = true;
-        TabernManager.Instance.CurrentDay++;
+        TabernManager.Instance.StartNewDay();
+
         tabernStatusText.text = "Tabern is closed";
         tabernCurrentTimeText.text = "08 : 00";
         currentDayText.text = "Day " + TabernManager.Instance.CurrentDay.ToString();

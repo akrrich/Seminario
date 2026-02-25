@@ -24,6 +24,9 @@ public class AdministratingManagerUI : MonoBehaviour
 
     [Header("Referencias (Panel Ingredients)")]
     [SerializeField] private GameObject ingredientButtonContainer;
+    [SerializeField] private GameObject firstUpgradeButtonContainer;
+    [SerializeField] private GameObject secondUpgradeButtonContainer;
+    [SerializeField] private GameObject thirdUpgradeButtonContainer;
 
     [Header("Referencias (Panel Upgrades)")]
     [SerializeField] private ConfirmationPanel confirmationPanel;
@@ -31,9 +34,9 @@ public class AdministratingManagerUI : MonoBehaviour
     [SerializeField] private Image currentImageUpgrade;
     [SerializeField] private TextMeshProUGUI textPriceCurrentUpgradeUnlock;
     [SerializeField] private TextMeshProUGUI textInformationCurrentUpgrade;
-    [SerializeField] private GameObject firstUpgradeButtonContainer;
-    [SerializeField] private GameObject secondUpgradeButtonContainer;
-    [SerializeField] private GameObject thirdUpgradeButtonContainer;
+
+
+
 
     [Header("Configuración Visual Upgrades")]
     [SerializeField] private Color unlockedUpgradeColor = Color.green;
@@ -80,6 +83,10 @@ public class AdministratingManagerUI : MonoBehaviour
         UnsubscribeToRecipeProgressEvents();
         UnsubscribeToTabernStateEvents();
 
+        if (panelAnimator != null)
+        {
+            panelAnimator.OnAnimateInComplete.RemoveListener(SetupInitialTab);
+        }
     }
 
     #region === Actualización y Gestión de Foco ===
@@ -358,7 +365,7 @@ public class AdministratingManagerUI : MonoBehaviour
                 ShowCurrentZoneInformation(0);
             }
         }
-        panelAdministrating.SetActive(true);
+       
     }
     #endregion
 
@@ -377,12 +384,10 @@ public class AdministratingManagerUI : MonoBehaviour
     private void HandlePlayerEnterAdmin()
     {
         AudioManager.Instance.PlayOneShotSFX("Admin/Cook/Pause");
-
+        panelAdministrating.SetActive(true);
         PrepareInitialUIState();
         PreRefreshUI();
-
         SetupInitialTab();
-
         panelAnimator?.AnimateIn();
     }
 
@@ -398,8 +403,6 @@ public class AdministratingManagerUI : MonoBehaviour
         panelAnimator?.AnimateOut();
         confirmationPanel.Hide();
     }
-
-
 
     private void SetupInitialTab()
     {
@@ -419,20 +422,25 @@ public class AdministratingManagerUI : MonoBehaviour
         tabGroup.SelectTabByIndex(indexToSelect);
         tabGroup.ForceShowCurrentTab();
 
-        if (indexToSelect == 2)
-        {
-            int nextIndex = GetNextAvailableUpgradeIndex();
-            if (nextIndex != -1)
-                ShowCurrentZoneInformation(nextIndex);
-        }
-
+        // Forzar selección visual del botón correcto
         if (tabGroup.CurrentSelectedButton != null)
+        {
             onSetSelectedCurrentGameObject?.Invoke(tabGroup.CurrentSelectedButton.gameObject);
+
+
+        }
 
         if (startTavernSwitch != null)
         {
             localTavernState = TabernManager.Instance.IsTabernOpen;
             startTavernSwitch.SetSelected(localTavernState);
+        }
+
+        if (indexToSelect == 2)
+        {
+            int nextIndex = GetNextAvailableUpgradeIndex();
+            if (nextIndex != -1)
+                ShowCurrentZoneInformation(nextIndex);
         }
     }
 
@@ -448,8 +456,10 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private void InitializeAnimatorEventBindings()
     {
-        panelAnimator.OnAnimateOutComplete.AddListener(() =>
+        panelAnimator.OnAnimateInComplete.AddListener(SetupInitialTab);
+        panelAnimator.OnAnimateOutStart.AddListener(() =>
         {
+            panelAdministrating.SetActive(false);
             panelIngredients.SetActive(false);
             panelUpgrades.SetActive(false);
         });
@@ -548,6 +558,6 @@ public class AdministratingManagerUI : MonoBehaviour
         }
 
     }
+}
 
     #endregion
-}

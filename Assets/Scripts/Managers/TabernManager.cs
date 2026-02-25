@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class TabernManager : Singleton<TabernManager>
 {
@@ -10,6 +11,8 @@ public class TabernManager : Singleton<TabernManager>
     private int currentDay = 1;
 
     private float currentMinute = 0f;
+    private float bankruptCounter = 0f;
+    private float maxTimeBankrupt = 5f;
 
     private float orderPaymentsAmount = 0f;
     private float tipsEarnedAmount = 0f;
@@ -21,11 +24,29 @@ public class TabernManager : Singleton<TabernManager>
 
     private bool isTabernOpen = false;
     private bool canOpenTabern = true;
+    public static event Action<bool> OnTabernStateChanged;
 
     private const int OPEN_HOUR = 8;
     private const float DAY_DURATION_MINUTES = 16f * 60f;
 
     public TabernManagerData TabernManagerData { get => tabernManagerData; }
+
+    public float CurrentHour
+    {
+        /*get
+        {
+            int hours = OPEN_HOUR + Mathf.FloorToInt(currentMinute / 60f);
+            if (hours >= 24) hours = 0;
+            return hours;
+        }*/
+
+        get
+        {
+            float hours = OPEN_HOUR + (currentMinute / 60f);
+            if (hours >= 24f) hours -= 24f;
+            return hours;
+        }
+    }
 
     public int CurrentDay { get => currentDay; set => currentDay = value; }
 
@@ -56,6 +77,7 @@ public class TabernManager : Singleton<TabernManager>
     void UpdateTabernManager()
     {
         UpdateTimer();
+        CheckBankruptLoseCondition();
     }
 
     void Start()
@@ -115,6 +137,17 @@ public class TabernManager : Singleton<TabernManager>
             "</color>) = <color=" + netColor + ">$" + finalAmount.ToString("0") + "</color>";
     }
 
+    public void StartNewDay()
+    {
+        CookingManager.Instance.ReturnAllObjectsToPool();
+        currentDay++;
+        canOpenTabern = true;
+        isTabernOpen = false;
+
+        currentMinute = 0f;
+
+        OnTabernStateChanged?.Invoke(false);
+    }
 
     private void SubscribeToUpdateManagerEvent()
     {
@@ -180,6 +213,8 @@ public class TabernManager : Singleton<TabernManager>
             canOpenTabern = false;
             isTabernOpen = true;
 
+            OnTabernStateChanged?.Invoke(true);
+
             currentMinute = 0f;
             TabernManagerUI.instance.TabernStatusText.text = "Tabern is open";
 
@@ -188,16 +223,19 @@ public class TabernManager : Singleton<TabernManager>
         }
     }
 
-    public void SetIsTabernClosed()
+    private void SetIsTabernClosed()
     {
         isTabernOpen = false;
+        canOpenTabern = false;
+
+        OnTabernStateChanged?.Invoke(false);
+        
         currentMinute = DAY_DURATION_MINUTES;
         TabernManagerUI.instance.TabernCurrentTimeText.text = "24 : 00";
         TabernManagerUI.instance.TabernStatusText.text = "Tabern is closed";
 
         StartCoroutine(PlayCurrentTabernMusic("TabernClose"));
         AdministratingManagerUI.OnSetSelectedCurrentGameObject?.Invoke(null);
-        AdministratingManagerUI.OnStartTabern?.Invoke();
 
         bool canTrigger = TutorialListener.Instance != null && TutorialListener.instance.TryTriggerManualTutorial(TutorialType.Bed);
         if (canTrigger)
@@ -246,6 +284,82 @@ public class TabernManager : Singleton<TabernManager>
         }
 
         MoneyManager.Instance.SubMoney(fixedExpensesAmount);
+    }
+
+    private void CheckBankruptLoseCondition()
+    {
+        bankruptCounter += Time.deltaTime;
+
+        if (bankruptCounter >= maxTimeBankrupt)
+        {
+            bankruptCounter = 0;
+
+            /// Ajustar que la condicion este dentro de los rangos de tiempo ya que son int y no float
+            if (CurrentHour >= 8f && CurrentHour < 24f)
+            {
+                bool cannotCookAnything = !IngredientInventoryManager.Instance.CanCookAnyUnlockedRecipe();
+
+                bool cannotAffordAnyRecipe = !CanAffordIngredientsForAnyRecipe();
+
+                bool noActiveDishes = !CookingManager.Instance.HasActiveDishes();
+
+                if (cannotCookAnything && cannotAffordAnyRecipe && noActiveDishes)
+                {
+                    if (LooseScreen.Instance.LooseText.text == "You ran out of money and resources, the tavern went bankrupt.") return;
+
+                    LooseScreen.Instance.LooseText.text =
+                        "You ran out of money and resources, the tavern went bankrupt.";
+
+                    PlayerView.OnEnterInBankrupt?.Invoke();
+                    DeviceManager.Instance.IsUIModeActive = true;
+                    LooseScreen.Instance.Show();
+                    StartCoroutine(Wait());
+                }
+            }
+        }
+    }
+
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(2f);
+        Time.timeScale = 0f;
+    }
+
+    private bool CanAffordIngredientsForAnyRecipe()
+    {
+        var inventory = IngredientInventoryManager.Instance;
+        float currentMoney = MoneyManager.Instance.CurrentMoney;
+
+        var unlockedRecipes =
+            RecipeProgressManager.Instance.GetUnlockedRecipes();
+
+        foreach (var recipe in unlockedRecipes)
+        {
+            float totalCost = 0f;
+            bool needsIngredients = false;
+
+            foreach (var ing in recipe.Ingridients)
+            {
+                int currentStock =
+                    inventory.GetStock(ing.IngredientType);
+
+                int missingAmount =
+                    Mathf.Max(0, ing.Amount - currentStock);
+
+                if (missingAmount > 0)
+                    needsIngredients = true;
+
+                int ingredientPrice =
+                    inventory.GetPriceOfIngredient(ing.IngredientType);
+
+                totalCost += missingAmount * ingredientPrice;
+            }
+
+            if (needsIngredients && currentMoney >= totalCost)
+                return true;
+        }
+
+        return false;
     }
 
     private IEnumerator InvokeSaveSystemManagerLoadAllGameDataEvent()

@@ -115,7 +115,20 @@ public class ClientManager : Singleton<ClientManager>
 
     public void SetRandomSpawnTime()
     {
-        nextSpawnTime = UnityEngine.Random.Range(clientManagerData.MinSpawnTime, clientManagerData.MaxSpawnTime);
+        float hour = TabernManager.Instance.CurrentHour;
+
+        bool isLunchTime = hour >= 11f && hour < 15f;
+        bool isDinnerTime = hour >= 20f && hour < 24f;
+
+        if (isLunchTime || isDinnerTime)
+        {
+            nextSpawnTime = UnityEngine.Random.Range(clientManagerData.MinSpawnRushTime, clientManagerData.MaxSpawnRushTime);
+        }
+
+        else
+        {
+            nextSpawnTime = UnityEngine.Random.Range(clientManagerData.MinSpawnNormalTime, clientManagerData.MaxSpawnNormalTime);
+        }
     }
 
 

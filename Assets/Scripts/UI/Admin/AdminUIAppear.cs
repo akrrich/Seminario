@@ -31,21 +31,24 @@ public class AdminUIAppear : MonoBehaviour
     private void Awake()
     {
         InitializeIfNeeded();
+        ResetToHiddenState();
     }
 
     public void AnimateIn()
     {
+        Debug.Log("AnimateIn called");
         InitializeIfNeeded();
+        Debug.Log($"rectTransform: {rectTransform}, canvasGroup: {canvasGroup}");
 
         LeanTween.cancel(gameObject);
-
         rectTransform.anchoredPosition = hiddenPosition;
         canvasGroup.alpha = 0f;
 
+        Debug.Log("Activating gameObject");
         gameObject.SetActive(true);
+        Debug.Log($"gameObject active: {gameObject.activeSelf}");
 
         OnAnimateInStart?.Invoke();
-
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
 
@@ -56,7 +59,10 @@ public class AdminUIAppear : MonoBehaviour
         LeanTween.move(rectTransform, shownPosition, showTime)
             .setEase(showEase)
             .setIgnoreTimeScale(true)
-            .setOnComplete(OnInComplete);
+            .setOnComplete(() => {
+                Debug.Log("AnimateIn COMPLETE");
+                OnInComplete();
+            });
     }
     public void AnimateOut()
     {
@@ -99,10 +105,11 @@ public class AdminUIAppear : MonoBehaviour
 
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-
         if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
+    }
 
-        // Estado inicial forzado
+    private void ResetToHiddenState()
+    {
         rectTransform.anchoredPosition = hiddenPosition;
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
