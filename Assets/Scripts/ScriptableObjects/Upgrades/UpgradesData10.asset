@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: UpgradesData10
   m_EditorClassIdentifier: 
   imageZoneUnlock: {fileID: 21300000, guid: 56221a4d9b95f99478fa6f3ee588d9dc, type: 3}
-  cost: 1300
+  cost: 1550
   informationCurrentZone: Add a new dish to your culinary repertoire.

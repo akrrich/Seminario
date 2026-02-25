@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: UpgradesData8
   m_EditorClassIdentifier: 
   imageZoneUnlock: {fileID: 21300000, guid: 923e0b5766cf9b24e8cdfee5c4e8a9fe, type: 3}
-  cost: 1450
+  cost: 1000
   informationCurrentZone: Unlock the second floor and improve your service flow.

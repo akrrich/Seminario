@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: UpgradesData6
   m_EditorClassIdentifier: 
   imageZoneUnlock: {fileID: 21300000, guid: cc4ef2fd46bdf8c48863701123328300, type: 3}
-  cost: 1000
+  cost: 740
   informationCurrentZone: An extra kitchen and faster cleaning between shifts.

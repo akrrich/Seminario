@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: UpgradesData3
   m_EditorClassIdentifier: 
   imageZoneUnlock: {fileID: 21300000, guid: 657f07da12c07d94ba44f70e783bc201, type: 3}
-  cost: 350
+  cost: 275
   informationCurrentZone: New customer and first-floor unlock.
