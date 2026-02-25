@@ -36,6 +36,7 @@ public class PlayerModel : MonoBehaviour
     private bool isInTrashPanel = false;
     private bool isInTutorial = false;
     private bool isInResumeDayPanel = false;
+    private bool isInBankruptPanel = false;
 
     private bool readyToJump = true;
     private bool exitingSlope = false;
@@ -59,12 +60,14 @@ public class PlayerModel : MonoBehaviour
     public bool IsInTrashPanel { get => isInTrashPanel; set => isInTrashPanel = value; }
     public bool IsInTutorial { get => isInTutorial; set => isInTutorial = value; }
     public bool IsInResumeDayPanel { get => isInResumeDayPanel; }
+    public bool IsInBankruptPanel { get => isInBankruptPanel; }
     public bool ReadyToJump { get => readyToJump; set => readyToJump = value; }
 
     void Awake()
     {
         SuscribeToTutorialEvents();
         SuscribeToResumeDayEvents();
+        SuscribeToBankrupt();
         GetComponents();
         Initialize();
         SpawnPlayerPosition();
@@ -74,12 +77,13 @@ public class PlayerModel : MonoBehaviour
     {
         UnsuscribeToTutorialEvents();
         UnsuscribeToResumeDayEvents();
+        UnsuscribeToBankrupt();
     }
 
     public void HandleMovement()
     {
         if (PlayerInputs.Instance == null) return;
-        if (isCooking || isAdministrating || isInTeleportPanel || isInTrashPanel || isInTutorial || isInResumeDayPanel) return;
+        if (isCooking || isAdministrating || isInTeleportPanel || isInTrashPanel || isInTutorial || isInResumeDayPanel || isInBankruptPanel) return;
 
         Vector2 input = PlayerInputs.Instance.GetMoveAxis();
 
@@ -145,13 +149,14 @@ public class PlayerModel : MonoBehaviour
             }
 
         }
-
     }
+
     public void ResetJump()
     {
         readyToJump = true;
         exitingSlope = false;
     }
+
     public void HandleGravity()
     {
         if (IsGrounded) return;
@@ -166,9 +171,8 @@ public class PlayerModel : MonoBehaviour
         {
             rb.velocity += Vector3.up * gravity * (playerTabernData.FallGravityMult - 1) * Time.fixedDeltaTime;
         }
-
-
     }
+
     private bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerTabernData.PlayerHeight / 2 + 0.5f))
@@ -196,6 +200,11 @@ public class PlayerModel : MonoBehaviour
         PlayerView.OnExitInResumeDay += OnExitInResumeDay;
     }
 
+    private void SuscribeToBankrupt()
+    {
+        PlayerView.OnEnterInBankrupt += OnEnterInBankrupt;
+    }
+
     private void UnsuscribeToResumeDayEvents()
     {
         PlayerView.OnEnterInResumeDay -= OnEnterInResumeDay;
@@ -206,6 +215,11 @@ public class PlayerModel : MonoBehaviour
     {
         TutorialScreensManager.OnEnterTutorial -= OnEnterInTutorial;
         TutorialScreensManager.OnExitTutorial -= OnExitInTutorial;
+    }
+
+    private void UnsuscribeToBankrupt()
+    {
+        PlayerView.OnEnterInBankrupt -= OnEnterInBankrupt;
     }
 
     private void GetComponents()
@@ -252,5 +266,10 @@ public class PlayerModel : MonoBehaviour
     private void OnExitInResumeDay()
     {
         isInResumeDayPanel = false;
+    }
+
+    private void OnEnterInBankrupt()
+    {
+        isInBankruptPanel = true;
     }
 }

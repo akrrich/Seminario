@@ -185,7 +185,7 @@ public class PauseManager : Singleton<PauseManager>
         PlayerView.OnExitTutorial += OnExitInUIMode;
 
         PlayerView.OnEnterInResumeDay += OnEnterInUIMode;
-       PlayerView.OnExitInResumeDay += OnExitInUIMode;
+        PlayerView.OnExitInResumeDay += OnExitInUIMode;
 
         Trash.OnShowPanelTrash += OnEnterInUIMode;
         Trash.OnHidePanelTrash += OnExitInUIMode;
@@ -360,7 +360,8 @@ public class PauseManager : Singleton<PauseManager>
 
     private void EnabledOrDisabledPausePanel()
     {
-        if(ignorePauseInput) return;
+        if (ScenesManager.Instance.IsInLoadingScenePanel) return;
+        if (ignorePauseInput) return;
         if (isGamePaused)
         {
             if (PlayerInputs.Instance.Pause())

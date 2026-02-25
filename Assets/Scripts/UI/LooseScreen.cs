@@ -41,6 +41,7 @@ public class LooseScreen : Singleton<LooseScreen>
 
         restartButton.OnClick.AddListener(() =>
         {
+            Time.timeScale = 1f;
             DeviceManager.Instance.IsUIModeActive = false;
             SaveSystemManager.DeleteAllData();
             AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
@@ -51,6 +52,7 @@ public class LooseScreen : Singleton<LooseScreen>
 
         menuButton.OnClick.AddListener(() =>
         {
+            Time.timeScale = 1f;
             DeviceManager.Instance.IsUIModeActive = true;
             SaveSystemManager.DeleteAllData();
             AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
@@ -67,6 +69,9 @@ public class LooseScreen : Singleton<LooseScreen>
 
     public void Show()
     {
+        AudioManager.Instance.StopMusic("TabernOpen");
+        AudioManager.Instance.StopMusic("TabernClose");
+        //AudioManager.Instance.PlayOneShotSFX("Loose");
         PlayerInputs.Instance.HasWon(true);
         gameObject.SetActive(true);
 
