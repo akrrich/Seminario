@@ -24,6 +24,9 @@ public class AdministratingManagerUI : MonoBehaviour
 
     [Header("Referencias (Panel Ingredients)")]
     [SerializeField] private GameObject ingredientButtonContainer;
+    [SerializeField] private GameObject firstUpgradeButtonContainer;
+    [SerializeField] private GameObject secondUpgradeButtonContainer;
+    [SerializeField] private GameObject thirdUpgradeButtonContainer;
 
     [Header("Referencias (Panel Upgrades)")]
     [SerializeField] private ConfirmationPanel confirmationPanel;
@@ -31,9 +34,9 @@ public class AdministratingManagerUI : MonoBehaviour
     [SerializeField] private Image currentImageUpgrade;
     [SerializeField] private TextMeshProUGUI textPriceCurrentUpgradeUnlock;
     [SerializeField] private TextMeshProUGUI textInformationCurrentUpgrade;
-    [SerializeField] private GameObject firstUpgradeButtonContainer;
-    [SerializeField] private GameObject secondUpgradeButtonContainer;
-    [SerializeField] private GameObject thirdUpgradeButtonContainer;
+
+
+
 
     [Header("Configuración Visual Upgrades")]
     [SerializeField] private Color unlockedUpgradeColor = Color.green;
@@ -56,6 +59,7 @@ public class AdministratingManagerUI : MonoBehaviour
     // --- Variables de control ---
     private GameObject lastSelectedButtonFromAdminPanel;
     private bool ignoreFirstButtonSelected = true;
+    private bool localTavernState = false;
 
     //--- Variable estaticas ---
     private static int lastTabIndex = -1;
@@ -79,6 +83,10 @@ public class AdministratingManagerUI : MonoBehaviour
         UnsubscribeToRecipeProgressEvents();
         UnsubscribeToTabernStateEvents();
 
+        if (panelAnimator != null)
+        {
+            panelAnimator.OnAnimateInComplete.RemoveListener(SetupInitialTab);
+        }
     }
 
     #region === Actualización y Gestión de Foco ===
@@ -148,19 +156,38 @@ public class AdministratingManagerUI : MonoBehaviour
     public void OnStartTavernSwitchClicked()
     {
         if (startTavernSwitch == null) return;
-        
+
         bool selected = startTavernSwitch.GetSelectedState();
-
         if (selected)
+        {
             OnStartTabern?.Invoke();
-        else
-            OnCloseTabern?.Invoke();
-    }
-    private void HandleTabernStateChanged(bool isOpen)
-    {
-        if (startTavernSwitch == null) return;
+            return;
+        }
+        if (TabernManager.Instance.IsTabernOpen)
+        {
+            // Cancel the visual change
+            startTavernSwitch.SetSelected(true);
 
-        startTavernSwitch.SetSelected(isOpen);
+            AudioManager.Instance.PlayOneShotSFX("ButtonClickWrong");
+
+            MessagePopUp.Show("You can't close the tavern right now.");
+
+            return;
+        }
+
+        OnCloseTabern?.Invoke();
+    }
+    private void HandleTavernOpened()
+    {
+        localTavernState = true;
+        startTavernSwitch.SetSelected(true);
+        startTavernSwitch.LockSwitch();
+    }
+    private void HandleTavernClosed()
+    {
+        localTavernState = false;
+        startTavernSwitch.SetSelected(false);
+        startTavernSwitch.UnlockSwitch();
     }
     public void ButtonExit()
     {
@@ -338,7 +365,7 @@ public class AdministratingManagerUI : MonoBehaviour
                 ShowCurrentZoneInformation(0);
             }
         }
-        panelAdministrating.SetActive(true);
+       
     }
     #endregion
 
@@ -357,14 +384,10 @@ public class AdministratingManagerUI : MonoBehaviour
     private void HandlePlayerEnterAdmin()
     {
         AudioManager.Instance.PlayOneShotSFX("Admin/Cook/Pause");
-
+        panelAdministrating.SetActive(true);
         PrepareInitialUIState();
         PreRefreshUI();
-
-        HandleTabernStateChanged(TabernManager.Instance.IsTabernOpen);
-
         SetupInitialTab();
-
         panelAnimator?.AnimateIn();
     }
 
@@ -380,8 +403,6 @@ public class AdministratingManagerUI : MonoBehaviour
         panelAnimator?.AnimateOut();
         confirmationPanel.Hide();
     }
-
-
 
     private void SetupInitialTab()
     {
@@ -401,15 +422,26 @@ public class AdministratingManagerUI : MonoBehaviour
         tabGroup.SelectTabByIndex(indexToSelect);
         tabGroup.ForceShowCurrentTab();
 
+        // Forzar selección visual del botón correcto
+        if (tabGroup.CurrentSelectedButton != null)
+        {
+            onSetSelectedCurrentGameObject?.Invoke(tabGroup.CurrentSelectedButton.gameObject);
+
+
+        }
+
+        if (startTavernSwitch != null)
+        {
+            localTavernState = TabernManager.Instance.IsTabernOpen;
+            startTavernSwitch.SetSelected(localTavernState);
+        }
+
         if (indexToSelect == 2)
         {
             int nextIndex = GetNextAvailableUpgradeIndex();
             if (nextIndex != -1)
                 ShowCurrentZoneInformation(nextIndex);
         }
-
-        if (tabGroup.CurrentSelectedButton != null)
-            onSetSelectedCurrentGameObject?.Invoke(tabGroup.CurrentSelectedButton.gameObject);
     }
 
     private void PrepareInitialUIState()
@@ -424,8 +456,10 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private void InitializeAnimatorEventBindings()
     {
-        panelAnimator.OnAnimateOutComplete.AddListener(() =>
+        panelAnimator.OnAnimateInComplete.AddListener(SetupInitialTab);
+        panelAnimator.OnAnimateOutStart.AddListener(() =>
         {
+            panelAdministrating.SetActive(false);
             panelIngredients.SetActive(false);
             panelUpgrades.SetActive(false);
         });
@@ -457,14 +491,13 @@ public class AdministratingManagerUI : MonoBehaviour
 
     private void SubscribeToTabernStateEvents()
     {
-        TabernManager.OnTabernStateChanged += HandleTabernStateChanged;
-        
+        OnStartTabern += HandleTavernOpened;
+        OnCloseTabern += HandleTavernClosed;
     }
-
-
     private void UnsubscribeToTabernStateEvents()
     {
-        TabernManager.OnTabernStateChanged -= HandleTabernStateChanged;
+        OnStartTabern -= HandleTavernOpened;
+        OnCloseTabern -= HandleTavernClosed;
     }
     private void GetComponents()
     {
@@ -525,6 +558,6 @@ public class AdministratingManagerUI : MonoBehaviour
         }
 
     }
+}
 
     #endregion
-}

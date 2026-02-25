@@ -21,7 +21,7 @@ public class PlayerStateAdministration<T> : State<T>
     public override void Enter()
     {
         base.Enter();
-        //Debug.Log("Administration");
+        Debug.Log("Administration");
 
         AdministratingManagerUI.OnExitAdmin += OnExitStateWhenClickOnButtonCloseUI;
         PlayerView.OnEnterInAdministrationMode?.Invoke();
