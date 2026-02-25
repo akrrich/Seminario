@@ -8,7 +8,7 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     private PlayerInputActions inputActions; // Representa la clase creada por default del nuevo Inputsystem
     private Vector2 joystick = Vector2.zero;
-
+    private bool hasWon = false;
     [SerializeField] private bool testJoystickButtonsInDebugger;
 
     public InputsData KeyboardInputs { get => keyboardInputs; }
@@ -44,7 +44,10 @@ public class PlayerInputs : Singleton<PlayerInputs>
         return new Vector2(joystick.x * joystickInputs.SensitivityX, joystick.y * joystickInputs.SensitivityY);
     }
 
-
+    public void HasWon(bool value)
+    {
+        hasWon = value;
+    }
     /* -------------------------------------------TABERN----------------------------------------- */
 
     public bool ShowOrHideDish() => Input.GetKeyDown(keyboardInputs.ShowOrHideDish) || Input.GetKeyDown(joystickInputs.ShowOrHideDish);
@@ -58,21 +61,23 @@ public class PlayerInputs : Singleton<PlayerInputs>
 
     /* -------------------------------------------BOTH----------------------------------------- */
 
-    public bool Run() => Input.GetKeyDown(keyboardInputs.Run) || Input.GetKeyDown(joystickInputs.Run);
-    public bool StopRun() => Input.GetKeyDown(keyboardInputs.Run) || Input.GetKeyDown(joystickInputs.Run);
+    public bool Run() => Input.GetKey(keyboardInputs.Run) || Input.GetKey(joystickInputs.Run);
+    public bool StopRun() => Input.GetKeyUp(keyboardInputs.Run) || Input.GetKeyUp(joystickInputs.Run);
     public bool InteractPress() => Input.GetKeyDown(keyboardInputs.Interact) || Input.GetKeyDown(joystickInputs.Interact);
     public bool InteractHold() => Input.GetKey(keyboardInputs.Interact) || Input.GetKey(joystickInputs.Interact);
     public bool Jump() => Input.GetKeyDown(keyboardInputs.Jump) || Input.GetKeyDown(joystickInputs.Jump);
     public bool Inventory() => Input.GetKeyDown(keyboardInputs.Inventory) || Input.GetKeyDown(joystickInputs.Inventory);
     public bool Pause() => Input.GetKeyDown(keyboardInputs.Pause) || Input.GetKeyDown(joystickInputs.Pause);
+    public bool PauseWithKeyP() => Input.GetKeyDown(KeyCode.P);
 
     /* -------------------------------------------UI----------------------------------------- */
-    
+
     public KeyCode GetInteractInput() => DeviceManager.Instance.CurrentDevice == Device.Joystick ? instance.joystickInputs.Interact : instance.keyboardInputs.Interact;
-    public bool R1() => Input.GetKeyDown(KeyCode.Joystick1Button5);
-    public bool L1() => Input.GetKeyDown(KeyCode.Joystick1Button4);
-
-
+    public bool BackPanelsUI()
+    {
+        if(hasWon) return false;
+        return Input.GetKeyDown(KeyCode.Escape);
+    }
     // No es necesario desuscribirse porque es singleton
     private void SuscribeToUpdateManagerEvent()
     {

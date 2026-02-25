@@ -10,6 +10,8 @@ public class CookingManager : Singleton<CookingManager>
     private CookingDeskUI currentDesk;
     private Transform currentStove;
 
+    private event Action<int> onAvailableStoveIndex;
+
     // Para las posiciones en la bandeja del player
     [SerializeField] private List<Transform> dishPositions;
     private Queue<Transform> availableDishPositions = new Queue<Transform>();
@@ -17,8 +19,14 @@ public class CookingManager : Singleton<CookingManager>
 
     private Dictionary<FoodType, ObjectPooler> foodPoolDictionary = new Dictionary<FoodType, ObjectPooler>();
 
+    public CookingDeskUI CurrentDesk => currentDesk;
+
     public Transform CurrentStove { get => currentStove; }
+    public List<Transform> DishPositions { get => dishPositions; }
     public Queue<Transform> AvailableDishPositions { get => availableDishPositions; }
+    public HashSet<Transform> OccupiedDishPositions {  get => occupiedDishPositions; }
+
+    public Action<int> OnAvailableStoveIndex { get => onAvailableStoveIndex; set => onAvailableStoveIndex = value; }
 
 
     void Awake()
@@ -64,7 +72,7 @@ public class CookingManager : Singleton<CookingManager>
 
     public Transform MoveFoodToDish(Food currentFood)
     {
-        Transform targetPosition = null;
+        /*Transform targetPosition = null;
 
         while (availableDishPositions.Count > 0)
         {
@@ -84,10 +92,30 @@ public class CookingManager : Singleton<CookingManager>
         {
             currentFood.transform.SetParent(targetPosition);
             float offsetY = currentFood.GetBottomOffset() - 0.030f;
+            currentFood.transform.rotation = targetPosition.rotation;
             currentFood.transform.position = targetPosition.position + new Vector3(0, offsetY, 0);
         }
 
-        return targetPosition;
+        return targetPosition;*/
+
+        for (int i = 0; i < dishPositions.Count; i++)
+        {
+            Transform targetPosition = dishPositions[i];
+
+            if (!occupiedDishPositions.Contains(targetPosition))
+            {
+                occupiedDishPositions.Add(targetPosition);
+
+                currentFood.transform.SetParent(targetPosition);
+                float offsetY = currentFood.GetBottomOffset() - 0.030f;
+                currentFood.transform.rotation = targetPosition.rotation;
+                currentFood.transform.position = targetPosition.position + new Vector3(0, offsetY, 0);
+
+                return targetPosition;
+            }
+        }
+
+        return null;
     }
 
 
@@ -129,6 +157,8 @@ public class CookingManager : Singleton<CookingManager>
                 if (currentStove != null)
                 {
                     foodAbstractFactory.CreateObject(prefabFoodName, currentStove, new Vector3(0, 0.2f, 0));
+                    int index = currentDesk.StoveIndexOf(currentStove);
+                    onAvailableStoveIndex?.Invoke(index);
                 }
             }
         }

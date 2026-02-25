@@ -9,22 +9,21 @@ public class OrdersManagerUI : Singleton<OrdersManagerUI>
     [SerializeField] private GameObject orderUIPrefab;
     [Header("UI Effect")]
     [SerializeField] private Vector3 cookingScale = new Vector3(0.8f, 0.8f, 0.8f);
-    [SerializeField] private Vector3 cookingNewPosition = new Vector3(0f, -50f, 0f);
+    [SerializeField] private Vector2 cookingOffset = new Vector2(15,75);
     [SerializeField] private float animTime = 0.4f;
     [SerializeField] private LeanTweenType easeType = LeanTweenType.easeOutQuad;
 
     [SerializeField] private float orderPrefabWidth = 177f;
 
     private List<OrderItemUI> activeOrders = new List<OrderItemUI>();
-    private int totalOrdersBeforeTabernOpen = 0;
-    private Vector3 originalPosition;
-    public int TotalOrdersBeforeTabernOpen { get => totalOrdersBeforeTabernOpen; }
+    private Vector2 originalAnchoredPos;
+
 
     void Awake()
     {
         CreateSingleton(false);
         SubscribeToPlayerViewEvents();
-        originalPosition = ordersContainer.localPosition;
+        originalAnchoredPos = ordersContainer.anchoredPosition;
     }
 
     private void OnDestroy()
@@ -63,11 +62,6 @@ public class OrdersManagerUI : Singleton<OrdersManagerUI>
 
         uiItem.SetupOrder(newOrderDataUI);
         activeOrders.Add(uiItem);
-
-        if (ClientManager.Instance.IsTabernOpen)
-        {
-            totalOrdersBeforeTabernOpen++;
-        }
 
         le.preferredWidth = 0f;
         cg.alpha = 0f;
@@ -115,10 +109,6 @@ public class OrdersManagerUI : Singleton<OrdersManagerUI>
         }
     }
 
-    public void RemoveTotalOrdersWhenCloseTabern()
-    {
-        totalOrdersBeforeTabernOpen = 0;
-    }
     private void DissapearIfInAdmin()
     {
         foreach (var order in activeOrders)
@@ -151,11 +141,13 @@ public class OrdersManagerUI : Singleton<OrdersManagerUI>
             {
                 LeanTween.scale(order.gameObject, cookingScale, animTime)
                     .setEase(easeType)
-                    .setIgnoreTimeScale(true); // Para que funcione si el juego se pausa
+                    .setIgnoreTimeScale(true);
             }
         }
 
-        LeanTween.moveLocal(ordersContainer.gameObject, cookingNewPosition, animTime)
+        Vector2 target = originalAnchoredPos + cookingOffset;
+
+        LeanTween.move(ordersContainer, target, animTime)
             .setEase(easeType)
             .setIgnoreTimeScale(true);
     }
@@ -166,12 +158,13 @@ public class OrdersManagerUI : Singleton<OrdersManagerUI>
             if (order != null)
             {
                 LeanTween.scale(order.gameObject, Vector3.one, animTime)
-                      .setEase(easeType)
-                      .setIgnoreTimeScale(true);
+                    .setEase(easeType)
+                    .setIgnoreTimeScale(true);
             }
         }
-        LeanTween.moveLocal(ordersContainer.gameObject, originalPosition, animTime)
-                   .setEase(easeType)
-                   .setIgnoreTimeScale(true);
+
+        LeanTween.move(ordersContainer, originalAnchoredPos, animTime)
+            .setEase(easeType)
+            .setIgnoreTimeScale(true);
     }
 }

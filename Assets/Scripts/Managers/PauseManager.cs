@@ -10,6 +10,7 @@ public class PauseManager : Singleton<PauseManager>
     [SerializeField] private GameObject pauseOpacity;
     [SerializeField] private GameObject pauseText;
     [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject tutorialPanel;
 
     [Header("UI Elements")]
     [Tooltip("El GameObject que contiene TODOS los botones principales de pausa (Resume, Settings, etc.)")]
@@ -18,9 +19,11 @@ public class PauseManager : Singleton<PauseManager>
     [SerializeField] private GameObject firstSelectedButton;
     [Tooltip("El botón que debe seleccionarse al volver de Settings (Ej: el botón 'Settings')")]
     [SerializeField] private GameObject settingsSelectedButton;
+    [SerializeField] private GameObject tutorialSelectedButton;
 
+    private PlayerModel playerModel;
 
-    // --- Eventos (sin cambios) ---
+    // --- Eventos ---
     private static event Action<GameObject> onSetSelectedCurrentGameObject;
     private static event Action onClearSelectedCurrentGameObject;
     private static event Action onButtonSettingsClickToShowCorrectPanel;
@@ -31,7 +34,9 @@ public class PauseManager : Singleton<PauseManager>
 
     private bool isGamePaused = false;
     private bool ignoreFirstSelectedSound = false;
-    private bool wasUiActiveOnPause = false;
+    private bool ignorePauseThisFrame = false;
+    private bool ignorePauseInput = false;
+
     public static Action<GameObject> OnSetSelectedCurrentGameObject { get => onSetSelectedCurrentGameObject; set => onSetSelectedCurrentGameObject = value; }
     public static Action OnClearSelectedCurrentGameObject { get => onClearSelectedCurrentGameObject; set => onClearSelectedCurrentGameObject = value; }
     public static Action OnButtonSettingsClickToShowCorrectPanel { get => onButtonSettingsClickToShowCorrectPanel; set => onButtonSettingsClickToShowCorrectPanel = value; }
@@ -39,33 +44,29 @@ public class PauseManager : Singleton<PauseManager>
 
     public static Action OnGamePaused { get => onGamePaused; set => onGamePaused = value; }
     public static Action OnGameUnPaused { get => onGameUnPaused; set => onGameUnPaused = value; }
-
     public bool IsGamePaused { get => isGamePaused; }
-    
-    
+
     void Awake()
     {
         CreateSingleton(false);
         SuscribeToUpdateManagerEvent();
+        SuscribeToPlayerViewEvents();
+        SubscribeToVictoryEvent();
+        SuscribeToLooseScreenEvent();
+        GetComponents();
     }
 
     void UpdatePauseManager()
     {
-        if (pausePanel == null)
-        {
-            Debug.LogWarning("PausePanel no está asignado en el PauseManager.");
-            return;
-        }
-        if (pausePanel.IsAnimating)
-        {
-            return;
-        }
         EnabledOrDisabledPausePanel();
     }
 
     void OnDestroy()
     {
         UnsuscribeToUpdateManagerEvent();
+        UnsuscribeToPlayerViewEvents();
+        UnsubscribeToVictoryEvent();
+        UnsuscribeToLooseScreenEvent();
     }
 
     // Funcion asignada a botones en la UI para reproducir el sonido selected
@@ -92,13 +93,17 @@ public class PauseManager : Singleton<PauseManager>
         AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
         ShowSettings();
     }
-
+    public void ButtonTutorial()
+    {
+        if (!tutorialSelectedButton.activeSelf) return;
+        AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
+        ShowTutorial();
+    }
     public void ButtonMainMenu()
     {
         AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
         Time.timeScale = 1f;
 
-        SaveLastSceneName();
         GameManager.Instance.GameSessionType = GameSessionType.None;
         string[] additiveScenes = { "MainMenuUI" };
         StartCoroutine(loadSceneAfterSeconds("MainMenu", additiveScenes));
@@ -106,7 +111,6 @@ public class PauseManager : Singleton<PauseManager>
 
     public void ButtonExit()
     {
-        SaveLastSceneName();
         AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
         StartCoroutine(ExitGameAfterSeconds());
     }
@@ -116,6 +120,7 @@ public class PauseManager : Singleton<PauseManager>
         ignoreFirstSelectedSound = true;
         AudioManager.Instance.PlayOneShotSFX("ButtonClickWell");
         HideSettings();
+        HideTutorial();
     }
     public void OnPausePanelShowComplete()
     {
@@ -140,15 +145,151 @@ public class PauseManager : Singleton<PauseManager>
         UpdateManager.OnUpdate -= UpdatePauseManager;
     }
 
+    private void SubscribeToVictoryEvent()
+    {
+        VictoryScreen.OnMenuPressed += ButtonMainMenu;
+        VictoryScreen.OnVictory += OnVictory;
+        VictoryScreen.OnVictoryClosed += OnVictoryClosed;
+    }
+
+    private void UnsubscribeToVictoryEvent()
+    {
+        VictoryScreen.OnMenuPressed -= ButtonMainMenu;
+        VictoryScreen.OnVictory -= OnVictory;
+        VictoryScreen.OnVictoryClosed -= OnVictoryClosed;
+    }
+
+    private void SuscribeToLooseScreenEvent()
+    {
+        LooseScreen.OnMenuPressed += ButtonMainMenu;
+        LooseScreen.OnDefeat += OnDefeated;
+        LooseScreen.OnDefeatClosed += OnLooseClosed;
+    }
+
+    private void UnsuscribeToLooseScreenEvent()
+    {
+        LooseScreen.OnMenuPressed -= ButtonMainMenu;
+        LooseScreen.OnDefeat -= OnDefeated;
+        LooseScreen.OnDefeatClosed -= OnLooseClosed;
+    }
+
+    private void SuscribeToPlayerViewEvents()
+    {
+        PlayerView.OnEnterInAdministrationMode += OnEnterInUIMode;
+        PlayerView.OnExitInAdministrationMode += OnExitInUIMode;
+
+        PlayerView.OnEnterInCookMode += OnEnterInUIMode;
+        PlayerView.OnExitInCookMode += OnExitInUIMode;
+
+        PlayerView.OnEnterTutorial += OnEnterInUIMode;
+        PlayerView.OnExitTutorial += OnExitInUIMode;
+
+        PlayerView.OnEnterInResumeDay += OnEnterInUIMode;
+       PlayerView.OnExitInResumeDay += OnExitInUIMode;
+
+        Trash.OnShowPanelTrash += OnEnterInUIMode;
+        Trash.OnHidePanelTrash += OnExitInUIMode;
+    }
+
+    private void UnsuscribeToPlayerViewEvents()
+    {
+        PlayerView.OnEnterInAdministrationMode -= OnEnterInUIMode;
+        PlayerView.OnExitInAdministrationMode -= OnExitInUIMode;
+
+        PlayerView.OnEnterInCookMode -= OnEnterInUIMode;
+        PlayerView.OnExitInCookMode -= OnExitInUIMode;
+
+        PlayerView.OnEnterTutorial -= OnEnterInUIMode;
+        PlayerView.OnExitTutorial -= OnExitInUIMode;
+
+        PlayerView.OnEnterInResumeDay -= OnEnterInUIMode;
+        PlayerView.OnExitInResumeDay -= OnExitInUIMode;
+
+        Trash.OnShowPanelTrash -= OnEnterInUIMode;
+        Trash.OnHidePanelTrash -= OnExitInUIMode;
+    }
+
+    private void OnEnterInUIMode()
+    {
+        ignorePauseThisFrame = true;
+    }
+
+    private void OnVictory()
+    {
+        ignorePauseInput = true;
+    }
+
+    private void OnVictoryClosed()
+    {
+        ignorePauseInput = false;
+    }
+
+    private void OnDefeated()
+    {
+        ignorePauseInput = true;
+    }
+
+    private void OnLooseClosed()
+    {
+        ignorePauseInput = false;
+    }
+
+    private void OnExitInUIMode()
+    {
+        //if (!isGamePaused) return;
+        
+        if (playerModel.IsAdministrating || playerModel.IsCooking || playerModel.IsInTrashPanel || playerModel.IsInTutorial || playerModel.IsInResumeDayPanel) return;
+
+        StartCoroutine(ExitUIMode());
+    }
+
+    private IEnumerator ExitUIMode()
+    {
+        yield return null;
+
+        ignorePauseThisFrame = false;
+    }
+
+    private void GetComponents()
+    {
+        playerModel = FindFirstObjectByType<PlayerModel>();
+    }
+    private bool ShouldStayInUIMode()
+    {
+        if (playerModel == null) return false;
+
+        if (playerModel.IsAdministrating) return true;
+        if (playerModel.IsCooking) return true;
+        if (playerModel.IsInTrashPanel) return true;
+        if (playerModel.IsInTutorial) return true;
+        if (playerModel.IsInResumeDayPanel) return true;
+       // if (IngredientInventoryManagerUI.OnInventoryOpen) return true;
+        
+
+        return false;
+    }
     private void ShowPause()
     {
-        onGamePaused?.Invoke();
-        wasUiActiveOnPause = DeviceManager.Instance.IsUIModeActive;
+        DeviceManager.Instance.IsUIModeActive = true;
 
+        if(InteractionManagerUI.Exists)
+        {
+            InteractionManagerUI.instance.ShowOrHideCenterPointUI(false);
+            if(InteractionManagerUI.instance.MessageAnimator!= null)
+            {
+                InteractionManagerUI.instance.MessageAnimator.HideInstantly();
+            }
+        }
+        onGamePaused?.Invoke();
+            
+        bool allTutorialsSeen = TutorialListener.Instance.AllTutorialsSeen();
+        tutorialSelectedButton.SetActive(allTutorialsSeen);
+        
         AudioManager.Instance.PauseCurrentMusic();
         StartCoroutine(AudioManager.Instance.PlayMusic("Pause"));
         pauseOpacity.SetActive(true);
         pauseButtonsContainer.SetActive(true);
+        pauseText.SetActive(true);
 
         Time.timeScale = 0f;
         isGamePaused = true;
@@ -162,7 +303,17 @@ public class PauseManager : Singleton<PauseManager>
         Time.timeScale = 1f;
         isGamePaused = false;
 
-        DeviceManager.Instance.IsUIModeActive = wasUiActiveOnPause;
+        bool stayInUi = ShouldStayInUIMode();
+
+        DeviceManager.Instance.IsUIModeActive = stayInUi;
+
+        if (!stayInUi)
+        {
+            if (InteractionManagerUI.Instance != null)
+            {
+                InteractionManagerUI.Instance.ForceResetUI();
+            }
+        }
 
         //No Borrar nunca
         onRestoreSelectedGameObject?.Invoke();
@@ -171,10 +322,14 @@ public class PauseManager : Singleton<PauseManager>
         
         AudioManager.Instance.StopMusic("Pause");
         AudioManager.Instance.ResumeLastMusic();
-        
+        pauseText.SetActive(false);
         if (settingsPanel.activeSelf)
         {
             settingsPanel.SetActive(false);
+        }
+        if(tutorialPanel.activeSelf)
+        {
+            tutorialPanel.SetActive(false);
         }
     }
 
@@ -193,21 +348,43 @@ public class PauseManager : Singleton<PauseManager>
         settingsPanel.SetActive(false);
         EventSystem.current.SetSelectedGameObject(settingsSelectedButton);
     }
+    private void ShowTutorial()
+    {
+        tutorialPanel.SetActive(true);
+    }
+    private void HideTutorial()
+    {
+        tutorialPanel.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(tutorialSelectedButton);
+    }
 
     private void EnabledOrDisabledPausePanel()
     {
-        if (PlayerInputs.Instance.Pause())
+        if(ignorePauseInput) return;
+        if (isGamePaused)
+        {
+            if (PlayerInputs.Instance.Pause())
+            {
+                AudioManager.Instance.PlayOneShotSFX("Admin/Cook/Pause");
+                HidePause();
+                return;
+            }
+        }
+
+        if (PlayerInputs.Instance.PauseWithKeyP())
+        {
+            AudioManager.Instance.PlayOneShotSFX("Admin/Cook/Pause");
+            (isGamePaused ? (Action)HidePause : ShowPause)();
+            return;
+        }
+
+        if (ignorePauseThisFrame) return;
+
+        if (PlayerInputs.Instance.Pause() && !playerModel.IsAdministrating && !playerModel.IsCooking && !playerModel.IsInTrashPanel && !playerModel.IsInTutorial)
         {
             AudioManager.Instance.PlayOneShotSFX("Admin/Cook/Pause");
             (isGamePaused ? (Action)HidePause : ShowPause)();
         }
-    }
-
-    private void SaveLastSceneName()
-    {
-        SaveData data = SaveSystemManager.LoadGame();
-        data.lastSceneName = ScenesManager.Instance.CurrentSceneName;
-        SaveSystemManager.SaveGame(data);
     }
 
     private IEnumerator loadSceneAfterSeconds(string sceneName, string[] sceneNameAdditive)

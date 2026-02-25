@@ -1,12 +1,11 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class FoodSupport : MonoBehaviour, IInteractable
 {
     private PlayerController playerController;
 
-    private GameObject currentFood;
+    private Food currentFood;
 
     public InteractionMode InteractionMode { get => InteractionMode.Press; }
 
@@ -42,8 +41,11 @@ public class FoodSupport : MonoBehaviour, IInteractable
             // Verifica que las posiciones de la bandeja tengan hijos (COMIDAS) y el soporte no tenga ningun hijo (comidas)
             if (child.childCount > 0 && gameObject.transform.childCount < 1)
             {
-                currentFood = child.gameObject;
+                currentFood = child.GetComponentInChildren<Food>();
+
+                //currentFood = child.gameObject;
                 OutlineManager.Instance.ShowWithDefaultColor(gameObject);
+                break;
             }
         }
     }

@@ -7,7 +7,7 @@ public class InteractionManager : Singleton<InteractionManager>
     private IInteractable currentTarget;
 
     private bool isPlayerInUI = false;
-    
+    public bool IsPlayerInUI => isPlayerInUI;
 
     void Awake()
     {
@@ -24,8 +24,6 @@ public class InteractionManager : Singleton<InteractionManager>
         DetectTarget();
         InteractWithTarget();
     }
-
-
     private void SuscribeToPlayerViewEvents()
     {
         PlayerView.OnEnterTutorial += HandlePlayerEnterUI;
@@ -86,7 +84,7 @@ public class InteractionManager : Singleton<InteractionManager>
 
         currentTarget.HideOutline();
 
-        if (InteractionManagerUI.Instance != null)
+        if (InteractionManagerUI.Exists)
         {
             InteractionManagerUI.Instance.MessageAnimator.Hide();
         }
@@ -167,9 +165,9 @@ public class InteractionManager : Singleton<InteractionManager>
         if (currentTarget != null)
         {
             currentTarget.HideOutline();
-            if (InteractionManagerUI.Instance != null)
+            if (InteractionManagerUI.Exists)
             {
-                InteractionManagerUI.Instance.MessageAnimator.Hide();
+                InteractionManagerUI.Instance.MessageAnimator.HideInstantly();
             }
             currentTarget = null;
         }
@@ -179,4 +177,5 @@ public class InteractionManager : Singleton<InteractionManager>
     {
         isPlayerInUI = false;
     }
+
 }

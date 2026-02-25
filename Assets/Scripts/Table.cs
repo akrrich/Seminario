@@ -2,9 +2,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using System.Collections;
+using TMPro;
 
 public class Table : MonoBehaviour, IInteractable
 {
+    /// <summary>
+    /// Agregar que si presiona pausa mientras esta limpiando, que se frene el sonido
+    /// </summary>
+
     private PlayerController playerController;
 
     private Table auxiliarTable;
@@ -14,6 +19,7 @@ public class Table : MonoBehaviour, IInteractable
     private GameObject chair;
     private GameObject dish;
     private ParticleSystem dirty;
+    private List<TextMeshPro> tableNumberTexts;
 
     //private NavMeshObstacle[] navMeshObstacles;
     private NavMeshObstacle navMeshObstacleChair;
@@ -21,6 +27,8 @@ public class Table : MonoBehaviour, IInteractable
     private List<Transform> dishPositions = new List<Transform>(); // Representa las posiciones hijas del plato
 
     private List<Food> currentFoods = new List<Food>();
+
+    [SerializeField] private int tableNumber;
 
     private float currentCleanProgress = 0f;
 
@@ -51,16 +59,77 @@ public class Table : MonoBehaviour, IInteractable
         }
     }
 
+    public int TableNumber { get => tableNumber; }
+
     public float CurrentCleanProgress { get => currentCleanProgress; set => currentCleanProgress = value; }
 
     public bool IsOccupied { get => isOccupied; set => isOccupied = value; }
     public bool IsDirty { get => isDirty; }
 
 
+    private Food SelectFoodToDeliver(ClientView clientView)
+    {
+        FoodType requestedFood = clientView.CurrentSelectedFood;
+
+        List<Food> priorityA = new(); // Tipo correcto + Cooked
+        List<Food> priorityB = new(); // Tipo correcto + mal estado
+        List<Food> priorityC = new(); // Cualquier otra
+
+        foreach (Transform slot in playerController.PlayerView.Dish.transform)
+        {
+            if (slot.childCount == 0) continue;
+
+            Food food = slot.GetChild(0).GetComponent<Food>();
+            if (food == null) continue;
+
+            if (food.FoodType == requestedFood)
+            {
+                if (food.CurrentCookingState == CookingStates.Cooked)
+                    priorityA.Add(food);
+                else
+                    priorityB.Add(food);
+            }
+            else
+            {
+                priorityC.Add(food);
+            }
+        }
+
+        if (priorityA.Count > 0)
+            return priorityA[0];
+
+        if (priorityB.Count > 0)
+            return priorityB[0];
+
+        if (priorityC.Count > 0)
+            return priorityC[Random.Range(0, priorityC.Count)];
+
+        return null;
+    }
+
+    private void HandleHandOverFood()
+    {
+        if (auxiliarTable == null) return;
+
+        ClientView clientView = GetComponentInChildren<ClientView>();
+        if (clientView == null) return;
+
+        Food foodToDeliver = SelectFoodToDeliver(clientView);
+        if (foodToDeliver == null) return;
+
+        DeliverFood(foodToDeliver, clientView);
+    }
+
+    private void DeliverFood(Food food, ClientView clientView)
+    {
+        food.HandOverToTable(this);
+    }
+
     void Awake()
     {
         FindObjectsAndComponents();
         StartCoroutine(RegisterOutline());
+        PlayerController.OnHandOverFood += HandleHandOverFood;
     }
 
     void OnEnable()
@@ -71,6 +140,7 @@ public class Table : MonoBehaviour, IInteractable
     void OnDestroy()
     {
         OutlineManager.Instance.Unregister(table);
+        PlayerController.OnHandOverFood -= HandleHandOverFood;
     }
 
 
@@ -154,6 +224,9 @@ public class Table : MonoBehaviour, IInteractable
             auxiliarClientView = null;
             return;
         }
+
+        AudioManager.Instance.StopLoopSFX("CleanDirtyTable");
+        isCleaningSoundPlaying = false;
     }
 
     public bool TryGetInteractionMessage(out string message)
@@ -248,6 +321,12 @@ public class Table : MonoBehaviour, IInteractable
         chair = transform.Find("Chair").gameObject;
         dish = transform.Find("Dish").gameObject;
         dirty = GetComponentInChildren<ParticleSystem>(true); // Indica que busca componentes en gameObject desactivados
+        
+        tableNumberTexts = new List<TextMeshPro>(GetComponentsInChildren<TextMeshPro>(true));
+        for (int i = 0; i < tableNumberTexts.Count; i++)
+        {
+            tableNumberTexts[i].text = tableNumber.ToString();
+        }
 
         //navMeshObstacles = GetComponentsInChildren<NavMeshObstacle>();
         navMeshObstacleChair = transform.Find("Chair").GetComponent<NavMeshObstacle>();

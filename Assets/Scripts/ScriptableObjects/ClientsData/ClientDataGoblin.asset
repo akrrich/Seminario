@@ -16,5 +16,13 @@ MonoBehaviour:
   speed: 3
   maxTimeWaitingForChair: 30
   maxTimeWaitingToBeAttended: 35
-  maxTimeWaitingFood: 125
-  maxTimeEating: 7
+  maxTimeWaitingFood: 45
+  maxTimeEating: 10
+  gratuityOptionsPercentage:
+  - probability: 40
+    gratuityPercentage: 10
+  - probability: 35
+    gratuityPercentage: 15
+  - probability: 25
+    gratuityPercentage: 20
+  probabilityToGiveGratuity: 25

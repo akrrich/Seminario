@@ -8,8 +8,6 @@ public class ClientStateLeave<T> : State<T>
     private ClientController clientController;
     private Transform newTransform;
 
-    private float waitingTimeToFreeTable = 1f;
-
     private bool canLeave = false;
 
     public bool CanLeave { get => canLeave; set => canLeave = value; }
@@ -45,7 +43,7 @@ public class ClientStateLeave<T> : State<T>
             clientView.StartCoroutine(WalkAnimationAfterExitTime());
         }
 
-        CheckIfFoodIsCorrect(); // Metodo Provisorio
+        CheckIfFoodIsCorrect();
 
         clientModel.StartCoroutine(FreeCurrentTableAfterSeconds());
     }
@@ -60,6 +58,7 @@ public class ClientStateLeave<T> : State<T>
         base.Exit();
 
         canLeave = false;
+        ClientManager.Instance.ClientsInsideTabern.Remove(clientModel.gameObject);
     }
 
 
@@ -85,7 +84,7 @@ public class ClientStateLeave<T> : State<T>
 
     private IEnumerator FreeCurrentTableAfterSeconds()
     {
-        yield return new WaitForSeconds(waitingTimeToFreeTable);
+        yield return new WaitForSeconds(ClientManager.Instance.ClientManagerData.DelayToFreeTableWhenClientLeaveTable);
 
         if (clientModel.CurrentTable == null) yield break; // Cortar el metodo si la mesa es null, quiere decir que se fue porque se quedo esperando
 
@@ -104,7 +103,9 @@ public class ClientStateLeave<T> : State<T>
                 {
                     AudioManager.Instance.PlaySFX("ClientHungry");
                     clientView.SetSpriteTypeName("SpriteHungry");
+                    TabernManager.Instance.BrokenThingsAmount += TabernManager.Instance.TabernManagerData.CostPerBrokenThings;
                     MoneyManager.Instance.AddMoney(ClientManager.Instance.ClientManagerData.MinimumPaymentAmount);
+                    MoneyManager.Instance.SubMoney(TabernManager.Instance.TabernManagerData.CostPerBrokenThings);
                 }
 
                 // Si la comida no es la que pidio
@@ -112,20 +113,22 @@ public class ClientStateLeave<T> : State<T>
                 {
                     AudioManager.Instance.PlaySFX("ClientHungry");
                     clientView.SetSpriteTypeName("SpriteHungry");
+                    TabernManager.Instance.BrokenThingsAmount += TabernManager.Instance.TabernManagerData.CostPerBrokenThings;
+                    MoneyManager.Instance.SubMoney(TabernManager.Instance.TabernManagerData.CostPerBrokenThings);
                 }
 
-                // Si la comida esta en el estado correcto y es la que pidio sumar el pago
+                // Si la comida es correcta y esta en buen estado
                 else if (clientModel.CurrentTable.CurrentFoods[0].FoodType == clientView.CurrentSelectedFood)
                 {
                     AudioManager.Instance.PlaySFX("ClientHappy");
                     clientView.SetSpriteTypeName("SpriteHappy");
                     int paymentAmout = ClientManager.Instance.ClientManagerData.GetPayment(clientModel.CurrentTable.CurrentFoods[0].FoodType);
-                    clientModel.StartCoroutine(AddGratutityAfterSomeSeconeds(paymentAmout));
+                    MoneyManager.Instance.AddMoney(paymentAmout);
 
-                    // Solamente dar propina si la mesa estaba sucia cuando se sento
+                    // Solamente dar propina si la mesa no estaba sucia cuando se sento
                     if (!clientModel.WasTableDirtyWhenSeated)
                     {
-                        GratuityManager.Instance.TryGiveGratuity(paymentAmout);
+                        clientModel.StartCoroutine(AddGratutityAfterSomeSeconeds(paymentAmout));
                     }
                 }
 
@@ -138,6 +141,8 @@ public class ClientStateLeave<T> : State<T>
             {
                 AudioManager.Instance.PlaySFX("ClientHungry");
                 clientView.SetSpriteTypeName("SpriteHungry");
+                TabernManager.Instance.BrokenThingsAmount += TabernManager.Instance.TabernManagerData.CostPerBrokenThings;
+                MoneyManager.Instance.SubMoney(TabernManager.Instance.TabernManagerData.CostPerBrokenThings);
                 //MoneyManager.Instance.SubMoney(GratuityManager.Instance.GratuityManagerData.MissedClientCost);
             }
         }
@@ -154,6 +159,6 @@ public class ClientStateLeave<T> : State<T>
     {
         yield return new WaitForSeconds(3);
 
-        MoneyManager.Instance.AddMoney(paymentAmout, true);
+        GratuityManager.Instance.TryGiveGratuity(paymentAmout, clientModel.ClientData);
     }
 }

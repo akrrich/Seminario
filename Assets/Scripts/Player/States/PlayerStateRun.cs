@@ -28,14 +28,29 @@ public class PlayerStateRun<T> : State<T>
 
         playerModel.Speed = playerModel.PlayerTabernData.RunSpeed;
 
-        //AudioManager.Instance.PlayLoopSFX("PlayerFootSteps");
+        AudioManager.Instance.PlayLoopSFX("PlayerFootSteps", 1.2f);
     }
 
     public override void Execute()
     {
         base.Execute();
 
-        if (PlayerInputs.Instance.GetMoveAxis() == Vector2.zero)
+        if (!playerModel.IsGrounded)
+        {
+            AudioManager.Instance.StopLoopSFX("PlayerFootSteps");
+        }
+
+        else
+        {
+            AudioSource playerFootSteps = AudioManager.Instance.GetActiveSFX("PlayerFootSteps");
+
+            if (playerFootSteps == null || !playerFootSteps.isPlaying)
+            {
+                AudioManager.Instance.PlayLoopSFX("PlayerFootSteps", 1.2f);
+            }
+        }
+
+        if (PlayerInputs.Instance.GetMoveAxis() == Vector2.zero || playerModel.IsInTutorial || playerModel.IsInResumeDayPanel)
         {
             Fsm.TransitionTo(inputToIdle);
         }
@@ -45,7 +60,7 @@ public class PlayerStateRun<T> : State<T>
             Fsm.TransitionTo(inputToWalk);
         }
 
-        if (PlayerInputs.Instance.Jump() && playerModel.IsGrounded && playerModel.ReadyToJump && !playerModel.IsInTeleportPanel && !playerModel.IsInTrashPanel && !playerModel.IsInTutorial)
+        if (PlayerInputs.Instance.Jump() && playerModel.IsGrounded && playerModel.ReadyToJump && !playerModel.IsInTeleportPanel && !playerModel.IsInTrashPanel && !playerModel.IsInTutorial && !playerModel.IsInResumeDayPanel)
         {
             Fsm.TransitionTo(inputToJump);
         }
@@ -65,6 +80,6 @@ public class PlayerStateRun<T> : State<T>
     {
         base.Exit();
 
-        //AudioManager.Instance.StopLoopSFX("PlayerFootSteps");
+        AudioManager.Instance.StopLoopSFX("PlayerFootSteps");
     }
 }

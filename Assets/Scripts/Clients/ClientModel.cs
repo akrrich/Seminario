@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +9,7 @@ public enum ClientStates
 
 public enum ClientType
 {
-    Ogre, Orc, Goblin 
+    Ogre, Orc, Goblin, Knight, BigOrc, Dwarf
 }
 
 public class ClientModel : MonoBehaviour
@@ -20,6 +21,8 @@ public class ClientModel : MonoBehaviour
 
     private Rigidbody rb;
     private NavMeshAgent navMeshAgent;
+    private List<SkinnedMeshRenderer> skinnedMeshRenderers;
+    private AudioSource audioSource3D;
     private CapsuleCollider capsuleCollider;
     private Table currentTable;
 
@@ -35,7 +38,8 @@ public class ClientModel : MonoBehaviour
     public ClientManager ClientManager { get => clientManager; }
     public OrderDataUI CurrentOrderDataUI { get => currentOrderDataUI; set => currentOrderDataUI = value; }
 
-    public NavMeshAgent NavMeshAgent { get => navMeshAgent; }
+    public NavMeshAgent NavMeshAgent { get => navMeshAgent; set => navMeshAgent = value; }
+    public AudioSource AudioSource3D { get => audioSource3D; }
     public Table CurrentTable { get => currentTable; set => currentTable = value; }
 
     public ClientType ClientType { get => clientType; }
@@ -71,6 +75,8 @@ public class ClientModel : MonoBehaviour
     public void MoveToTarget(Vector3 target)
     {
         navMeshAgent.isStopped = false;
+        navMeshAgent.updatePosition = true;
+        navMeshAgent.updateRotation = true;
         navMeshAgent.SetDestination(target);
     }
 
@@ -90,6 +96,8 @@ public class ClientModel : MonoBehaviour
     public void StopVelocity()
     {
         navMeshAgent.isStopped = true;
+        //navMeshAgent.updatePosition = false;
+        //navMeshAgent.updateRotation = false;
         navMeshAgent.velocity = Vector3.zero;
     }
 
@@ -117,6 +125,8 @@ public class ClientModel : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        skinnedMeshRenderers = new List<SkinnedMeshRenderer>(GetComponentsInChildren<SkinnedMeshRenderer>(true));
+        audioSource3D = GetComponentInChildren<AudioSource>();
         capsuleCollider =  GetComponent<CapsuleCollider>();
     }
 
@@ -125,14 +135,25 @@ public class ClientModel : MonoBehaviour
         navMeshAgent.speed = clientData.Speed;
     }
 
-    public void InitializeSpawnPosition()
+    private void InitializeSpawnPosition()
     {
         transform.position = clientManager.SpawnPosition.position;
     }
 
-    public void InitializeTablePosition()
+    private void InitializeTablePosition()
     {
         currentTable = TablesManager.Instance.GetRandomAvailableTableForClient();
+    }
+
+    private void SelectRandomSkinnedMeshRenderer()
+    {
+        for (int i = 0; i < skinnedMeshRenderers.Count; i++)
+        {
+            skinnedMeshRenderers[i].gameObject.SetActive(false);
+        }
+
+        int randomNumber = Random.Range(0, skinnedMeshRenderers.Count);
+        skinnedMeshRenderers[randomNumber].gameObject.SetActive(true);
     }
 
     private void InitializeClientForPool()
@@ -141,6 +162,7 @@ public class ClientModel : MonoBehaviour
         {
             InitializeSpawnPosition();
             InitializeTablePosition();
+            SelectRandomSkinnedMeshRenderer();
             return;
         }
 

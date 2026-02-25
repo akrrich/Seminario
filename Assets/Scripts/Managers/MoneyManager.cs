@@ -13,6 +13,7 @@ public class MoneyManager : Singleton<MoneyManager>
 
     private TextMeshProUGUI moneyText;
 
+    private bool isInAdminMode = false;
     private float currentMoney;
 
     public float CurrentMoney { get => currentMoney; }
@@ -22,7 +23,9 @@ public class MoneyManager : Singleton<MoneyManager>
     {
         CreateSingleton(true);
         SuscribeToMoneyTextEvent();
-        SuscribeToGameManagerEvent();
+        SuscribeToSaveSystemManagerEvent();
+        SuscribeToPlayerViewEvents();
+        InitializeMoneyDefault();
     }
 
 
@@ -31,17 +34,21 @@ public class MoneyManager : Singleton<MoneyManager>
         if (isFromGratuity)
         {
             AudioManager.Instance.PlayOneShotSFX("Gratuity");
+            TabernManager.Instance.TipsEarnedAmount += amount;
         }
 
         else
         {
             AudioManager.Instance.PlayOneShotSFX("AddMoney");
+            TabernManager.Instance.OrderPaymentsAmount += amount;
         }
 
         currentMoney += amount;
         UpdateMoneyText();
-        SaveMoney();
         ShowFloatingMoneyText(amount, true);
+
+        if(UpgradesManager.Exists)
+            UpgradesManager.Instance.RefreshAvailabilityState();
     }
 
     public void SubMoney(float amount)
@@ -53,8 +60,9 @@ public class MoneyManager : Singleton<MoneyManager>
         }
 
         UpdateMoneyText();
-        SaveMoney();
         ShowFloatingMoneyText(amount, false);
+        if (UpgradesManager.Exists)
+            UpgradesManager.Instance.RefreshAvailabilityState();
     }
 
 
@@ -63,9 +71,27 @@ public class MoneyManager : Singleton<MoneyManager>
         MoneyManagerUI.OnTextGetComponent += GetComponentFromEvent;
     }
 
-    private void SuscribeToGameManagerEvent()
+    private void SuscribeToSaveSystemManagerEvent()
     {
-        GameManager.Instance.OnGameSessionStarted += OnInitializeCurrentMoney;
+        SaveSystemManager.OnSaveAllGameData += OnSaveMoney;
+        SaveSystemManager.OnLoadAllGameData += OnLoadMoney;
+        SaveSystemManager.OnDeleteAllGameData += InitializeMoneyDefault;
+    }
+
+    private void SuscribeToPlayerViewEvents()
+    {
+        PlayerView.OnEnterInAdministrationMode += HandleEnterAdminMode;
+        PlayerView.OnExitInAdministrationMode += HandleExitAdminMode;
+    }
+
+    private void HandleEnterAdminMode()
+    {
+        isInAdminMode = true;
+    }
+
+    private void HandleExitAdminMode()
+    {
+        isInAdminMode = false;
     }
 
     private void GetComponentFromEvent(TextMeshProUGUI moneyText)
@@ -75,27 +101,22 @@ public class MoneyManager : Singleton<MoneyManager>
         UpdateMoneyText();
     }
 
-    private void OnInitializeCurrentMoney()
-    {
-        if (GameManager.Instance.GameSessionType == GameSessionType.Load && SaveSystemManager.SaveExists())
-        {
-            SaveData data = SaveSystemManager.LoadGame();
-            currentMoney = data.money;
-            SaveMoney();
-        } 
-
-        else
-        {
-            currentMoney = moneyManagerData.InitializeCurrentMoneyValue;
-            SaveMoney();
-        }
-    }
-
-    private void SaveMoney()
+    private void OnSaveMoney()
     {
         SaveData data = SaveSystemManager.LoadGame();
         data.money = currentMoney;
         SaveSystemManager.SaveGame(data);
+    }
+
+    private void OnLoadMoney()
+    {
+        SaveData data = SaveSystemManager.LoadGame();
+        currentMoney = data.money;
+    }
+
+    private void InitializeMoneyDefault()
+    {
+        currentMoney = moneyManagerData.InitializeCurrentMoneyValue;
     }
 
     private void UpdateMoneyText()
@@ -104,21 +125,7 @@ public class MoneyManager : Singleton<MoneyManager>
     }
 
     private void ShowFloatingMoneyText(float amount, bool positive)
-    {
-        /*FloatingMoneyText obj = floatingMoneyTextPool.GetObjectFromPool<FloatingMoneyText>();
-
-        if (positive)
-        {
-            obj.TextAmount.text = "+" + amount.ToString();
-        }
-
-        else
-        {
-            obj.TextAmount.text = "-" + amount.ToString();
-        }
-
-        StartCoroutine(floatingMoneyTextPool.ReturnObjectToPool(obj, obj.MaxTimeToReturnObjectToPool));*/
-
+    {   
         FloatingMoneyText go = Instantiate(floatingMoneyText, moneyText.transform.position, Quaternion.identity);
 
         if (positive)
@@ -132,7 +139,9 @@ public class MoneyManager : Singleton<MoneyManager>
             go.TextAmount.text = "-" + amount.ToString();
             go.TextAmount.color = deductionColor;
         }
-
+        
+        go.ActivateAdminAnimation(isInAdminMode);
+        
         Destroy(go.gameObject, go.MaxTimeToReturnObjectToPool);
     }
 }

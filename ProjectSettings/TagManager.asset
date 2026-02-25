@@ -32,7 +32,7 @@ TagManager:
   - PlayerDish
   - Chair
   - InteractableFood
-  - 
+  - ChairColliderTrigger
   - 
   - 
   - 

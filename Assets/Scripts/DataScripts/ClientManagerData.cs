@@ -9,11 +9,11 @@ public class ClientManagerData : ScriptableObject
     [SerializeField] private List<FoodPayment> foodPayments;
 
     [SerializeField] private int minimumPaymentAmount;
-    [SerializeField] private int minimumOrdersServedToCloseTabern;
 
     [SerializeField] private float minSpawnTime;
     [SerializeField] private float maxSpawnTime;
-    [SerializeField] private float delayToOpenTabernAgainAfterClose;
+    [SerializeField] private float delayToFreeTableWhenClientLeaveTable;
+    [SerializeField] private float delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs;
 
     [Serializable]
     public class ClientSpawnChance
@@ -30,11 +30,11 @@ public class ClientManagerData : ScriptableObject
     }
 
     public int MinimumPaymentAmount { get => minimumPaymentAmount; }
-    public int MinimumOrdersServedToCloseTabern { get => minimumOrdersServedToCloseTabern; }
 
     public float MinSpawnTime { get => minSpawnTime; }
     public float MaxSpawnTime { get => maxSpawnTime; }
-    public float DelayToOpenTabernAgainAfterClose { get => delayToOpenTabernAgainAfterClose; }
+    public float DelayToFreeTableWhenClientLeaveTable { get => delayToFreeTableWhenClientLeaveTable; }
+    public float DelayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs { get => delayToSpawnClientsAgainIfMaxClientsAreWaitingForChairs; }
 
 
     public ClientType? GetRandomClient(List<ClientType> availableClientTypes)

@@ -62,7 +62,7 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
 
     public Transform GetAvailableStove()
     {
-        if (availableStoves.Count == 0)
+        /*if (availableStoves.Count == 0)
             return null;
 
         Transform stove = null;
@@ -81,7 +81,20 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
             break;
         }
 
-        return stove;
+        return stove;*/
+
+        for (int i = 0; i < stovePositionsThisDesk.Count; i++)
+        {
+            Transform stove = stovePositionsThisDesk[i];
+
+            if (!occupiedStoves.Contains(stove))
+            {
+                occupiedStoves.Add(stove);
+                return stove;
+            }
+        }
+
+        return null; // no hay slots libres
     }
 
     public void ReleaseStove(Transform stove)
@@ -92,6 +105,17 @@ public class CookingDeskUI : MonoBehaviour, IInteractable
             availableStoves.Enqueue(stove);
         }
     }
+
+    public int StoveIndexOf(Transform stove)
+    {
+        return stovePositionsThisDesk.IndexOf(stove);
+    }
+
+    public bool HasFreeStove()
+    {
+        return occupiedStoves.Count < stovePositionsThisDesk.Count;
+    }
+
 
     private void GetComponents()
     {

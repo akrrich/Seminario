@@ -3,10 +3,6 @@ using System.Collections.Generic;
 
 public class ClientView : MonoBehaviour
 {
-    /// <summary>
-    /// Recordatorio: Buscar en la mesa el componente hijo Food y tomar el tiempo que tarda en cocinarse en ese instante de forma local
-    /// </summary>
-
     [SerializeField] private ClientsFoodPreferencesData clientsFoodPreferencesData;
 
     private ClientModel clientModel;
@@ -122,7 +118,7 @@ public class ClientView : MonoBehaviour
             FoodData data = FoodTimesManager.Instance.GetFoodData(selectedFood.Value);
             currentFoodCookingTime = data.TimeToBeenCooked;
 
-            clientModel.CurrentOrderDataUI = new OrderDataUI(spriteSelectedFood, clientModel.ClientData.ClientImage, clientModel.ClientData.MaxTimeWaitingFood + currentFoodCookingTime);
+            clientModel.CurrentOrderDataUI = new OrderDataUI(spriteSelectedFood, clientModel.ClientData.ClientImage, clientModel.ClientData.MaxTimeWaitingFood + currentFoodCookingTime, tablePlayerCollision.TableNumber);
             OrdersManagerUI.Instance.AddOrder(clientModel.CurrentOrderDataUI);
 
             if (spriteSelectedFood != null)

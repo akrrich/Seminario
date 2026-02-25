@@ -26,9 +26,9 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
     private void OnSessionStart()
     {
         // If coming from a prior run and pending flag set while being in a room, force place in last hallway
-        if (SaveSystemManager.SaveExists())
+        //if (SaveSystemManager.SaveExists())
         {
-            SaveData data = SaveSystemManager.LoadGame();
+            /*SaveData data = SaveSystemManager.LoadGame();
 
             if (data.session.pendingReturnToHallway && data.lastHallwayCheckpoint != null)
             {
@@ -51,8 +51,8 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
                 data.session.currentId = cp.hallwayId;
                 data.session.pendingReturnToHallway = false;
 
-                SaveSystemManager.SaveGame(data);
-            }
+                //SaveSystemManager.SaveGame(data);
+            }*/
         }
     }
 
@@ -63,7 +63,7 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
     {
         Debug.Log($"[HallwaySaveCoordinator] Creating Memento checkpoint at hallway {hallwayId}");
 
-        SaveData data = SaveSystemManager.LoadGame();
+        /*SaveData data = SaveSystemManager.LoadGame();
 
         // Create the Memento checkpoint with complete state
         var checkpoint = CreateHallwayMemento(hallwayId, layer, hallwaySpawn, roomsSinceLast, hallwaysSinceLast, data);
@@ -71,15 +71,15 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
         data.lastHallwayCheckpoint = checkpoint;
         data.session.currentLocation = "Hallway";
         data.session.currentId = hallwayId;
-        data.session.pendingReturnToHallway = false;
+        data.session.pendingReturnToHallway = false;*/
 
-        SaveSystemManager.SaveGame(data);
+        //SaveSystemManager.SaveGame(data);
     }
 
     /// <summary>
     /// Creates a Memento checkpoint containing the complete game state
     /// </summary>
-    private CheckpointData CreateHallwayMemento(string hallwayId, int layer, Vector3 hallwaySpawn, 
+    /*private CheckpointData CreateHallwayMemento(string hallwayId, int layer, Vector3 hallwaySpawn, 
         List<string> roomsSinceLast, List<string> hallwaysSinceLast, SaveData currentData)
     {
         var checkpoint = new CheckpointData
@@ -105,12 +105,12 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
         AddEventToHistory(checkpoint.runHistory, "Hallway", hallwayId, layer, true);
 
         return checkpoint;
-    }
+    }*/
 
     /// <summary>
     /// Adds an event to the dungeon run history
     /// </summary>
-    private void AddEventToHistory(DungeonRunHistory history, string eventType, string eventId, int layer, bool wasCompleted)
+    /*private void AddEventToHistory(DungeonRunHistory history, string eventType, string eventId, int layer, bool wasCompleted)
     {
         var dungeonEvent = new DungeonEvent
         {
@@ -129,14 +129,14 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
         {
             history.totalRoomsCompleted++;
         }
-    }
+    }*/
 
     /// <summary>
     /// Mark leaving hallway into room, but do not save a checkpoint here
     /// </summary>
     public void OnEnterRoom(string roomId, int layer)
     {
-        SaveData data = SaveSystemManager.LoadGame();
+        /*SaveData data = SaveSystemManager.LoadGame();
         data.session.currentLocation = "Room";
         data.session.currentId = roomId;
         
@@ -144,8 +144,8 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
         if (data.lastHallwayCheckpoint?.runHistory != null)
         {
             AddEventToHistory(data.lastHallwayCheckpoint.runHistory, "Room", roomId, layer, false);
-            SaveSystemManager.SaveGame(data);
-        }
+            //SaveSystemManager.SaveGame(data);
+        }*/
 
         Debug.Log($"[HallwaySaveCoordinator] Entered room {roomId} - no checkpoint saved, but added to history");
     }
@@ -155,7 +155,7 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
     /// </summary>
     public void OnRoomCompleted(string roomId, int layer)
     {
-        SaveData data = SaveSystemManager.LoadGame();
+        /*SaveData data = SaveSystemManager.LoadGame();
         
         if (data.lastHallwayCheckpoint?.runHistory != null)
         {
@@ -169,9 +169,9 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
                 data.lastHallwayCheckpoint.runHistory.totalRoomsCompleted++;
             }
             
-            SaveSystemManager.SaveGame(data);
+            //SaveSystemManager.SaveGame(data);
             Debug.Log($"[HallwaySaveCoordinator] Room {roomId} marked as completed in history");
-        }
+        }*/
     }
 
     /// <summary>
@@ -179,11 +179,11 @@ public class HallwaySaveCoordinator : Singleton<HallwaySaveCoordinator>
     /// </summary>
     public void MarkPendingReturnToHallway()
     {
-        SaveData data = SaveSystemManager.LoadGame();
-        data.session.pendingReturnToHallway = (data.session.currentLocation == "Room");
-        SaveSystemManager.SaveGame(data);
+        //SaveData data = SaveSystemManager.LoadGame();
+        //data.session.pendingReturnToHallway = (data.session.currentLocation == "Room");
+        //SaveSystemManager.SaveGame(data);
 
-        Debug.Log($"[HallwaySaveCoordinator] Marked pending return to hallway: {data.session.pendingReturnToHallway}");
+        //Debug.Log($"[HallwaySaveCoordinator] Marked pending return to hallway: {data.session.pendingReturnToHallway}");
     }
 
     private void TryPlacePlayerAt(Vector3 pos)

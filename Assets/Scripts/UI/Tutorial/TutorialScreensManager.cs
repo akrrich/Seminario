@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+
 public enum TutorialType
 {
     Admin,
     Cooking,
-    Clients
+    Clients,
+    Bed
 }
 
 public class TutorialScreensManager : Singleton<TutorialScreensManager>
@@ -26,28 +28,50 @@ public class TutorialScreensManager : Singleton<TutorialScreensManager>
     private TutorialType currentTutorialType;
     public TutorialType CurrentTutorialType => currentTutorialType;
 
+    private bool isInTutorial = false;
+
     public static Action OnEnterTutorial { get => onEnterTutorial; set => onEnterTutorial = value; }
     public static Action OnExitTutorial { get => onExitTutorial; set => onExitTutorial = value; }
 
-    private void Awake()
+    void Awake()
     {
         CreateSingleton(false);
+        SuscribeToUpdateManagerEvent();
         BuildDictionary();
-
     }
+
+    // Simulacion de Update
+    void UpdateTutorialScreensManager()
+    {
+        if (PlayerInputs.Instance.BackPanelsUI() && isInTutorial)
+        {
+            Close();
+        }
+    }
+
+    void OnDestroy()
+    {
+        UnsuscribeToUpdateManagerEvent();
+    }
+
+
     public void SetTutorialType(TutorialType tutorialType)
     {
+        isInTutorial = true;
         if (tutorialData.ActivateTutorial == false) return;
         DeviceManager.instance.IsUIModeActive = true;
         currentTutorialType = tutorialType;
         UpdateTutorialImage();
         onEnterTutorial?.Invoke();
+        PlayerView.OnEnterTutorial?.Invoke();
     }
     public void Close()
     {
         DeviceManager.instance.IsUIModeActive = false;
         appearAnim?.HidePanel();
         onExitTutorial?.Invoke();
+        PlayerView.OnExitTutorial?.Invoke();
+        isInTutorial = false;
     }
 
     public void SetTutorialType(int tutorialTypeIndex)
@@ -57,6 +81,17 @@ public class TutorialScreensManager : Singleton<TutorialScreensManager>
             SetTutorialType((TutorialType)tutorialTypeIndex);
         else
             Debug.LogError($"Índice de tutorial '{tutorialTypeIndex}' no es válido.", this);
+    }
+
+
+    private void SuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate += UpdateTutorialScreensManager;
+    }
+
+    private void UnsuscribeToUpdateManagerEvent()
+    {
+        UpdateManager.OnUpdate -= UpdateTutorialScreensManager;
     }
 
     private void UpdateTutorialImage()
@@ -77,6 +112,7 @@ public class TutorialScreensManager : Singleton<TutorialScreensManager>
         }
         appearAnim?.ShowPannel();
     }
+
     private void BuildDictionary()
     {
         tutorialImageDictionary = tutorialImages
