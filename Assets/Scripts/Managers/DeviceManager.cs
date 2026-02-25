@@ -52,6 +52,11 @@ public class DeviceManager : Singleton<DeviceManager>
     {
         if (deviceManagerData.UseCursorAllTime) return;
 
+        if (ScenesManager.Instance.IsInLoadingScenePanel || ScenesManager.Instance.IsInExitGamePanel)
+        {
+            return;
+        }
+
         if (currentDevice == Device.Joystick)
         {
             Cursor.visible = false;

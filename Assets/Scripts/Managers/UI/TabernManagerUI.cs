@@ -82,6 +82,7 @@ public class TabernManagerUI : Singleton<TabernManagerUI>
         PlayerView.OnEnterInAdministrationMode += OnDisableUI;
         PlayerView.OnEnterTutorial += OnDisableUI;
         PlayerView.OnEnterInResumeDay += OnDisableUI;
+        PlayerView.OnEnterInBankrupt += OnDisableUI;
 
         PlayerView.OnExitInCookMode += OnEnabledUI;
         PlayerView.OnExitInAdministrationMode += OnEnabledUI;
@@ -95,6 +96,7 @@ public class TabernManagerUI : Singleton<TabernManagerUI>
         PlayerView.OnEnterInAdministrationMode -= OnDisableUI;
         PlayerView.OnEnterTutorial -= OnDisableUI;
         PlayerView.OnEnterInResumeDay -= OnDisableUI;
+        PlayerView.OnEnterInBankrupt -= OnDisableUI;
 
         PlayerView.OnExitInCookMode -= OnEnabledUI;
         PlayerView.OnExitInAdministrationMode -= OnEnabledUI;

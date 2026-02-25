@@ -31,8 +31,7 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 
     public bool CanCookAnyUnlockedRecipe()
     {
-        var unlockedRecipes =
-            RecipeProgressManager.Instance.GetUnlockedRecipes();
+        var unlockedRecipes = RecipeProgressManager.Instance.GetUnlockedRecipes();
 
         foreach (var recipe in unlockedRecipes)
         {
@@ -40,16 +39,14 @@ public class IngredientInventoryManager : Singleton<IngredientInventoryManager>
 
             foreach (var ing in recipe.Ingridients)
             {
-                if (!ingredientInventory.ContainsKey(ing.IngredientType) ||
-                    ingredientInventory[ing.IngredientType] < ing.Amount)
+                if (!ingredientInventory.ContainsKey(ing.IngredientType) || ingredientInventory[ing.IngredientType] < ing.Amount)
                 {
                     canCook = false;
                     break;
                 }
             }
 
-            if (canCook)
-                return true;
+            if (canCook) return true;
         }
 
         return false;

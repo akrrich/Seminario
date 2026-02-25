@@ -115,10 +115,10 @@ public class ClientManager : Singleton<ClientManager>
 
     public void SetRandomSpawnTime()
     {
-        int hour = TabernManager.Instance.CurrentHour;
+        float hour = TabernManager.Instance.CurrentHour;
 
-        bool isLunchTime = hour >= 11 && hour < 15;
-        bool isDinnerTime = hour >= 20 && hour <= 23;
+        bool isLunchTime = hour >= 11f && hour < 15f;
+        bool isDinnerTime = hour >= 20f && hour < 24f;
 
         if (isLunchTime || isDinnerTime)
         {

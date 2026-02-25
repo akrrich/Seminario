@@ -7,6 +7,9 @@ public class PlayerView : MonoBehaviour
 
     private static event Action<bool> onEnabledDishForced;
 
+    private static Action onEnterInBankrupt;
+    private static Action onExitInBankrupt;
+
     private static Action onEnterInResumeDay;
     private static Action onExitInResumeDay;
 
@@ -25,6 +28,8 @@ public class PlayerView : MonoBehaviour
     public GameObject Dish { get => dish; }
 
     public static Action<bool> OnEnabledDishForced { get => onEnabledDishForced; set => onEnabledDishForced = value; }  
+
+    public static Action OnEnterInBankrupt { get => onEnterInBankrupt; set => onEnterInBankrupt = value; }
 
     public static Action OnEnterInResumeDay { get => onEnterInResumeDay; set => onEnterInResumeDay = value; }
     public static Action OnExitInResumeDay { get => onExitInResumeDay; set => onExitInResumeDay = value; }
