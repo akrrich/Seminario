@@ -138,7 +138,7 @@ public class TabernManagerUI : Singleton<TabernManagerUI>
 
         TabernManager.Instance.StartNewDay();
 
-        tabernStatusText.text = "Tabern is closed";
+        tabernStatusText.text = "Tavern is closed";
         tabernCurrentTimeText.text = "08 : 00";
         currentDayText.text = "Day " + TabernManager.Instance.CurrentDay.ToString();
         AdministratingManagerUI.OnCloseTabern?.Invoke();
@@ -146,7 +146,7 @@ public class TabernManagerUI : Singleton<TabernManagerUI>
 
     private void InitializeTabernTexts()
     {
-        tabernStatusText.text = "Tabern is closed";
+        tabernStatusText.text = "Tavern is closed";
         tabernCurrentTimeText.text = "08 : 00";
         currentDayText.text = "Day " + TabernManager.Instance.CurrentDay.ToString();
     }

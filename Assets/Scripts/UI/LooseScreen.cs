@@ -71,7 +71,7 @@ public class LooseScreen : Singleton<LooseScreen>
     {
         AudioManager.Instance.StopMusic("TabernOpen");
         AudioManager.Instance.StopMusic("TabernClose");
-        //AudioManager.Instance.PlayOneShotSFX("Loose");
+        AudioManager.Instance.PlayOneShotSFX("Loose");
         PlayerInputs.Instance.HasWon(true);
         gameObject.SetActive(true);
 

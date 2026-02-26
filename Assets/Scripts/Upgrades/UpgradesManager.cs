@@ -42,7 +42,8 @@ public class UpgradesManager : Singleton<UpgradesManager>
             // --- NOTIFICAR CAMBIOS ---
             if (AllUpgradesPurchased)
             {
-                OnAllUpgradesCompleted?.Invoke();    
+                OnAllUpgradesCompleted?.Invoke();
+                AudioManager.Instance.PlayOneShotSFX("Win");
             }
 
             // Verificamos de nuevo si alcanza para la siguiente (o si ya no hay mas)

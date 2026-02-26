@@ -506,7 +506,7 @@ public class CookingManagerUI : Singleton<CookingManagerUI>
         // Inicia la animación de salida
         if (cookingAnim != null)
             cookingAnim.AnimateOut();
-        CloseKitchen();
+        //CloseKitchen(); // Esta linea fue agregada en el momento exacto en que finaliza cerrar la animacion de la UI completa para que no aparezca el render texture de la camara en blanco
     }
 
     /// <summary>

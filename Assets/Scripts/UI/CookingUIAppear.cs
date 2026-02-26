@@ -149,6 +149,7 @@ public class CookingUIAppear : MonoBehaviour
             .setEase(hideEase)
             .setIgnoreTimeScale(true)
             .setOnComplete(OnOutComplete);
+
     }
     private void SetInteractable(bool canInteract)
     {
@@ -184,5 +185,6 @@ public class CookingUIAppear : MonoBehaviour
 
         gameObject.SetActive(false); 
         OnAnimateOutComplete.Invoke();
+        CookingManagerUI.Instance.CloseKitchen();
     }
 }

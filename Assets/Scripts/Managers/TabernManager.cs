@@ -216,7 +216,7 @@ public class TabernManager : Singleton<TabernManager>
             OnTabernStateChanged?.Invoke(true);
 
             currentMinute = 0f;
-            TabernManagerUI.instance.TabernStatusText.text = "Tabern is open";
+            TabernManagerUI.instance.TabernStatusText.text = "Tavern is open";
 
             ClientManager.Instance.SpawnTime = 0f;
             ClientManager.Instance.SetRandomSpawnTime();
@@ -231,8 +231,8 @@ public class TabernManager : Singleton<TabernManager>
         OnTabernStateChanged?.Invoke(false);
         
         currentMinute = DAY_DURATION_MINUTES;
-        TabernManagerUI.instance.TabernCurrentTimeText.text = "24 : 00";
-        TabernManagerUI.instance.TabernStatusText.text = "Tabern is closed";
+        TabernManagerUI.instance.TabernCurrentTimeText.text = "00 : 00";
+        TabernManagerUI.instance.TabernStatusText.text = "Tavern is closed";
 
         StartCoroutine(PlayCurrentTabernMusic("TabernClose"));
         AdministratingManagerUI.OnSetSelectedCurrentGameObject?.Invoke(null);
