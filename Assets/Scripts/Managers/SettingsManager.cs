@@ -105,7 +105,6 @@ public class SettingsManager : Singleton<SettingsManager>
         qualityLevel = index;
         QualitySettings.SetQualityLevel(index);
         PlayerPrefs.SetInt("QualityLevel", index);
-
     }
 
     public void SetVSync(bool value)

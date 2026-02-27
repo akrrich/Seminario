@@ -3310,9 +3310,9 @@ MonoBehaviour:
   - name: Eating2
     clip: {fileID: 8300000, guid: 1e18a334db67b91478f0d33510f244a4, type: 3}
   - name: Win
-    clip: {fileID: 8300000, guid: 1e18a334db67b91478f0d33510f244a4, type: 3}
+    clip: {fileID: 8300000, guid: 256fa5959282c5d4f8c96415db92f4da, type: 3}
   - name: Loose
-    clip: {fileID: 8300000, guid: 1e18a334db67b91478f0d33510f244a4, type: 3}
+    clip: {fileID: 8300000, guid: ce8f24247e98d0d4c87b003cba8671ca, type: 3}
 --- !u!1 &1722558582
 GameObject:
   m_ObjectHideFlags: 0

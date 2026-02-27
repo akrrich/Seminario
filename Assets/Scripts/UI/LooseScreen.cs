@@ -21,6 +21,8 @@ public class LooseScreen : Singleton<LooseScreen>
     [SerializeField] private float scaleTime = 0.25f;
     [SerializeField] private float buttonsDelay = 0.08f;
 
+    private bool isInUI = false;
+
     private static event Action onDefeat;
     private static event Action onDefeatClosed;
     private static event Action onRestartPressed;
@@ -32,6 +34,8 @@ public class LooseScreen : Singleton<LooseScreen>
     public static Action OnDefeatClosed { get => onDefeatClosed; set => onDefeatClosed = value; }
     public static Action OnRestartPressed { get => onRestartPressed; set => onRestartPressed = value; }
     public static Action OnMenuPressed { get => onMenuPressed; set => onMenuPressed = value; }
+
+    public bool IsInUI { get => isInUI; }
 
 
     void Awake()
@@ -69,6 +73,7 @@ public class LooseScreen : Singleton<LooseScreen>
 
     public void Show()
     {
+        isInUI = true;
         AudioManager.Instance.StopMusic("TabernOpen");
         AudioManager.Instance.StopMusic("TabernClose");
         AudioManager.Instance.PlayOneShotSFX("Loose");
@@ -124,6 +129,7 @@ public class LooseScreen : Singleton<LooseScreen>
 
     public void Hide()
     {
+        isInUI = false;
         LeanTween.alphaCanvas(rootGroup, 0f, fadeTime);
         LeanTween.alphaCanvas(panelGroup, 0f, fadeTime);
 

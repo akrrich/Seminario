@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class VictoryScreen : MonoBehaviour
+public class VictoryScreen : Singleton<VictoryScreen>
 {
     [Header("References")]
     [SerializeField] private CanvasGroup rootGroup;
@@ -19,6 +19,8 @@ public class VictoryScreen : MonoBehaviour
     [SerializeField] private float scaleTime = 0.25f;
     [SerializeField] private float buttonsDelay = 0.08f;
 
+    private bool isInUI = false;
+
     private static event Action onVictory;
     private static event Action onVictoryClosed;
     private static event Action onContinuePressed;
@@ -29,9 +31,12 @@ public class VictoryScreen : MonoBehaviour
     public static Action OnContinuePressed { get => onContinuePressed; set => onContinuePressed = value; }
     public static Action OnMenuPressed { get => onMenuPressed; set => onMenuPressed = value; }
 
+    public bool IsInUI { get => isInUI; }
+
 
     void Awake()
     {
+        CreateSingleton(false);
         HideImmediate();
         continueButton.OnClick.AddListener(() =>
         {
@@ -55,6 +60,7 @@ public class VictoryScreen : MonoBehaviour
 
     public void Show()
     {
+        isInUI = true;
         PlayerInputs.Instance.HasWon(true);
         gameObject.SetActive(true);
         // INITIAL VALUES
@@ -111,6 +117,7 @@ public class VictoryScreen : MonoBehaviour
     }
     public void Hide()
     {
+        isInUI = false;
         LeanTween.alphaCanvas(rootGroup, 0f, fadeTime)
               .setIgnoreTimeScale(false);
 

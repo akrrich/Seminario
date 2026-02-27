@@ -38,6 +38,9 @@ public class PlayerStateAdministration<T> : State<T>
     {
         base.Execute();
 
+        if (LooseScreen.Instance.IsInUI) return;
+        if (VictoryScreen.Instance.IsInUI) return;
+
         if (PlayerInputs.Instance.InteractPress() || PlayerInputs.Instance.BackPanelsUI())
         {
             Fsm.TransitionTo(inputToIdle);
